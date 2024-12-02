@@ -1,0 +1,657 @@
+<div role="tabpanel" class="tab-pane active">
+  <div class="section-heading padding-b5">
+    <h2>View Course Assessment Report</h2>
+  </div>
+  <div class="margin-b15">
+    <div class="row">
+      <div class="col-sm-12">
+        <fieldset class="padding-b5">
+          <legend>Criteria</legend>
+          <div class="row">
+            <div class="form-group col-sm-2" *ngIf="Temp_Institute_ID===0">
+              <label class="control-label">Select Institute <span class="text-danger">*</span></label>
+              <select class="form-control" id="Institute" (change)="Get_Department($event.target.value)" [ngModel]="Temp_Institute_ID" [attr.disabled]="Temp_Institute_ID != 0  ? 'disabled' : null">
+                <option value="0">Select Institute</option>
+                <option value="{{i.InstituteID}}" *ngFor="let i of Institutes">{{i.InstituteShortName}}</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-2" *ngIf="Temp_Deaprtment_ID===0">
+              <label class="control-label">Select Department <span class="text-danger">*</span></label>
+              <select class="form-control" id="DepartmentID" [ngModel]="Temp_Deaprtment_ID" [attr.disabled]="Temp_Deaprtment_ID != 0  ? 'disabled' : null">
+                <option value="0">Select Deparment</option>
+                <option value="{{i.DepartmentID}}" *ngFor="let i of Department">{{i.DepartmentName}}</option>
+              </select>
+            </div>
+            
+            <div class="form-group col-sm-2">
+              <label class="control-label">Select Semester <span class="text-danger">*</span></label>
+              <select class="form-control" id="SemesterID" (change)="Get_FacultyMembers($event.target.value)">
+                <option value="0">Select Semester</option>
+                <option value="{{i.SemesterID}}" *ngFor="let i of All_Semester">{{i.semesterAlia}}</option>
+              </select>
+            </div>
+
+            <div class="form-group col-sm-2" *ngIf="Temp_FacultyMember_ID===0">
+              <label class="control-label">Select Faculty<span class="text-danger">*</span></label>
+              <select class="form-control" id="FacultyID" (change)="Get_AssignedCourse($event.target.value)" [ngModel]="Temp_FacultyMember_ID" [attr.disabled]="Temp_FacultyMember_ID != 0  ? 'disabled' : null">
+                <option value="0">Select Faculty</option>
+                <option value="{{i.FacultyMemberID}}" *ngFor="let i of Faculty">{{i.Name}}</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-2">
+              <label class="control-label">Select Course<span class="text-danger">*</span></label>
+              <select class="form-control" id="OfferedCourseID">
+                <option value="0">Select Course</option>
+                <option value="{{i.OfferedCourseID}}" *ngFor="let i of AssignedCourse_Request_lst" title="{{i.Title}}">{{i.Course_Alias}}</option>
+              </select>
+            </div>
+
+            <div class="col-sm-1 margin-t17">
+              <button class="btn btn-info" (click)="Get_Course_Assessment_Report()">Search</button>
+            </div>
+            <div class="col-sm-1 margin-t17" *ngIf="CanDownload">
+              <button class="btn btn-default btn-sm dropdown-toggle margin-r5" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Export <span class="caret"></span> </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li><a (click)="GeneratePDF()">PDF</a></li>
+              </ul>
+            </div>
+
+
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+  <div class="margin-b15">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="section-heading padding-b5">
+          <h4><a (click)="DirectEdit()"><b>Attainment level of CLOs (Direct)   </b> <i class="app-icon-Amazing-Fusion-61 icon" *ngIf="!Direct_CLO_Edit"></i></a></h4>
+          <div class="pull-right" *ngIf="Direct_CLO_Edit">
+            <button class="btn btn-info margin-r10" (click)="SaveDirectRemarks()">Save</button>
+            <button class="btn btn-default" (click)="CancelDirectAssessment()">Cancel</button>
+          </div>
+        </div>
+        <div class="dashboard-box dash-box-right">
+          <div class="table-responsive">
+            <table class="table table-hover table-theme">
+              <thead>
+                <tr>
+                  <th>CLOs</th>
+                  <th width="25%">Statement </th>
+                  <th>Mapped PLO</th>
+                  <th>Domain</th>
+                  <th>Level</th>
+                  <th>Attainment</th>
+                  <th>Remarks for CQI Cycle</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let i of Get_Course_CLOS; let idx = index">
+                  <tr [ngClass]="(Direct_CLO_Edit)?'tr-info':''">
+                    <td align="center">
+                      <b class="blue">
+                        <span [innerHTML]="i.CLOTitle"></span>
+                      </b>
+                    </td>
+                    <td><span [innerHTML]="i.CLODescription"></span></td>
+                    <td><span [innerHTML]="i.PLO_Title"></span></td>
+                    <td><span [innerHTML]="i.CLO_Skill_Title"></span></td>
+                    <td><span [innerHTML]="i.CLO_Skill_Level_Title"></span></td>
+                    <td align="center"><b class="blue"><span [innerHTML]="i.CLO_Attainment"></span>%</b></td>
+                    <td>
+                      <textarea class="textArea DirectCLO hidden" id="DirectCLO{{idx}}" rows="3" placeholder="   Remarks for CQI Cycle">{{i.Direct_Remarks_CQI_Cycle}}</textarea>
+                      <span class="DirectCLOAddedComment" [innerHTML]="i.Direct_Remarks_CQI_Cycle"></span>
+                    </td>
+                  </tr>
+                </ng-container>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <div class="section-heading padding-b5">
+          <h4><a (click)="IndirectEdit()"><b>Student’s perception on the attainment of CLOs/PLOs (Indirect)  </b> <i class="app-icon-Amazing-Fusion-61 icon" *ngIf="!Indirect_CLO_Edit"></i></a></h4>
+          <div class="pull-right" *ngIf="Indirect_CLO_Edit">
+            <button class="btn btn-info margin-r10" (click)="SaveIndirectRemarks()">Save</button>
+            <button class="btn btn-default" (click)="CancelIndirectAssessment()">Cancel</button>
+          </div>
+        </div>
+        <div class="dashboard-box dash-box-right">
+          <div class="table-responsive">
+            <table class="table table-hover table-theme">
+              <thead>
+                <tr>
+                  <th>CLOs</th>
+                  <th width="25%">Statement </th>
+                  <th>Mapped PLO</th>
+                  <th>Domain</th>
+                  <th>Level</th>
+                  <th>Attainment</th>
+                  <th align="center">Comments / Remarks </th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let i of Get_Course_CLOS; let idx = index">
+                  <tr [ngClass]="(Indirect_CLO_Edit)?'tr-info':''">
+                    <td align="center">
+                      <b class="blue">
+                        <span [innerHTML]="i.CLOTitle"></span>
+                      </b>
+                    </td>
+                    <td><span [innerHTML]="i.CLODescription"></span></td>
+                    <td><span [innerHTML]="i.PLO_Title"></span></td>
+                    <td><span [innerHTML]="i.CLO_Skill_Title"></span></td>
+                    <td><span [innerHTML]="i.CLO_Skill_Level_Title"></span></td>
+                    <td align="center"><b class="blue"><span [innerHTML]="i.CLO_Attainment"></span>%</b></td>
+                    <td>
+                      <textarea class="textArea IndirectCLO hidden" id="IndirectCLO{{idx}}" rows="3" placeholder="   Comments / Remarks">{{i.Indirect_Remarks}}</textarea>
+                      <span class="IndirectCLOAddedComment" [innerHTML]="i.Indirect_Remarks"></span>
+                    </td>
+
+                  </tr>
+                </ng-container>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <div class="section-heading padding-b5">
+          <h4><a href="javascript:voide(0)"><b>CLO-PLO Mapping and Weightage   </b></a></h4>
+        </div>
+        <div class="dashboard-box dash-box-right">
+          <div class="dashboard-scroller setups-widget mCustomScrollbar">
+            <div class="table-responsive">
+              <table class="table table-hover table-theme">
+                <thead>
+                  <tr>
+                    <th align="center">CLOs</th>
+                    <th align="center">PLO1</th>
+                    <th align="center">PLO2</th>
+                    <th align="center">PLO3</th>
+                    <th align="center">PLO4</th>
+                    <th align="center">PLO5</th>
+                    <th align="center">PLO6</th>
+                    <th align="center">PLO7</th>
+                    <th align="center">PLO8</th>
+                    <th align="center">PLO9</th>
+                    <th align="center">PLO10</th>
+                    <th align="center">PLO11</th>
+                    <th align="center">PLO12</th>
+                    <th align="center">Total Marks</th>
+                    <th align="center">Total Weightage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let i of Get_CLOS_Over_PLOS_Marks_Distribution">
+                    <td align="center"><b class="blue">{{i.CLOTitle}}</b></td>
+                    <td align="center"><b class="blue">{{i.P1Marks}}</b></td>
+                    <td align="center"><b class="blue">{{i.P2Marks}}</b></td>
+                    <td align="center"><b class="blue">{{i.P3Marks}}</b></td>
+                    <td align="center"><b class="blue">{{i.P4Marks}}</b></td>
+                    <td align="center"><b class="blue">{{i.P5Marks}}</b></td>
+                    <td align="center"><b class="blue">{{i.P6Marks}}</b></td>
+                    <td align="center"><b class="blue">{{i.P7Marks}}</b></td>
+                    <td align="center"><b class="blue">{{i.P8Marks}}</b></td>
+                    <td align="center"><b class="blue">{{i.P9Marks}}</b></td>
+                    <td align="center"><b class="blue">{{i.P10Marks}}</b></td>
+                    <td align="center"><b class="blue">{{i.P11Marks}}</b></td>
+                    <td align="center"><b class="blue">{{i.P12Marks}}</b></td>
+                    <td align="center"><b class="blue">{{i.TotalCLOMarks}}</b></td>
+                    <td align="center"><b class="blue">{{i.TotalCLOWeightage}}%</b></td>
+                  </tr>
+                  <tr class="tr-info" *ngIf="Get_CLOS_Over_PLOS_Marks_Distribution?.length>0">
+                    <td align="center"><b class="blue">Total</b></td>
+                    <td align="center"><b class="blue">{{PLO1Total}} </b></td>
+                    <td align="center"><b class="blue">{{PLO2Total}} </b></td>
+                    <td align="center"><b class="blue">{{PLO3Total}} </b></td>
+                    <td align="center"><b class="blue">{{PLO4Total}} </b></td>
+                    <td align="center"><b class="blue">{{PLO5Total}} </b></td>
+                    <td align="center"><b class="blue">{{PLO6Total}} </b></td>
+                    <td align="center"><b class="blue">{{PLO7Total}} </b></td>
+                    <td align="center"><b class="blue">{{PLO8Total}} </b></td>
+                    <td align="center"><b class="blue">{{PLO9Total}} </b></td>
+                    <td align="center"><b class="blue">{{PLO10Total}}</b></td>
+                    <td align="center"><b class="blue">{{PLO11Total}}</b></td>
+                    <td align="center"><b class="blue">{{PLO12Total}}</b></td>
+                    <td align="center"><b class="blue">{{Total_PLOS}}</b></td>
+                    <td align="center"><b class="blue">{{Total_Weightage}}%</b></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <div class="section-heading padding-b5">
+          <h4><a href="javascript:voide(0)"><b>Grade Distribution</b></a></h4>
+        </div>
+        <div class="dashboard-box dash-box-right" *ngFor="let i of CourseGradeDistribution; let idx = index">
+          <div class="dashboard-scroller setups-widget mCustomScrollbar">
+            <div class="table-responsive">
+              <table class="table table-hover table-theme">
+                <thead>
+                  <tr>
+                    <th align="center">Grade Distribution </th>
+                    <th align="center" *ngFor="let j of i.Grades">{{j}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td align="center">Number</td>
+                    <td align="center" *ngFor="let k of i.MinMarks;let ind = index"><b class="blue">{{k}}-{{i.MaxMarks[ind]}}</b></td>
+                  </tr>
+                  <tr class="tr-info">
+                    <td align="center">Grade Count</td>
+                    <td align="center" *ngFor="let l of i.GradesCount;"><b class="blue">{{l}}</b></td>
+                  </tr>
+                  <tr class="tr-info">
+                    <td align="center">Average CGPA </td>
+                    <td align="center" [attr.colspan]="i.GradesCountForTD">
+                      <b class="blue">{{i.AverageGPAPoints}}</b>
+                    </td>
+                  </tr>
+                  <tr class="tr-info">
+                    <td align="center">Average Marks</td>
+                    <td align="center" [attr.colspan]="i.GradesCountForTD">
+                      <b class="blue">{{i.AverageMarks}}</b>
+                    </td>
+                  </tr>
+                  <tr class="tr-info">
+                    <td align="center">Average Grade</td>
+                    <td align="center" [attr.colspan]="i.GradesCountForTD">
+                      <b class="blue">{{i.AverageGrade}}</b>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12" *ngIf="this.GetAllStudentWhoPassedCourseButFailedCLODetailsResponse?.length>0">
+        <div class="section-heading padding-b5">
+          <h4><a href="javascript:voide(0)"><b>Students who passed course but failed CLOs </b></a></h4>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover table-theme margin-b30">
+            <thead>
+              <tr>
+                <th>Intake</th>
+                <th>Name / Enrollment</th>
+                <th>Total Marks</th>
+                <th>Grade</th>
+                <th>CLO Title</th>
+                <th>CLO Attainment</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let i of GetAllStudentWhoPassedCourseButFailedCLODetailsResponse; let idx=index">
+                <tr>
+                  <td align="center">
+                    <b><span class="blue"><span [innerHTML]="i.Intake"></span></span></b>
+                  </td>
+                  <td>
+                    <b><span class="blue"><span [innerHTML]="i.Name"></span></span></b>
+                    <p><span [innerHTML]="i.Enrollment"></span></p>
+                  </td>
+                  <td align="center">
+                    <b><span class="blue"><span [innerHTML]="i.Total_Marks"></span></span></b>
+                  </td>
+                  <td align="center">
+                    <b><span class="blue"><span [innerHTML]="i.Grade"></span></span></b>
+                  </td>
+                  <td align="center">
+                    <b><span class="blue"><span [innerHTML]="i.CLOTitle"></span></span></b>
+                  </td>
+                  <td align="center">
+                    <b><span class="blue"><span [innerHTML]="i.CLOResult"></span>%</span></b>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-pane active main-dashboard margin-t10" id="dashboard-tab">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="dashboard-box">
+            <div class="box-panel-heading text-align-Center">
+              <span><i class="app-icon-IconSet-1-73"></i></span>
+              <h1>
+                <b>Note: </b>This section is very important for continuous quality improvement of our academic program.
+              </h1>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-12">
+          <div class="dashboard-box">
+            <div class="box-panel-heading text-align-Center">
+              <span><i class="app-icon-IconSet-1-73"></i></span>
+              <h1>
+                <b>Reflections: </b>Please identify the areas of improvement and corrective action plan to be taken for improvement of outcomes.
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="section-heading padding-b5">
+          <h4><a (click)="Table1Edit()"><b>Course Contents   </b> <i class="app-icon-Amazing-Fusion-61 icon" *ngIf="!Table1_Edit"></i></a></h4>
+          <div class="pull-right" *ngIf="Table1_Edit">
+            <button class="btn btn-info margin-r10" (click)="SaveTable1Form()">Save</button>
+            <button class="btn btn-default" (click)="CancelTable1Form()">Cancel</button>
+          </div>
+        </div>
+        <div class="dashboard-box dash-box-right">
+          <div class="table-responsive">
+            <table class="table table-hover table-theme">
+              <thead>
+                <tr>
+                  <th align="center" width="15%">Questions </th>
+                  <th align="center">Comments </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr [ngClass]="(Table1_Edit)?'tr-info':''">
+                  <td>Please comment on the course content approved for this course.</td>
+                  <td>
+                    <br />
+                    <input id="Q1Sufficient" type="radio" value="Sufficient" name="Tb1Q1" checked [disabled]="!Table1_Edit">
+                    <label for="Q1Sufficient" class="m-r-5p">Sufficient</label>
+
+                    <input id="Q1Insufficient" type="radio" value="Insufficient" name="Tb1Q1" [disabled]="!Table1_Edit">
+                    <label for="Q1Insufficient">Insufficient</label> <br /><br />
+
+                    <label for="Tb1Q1Remarks">Remarks (If any): </label><br />
+                    <textarea class="textArea" id="Tb1Q1Remarks" rows="4" placeholder="Add Remarks if you have any" [disabled]="!Table1_Edit"></textarea>
+                  </td>
+                </tr>
+
+                <tr [ngClass]="(Table1_Edit)?'tr-info':''">
+                  <td>Can the students meet the expected outcomes? </td>
+                  <td>
+                    <br />
+                    <input id="Q2Yes" type="radio" value="Yes" name="Tb1Q2" checked [disabled]="!Table1_Edit">
+                    <label for="Q2Yes" class="m-r-5p">Yes</label>
+
+                    <input id="Q2No" type="radio" value="No" name="Tb1Q2" [disabled]="!Table1_Edit">
+                    <label for="Q2No">No</label> <br /><br />
+
+                    <label for="Tb1Q2Remarks">Remarks (If any): </label><br />
+                    <textarea class="textArea" id="Tb1Q2Remarks" rows="4" placeholder="Add Remarks if you have any" [disabled]="!Table1_Edit"></textarea>
+                  </td>
+                </tr>
+
+                <tr [ngClass]="(Table1_Edit)?'tr-info':''">
+                  <td>Please comment on the course content delivered by you.</td>
+                  <td>
+                    <br />
+                    <input id="Q3FullyCovered" type="radio" value="Fully Covered" name="Tb1Q3" checked [disabled]="!Table1_Edit">
+                    <label for="Q3FullyCovered" class="m-r-5p">Fully Covered</label>
+
+                    <input id="Q3PartiallyCovered" type="radio" value="Partially Covered" name="Tb1Q3" [disabled]="!Table1_Edit">
+                    <label for="Q3PartiallyCovered">Partially Covered</label> <br /><br />
+
+                    <label for="Tb1Q3Remarks">Remarks (If any): </label><br />
+                    <textarea class="textArea" id="Tb1Q3Remarks" rows="4" placeholder="Add Remarks if you have any" [disabled]="!Table1_Edit"></textarea>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <div class="section-heading padding-b5">
+          <h4><a (click)="Table2Edit()"><b>Method Of Teaching    </b> <i class="app-icon-Amazing-Fusion-61 icon" *ngIf="!Table2_Edit"></i></a></h4>
+          <div class="pull-right" *ngIf="Table2_Edit">
+            <button class="btn btn-info margin-r10" (click)="SaveTable2Form()">Save</button>
+            <button class="btn btn-default" (click)="CancelTable2Form()">Cancel</button>
+          </div>
+        </div>
+        <div class="dashboard-box dash-box-right">
+          <div class="table-responsive">
+            <table class="table table-hover table-theme">
+              <thead>
+                <tr>
+                  <th align="center" width="15%">Questions </th>
+                  <th align="center">Comments </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr [ngClass]="(Table2_Edit)?'tr-info':''">
+                  <td>Please comment on the use of latest tools available.</td>
+                  <td>
+                    <br />
+                    <input id="Q1MinimumLevel" type="radio" value="Minimum Level" name="Tb2Q1" checked [disabled]="!Table2_Edit">
+                    <label for="Q1MinimumLevel" class="m-r-5p">Minimum Level</label>
+
+                    <input id="Q1PartiallyCovered" type="radio" value="Partially Covered" name="Tb2Q1" [disabled]="!Table2_Edit">
+                    <label for="Q1PartiallyCovered" class="m-r-5p">Partially Covered</label>
+
+                    <input id="Q1None" type="radio" value="None" name="Tb2Q1" [disabled]="!Table2_Edit">
+                    <label for="Q1None" class="m-r-5p">None</label><br /><br />
+
+                    <label for="Tb2Q1Remarks">Remarks (If any): </label><br />
+                    <textarea class="textArea" id="Tb2Q1Remarks" rows="4" placeholder="Add Remarks if you have any" [disabled]="!Table2_Edit"></textarea>
+                  </td>
+                </tr>
+
+                <tr [ngClass]="(Table2_Edit)?'tr-info':''">
+                  <td>Please comment on the other teaching method used.</td>
+                  <td>
+                    <br />
+                    <input id="Q2ActiveLearning" type="radio" value="Active Learning" name="Tb2Q2" checked [disabled]="!Table2_Edit">
+                    <label for="Q2ActiveLearning" class="m-r-5p">Active Learning</label>
+
+                    <input id="Q2CooperativeLearning" type="radio" value="Cooperative Learning" name="Tb2Q2" [disabled]="!Table2_Edit">
+                    <label for="Q2CooperativeLearning" class="m-r-5p">Cooperative Learning</label>
+
+                    <input id="Q2ProblemBasedLearning" type="radio" value="Problem Based Learning" name="Tb2Q2" [disabled]="!Table2_Edit">
+                    <label for="Q2ProblemBasedLearning" class="m-r-5p">Problem Based Learning</label>
+
+                    <input id="Q2ProjectBasedLearning" type="radio" value="Project Based Learning" name="Tb2Q2" [disabled]="!Table2_Edit">
+                    <label for="Q2ProjectBasedLearning" class="m-r-5p">Project Based Learning</label> <br /><br />
+
+                    <label for="Tb2Q2Remarks">Remarks (If any): </label><br />
+                    <textarea class="textArea" id="Tb2Q2Remarks" rows="4" placeholder="Add Remarks if you have any" [disabled]="!Table2_Edit"></textarea>
+                  </td>
+                </tr>
+
+                <tr [ngClass]="(Table2_Edit)?'tr-info':''">
+                  <td>Please comment on the students response to the teaching methods used.</td>
+                  <td>
+                    <br />
+                    <input id="Q3RespondedWell" type="radio" value="Responded Well" name="Tb2Q3" checked [disabled]="!Table2_Edit">
+                    <label for="Q3RespondedWell" class="m-r-5p">Responded Well </label>
+
+                    <input id="Q3DidNotRespondWell" type="radio" value="Did Not Respond Well" name="Tb2Q3" [disabled]="!Table2_Edit">
+                    <label for="Q3DidNotRespondWell" class="m-r-5p">Did Not Respond Well </label> <br /><br />
+
+                    <label for="Tb2Q3Remarks">Remarks (If any): </label><br />
+                    <textarea class="textArea" id="Tb2Q3Remarks" rows="4" placeholder="Add Remarks if you have any" [disabled]="!Table2_Edit"></textarea>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-pane active main-dashboard margin-t10" id="dashboard-tab">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="dashboard-box">
+            <div class="box-panel-heading text-align-Center">
+              <span><i class="app-icon-IconSet-1-73"></i></span>
+              <h1>
+                Assessments and Corrective Actions.
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="section-heading padding-b5">
+          <h4><a (click)="Table3Edit()"><b>Corrective Action Plan   </b> <i class="app-icon-Amazing-Fusion-61 icon" *ngIf="!Table3_Edit"></i></a></h4>
+          <div class="pull-right" *ngIf="Table3_Edit">
+            <button class="btn btn-info margin-r10" (click)="SaveTable3Form()">Save</button>
+            <button class="btn btn-default" (click)="CancelTable3Form()">Cancel</button>
+          </div>
+        </div>
+        <div class="dashboard-box dash-box-right">
+          <div class="table-responsive">
+            <table class="table table-hover table-theme">
+              <thead>
+                <tr>
+                  <th align="center" width="15%">Questions </th>
+                  <th align="center">Comments </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr [ngClass]="(Table3_Edit)?'tr-info':''">
+                  <td>Please comment on the assessment tools listed in the course outline which you have adopted.</td>
+                  <td>
+                    <br />
+                    <div class="form-group">
+                      <label class="control-label" for="Quiz">Quiz Performance Target(%)</label>
+                      <input type="number" class="form-control input-sm" id="Quiz" [disabled]="!Table3_Edit">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label" for="Assignment">Assignment Performance Target(%)</label>
+                      <input type="number" class="form-control input-sm" id="Assignment" [disabled]="!Table3_Edit">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label" for="CourseProject">Course Project Performance Target(%)</label>
+                      <input type="number" class="form-control input-sm" id="CourseProject" [disabled]="!Table3_Edit">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label" for="MidsFinals"> Midterm/Final Exams Performance Target(%)</label>
+                      <input type="number" class="form-control input-sm" id="MidsFinals" [disabled]="!Table3_Edit">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label" for="Presentation">Presentation Performance Target(%)</label>
+                      <input type="number" class="form-control input-sm" id="Presentation" [disabled]="!Table3_Edit">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label" for="CEP">CEP Performance Target(%)</label>
+                      <input type="number" class="form-control input-sm" id="CEP" [disabled]="!Table3_Edit">
+                    </div>
+
+                    <label for="Tb3Q1Remarks">Remarks (If any): </label><br />
+                    <textarea class="textArea" id="Tb3Q1Remarks" rows="4" placeholder="Add Remarks if you have any" [disabled]="!Table3_Edit"></textarea>
+                  </td>
+                </tr>
+
+                <tr [ngClass]="(Table3_Edit)?'tr-info':''">
+                  <td>Please comment on the distribution of marks as stated in the course outline.</td>
+                  <td>
+                    <br />
+                    <input id="Q2WellDistributed" type="radio" value="Well Distributed" name="Tb3Q2" checked [disabled]="!Table3_Edit">
+                    <label for="WellDistributed " class="m-r-5p">Well Distributed</label>
+
+                    <input id="Q2NeedsReDistribution" type="radio" value="Needs Re-Distribution" name="Tb3Q2" [disabled]="!Table3_Edit">
+                    <label for="Q2NeedsReDistribution">Needs Re-Distribution</label> <br /><br />
+
+                    <label for="Tb3Q2Remarks">Remarks (If any): </label><br />
+                    <textarea class="textArea" id="Tb3Q2Remarks" rows="4" placeholder="Add Remarks if you have any" [disabled]="!Table3_Edit"></textarea>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <div class="section-heading padding-b5">
+          <h4><a (click)="Table4Edit()"><b>Corrective Action Plan  </b> <i class="app-icon-Amazing-Fusion-61 icon" *ngIf="!Table4_Edit"></i></a></h4>
+          <div class="pull-right" *ngIf="Table4_Edit">
+            <button class="btn btn-info margin-r10" (click)="SaveTable4Form()">Save</button>
+            <button class="btn btn-default" (click)="CancelTable4Form()">Cancel</button>
+          </div>
+        </div>
+        <div class="dashboard-box dash-box-right">
+          <div class="table-responsive">
+            <table class="table table-hover table-theme">
+              <thead>
+                <tr>
+                  <th align="center" width="15%">Questions </th>
+                  <th align="center">Comments </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr [ngClass]="(Table4_Edit)?'tr-info':''">
+                  <td>Please state the type of failure and your action plan details for closing the CQI cycle.</td>
+                  <td>
+                    <div class="form-group">
+                      <label class="control-label" for="FailedCLOS">CLO (Number of Failed CLOs)</label>
+                      <input type="number" class="form-control input-sm" id="FailedCLOS" [disabled]="!Table4_Edit">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label" for="FailedStudentsInCLOS">CLO (Number of Failing Students)</label>
+                      <input type="number" class="form-control input-sm" id="FailedStudentsInCLOS" [disabled]="!Table4_Edit">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label" for="FailedPLOS">PLO (Number of Failed PLOs)</label>
+                      <input type="number" class="form-control input-sm" id="FailedPLOS" [disabled]="!Table4_Edit">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label" for="FailedStudentsInPLOS">PLO (Number of Failing Students)</label>
+                      <input type="number" class="form-control input-sm" id="FailedStudentsInPLOS" [disabled]="!Table4_Edit">
+                    </div>
+
+                    <br />
+                    <input id="Q1Workshop" type="radio" value="Workshop" name="Tb4Q1" checked [disabled]="!Table4_Edit">
+                    <label for="Q1Workshop" class="m-r-5p">Workshop</label>
+
+                    <input id="Q1ComprehensiveAssignment " type="radio" value="Comprehensive Assignment" name="Tb4Q1" [disabled]="!Table4_Edit">
+                    <label for="Q1ComprehensiveAssignment " class="m-r-5p">Comprehensive Assignment </label>
+
+                    <input id="Q1RepeatCourse " type="radio" value="Repeat Course" name="Tb4Q1" [disabled]="!Table4_Edit">
+                    <label for="Q1RepeatCourse ">Repeat Course </label> <br />
+
+                  </td>
+                </tr>
+
+                <tr [ngClass]="(Table4_Edit)?'tr-info':''">
+                  <td>
+                    Please state the implementation  plan that you will adopt.
+                  </td>
+                  <td>
+                    <br />
+                    <label for="Tb4Q2Remarks">Remarks (If any): </label><br />
+                    <textarea class="textArea" id="Tb4Q2Remarks" rows="4" placeholder="Add Remarks if you have any" [disabled]="!Table4_Edit"></textarea>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<div class="tab-content main-tab-content dragging-area">
+  <div class="tab-pane active" id="dashboard">
+    <div class="tabs-menu">
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active" id="Dashboard-Active" (click)="activeClass('d')"><a [routerLink]="['main']" href="javascript:void(0)" aria-controls="home" id="dashboard-tab" role="tab" data-toggle="tab"><i class="icon app-icon-EHR-Nav-Icons-02 padding-r5"></i> Dashboard </a></li>
+        <li role="presentation" id="Registered-Courses-Active" (click)="activeClass('r')"><a [routerLink]="['RegisteredCourses']" id="RegisteredCourses-tab" role="tab" data-toggle="tab"><i class="app-icon-IconSet-1-80 padding-r5"></i>Registered Courses </a></li>
+        <li *ngIf="this.ShowExitSurveyForm===1" role="presentation" id="Exit-Survey-Active" (click)="activeClass('E')"><a [routerLink]="['ExitSurveyFrom']" id="Exit-Survey-tab" role="tab" data-toggle="tab"><i class="app-icon-IconSet-1-80 padding-r5"></i>Exit Survey Form</a></li>
+        
+        <li class="clearfix"></li>
+      </ul>
+    </div>
+    <router-outlet></router-outlet>
+  </div>
+</div>

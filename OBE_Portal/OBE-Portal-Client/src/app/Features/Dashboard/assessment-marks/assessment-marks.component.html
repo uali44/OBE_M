@@ -1,0 +1,375 @@
+<div class="modal-section" style="position: initial;">
+  <div class="modal fade modal-sm margin-t41" id="Add-Assessment-Marks-Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="section-heading">
+            <h2 class="pull-left">Add Assessment Marks</h2>
+            <div class="pull-right">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+
+        <div class="popup-scroller mCustomScrollbar" style="height: 20vh;max-height:20vh">
+          <div class="modal-body">
+            <div class="row">
+              <div class="form-group col-sm-12 text-center">
+                <div data-toggle="buttons" class="btn-group btn-switch">
+                  <!--<button class="btn btn-default active" href="#Excel-Upload" role="tab" data-toggle="tab" aria-expanded="true">
+                    <input type="radio" chacked="" autocomplete="off" id="option2" name="options">
+                    Excel Upload
+                  </button>-->
+                  <!--<button class="btn btn-default" href="#Manual" role="tab" data-toggle="tab" aria-expanded="true">
+                    <input type="radio" autocomplete="off" id="option1" name="options">
+                    Manual
+                  </button>-->
+                </div>
+              </div>
+            </div>
+            <div class="tab-content no-padding">
+              <div role="tabpanel" class="tab-pane active" id="Excel-Upload">
+                <div class="row">
+                  <div class="col-sm-12 col-md-6 col-lg-12">
+                    <fieldset>
+                      <legend>Excel Upload</legend>
+                      <div class="row">
+                        <div class="form-group col-sm-12 col-lg-12">
+                          <span class="col-lg-10 no-padding">
+                            <label class="control-label">Select File (.xls) <span class="text-danger">*</span> </label>
+                            <input type="text" class="form-control margin-r5" [(ngModel)]="this.FileName" disabled>
+                          </span>
+                          <span class="btn btn-default btn-file col-lg-1 margin-l5" style="margin-top: 17px;">
+                            Browse
+                            <input type="file" (change)="onFileChange($event)">
+                          </span>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <!--<fieldset class="padding-b5">
+                      <legend>Criteria</legend>
+                      <div class="row">
+                        <div class="form-group col-sm-12 col-lg-3">
+                          <label class="control-label">Select Assessment <span class="text-danger">*</span> </label>
+                          <select class="form-control">
+                            <option value="1" selected>Select Assessment</option>
+                          </select>
+                        </div>
+                        <div class="col-sm-12 col-lg-1" style="margin-top: 17px;">
+                          <button class="btn btn-info">Display</button>
+                        </div>
+                      </div>
+                    </fieldset>-->
+                  </div>
+                </div>
+                <!--<div class="dashboard-box dash-box-right margin-t5">
+                  <div class="dashboard-scroller setups-widget mCustomScrollbar" style="max-height: 400px !important;">
+                    <div class="table-responsive">
+                      <table class="table table-hover table-theme">
+                        <thead>
+                          <tr>
+                            <th width="3%" class="text-center">Sr. #</th>
+                            <th width="10%" class="text-left">Name / Enrollment</th>
+                            <th width="25%" class="text-left">Assessment Sub Details</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td align="center">1</td>
+                            <td><b class="blue">Muhammad Bilal Malik</b><p>01-133132-130</p></td>
+                            <td>
+                              <b class="blue">Question: 1 </b><p>Question Marks: <b>5</b> | Obtained Marks: <b>5</b> | Mapped CLO: <b>CLO1</b> | Weightage: <b>100%</b></p>
+                              <b class="blue">Question: 2 </b><p>Question Marks: <b>5</b> | Obtained Marks: <b>5</b> | Mapped CLO: <b>CLO2</b> | Weightage: <b>100%</b></p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>-->
+              </div>
+              <!--<div role="tabpanel" class="tab-pane" id="Manual">
+                <div class="row">
+                  <div class="col-sm-12 col-md-6 col-lg-12">
+                    <fieldset class="padding-b5">
+                      <legend>Criteria</legend>
+                      <div class="row">
+                        <div class="form-group col-sm-12 col-lg-3">
+                          <label class="control-label">Select Assessment <span class="text-danger">*</span> </label>
+                          <select class="form-control">
+                            <option value="1" selected>ALL</option>
+                          </select>
+                        </div>
+                        <div class="col-sm-12 col-lg-1" style="margin-top: 17px;">
+                          <button class="btn btn-info">Display</button>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+                <div class="dashboard-box dash-box-right margin-t5">
+                  <div class="dashboard-scroller setups-widget mCustomScrollbar" style="max-height: 400px !important;">
+                    <div class="table-responsive">
+                      <table class="table table-hover table-theme">
+                        <thead>
+                          <tr>
+                            <th width="3%" class="text-center">Sr. #</th>
+                            <th width="10%" class="text-left">Name / Enrollment</th>
+                            <th width="25%" class="text-left">Assessment Sub Details</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td align="center">1</td>
+                            <td><b class="blue">Muhammad Bilal Malik</b><p>01-133132-130</p></td>
+                            <td>
+                              <div class="form-group">
+                                <label class="control-label"><b class="blue">Question: 1</b><p>Marks: <b>10</b> | Mapped CLO: <b>CLO1</b> | Weightage: <b>100%</b></p> </label>
+                                <input type="number" class="form-control input-sm">
+                              </div>
+                              <div class="form-group">
+                                <label class="control-label"><b class="blue">Question: 2</b><p>Marks: <b>10</b> | Mapped CLO: <b>CLO1</b> | Weightage: <b>100%</b></p> </label>
+                                <input type="number" class="form-control input-sm">
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>-->
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-info" data-dismiss="modal" (click)="Save_Marks()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade modal-wide margin-t41" id="Edit-Assessment-Marks-Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="section-heading">
+            <h2 class="pull-left">Edit Marks</h2>
+            <div class="pull-right">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="popup-scroller mCustomScrollbar">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-12 col-md-6 col-lg-12">
+                <fieldset class="padding-b5">
+                  <legend>Edit Marks</legend>
+                  <div class="row">
+                    <div class="form-group col-sm-3">
+                      <label class="control-label" *ngIf="Is_Course">Question Number</label>
+                      <label class="control-label" *ngIf="!Is_Course">Performance Indicator</label>
+                      <input min="0" type="text" class="form-control input-sm" id="Question_Number" disabled>
+                    </div>
+                    <div class="form-group col-sm-3">
+                      <label class="control-label">Obtained Marks <span class="text-danger">*</span> </label>
+                      <input min="0" type="number" class="form-control input-sm" id="update_Marks">
+                    </div>
+                    <div class="col-sm-12 col-lg-1 pull-left margin-t17">
+                      <button class="btn btn-info" (click)="Update_Temp()" [attr.disabled]="this.Assessment_Marks_ID==0 ? true : null">Update</button>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+            <div class="dashboard-box dash-box-right margin-t5">
+              <div class="dashboard-scroller setups-widget mCustomScrollbar" style="max-height: 400px !important;">
+                <div class="table-responsive">
+                  <table class="table table-hover table-theme">
+                    <thead>
+                      <tr>
+                        <th width="3%" class="text-center">Sr. #</th>
+                        <th width="10%" class="text-left">Name / Enrollment</th>
+                        <th width="25%" class="text-left">Assessment Sub Details</th>
+                        <th width="5%" class="text-center">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="tr-warning" *ngFor="let i of Update_Marks; let ind=index">
+                        <td align="center">{{ind+1}}</td>
+                        <td><b class="blue"><span [innerHTML]="i.Name"></span></b><p><span [innerHTML]="i.Enrollment"></span></p></td>
+                        <td *ngIf="i.Is_Course">
+                          <b class="blue">Question: <span [innerHTML]="i.Question_Number"></span></b><p>Question Marks: <b><span [innerHTML]="i.Question_Marks"></span></b> | Obtained Marks: <b><span [innerHTML]="i.Obtained_Marks"></span></b> | Mapped CLO: <b><span [innerHTML]="i.CLO_Title"></span></b> | Weightage: <b><span [innerHTML]="i.Weightage"></span>%</b></p>
+                        </td>
+                        <td *ngIf="!i.Is_Course">
+                          <b class="blue"><span [innerHTML]="i.Question_Number"></span></b><p>Question Marks: <b><span [innerHTML]="i.Question_Marks"></span></b> | Obtained Marks: <b><span [innerHTML]="i.Obtained_Marks"></span></b> | Mapped CLO: <b><span [innerHTML]="i.CLO_Title"></span></b> | Weightage: <b><span [innerHTML]="i.Weightage"></span>%</b></p>
+                        </td>
+                        <td align="center">
+                          <div class="btn-group">
+                            <button type="button" (click)="Edit_Assessment_Marks_Temp(i,ind)" class="btn btn-default margin-r5" title="Edit Marks"><i class="app-icon-Amazing-Fusion-61 f12 blue"></i> </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-info" data-dismiss="modal" (click)="Save_Updated_Marks()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div role="tabpanel" class="tab-pane" id="tab-Assessment-Marks">
+  <div class="section-heading padding-b5">
+    <h2>Assessment Marks Details</h2>
+    <div class="pull-right" *ngIf="Add_Permission">
+      <button data-target="#Add-Assessment-Marks-Modal" data-toggle="modal" class="btn btn-info">Add Assessment Marks</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-12">
+      <fieldset class="padding-b5">
+        <legend>Criteria</legend>
+        <div class="row">
+
+          <div class="form-group col-sm-12 col-lg-3">
+            <label class="control-label">Select Assessment</label>
+            <select class="form-control" [(ngModel)]="Selected_Assessment">
+              <option value="0" selected>Select Assessment</option>
+              <option value="{{i.Assessment_Main_Details_ID}}" *ngFor="let i of Added_Assessments">{{i.Assessment_Title}}</option>
+            </select>
+          </div>
+
+          <div class="form-group col-sm-12 col-lg-3">
+            <label class="control-label">Registered Student</label>
+            <select class="form-control" [(ngModel)]="Selected_Student">
+              <option value="0" selected>ALL</option>
+              <option value="{{i.Student_ID}}" *ngFor="let i of Registered_Students">{{i.Student_Name}} ({{i.Student_Enrollment}} )</option>
+            </select>
+          </div>
+
+          <div class="col-sm-12 col-lg-1" style="margin-top: 17px;">
+            <button class="btn btn-info" (click)="GetStudentAssessmentDetails()">Search</button>
+          </div>
+
+        </div>
+      </fieldset>
+    </div>
+  </div>
+  <div class="margin-b5 margin-t5">
+    <div class="pull-left">
+      <div class="has-feedback width-300">
+        <input type="text" class="form-control" placeholder="Search Records" [(ngModel)]="query">
+        <span class="form-control-feedback"><i class="app-icon-IconSet-1-92"></i></span>
+      </div>
+    </div>
+    <div class="pull-left margin-l5">
+      <div class="form-inline">
+        <div class="form-group margin-r10" style="width:110%">
+          <label class="control-label margin-r10">Show</label>
+          <select class="form-control input-xs margin-r5" (change)="setPage(1,pagesize)" [(ngModel)]="pagesize" style="width: 30%;">
+            <option>10</option>
+            <option>20</option>
+            <option>30</option>
+            <option>50</option>
+            <option>100</option>
+          </select>
+          <label class="control-label">Per Page</label>
+        </div>
+      </div>
+    </div>
+    <div class="pull-left margin-t5">
+      <ul class="nav nav-pills margin-l20">
+        <li class="margin-r15"><span class="fa fa-stop text-success"></span> Passed</li>
+        <li class="margin-r15"><span class="fa fa-stop text-danger"></span> Failed</li>
+      </ul>
+    </div>
+    <div class="pull-right">
+      <div class="btn-group left-dropdown">
+        <button class="btn btn-default btn-sm dropdown-toggle margin-r5" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Export <span class="caret"></span> </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <li><a (click)="DownloadExcel()">Marks Template</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+</div>
+<div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+  <table class="table table-hover table-theme">
+    <thead>
+      <tr>
+        <th width="3%" class="text-center">Sr. #</th>
+        <th width="15%" class="text-left">Assessment Title</th>
+        <th width="15%" class="text-left">Name / Enrollment</th>
+        <th width="40%" class="text-left">Assessment Details</th>
+        <th width="5%" class="text-center" *ngIf="Is_Show_Action_TD" style="z-index: 1;">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="tr-success" *ngFor="let i of Assessment_And_Student_Details | filter:query; let ind=index">
+        <td align="center">{{ind+1}}</td>
+        <td><b class="blue"> <span [innerHTML]="i.Assessment_Title | highlight:query"></span></b><p>Total Marks: <b><span [innerHTML]="i.Assessment_Marks | highlight:query"></span></b></p></td>
+        <td><b class="blue"><span [innerHTML]="i.Name | highlight:query"></span></b><p><span [innerHTML]="i.Enrollment | highlight:query"></span></p></td>
+        <ng-container *ngIf="i.Is_Course">
+          <td *ngIf="i.Is_Multiple">
+            <ng-container *ngFor="let j of i.Question_Number; let idx=index">
+              <b class="blue">Question: <span [innerHTML]="j | highlight:query"></span></b><p>Question Marks: <b><span [innerHTML]="i.Question_Marks[idx] | highlight:query"></span></b> | Obtained Marks: <b><span [innerHTML]="i.Obtained_Marks[idx] | highlight:query"></span></b> | Mapped CLO: <b><span [innerHTML]="i.CLO_Title[idx] | highlight:query"></span></b> | Weightage: <b><span [innerHTML]="i.Weightage[idx] | highlight:query"></span>%</b></p>
+            </ng-container>
+          </td>
+          <td *ngIf="!i.Is_Multiple">
+            <b class="blue">Question: <span [innerHTML]="i.Question_Number | highlight:query"></span></b><p>Question Marks: <b><span [innerHTML]="i.Question_Marks | highlight:query"></span></b> | Obtained Marks: <b><span [innerHTML]="i.Obtained_Marks | highlight:query"></span></b> | Mapped CLO: <b><span [innerHTML]="i.CLO_Title | highlight:query"></span></b> | Weightage: <b><span [innerHTML]="i.Weightage | highlight:query"></span>%</b></p>
+          </td>
+        </ng-container>
+        <ng-container *ngIf="!i.Is_Course">
+          <td *ngIf="i.Is_Multiple">
+            <ng-container *ngFor="let j of i.Question_Number; let idx=index">
+              <b class="blue"><span [innerHTML]="j | highlight:query"></span></b><p>Rubrics Marks: <b><span [innerHTML]="i.Question_Marks[idx] | highlight:query"></span></b> | Obtained Marks: <b><span [innerHTML]="i.Obtained_Marks[idx] | highlight:query"></span></b> | Mapped CLO: <b><span [innerHTML]="i.CLO_Title[idx] | highlight:query"></span></b> | Weightage: <b><span [innerHTML]="i.Weightage[idx] | highlight:query"></span>%</b></p>
+            </ng-container>
+          </td>
+          <td *ngIf="!i.Is_Multiple">
+            <b class="blue"><span [innerHTML]="i.Question_Number | highlight:query"></span></b><p>Rubrics Marks: <b><span [innerHTML]="i.Question_Marks | highlight:query"></span></b> | Obtained Marks: <b><span [innerHTML]="i.Obtained_Marks | highlight:query"></span></b> | Mapped CLO: <b><span [innerHTML]="i.CLO_Title | highlight:query"></span></b> | Weightage: <b><span [innerHTML]="i.Weightage | highlight:query"></span>%</b></p>
+          </td>
+        </ng-container>
+        <td align="center" *ngIf="Is_Show_Action_TD">
+          <div class="btn-group">
+            <button type="button" (click)="Edit_Assessment_Marks(i)" class="btn btn-default margin-r5" title="Edit Marks"><i class="app-icon-Amazing-Fusion-61 f12 blue"></i> </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination-bottom">
+  <div class="pull-left">
+    <div class="form-inline">
+      <div class="form-group" *ngIf="Assessment_And_Student_Details==null || Assessment_And_Student_Details?.length == 0">
+        <label class="control-label padding-t5">Showing 0 to 0 of 0 entries</label>
+      </div>
+      <div class="form-group" *ngIf="Assessment_And_Student_Details?.length >=1">
+        <label class="control-label padding-t5">Showing {{pager?.startIndex+1}} to {{pager?.endIndex+1}} of {{pager?.totalItems}} entries</label>
+      </div>
+    </div>
+  </div>
+  <div class="form-inline pull-right margin-b5">
+    <div class="table-pagination pull-right" *ngIf="pager?.pages && pager?.pages.length">
+      <button data-original-title="First Page" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === 1}" (click)="setPage(1,pagesize)" [disabled]="pager?.currentPage === 1"><i class="fa fa-backward"></i></button>
+      <button data-original-title="Previous" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === 1}" (click)="setPage(pager?.currentPage - 1,pagesize)" [disabled]="pager?.currentPage === 1"><i class="fa fa-caret-left"></i></button>
+      <input type="text" style="width:50px;" value="1" class="form-control" [(ngModel)]="page" (keyup)="setPage(page)" (keypress)="keyRestrict($event,'0123456789')" disabled>
+      <label class="control-label">of  {{pager?.totalPages}}</label>
+      <button data-original-title="Next" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === pager?.totalPages}" (click)="setPage(pager?.currentPage + 1,pagesize)" [disabled]="pager?.currentPage == pager?.totalPages"><i class="fa fa-caret-right"></i></button>
+      <button data-original-title="Last" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === pager?.totalPages}" (click)="setPage(pager?.totalPages,pagesize)" [disabled]="pager?.currentPage == pager?.totalPages"><i class="fa fa-forward"></i></button>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+</div>

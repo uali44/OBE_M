@@ -1,0 +1,121 @@
+
+.slinky-menu {
+    overflow: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.slinky-menu>ul {
+    left: 0;
+    position: relative;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease
+}
+
+.slinky-menu li,
+.slinky-menu ul {
+    list-style: none;
+    margin: 2px 0;
+    text-align: left;
+}
+
+.slinky-menu ul {
+    width: 100%
+}
+
+.slinky-menu a {
+    display: block;
+    border: none;
+    color: #0864a6;
+    padding: 8px 10px;
+    border: 1px solid #dae1e6;
+    text-align: left;
+    background: white;
+    line-height: normal;
+}
+.slinky-menu a.next{
+    color: #333;
+    font-weight: 500;
+}
+.slinky-menu a.next i{
+        color: #0864a6;
+    margin-right: 3px;
+    font-size: 16px;
+    position: relative;
+    top: 2px;
+}
+.slinky-menu a.next:hover i{
+    color: #fff;
+}
+.slinky-menu li ul {
+    display: none;
+    left: 100%;
+    position: absolute;
+    top: 0
+}
+.slinky-menu li ul.active {
+    background: #f0f3f5;
+    transition-duration: 300ms;
+}
+
+.slinky-menu .header {
+    position: relative;
+    background: #0864a6;
+}
+
+.slinky-menu h2~a.back {
+    left: 0;
+    position: absolute;
+    top: 0;
+    color: #fff;
+    border: none;
+    background: #0864a6;
+    padding: 5px 8px;
+    line-height: 18px;
+}
+.slinky-menu h2~a.back:hover{
+    background: #005796;
+}
+.slinky-menu h2 {
+    font-size: 1em;
+    margin: 0;
+    text-align: center;
+    color: #FFF;
+    padding:8px 10px;
+}
+
+.slinky-menu li {
+    line-height: 1
+}
+
+.slinky-menu a:hover {
+    background: #005796;
+    color: #fff;
+}
+
+.slinky-menu a.next:after {
+    content: '\276f';
+    margin-left: 1em;
+    float: right
+}
+
+.slinky-menu a.back:before {
+    content: '\276e';
+    margin-right: 7px;
+    float: left
+}
+
+
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+    margin: 0;
+    outline: none;
+    padding: 0;
+}

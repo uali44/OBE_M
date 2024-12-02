@@ -1,0 +1,72 @@
+<div class="tab-content">
+  <div *ngIf="Is_Permission_Search_Criteria">
+    <app-course-search [Module]="2"></app-course-search>
+  </div>
+  <div role="tabpanel" id="AssignedCourse-tab" *ngIf="AssignedCourse_Request_lst?.length>0">
+    <ul class="breadcrumb" role="tablist">
+      <ng-container *ngFor="let i of AssignedCourse_Request_lst">
+        <li role="presentation" class="cursor-pointer" [ngClass]="(i.Sr_Number==Sr_number)?'active':''" (click)="SelectedCourse(i)">
+          <a href="#Course-One" aria-controls="home" role="tab" data-toggle="tab" title="{{i.Title}}">
+            <span>{{i.Sr_Number}}</span>
+            {{i.Course_Alias}}
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+    <div class="tab-content no-padding">
+      <div role="tabpanel" class="tab-pane active">
+        <div class="row">
+          <div role="tabpanel" class="tab-pane active" id="Course-One">
+            <div class="section-tabs margin-t0">
+              <div class="tabs-head">
+                <ul class="nav nav-tabs" role="tablist">
+                  <li role="presentation" id="tab_Course_CLOS" class="active" (click)="LoadCoursesCLOS()"><a aria-expanded="true" href="#tab-Course-CLOS" role="tab" data-toggle="tab">Course CLOs <span class="notification">{{CLOS_Count}}</span> </a> </li>
+                  <li role="presentation" id="tab_Assessment_Details" (click)="LoadAssessmentTools()"><a aria-expanded="true" href="#tab-Assessment-Details" role="tab" data-toggle="tab">Assessment Details <span class="notification">{{Assessment_Count}}</span> </a> </li>
+                  <li role="presentation" id="tab_Assessment_Marks" (click)="LoadAssessmentMarks()"><a aria-expanded="true" href="#tab-Assessment-Marks" role="tab" data-toggle="tab">Assessment Marks  <span class="notification">{{Marks_Added_Assessment_Count}}</span> </a> </li>
+                  <li role="presentation" id="tab_Compiled_Result" (click)="LoadCompiledResult()"><a aria-expanded="true" href="#tab-Compiled-Result" role="tab" data-toggle="tab">Compiled Result <span class="notification">{{Student_Count}}</span> </a> </li>
+                  <li role="presentation" id="tab_Assessment_Achievement" (click)="LoadAssessmentAchievement()" class="hidden"> <a aria-expanded="true" href="#tab-Assessment-Achievement" role="tab" data-toggle="tab">Assessment Achievement <span class="notification">{{Student_Count}}</span></a></li>
+                  <li role="presentation" id="tab_Student_For_CQI" (click)="LoadStudentForCQI()"> <a aria-expanded="true" href="#tab-Student-For-CQI" role="tab" data-toggle="tab">Failed CLOs Students<span class="notification">{{Failed_CLOs_Students_Count}}</span></a></li>
+                </ul>
+              </div>
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="tab-Course-CLOS">
+                  <ng-container *ngIf="Is_Course_CLOS">
+                    <app-courses-clos></app-courses-clos>
+                  </ng-container>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="tab-Assessment-Details">
+                  <ng-container *ngIf="Is_Assessment_Tools">
+                    <app-assessment-details></app-assessment-details>
+                  </ng-container>
+
+                </div>
+                <div role="tabpanel" class="tab-pane" id="tab-Assessment-Marks">
+                  <ng-container *ngIf="Is_Assessment_Marks">
+                    <app-assessment-marks></app-assessment-marks>
+                  </ng-container>
+
+                </div>
+                <div role="tabpanel" class="tab-pane" id="tab-Compiled-Result">
+                  <ng-container *ngIf="Is_Compiled_Result">
+                    <app-compiled-result></app-compiled-result>
+                  </ng-container>
+
+                </div>
+                <div role="tabpanel" class="tab-pane hidden" id="tab-Assessment-Achievement">
+                  <ng-container *ngIf="Is_Assessment_Achievement">
+                    <app-assessment-achievement></app-assessment-achievement>
+                  </ng-container>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="tab-Student-For-CQI">
+                  <ng-container *ngIf="Is_Student_For_CQI">
+                    <app-student-for-cqi></app-student-for-cqi>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

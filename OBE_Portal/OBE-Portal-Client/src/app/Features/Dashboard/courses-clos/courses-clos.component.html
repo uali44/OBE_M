@@ -1,0 +1,316 @@
+<div class="modal-section" style="position: initial;">
+  <div class="modal fade modal-wide margin-t41" id="Add-Course-CLOS-Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="section-heading">
+            <h2 class="pull-left">Add Course CLOS</h2>
+            <div class="pull-right">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="CourseCLOSForm" (ngSubmit)="onSubmit()">
+            <div class="form-group" [ngClass]="{ 'has-error': submitted && Course_CLOS_Form.Description.errors }">
+              <label class="control-label">Description <span class="text-danger">*</span></label>
+              <textarea id="Description" formControlName="Description" class="form-control" rows="6" draggable="false" autofocus style="resize:none"> </textarea>
+              <div *ngIf="submitted && Course_CLOS_Form.Description.errors" class="invalid-feedback">
+                <div *ngIf="Course_CLOS_Form.Description.errors.required" class="text-danger">Description is required</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group" [ngClass]="{ 'has-error': submitted && Course_CLOS_Form.Selected_PLOS.errors }">
+                  <label class="control-label">Select PLO <span class="text-danger">*</span></label>
+                  <select class="form-control" formControlName="Selected_PLOS">
+                    <option value="" selected>Select PLO</option>
+                    <option value="{{i.PLO_ID}}" *ngFor="let i of All_PLOS">{{i.PLO_Title}}</option>
+                  </select>
+                  <div *ngIf="submitted && Course_CLOS_Form.Selected_PLOS.errors" class="invalid-feedback">
+                    <div *ngIf="Course_CLOS_Form.Selected_PLOS.errors.required" class="text-danger">Please Selected PLO</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group" [ngClass]="{ 'has-error': submitted && Course_CLOS_Form.Selected_PLOS_Skill.errors }">
+                  <label class="control-label">Select Skill <span class="text-danger">*</span></label>
+                  <select class="form-control" formControlName="Selected_PLOS_Skill" (change)="Get_Levels_For_Selected_Skill($event.target.value)">
+                    <option value="" selected>Select Skill</option>
+                    <option value="{{i.CLO_Skill_ID}}" *ngFor="let i of All_PLOS_Skill">{{i.CLO_Skill_Title}}</option>
+                  </select>
+                  <div *ngIf="submitted && Course_CLOS_Form.Selected_PLOS_Skill.errors" class="invalid-feedback">
+                    <div *ngIf="Course_CLOS_Form.Selected_PLOS_Skill.errors.required" class="text-danger">Please Selected PLO Skill</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group" [ngClass]="{ 'has-error': submitted && Course_CLOS_Form.Selected_PLOS_Skill_Level.errors }">
+                  <label class="control-label">Select Level <span class="text-danger">*</span></label>
+                  <select class="form-control" formControlName="Selected_PLOS_Skill_Level">
+                    <option value="" selected>Select Level</option>
+                    <option value="{{i.CLO_Skill_Level_ID}}" *ngFor="let i of All_PLOS_Skill_level_temp">{{i.CLO_Skill_Level_Title}}</option>
+                  </select>
+                  <div *ngIf="submitted && Course_CLOS_Form.Selected_PLOS_Skill_Level.errors" class="invalid-feedback">
+                    <div *ngIf="Course_CLOS_Form.Selected_PLOS_Skill_Level.errors.required" class="text-danger">Please Selected PLO Skill Level</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-info pull-right">Add</button>
+          </form>
+
+          <div class="tab-pane margin-t20">
+            <div class="section-heading"><h2>CLOS Details</h2></div>
+            <div class="margin-b5">
+              <div class="clearfix"></div>
+            </div>
+            <fieldset class="margin-b15">
+              <legend >Added CLOS</legend>
+              <div class="dashboard-scroller setups-widget mCustomScrollbar">
+                <div class="table-responsive">
+                  <table class="table table-hover table-theme">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th width="35%">Desciption</th>
+                        <th>PLO</th>
+                        <th>Skill</th>
+                        <th>Level</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style="cursor: pointer;" *ngFor="let i of All_Added_CLOS; let ind = index">
+                        <td align="center"><b><span class="blue">{{i.CLO_Title}}</span></b></td>
+                        <td>{{i.Description}}</td>
+                        <td>{{i.Selected_PLO_Title}}</td>
+                        <td>{{i.Selected_Skill_Title}}</td>
+                        <td>{{i.Selected_Skill_Level_Title}}</td>
+                        <td align="center">
+                          <div class="btn-group">
+                            <button (click)="Delete_Temp_Added_CLOS(ind)" type="button" class="btn btn-default margin-r5" title="Delete"><i class="app-icon-IconSet-1-33 blue"></i> </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+                
+            </fieldset>
+
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" (click)="Cancel_Course_Added_CLOS()">Cancel</button>
+          <button type="button" class="btn btn-info" (click)="Save_Course_Added_CLOS()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade margin-t41" id="Edit-Course-CLOS-Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="section-heading">
+            <h2 class="pull-left">Edit Course CLO</h2>
+            <div class="pull-right">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="CourseCLOSEditForm">
+            <div class="form-group" [ngClass]="{ 'has-error': submitted_Edit && Course_CLOS_Form_Edit.Description_Edit.errors }">
+              <label class="control-label">Description <span class="text-danger">*</span></label>
+              <textarea id="Description_Edit" formControlName="Description_Edit" class="form-control" rows="6" draggable="false" autofocus style="resize:none"> </textarea>
+              <div *ngIf="submitted_Edit && Course_CLOS_Form_Edit.Description_Edit.errors" class="invalid-feedback">
+                <div *ngIf="Course_CLOS_Form_Edit.Description_Edit.errors.required" class="text-danger">Description is required</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group" [ngClass]="{ 'has-error': submitted_Edit && Course_CLOS_Form_Edit.Selected_PLOS_Edit.errors }">
+                  <label class="control-label">Select PLO <span class="text-danger">*</span></label>
+                  <select class="form-control" formControlName="Selected_PLOS_Edit">
+                    <option value="" selected>Select PLO</option>
+                    <option value="{{i.PLO_ID}}" *ngFor="let i of All_PLOS">{{i.PLO_Title}}</option>
+                  </select>
+                  <div *ngIf="submitted_Edit && Course_CLOS_Form_Edit.Selected_PLOS_Edit.errors" class="invalid-feedback">
+                    <div *ngIf="Course_CLOS_Form_Edit.Selected_PLOS_Edit.errors.required" class="text-danger">Please Selected PLO</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group" [ngClass]="{ 'has-error': submitted_Edit && Course_CLOS_Form_Edit.Selected_PLOS_Skill_Edit.errors }">
+                  <label class="control-label">Select Skill <span class="text-danger">*</span></label>
+                  <select class="form-control" formControlName="Selected_PLOS_Skill_Edit" (change)="Get_Levels_For_Selected_Skill($event.target.value)">
+                    <option value="" selected>Select Skill</option>
+                    <option value="{{i.CLO_Skill_ID}}" *ngFor="let i of All_PLOS_Skill">{{i.CLO_Skill_Title}}</option>
+                  </select>
+                  <div *ngIf="submitted_Edit && Course_CLOS_Form_Edit.Selected_PLOS_Skill_Edit.errors" class="invalid-feedback">
+                    <div *ngIf="Course_CLOS_Form_Edit.Selected_PLOS_Skill_Edit.errors.required" class="text-danger">Please Selected PLO Skill</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group" [ngClass]="{ 'has-error': submitted_Edit && Course_CLOS_Form_Edit.Selected_PLOS_Skill_Level_Edit.errors }">
+                  <label class="control-label">Select Level <span class="text-danger">*</span></label>
+                  <select class="form-control" formControlName="Selected_PLOS_Skill_Level_Edit">
+                    <option value="" selected>Select Level</option>
+                    <option value="{{i.CLO_Skill_Level_ID}}" *ngFor="let i of All_PLOS_Skill_level_temp">{{i.CLO_Skill_Level_Title}}</option>
+                  </select>
+                  <div *ngIf="submitted_Edit && Course_CLOS_Form_Edit.Selected_PLOS_Skill_Level_Edit.errors" class="invalid-feedback">
+                    <div *ngIf="Course_CLOS_Form_Edit.Selected_PLOS_Skill_Level_Edit.errors.required" class="text-danger">Please Selected PLO Skill Level</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-info" (click)="onSubmitUpdate()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div role="tabpanel" class="tab-pane active" id="tab-Course-CLOS">
+  <div class="section-heading padding-b5">
+    <h2>Course CLOs</h2>
+    <div class="pull-right"   *ngIf="!Is_Completed">
+      <button (click)="Add_Courses_CLOS_Show_Modal()" class="btn btn-info">Add Course CLOs</button>
+    </div>
+  </div>
+  <div class="margin-b5">
+    <div class="pull-left">
+      <div class="has-feedback width-300">
+        <input type="text" class="form-control" placeholder="Search Records" [(ngModel)]="query">
+        <span class="form-control-feedback"><i class="app-icon-IconSet-1-92"></i></span>
+      </div>
+    </div>
+    <div class="pull-left margin-l5">
+      <div class="form-inline">
+        <div class="form-group margin-r10" style="width:110%">
+          <label class="control-label margin-r10">Show</label>
+          <select class="form-control input-xs margin-r5" (change)="setPage(1,pagesize)" [(ngModel)]="pagesize" style="width: 30%;">
+            <option>10</option>
+            <option>20</option>
+            <option>30</option>
+            <option>50</option>
+            <option>100</option>
+          </select>
+          <label class="control-label">Per Page</label>
+        </div>
+      </div>
+    </div>
+    <div class="pull-left margin-t4 margin-l20">
+      <ul class="nav nav-pills margin-l5">
+        <li class="margin-r15"><span class="fa fa-stop text-success"></span> Above Average</li>
+        <li class="margin-r15"><span class="fa fa-stop text-warning"></span> Nothing Mapped</li>
+        <li class="margin-r15"><span class="fa fa-stop text-danger"></span> Below Average</li>
+      </ul>
+    </div>
+    <div class="pull-right hidden">
+      <div class="btn-group left-dropdown">
+        <button class="btn btn-default btn-sm dropdown-toggle margin-r5" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Export <span class="caret"></span> </button>
+        <ul class="dropdown-menu " aria-labelledby="dropdownMenu1">
+          <li><a href="#">PDF</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="dashboard-box dash-box-right">
+    <div class="dashboard-scroller setups-widget mCustomScrollbar" style="max-height: 45vh;">
+      <div class="table-responsive">
+        <table class="table table-hover table-theme">
+          <thead>
+            <tr>
+              <th width="4%">Sr. #</th>
+              <th>Title</th>
+              <th width="40%">Description</th>
+              <th>Mapped PLO</th>
+              <th>Skill</th>
+              <th>Level</th>
+              <th>CLO Attainment</th>
+              <th *ngIf="Is_Show_Action_TD">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let i of Get_Course_CLOS | filter:query">
+              <tr [ngClass]="[(i.CLO_Attainment>=50 && i.Can_Change === false)?'tr-success':'', (i.Can_Change === true)?'tr-warning':'',(i.CLO_Attainment<50 && i.Can_Change === false)?'tr-danger':'']">
+                <td align="center">{{i.Sr_Number}}</td>
+                <td align="center">
+                  <b class="blue">
+                    <span [innerHTML]="i.CLOTitle | highlight:query"></span>
+                  </b>
+                </td>
+                <td><span [innerHTML]="i.CLODescription | highlight:query"></span></td>
+                <td><span [innerHTML]="i.PLO_Title | highlight:query"></span></td>
+                <td><span [innerHTML]="i.CLO_Skill_Title | highlight:query"></span></td>
+                <td><span [innerHTML]="i.CLO_Skill_Level_Title | highlight: query"></span></td>
+                <td align="center"><b class="blue"><span [innerHTML]="i.CLO_Attainment | highlight:query"></span>%</b></td>
+                <td align="center" *ngIf="Is_Show_Action_TD">
+                  <div class="btn-group">
+                    <ng-container *ngIf="!Is_Permission_Edit_Course_Details && !Is_Have_Special_Permission">
+                      <button (click)="Edit_CLO(i)" [attr.disabled]="i.Can_Change === false  ? 'disabled' : null" type="button" class="btn btn-default margin-r5 cr-pointer" title="Edit CLO"><i class="app-icon-Amazing-Fusion-61 f12 blue"></i> </button>
+                    </ng-container>
+
+                    <ng-container *ngIf="!Is_Permission_Delete_Course_Details && !Is_Have_Special_Permission">
+                      <button (click)="Delete_CLO(i)" [attr.disabled]="i.Can_Change === false ? 'disabled' : null" type="button" class="btn btn-default margin-r5 cr-pointer" title="Delete CLO"><i class="app-icon-IconSet-1-33 blue"></i> </button>
+                    </ng-container>
+
+                    <ng-container *ngIf="Is_Permission_Edit_Course_Details && Is_Have_Special_Permission">
+                      <button (click)="Edit_CLO(i)" type="button" class="btn btn-default margin-r5 cr-pointer" title="Edit CLO"><i class="app-icon-Amazing-Fusion-61 f12 blue"></i> </button>
+                    </ng-container>
+
+                    <ng-container *ngIf="Is_Permission_Delete_Course_Details && Is_Have_Special_Permission">
+                      <button (click)="Delete_CLO(i)" type="button" class="btn btn-default margin-r5 cr-pointer" title="Delete CLO"><i class="app-icon-IconSet-1-33 blue"></i> </button>
+                    </ng-container>
+
+
+                  </div>
+                </td>
+
+              </tr>
+            </ng-container>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="pagination-bottom">
+      <div class="pull-left">
+        <div class="form-inline">
+          <div class="form-group" *ngIf="Get_Course_CLOS==null || Get_Course_CLOS?.length == 0">
+            <label class="control-label padding-t5">Showing 0 to 0 of 0 entries</label>
+          </div>
+          <div class="form-group" *ngIf="Get_Course_CLOS?.length >=1">
+            <label class="control-label padding-t5">Showing {{pager?.startIndex+1}} to {{pager?.endIndex+1}} of {{pager?.totalItems}} entries</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-inline pull-right margin-b5">
+        <div class="table-pagination pull-right" *ngIf="pager?.pages && pager?.pages.length">
+          <button data-original-title="First Page" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === 1}" (click)="setPage(1,pagesize)" [disabled]="pager?.currentPage === 1"><i class="fa fa-backward"></i></button>
+          <button data-original-title="Previous" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === 1}" (click)="setPage(pager?.currentPage - 1,pagesize)" [disabled]="pager?.currentPage === 1"><i class="fa fa-caret-left"></i></button>
+          <input type="text" style="width:50px;" value="1" class="form-control" [(ngModel)]="page" (keyup)="setPage(page)" (keypress)="keyRestrict($event,'0123456789')" disabled>
+          <label class="control-label">of  {{pager?.totalPages}}</label>
+          <button data-original-title="Next" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === pager?.totalPages}" (click)="setPage(pager?.currentPage + 1,pagesize)" [disabled]="pager?.currentPage == pager?.totalPages"><i class="fa fa-caret-right"></i></button>
+          <button data-original-title="Last" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === pager?.totalPages}" (click)="setPage(pager?.totalPages,pagesize)" [disabled]="pager?.currentPage == pager?.totalPages"><i class="fa fa-forward"></i></button>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+
+
+
+
+</div>

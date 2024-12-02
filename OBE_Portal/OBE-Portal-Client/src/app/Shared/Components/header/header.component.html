@@ -1,0 +1,89 @@
+<header>
+    <div class="logo" *ngIf="IsStudent"><a routerLink="student/main" style="cursor: pointer;">OBE Portal <sup>1.0</sup> </a></div>
+    <div class="logo" *ngIf="!IsStudent"><a routerLink="dashboard/main" style="cursor: pointer;">OBE Portal <sup>1.0</sup> </a></div>
+    <div class="practice" data-toggle="tooltip" data-placement="bottom" id="HeaderSemesterDropdown">
+      <h5>Select Semester</h5>
+      <select class="form-control" (change)="UpdateSemesterID($event)">
+        <option *ngFor="let i of Semester_Details_lst" value="{{i.Semester_ID}}">{{i.Semester_Alias}}</option>
+      </select>
+      <div class="clearfix"></div>
+    </div>
+    <!-- <div id="header-progress-bar" class="progress-style popover-bottom" data-container="#header-progress-bar" data-placement="bottom" data-popwrapper="#header-progress" rel="popover" data-toggle="tooltip" data-placement="bottom">
+      <div class="progress-bar" style="width:60%; background:#d9534f;">
+        <div class="progress-value">60%</div>
+      </div>
+    </div> -->
+    <div class="user" data-toggle="tooltip" data-placement="bottom">
+      <ul>
+        <li class="dropdown left-dropdown">
+          <a href="javascript:voide(0)" class="dropdown-toggle" data-toggle="dropdown"><i class="app-icon-Amazing-Fusion-35"></i> {{this.User_Name}} <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a (click)="ShowChangePassword()"><i class="fa fa-key"></i> Change Password</a></li>
+            <li><a (click)="Logout()"><i class="app-icon-IconSet-1-95"></i> Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="clearfix"></div>
+  </header>
+<div class="modal-section" style="position: initial;">
+  <div class="modal fade modal-sm margin-t41" id="Update-Password-Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="section-heading">
+            <h2 class="pull-left">Update Password</h2>
+            <div class="pull-right">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="UpdatePasswordForm">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group" [ngClass]="{ 'has-error': submitted && Update_Password_Form.Current_Password.errors }">
+                  <label class="control-label">Current Password <span class="text-danger">*</span></label>
+                  <input type="password" class="form-control input-sm" formControlName="Current_Password" autocomplete="off">
+                  <div *ngIf="submitted && Update_Password_Form.Current_Password.errors" class="invalid-feedback">
+                    <div *ngIf="Update_Password_Form.Current_Password.errors.required" class="text-danger">Current Password is required </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-12">
+                <div class="form-group" [ngClass]="{ 'has-error': submitted && Update_Password_Form.New_Password.errors }">
+                  <label class="control-label">New Password <span class="text-danger">*</span></label>
+                  <input type="password" class="form-control input-sm" formControlName="New_Password" autocomplete="off">
+                  <div *ngIf="submitted && Update_Password_Form.New_Password.errors" class="invalid-feedback">
+                    <div *ngIf="Update_Password_Form.New_Password.errors.required" class="text-danger">New Password is required </div>
+                    <div *ngIf="Update_Password_Form.New_Password.errors.minlength" class="text-danger">Password must be at least 5 characters</div>
+                    <div *ngIf="Update_Password_Form.New_Password.errors.maxlength" class="text-danger">Password max be 20 characters</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-12">
+                <div class="form-group" [ngClass]="{ 'has-error': submitted && Update_Password_Form.Confirm_Password.errors }">
+                  <label class="control-label">Confirm Password <span class="text-danger">*</span></label>
+                  <input type="password" class="form-control input-sm" formControlName="Confirm_Password" autocomplete="off">
+                  <div *ngIf="submitted && Update_Password_Form.Confirm_Password.errors" class="invalid-feedback">
+                    <div *ngIf="Update_Password_Form.Confirm_Password.errors.required" class="text-danger">Confirm Password is required </div>
+                    <div *ngIf="Update_Password_Form.Confirm_Password.errors.mustMatch" class="text-danger">New and current password must match</div>
+                    <div *ngIf="Update_Password_Form.Confirm_Password.errors.minlength" class="text-danger">Password must be at least 5 characters</div>
+                    <div *ngIf="Update_Password_Form.Confirm_Password.errors.maxlength" class="text-danger">Password max be 20 characters</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-info" (click)="UpdatePassword()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

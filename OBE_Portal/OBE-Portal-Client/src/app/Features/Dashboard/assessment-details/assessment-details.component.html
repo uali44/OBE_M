@@ -1,0 +1,1507 @@
+<div class="modal-section" style="position: initial;">
+  <!--Course Modal-->
+  <div class="modal fade modal-wide margin-t41" id="Add-Assessment-Details-Course-Modal" tabindex="-1" role="dialog" *ngIf="CourseCategory==1">
+    <div class="modal-dialog" role="document">
+      <div class="modal-right">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="section-heading">
+              <h2 class="pull-left">Add Assessment Details</h2>
+              <div class="pull-right">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            <div role="tabpanel" class="tab-pane active main-dashboard margin-t10" id="dashboard-tab">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="dashboard-box">
+                    <div class="box-panel-heading text-align-Center">
+                      <span><i class="app-icon-IconSet-1-73"></i></span>
+                      <h1>
+                        Please Select multiple assessment only when all selected assessments have same details: <strong>Else save one by one.</strong>
+                      </h1>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-body padding-t0">
+            <fieldset class="margin-b15">
+              <legend>Add Assessment Details</legend>
+              <form [formGroup]="CourseAssessmentForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                  <label class="control-label">Question Remarks</label>
+                  <textarea class="form-control" rows="6" style="resize:none" formControlName="Question_Remarks" id="Question_Remarks"></textarea>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted && Course_Assessment_Form.Selected_CLOS.errors }">
+                      <label class="control-label">Select CLO</label>
+                      <select class="form-control" formControlName="Selected_CLOS" (change)="Set_Weightage()">
+                        <option value="0" selected>Select CLO</option>
+                        <option value="{{x.CoursesCLOSID}}" *ngFor="let x of Get_Added_CLOS">{{x.CLOTitle}}</option>
+                      </select>
+                      <div *ngIf="submitted && Course_Assessment_Form.Selected_CLOS.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form.Selected_CLOS.errors.required" class="text-danger">Please Select CLO</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted && Course_Assessment_Form.CLO_Weightage.errors }">
+                      <label class="control-label">Weightage % <span class="text-danger" *ngIf="Is_Weightage_Mendatory">*</span></label>
+                      <input type="number" class="form-control input-sm" formControlName="CLO_Weightage">
+                      <div *ngIf="submitted && Course_Assessment_Form.CLO_Weightage.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form.CLO_Weightage.errors.required" class="text-danger">CLO weightage is required </div>
+                        <div *ngIf="Course_Assessment_Form.CLO_Weightage.errors.min" class="text-danger">Minimum CLO weightage is 0</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted && Course_Assessment_Form.Question_Marks.errors }">
+                      <label class="control-label">Question Marks <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control input-sm" formControlName="Question_Marks">
+                      <div *ngIf="submitted && Course_Assessment_Form.Question_Marks.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form.Question_Marks.errors.required" class="text-danger">Question marks is required </div>
+                        <div *ngIf="Course_Assessment_Form.Question_Marks.errors.min" class="text-danger">Minimum marks is 0</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                      <label class="control-label">Total Marks</label>
+                      <input formControlName="Assessment_Total" type="number" class="form-control input-sm" disabled="">
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-info pull-right" *ngIf="Assessment_Type==1 || Assessment_Type==2">Add</button>
+                <button type="submit" class="btn btn-info pull-right" *ngIf="Assessment_Type===3 && !Is_Mid_Marks_Added">Add</button>
+                <button type="submit" class="btn btn-info pull-right" *ngIf="Assessment_Type===4 && !Is_Finals_Marks_Added">Add</button>
+              </form>
+            </fieldset>
+
+            <div class="tab-pane margin-t10">
+              <div class="section-heading pull-left"><h2>View Added Assessment Details</h2></div>
+              <div class="margin-b5">
+                <div class="clearfix"></div>
+              </div>
+              <fieldset class="margin-b15">
+                <legend>View Assessment Details</legend>
+                <div class="dashboard-scroller setups-widget mCustomScrollbar" style="height:15vh">
+                  <div class="table-responsive">
+                    <table class="table table-hover table-theme">
+                      <thead>
+                        <tr>
+                          <th>Q. #</th>
+                          <th width="50%">Question Remarks</th>
+                          <th>Question Marks</th>
+                          <th>Mapped CLO</th>
+                          <th>Weightage</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="cursor-pointer" *ngFor="let i of All_Added_Assessment_Details; let ind = index">
+                          <td align="center"><b><span class="blue">{{i.Question_Number}}</span></b></td>
+                          <td>{{i.Question_Remarks}}</td>
+                          <td align="center">{{i.Question_Marks}}</td>
+                          <td align="center">{{i.Selected_CLOS_Title}}</td>
+                          <td align="center">{{i.CLO_Weightage}}%</td>
+                          <td align="center">
+                            <div class="btn-group">
+                              <button (click)="Deleted_Temp_Added_Assessment(ind)" type="button" class="btn btn-default margin-r5" title="Delete"><i class="app-icon-IconSet-1-33 blue"></i> </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-info" (click)="SaveAssessment()" *ngIf="Assessment_Type==1 || Assessment_Type==2">Save</button>
+            <button type="button" class="btn btn-info" (click)="SaveAssessment()" *ngIf="Assessment_Type===3 && !Is_Mid_Marks_Added">Save</button>
+            <button type="button" class="btn btn-info" (click)="SaveAssessment()" *ngIf="Assessment_Type===4 && !Is_Finals_Marks_Added">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-left" style="width:400px">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs fl-n" role="tablist">
+          <li class="active width-100p"><a href="#Assessment-Tools-Details" role="tab" data-toggle="tab">Select Assessments</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content margin-b15">
+          <div role="tabpanel" class="tab-pane active" id="Assessment-Tools-Details">
+            <div class="row text-align-Center">
+              <div class="form-group">
+                <label class="control-label d-block">Choose Assessment <span class="text-danger">*</span></label>
+                <div class="radio-inline padding-t5">
+                  <input type="radio" name="Assessment-type" id="rdo-Assignments" checked (change)="Select_Assessment(1)">
+                  <label for="rdo-Assignments" class="cursor-pointer">Assignments</label>
+                </div>
+                <div class="radio-inline padding-t5">
+                  <input type="radio" name="Assessment-type" value="radio" id="rdo-Quizzes" (change)="Select_Assessment(2)">
+                  <label for="rdo-Quizzes" class="cursor-pointer">Quizzes</label>
+                </div>
+                <div class="radio-inline padding-t5">
+                  <input type="radio" name="Assessment-type" value="radio" id="rdo-Mid" (change)="Select_Assessment(3)">
+                  <label for="rdo-Mid" class="cursor-pointer">Mid Terms</label>
+                </div>
+                <div class="radio-inline padding-t5">
+                  <input type="radio" name="Assessment-type" value="radio" id="rdo-Final" (change)="Select_Assessment(4)">
+                  <label for="rdo-Final" class="cursor-pointer">Final Terms</label>
+                </div>
+              </div>
+            </div>
+            <!-- Assignment  Starts -->
+            <div *ngIf="Assessment_Type===1" class="panel-group" id="accordion6" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default" *ngFor="let i of Assignment_Initial_Array; let ind = index">
+                <div class="panel-heading">
+                  <div class="row">
+                    <h5 class="panel-title col-sm-8 padding-t5">
+                      <a data-toggle="collapse"
+                         [ngClass]="(i.Is_Temp_Added)?'':'collapsed'"
+                         data-parent="#accordion6" class="collapse-arrow" [attr.href]="'#Assignment'+ind" aria-expanded="false"> {{i.Assignment_Title}}</a>
+                    </h5>
+                    <div class="col-sm-4 padding-t5">
+                      <div class="form-group">
+                        <input type="checkbox" *ngIf="i.Already_Added" [ngStyle]="i.Already_Added && {'cursor': 'no-drop'}" [attr.disabled]="i.Already_Added ? true : null" [attr.checked]="i.Already_Added ? 'checked' : null" id="Assignment_Checkbox{{ind}}">
+                        <input type="checkbox" *ngIf="!i.Already_Added" [ngStyle]="(!i.Already_Added && !i.Can_Add)  && {'cursor': 'no-drop'}" [attr.disabled]="(!i.Already_Added && !i.Can_Add) ? true : null" [attr.checked]="i.Is_Temp_Added ? 'checked' : null" id="Assignment_Checkbox{{ind}}" (change)="Add_Remove_Assignments(i.Assignment_Title,ind,'Assignment'+ind,'Assignment_Date','Assignment_textarea',$event.target.checked)">
+                        <label class="text-success text-bold" *ngIf="i.Already_Added" for="Assignment_Checkbox{{ind}}" [ngStyle]="i.Already_Added  && {'cursor': 'no-drop'}">Added</label>
+                        <label *ngIf="!i.Already_Added && i.Is_Temp_Added" class="text-warning text-bold" for="Assignment_Checkbox{{ind}}">Selected</label>
+                        <label *ngIf="!i.Already_Added && !i.Is_Temp_Added" for="Assignment_Checkbox{{ind}}" [ngStyle]="i.Already_Added && {'cursor': 'no-drop'}">Select</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="Assignment{{ind}}" [ngClass]="(i.Is_Temp_Added)?'in':''" class="panel-collapse collapse" aria-expanded="false">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <label class="control-label">Scheduled Date</label>
+                        <div class="input-group">
+                          <input id="Assignment_Date{{ind}}" [min]="Min_Date" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" placeholder="Scheduled Date" class="form-control Assignment{{ind}}">
+                          <span class="input-group-addon"><i class="fas fa-calendar-alt"></i></span>
+                          <owl-date-time #dt4 [pickerType]="'calendar'"></owl-date-time>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 margin-t5">
+                        <div class="form-group">
+                          <label class="control-label">Assessment Remarks</label>
+                          <textarea class="form-control Assignment_textarea{{ind}}" id="Assignment_textarea{{ind}}" rows="6" style="resize:none"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Assignment  End -->
+            <!-- Quizzed  Start -->
+            <div *ngIf="Assessment_Type===2" class="panel-group" id="accordion6" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default" *ngFor="let i of Quizzes_Initial_Array; let ind = index">
+                <div class="panel-heading">
+                  <div class="row">
+                    <h5 class="panel-title col-sm-8 padding-t5">
+                      <a data-toggle="collapse" data-parent="#accordion6"
+                         [ngClass]="(i.Is_Temp_Added)?'':'collapsed'"
+                         class="collapse-arrow" [attr.href]="'#Quiz'+ind" aria-expanded="false"> {{i.Quiz_Title}}</a>
+                    </h5>
+                    <div class="col-sm-4 padding-t5">
+                      <div class="form-group">
+                        <input type="checkbox" *ngIf="i.Already_Added" [ngStyle]="i.Already_Added  && {'cursor': 'no-drop'}" [attr.disabled]="i.Already_Added ? true : null" [attr.checked]="i.Already_Added ? 'checked' : null" id="Quiz_Checkbox{{ind}}">
+                        <input type="checkbox" *ngIf="!i.Already_Added" [ngStyle]="(!i.Already_Added && !i.Can_Add)  && {'cursor': 'no-drop'}" [attr.disabled]="(!i.Already_Added && !i.Can_Add) ? true : null" [attr.checked]="i.Is_Temp_Added ? 'checked' : null" id="Quiz_Checkbox{{ind}}" (change)="Add_Remove_Assignments(i.Quiz_Title,ind,'Quiz'+ind,'Quiz_Date','Quiz_textarea',$event.target.checked)">
+
+                        <label class="text-success text-bold" *ngIf="i.Already_Added" for="Quiz_Checkbox{{ind}}" [ngStyle]="i.Already_Added  && {'cursor': 'no-drop'}">Added</label>
+                        <label *ngIf="!i.Already_Added && i.Is_Temp_Added" class="text-warning text-bold" for="Quiz_Checkbox{{ind}}">Selected</label>
+                        <label *ngIf="!i.Already_Added && !i.Is_Temp_Added" for="Quiz_Checkbox{{ind}}" [ngStyle]="i.Already_Added && {'cursor': 'no-drop'}">Select</label>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="Quiz{{ind}}" [ngClass]="(i.Is_Temp_Added)?'in':''" class="panel-collapse collapse" aria-expanded="false">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <label class="control-label">Scheduled Date</label>
+                        <div class="input-group">
+                          <input id="Quiz_Date{{ind}}" [min]="Min_Date" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" placeholder="Scheduled Date" class="form-control trigger Quiz{{ind}}">
+                          <span class="input-group-addon trigger"><i class="fas fa-calendar-alt"></i></span>
+                          <owl-date-time #dt4 [pickerType]="'calendar'"></owl-date-time>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 margin-t5">
+                        <div class="form-group">
+                          <label class="control-label">Assessment Remarks</label>
+                          <textarea class="form-control Quiz_textarea{{ind}}" id="Quiz_textarea{{ind}}" rows="6" style="resize:none"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <!-- Quizzed  End -->
+            <!-- Mids  Start -->
+            <div *ngIf="Assessment_Type===3" class="panel-group" id="accordion6" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="row">
+                    <h5 class="panel-title col-sm-8 padding-t5">
+                      <a data-toggle="collapse" data-parent="#accordion6"
+                         class="collapse-arrow" href="#MidTerm-tab" aria-expanded="false"> Mid Term </a>
+                    </h5>
+                    <div class="col-sm-4 padding-t5">
+                      <div class="form-group">
+                        <input type="checkbox" [ngStyle]="Is_Mid_Marks_Added  && {'cursor': 'no-drop'}" [attr.disabled]="Is_Mid_Marks_Added ? true : null" [attr.checked]="Is_Mid_Marks_Added ? 'checked' : null" id="Mids_Course" (change)="Add_Remove_Assignments('Mids',0,'Mids','','Mids_Course_textarea',$event.target.checked)">
+                        <label class="text-success text-bold" *ngIf="Is_Mid_Marks_Added && !Is_Temp_Mids_And_Finals" for="Mids_Course" [ngStyle]="Is_Mid_Marks_Added===true  && {'cursor': 'no-drop'}">Added</label>
+                        <label *ngIf="!Is_Mid_Marks_Added && !Is_Temp_Mids_And_Finals" for="Mids_Course">Select</label>
+                        <label class="text-warning text-bold" *ngIf="!Is_Mid_Marks_Added && Is_Temp_Mids_And_Finals" for="Mids_Course">Selected</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="MidTerm-tab" class="panel-collapse collapse in" aria-expanded="false">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-sm-12 margin-t5">
+                        <div class="form-group">
+                          <label class="control-label">Assessment Remarks</label>
+                          <textarea class="form-control" id="Mids_Course_textarea0" rows="6" style="resize:none"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Mids  End -->
+            <!-- Finals  Start -->
+            <div *ngIf="Assessment_Type===4" class="panel-group" id="accordion6" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="row">
+                    <h5 class="panel-title col-sm-8 padding-t5">
+                      <a data-toggle="collapse" data-parent="#accordion6"
+                         class="collapse-arrow" href="#FinalTerm-tab" aria-expanded="false"> Final Term </a>
+                    </h5>
+
+                    <div class="col-sm-4 padding-t5">
+                      <div class="form-group">
+                        <input type="checkbox" [ngStyle]="Is_Finals_Marks_Added  && {'cursor': 'no-drop'}" [attr.disabled]="Is_Finals_Marks_Added ? true : null" [attr.checked]="Is_Finals_Marks_Added ? 'checked' : null" id="Final_Course" (change)="Add_Remove_Assignments('Finals',0,'Finals','','Final_Course_textarea',$event.target.checked)">
+                        <label class="text-success text-bold" *ngIf="Is_Finals_Marks_Added && !Is_Temp_Mids_And_Finals" for="Final_Course" [ngStyle]="Is_Finals_Marks_Added===true  && {'cursor': 'no-drop'}">Added</label>
+                        <label *ngIf="!Is_Finals_Marks_Added && !Is_Temp_Mids_And_Finals" for="Final_Course">Select</label>
+                        <label class="text-warning text-bold" *ngIf="!Is_Finals_Marks_Added && Is_Temp_Mids_And_Finals" for="Final_Course">Selected</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="FinalTerm-tab" class="panel-collapse collapse in" aria-expanded="false">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-sm-12 margin-t5">
+                        <div class="form-group">
+                          <label class="control-label">Assessment Remarks</label>
+                          <textarea class="form-control" id="Final_Course_textarea0" rows="6" style="resize:none"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Finals  End -->
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+  <div class="modal fade modal-wide margin-t41" id="Edit-Assessment-Details-Course-Modal" tabindex="-1" role="dialog" *ngIf="CourseCategory==1">
+    <div class="modal-dialog" role="document">
+      <div class="modal-right">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="section-heading">
+              <h2 class="pull-left">Edit Assessment Details</h2>
+              <div class="pull-right">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="modal-body">
+            <fieldset class="margin-b15">
+              <legend>Update Assessment Details</legend>
+              <form [formGroup]="CourseAssessmentFormEdit" (ngSubmit)="onSubmitEdit()">
+                <div class="form-group">
+                  <label class="control-label">Question Remarks</label>
+                  <textarea class="form-control" rows="6" style="resize:none" formControlName="Question_Remarks_Edit"></textarea>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted_Edit && Course_Assessment_Form_Edit.Selected_CLOS_Edit.errors }">
+                      <label class="control-label">Select CLO</label>
+                      <select class="form-control" formControlName="Selected_CLOS_Edit" (change)="Set_Weightage_Edit()">
+                        <option value="" selected>Select CLO</option>
+                        <option value="{{x.CoursesCLOSID}}" *ngFor="let x of Get_Added_CLOS">{{x.CLOTitle}}</option>
+                      </select>
+                      <div *ngIf="submitted_Edit && Course_Assessment_Form_Edit.Selected_CLOS_Edit.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_Edit.Selected_CLOS_Edit.errors.required" class="text-danger">Please Select CLO</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted_Edit && Course_Assessment_Form_Edit.CLO_Weightage_Edit.errors }">
+                      <label class="control-label">Weightage % <span class="text-danger" *ngIf="Is_Weightage_Mendatory">*</span></label>
+                      <input type="number" class="form-control input-sm" formControlName="CLO_Weightage_Edit" min="0" max="100">
+                      <div *ngIf="submitted_Edit && Course_Assessment_Form_Edit.CLO_Weightage_Edit.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_Edit.CLO_Weightage_Edit.errors.required" class="text-danger">CLO weightage is required </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted_Edit && Course_Assessment_Form_Edit.Question_Marks_Edit.errors }">
+                      <label class="control-label">Question Marks <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control input-sm" formControlName="Question_Marks_Edit">
+                      <div *ngIf="submitted_Edit && Course_Assessment_Form_Edit.Question_Marks_Edit.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_Edit.Question_Marks_Edit.errors.required" class="text-danger">Question Marks is required </div>
+                        <div *ngIf="Course_Assessment_Form_Edit.Question_Marks_Edit.errors.min" class="text-danger">Minimum marks is 0</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                      <label class="control-label">Total Marks</label>
+                      <input formControlName="Assessment_Total_Edit" type="number" class="form-control input-sm" disabled="">
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-info pull-right" disabled id="Course_Update_Button">Update</button>
+              </form>
+            </fieldset>
+            <div class="tab-pane margin-t10">
+              <div class="section-heading pull-left"><h2>View Assessment Details</h2></div>
+              <div class="margin-b5">
+                <div class="clearfix"></div>
+              </div>
+              <fieldset class="margin-b15">
+                <legend>Edited Assessment Details</legend>
+                <div class="dashboard-scroller setups-widget mCustomScrollbar" style="height:15vh">
+                  <div class="table-responsive">
+                    <table class="table table-hover table-theme">
+                      <thead>
+                        <tr>
+                          <th>Q. #</th>
+                          <th width="50%">Question Remarks</th>
+                          <th>Question Marks</th>
+                          <th>Mapped CLO</th>
+                          <th>Weightage</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <ng-container *ngFor="let i of Selected_Assessment_Sub_Details; let ind = index">
+                          <tr class="cursor-pointer" *ngIf="!i.Is_Deleted">
+                            <td align="center"><b><span class="blue">{{i.Question_Number}}</span></b></td>
+                            <td>{{i.Assessment_Sub_Remarks}}</td>
+                            <td align="center">{{i.Question_Marks}}</td>
+                            <td align="center">{{i.Mapped_CLO_Title}}</td>
+                            <td align="center">{{i.Weightage}}%</td>
+                            <td align="center">
+                              <div class="btn-group">
+                                <button (click)="Edit_Temp_Added_Assessment(i,ind)" type="button" class="btn btn-default margin-r5" title="Edit Assessment Details"><i class="app-icon-Amazing-Fusion-61 f12 blue"></i> </button>
+                                <button (click)="Deleted_Edited_Temp_Added_Assessment(ind)" type="button" class="btn btn-default" title="Delete Assessment Details"><i class="app-icon-IconSet-1-33 blue"></i> </button>
+                              </div>
+                            </td>
+                          </tr>
+                        </ng-container>
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </fieldset>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-info" (click)="SaveEditedAssessment()">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-left" style="width:400px">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs fl-n" role="tablist">
+          <li class="active width-100p"><a href="#Assessment-Tools-Details-Edit" role="tab" data-toggle="tab">Selected Assessments</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content margin-b15">
+          <div role="tabpanel" class="tab-pane active" id="Assessment-Tools-Details-Edit">
+            <!-- Edit Assessment Starts -->
+            <div *ngIf="Assessment_Type===1" class="panel-group" id="accordion6" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="row">
+                    <h5 class="panel-title col-sm-8 padding-t5"><a data-toggle="collapse" data-parent="#accordion6" class="collapse-arrow collapsed" href="#EditAssessment" aria-expanded="false">{{this.Selected_Assessment_Title}}</a> </h5>
+                    <div class="col-sm-4 padding-t5">
+                      <div class="form-group">
+                        <input type="checkbox" disabled checked>
+                        <label class="text-success text-bold" style="cursor:no-drop">Added</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="EditAssessment" class="panel-collapse collapse in" aria-expanded="false">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <label class="control-label">Scheduled Date</label>
+                        <div class="input-group">
+                          <input id="Assessment_Edit_Date" [(ngModel)]="this.Selected_Assessment_Scheduled_Date" [min]="Min_Date" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" placeholder="Scheduled Date" class="form-control">
+                          <span class="input-group-addon"><i class="fas fa-calendar-alt"></i></span>
+                          <owl-date-time #dt4 [pickerType]="'calendar'"></owl-date-time>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 margin-t5">
+                        <div class="form-group">
+                          <label class="control-label">Assessment Remarks</label>
+                          <textarea class="form-control" id="Assessment_Edit_Textarea" rows="6" style="resize:none">{{this.Selected_Assessment_Remarks}}</textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Edit Assessment  End -->
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+  <!--End Course Modal-->
+  <!--Lab Modal-->
+  <div class="modal fade modal-wide margin-t41" id="Add-Assessment-Details-lab-Modal" tabindex="-1" role="dialog" *ngIf="CourseCategory==4">
+    <div class="modal-dialog" role="document">
+      <div class="modal-right">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="section-heading">
+              <h2 class="pull-left">Add Assessment Details</h2>
+              <div class="pull-right">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            <div role="tabpanel" class="tab-pane active main-dashboard margin-t10" id="dashboard-tab">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="dashboard-box">
+                    <div class="box-panel-heading text-align-Center">
+                      <span><i class="app-icon-IconSet-1-73"></i></span>
+                      <h1>
+                        Please Select multiple assessment only when all selected assessments have same details: <strong>Else save one by one.</strong>
+                      </h1>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-body padding-t0">
+            <fieldset class="margin-b15">
+              <legend>Add Assessment Details</legend>
+              <form [formGroup]="CourseAssessmentFormLab" (ngSubmit)="onSubmitLab()">
+                <div class="row">
+                  <div [ngClass]="(Assessment_Type_Lab == 3 || Assessment_Type_Lab == 4)?'col-sm-3':'col-sm-4'">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted && Course_Assessment_Form_Lab.Performance_Indicator.errors }">
+                      <label class="control-label">Select Performance Indicator <span class="text-danger">*</span></label>
+                      <select class="form-control" formControlName="Performance_Indicator" id="Performance_Indicator">
+                        <option value="0" selected>Select Performance Indicator</option>
+                        <option value="{{x.Performance_Indicators_ID}}" *ngFor="let x of Lab_Performance_Indicator">{{x.Performance_Indicators_Title}}</option>
+                      </select>
+                      <div *ngIf="submitted && Course_Assessment_Form_Lab.Performance_Indicator.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_Lab.Performance_Indicator.errors.required" class="text-danger">Please Select Performance Indicator</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div [ngClass]="(Assessment_Type_Lab == 3 || Assessment_Type_Lab == 4)?'col-sm-3':'col-sm-4'">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted && Course_Assessment_Form_Lab.Performance_Indicator_Marks.errors }">
+                      <label class="control-label">Performance Indicator Marks <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control input-sm" formControlName="Performance_Indicator_Marks">
+                      <div *ngIf="submitted && Course_Assessment_Form_Lab.Performance_Indicator_Marks.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_Lab.Performance_Indicator_Marks.errors.required" class="text-danger">Performance Indicator Marks is required </div>
+                        <div *ngIf="Course_Assessment_Form_Lab.Performance_Indicator_Marks.errors.min" class="text-danger">Minimum marks is 0</div>
+                      </div>
+                    </div>
+                  </div>
+                  <ng-container *ngIf="Assessment_Type_Lab == 3 || Assessment_Type_Lab == 4">
+                    <div [ngClass]="(Assessment_Type_Lab == 3 || Assessment_Type_Lab == 4)?'col-sm-2':'col-sm-4'">
+                      <div class="form-group">
+                        <label class="control-label">Select CLO</label>
+                        <select class="form-control Select_CLO" formControlName="Selected_CLO" (change)="Set_Weightage_lab()" id="Select_CLO_Mid_Lab0">
+                          <option value="0" selected>Select CLO</option>
+                          <option value="{{x.CoursesCLOSID}}" *ngFor="let x of Get_Added_CLOS">{{x.CLOTitle}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div [ngClass]="(Assessment_Type_Lab == 3 || Assessment_Type_Lab == 4)?'col-sm-2':'col-sm-4'">
+                      <div class="form-group" [ngClass]="{ 'has-error': submitted && Course_Assessment_Form_Lab.CLO_Weightage.errors }">
+                        <label class="control-label">Weightage % <span class="text-danger" *ngIf="Is_Weightage_Mendatory">*</span></label>
+                        <input type="number" class="form-control input-sm" formControlName="CLO_Weightage">
+                        <div *ngIf="submitted && Course_Assessment_Form_Lab.CLO_Weightage.errors" class="invalid-feedback">
+                          <div *ngIf="Course_Assessment_Form_Lab.CLO_Weightage.errors.required" class="text-danger">CLO weightage is required </div>
+                          <div *ngIf="Course_Assessment_Form_Lab.CLO_Weightage.errors.min" class="text-danger">Minimum CLO weightage is 0</div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <div [ngClass]="(Assessment_Type_Lab == 3 || Assessment_Type_Lab == 4)?'col-sm-2':'col-sm-4'">
+                    <div class="form-group">
+                      <label class="control-label">Total Marks</label>
+                      <input type="number" class="form-control input-sm" disabled formControlName="Assessment_Total">
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-info pull-right">Add</button>
+              </form>
+            </fieldset>
+            <div class="tab-pane margin-t10">
+              <div class="section-heading pull-left"><h2>Assessment Details</h2></div>
+              <div class="margin-b5">
+                <div class="clearfix"></div>
+              </div>
+              <fieldset class="margin-b15">
+                <legend>Added Assessment Details</legend>
+                <div class="dashboard-scroller setups-widget mCustomScrollbar" style="height:15vh">
+                  <div class="table-responsive">
+                    <table class="table table-hover table-theme">
+                      <thead>
+                        <tr>
+                          <th>Performance Indicator</th>
+                          <th>Performance Indicator Marks</th>
+                          <th *ngIf="Assessment_Type_Lab == 3 || Assessment_Type_Lab == 4">Mapped CLO</th>
+                          <th *ngIf="Assessment_Type_Lab == 3 || Assessment_Type_Lab == 4">Weightage</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="cursor-pointer" *ngFor="let i of All_Added_Assessment_Details_Lab;let ind=index">
+                          <td><b><span class="blue">{{i.Performance_Indicator_Title}}</span></b></td>
+                          <td align="center">{{i.Performance_Indicator_Marks}}</td>
+                          <td align="center" *ngIf="Assessment_Type_Lab == 3 || Assessment_Type_Lab == 4">{{i.Selected_CLOS_Title}}</td>
+                          <td align="center" *ngIf="Assessment_Type_Lab == 3 || Assessment_Type_Lab == 4">{{i.CLO_Weightage}}</td>
+                          <td align="center">
+                            <div class="btn-group">
+                              <button (click)="Deleted_Temp_Added_Assessment_Lab(ind)" type="button" class="btn btn-default margin-r5" title="Delete"><i class="app-icon-IconSet-1-33 blue"></i> </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </fieldset>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-info" (click)="SaveAssessmentLab()">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-left" style="width:400px;max-height:800px;overflow-y:scroll">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs fl-n" role="tablist">
+          <li class="active width-100p"><a href="#Assessment-Tools-Details" role="tab" data-toggle="tab">Select Assessments</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="Assessment-Tools-Details">
+            <div class="row text-align-Center">
+              <div class="form-group">
+                <label class="control-label d-block">Choose Assessment <span class="text-danger">*</span></label>
+                <div class="radio-inline padding-t5">
+                  <input type="radio" name="Assessment-type" id="rdo-Assessment" checked (change)="Select_Assessment_Lab(1)">
+                  <label for="rdo-Assessment" class="cursor-pointer">Assessment</label>
+                </div>
+                <div class="radio-inline padding-t5">
+                  <input type="radio" name="Assessment-type" value="radio" id="rdo-Journal" (change)="Select_Assessment_Lab(2)">
+                  <label for="rdo-Journal" class="cursor-pointer">Journal</label>
+                </div>
+                <div class="radio-inline padding-t5" title="Mid Term/ Open Ended Lab">
+                  <input type="radio" name="Assessment-type" value="radio" id="rdo-Mid" (change)="Select_Assessment_Lab(3)">
+                  <label for="rdo-Mid" class="cursor-pointer">Mid Terms / OEL</label>
+                </div>
+                <div class="radio-inline padding-t5" title="Final Terms/ Open Ended Lab">
+                  <input type="radio" name="Assessment-type" value="radio" id="rdo-Final" (change)="Select_Assessment_Lab(4)">
+                  <label for="rdo-Final" class="cursor-pointer">Final Terms / OEL</label>
+                </div>
+              </div>
+            </div>
+            <!-- Assessment  Starts -->
+            <div *ngIf="Assessment_Type_Lab===1" class="panel-group" id="accordion6" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default" *ngFor="let i of Assessment_Initial_Array; let ind = index">
+                <div class="panel-heading">
+                  <div class="row">
+                    <h5 class="panel-title col-sm-8 padding-t5">
+                      <a data-toggle="collapse" data-parent="#accordion6"
+                         [ngClass]="(i.Is_Temp_Added)?'':'collapsed'"
+                         class="collapse-arrow" [attr.href]="'#Assessment'+ind" aria-expanded="false"> {{i.Assessment_Title}}</a>
+                    </h5>
+                    <div class="col-sm-4 padding-t5">
+                      <div class="form-group">
+                        <input type="checkbox" *ngIf="i.Already_Added" [ngStyle]="i.Already_Added && {'cursor': 'no-drop'}" [attr.disabled]="i.Already_Added ? true : null" [attr.checked]="i.Already_Added ? 'checked' : null" id="Assessment_Checkbox{{ind}}">
+
+                        <input type="checkbox" *ngIf="!i.Already_Added" [ngStyle]="(!i.Already_Added && !i.Can_Add)  && {'cursor': 'no-drop'}" [attr.disabled]="(!i.Already_Added && !i.Can_Add) ? true : null" [attr.checked]="i.Is_Temp_Added ? 'checked' : null" id="Assessment_Checkbox{{ind}}"
+                               (change)="Add_Remove_Assessment_For_Lab(i.Assessment_Title,ind,'Assessment'+ind,'Lab_Remarks_Assessment','Select_CLO_Assessment_Lab','Selected_CLO_Assessment_Weightage',$event.target.checked)">
+                        <label class="text-success text-bold" *ngIf="i.Already_Added" for="Assessment_Checkbox{{ind}}" [ngStyle]="i.Already_Added  && {'cursor': 'no-drop'}">Added</label>
+
+                        <label *ngIf="!i.Already_Added && i.Is_Temp_Added" class="text-warning text-bold" for="Assignment_Checkbox{{ind}}">Selected</label>
+                        <label *ngIf="!i.Already_Added && !i.Is_Temp_Added" for="Assessment_Checkbox{{ind}}" [ngStyle]="i.Already_Added && {'cursor': 'no-drop'}">Select</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="Assessment{{ind}}" [ngClass]="(i.Is_Temp_Added)?'in':''" class="panel-collapse collapse" aria-expanded="false">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-sm-12 margin-t5">
+                        <div class="form-group">
+                          <label class="control-label">Lab Remarks</label>
+                          <textarea class="form-control" id="Lab_Remarks_Assessment{{ind}}" rows="6" style="resize:none"></textarea>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label class="control-label">Select CLO<span class="text-danger">*</span></label>
+                          <select class="form-control" id="Select_CLO_Assessment_Lab{{ind}}" (change)="Set_Weightage_lab(ind,'Selected_CLO_Assessment_Weightage')">
+                            <option value="0" selected>Select CLO</option>
+                            <option value="{{x.CoursesCLOSID}}" *ngFor="let x of Get_Added_CLOS">{{x.CLOTitle}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label class="control-label">Weightage % <span class="text-danger">*</span></label>
+                          <input type="number" id="Selected_CLO_Assessment_Weightage{{ind}}" class="form-control input-sm">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Assessment  End -->
+            <!-- Journals  Start -->
+            <div *ngIf="Assessment_Type_Lab===2" class="panel-group" id="accordion6" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default" *ngFor="let i of Journals_Initial_Array; let ind = index">
+                <div class="panel-heading">
+                  <div class="row">
+                    <h5 class="panel-title col-sm-8 padding-t5">
+                      <a data-toggle="collapse" data-parent="#accordion6"
+                         [ngClass]="(i.Is_Temp_Added)?'':'collapsed'"
+                         class="collapse-arrow" [attr.href]="'#Journals'+ind" aria-expanded="false"> {{i.Journals_Title}}</a>
+                    </h5>
+                    <div class="col-sm-4 padding-t5">
+                      <div class="form-group">
+                        <input type="checkbox" *ngIf="i.Already_Added" [ngStyle]="i.Already_Added  && {'cursor': 'no-drop'}" [attr.disabled]="i.Already_Added ? true : null" [attr.checked]="i.Already_Added ? 'checked' : null" id="Journals_Checkbox{{ind}}">
+                        <input type="checkbox" *ngIf="!i.Already_Added" [ngStyle]="(!i.Already_Added && !i.Can_Add)  && {'cursor': 'no-drop'}" [attr.disabled]="(!i.Already_Added && !i.Can_Add) ? true : null" [attr.checked]="i.Is_Temp_Added ? 'checked' : null" id="Journals_Checkbox{{ind}}"
+                               (change)="Add_Remove_Assessment_For_Lab(i.Journals_Title,ind,'Journals'+ind,'Lab_Remarks_Journals','Select_CLO_Journals_Lab','Selected_CLO_Journals_Weightage',$event.target.checked)">
+
+                        <label class="text-success text-bold" *ngIf="i.Already_Added" for="Journals_Checkbox{{ind}}" [ngStyle]="i.Already_Added  && {'cursor': 'no-drop'}">Added</label>
+                        <label *ngIf="!i.Already_Added && i.Is_Temp_Added" class="text-warning text-bold" for="Journals_Checkbox{{ind}}">Selected</label>
+                        <label *ngIf="!i.Already_Added && !i.Is_Temp_Added" for="Journals_Checkbox{{ind}}" [ngStyle]="i.Already_Added && {'cursor': 'no-drop'}">Select</label>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="Journals{{ind}}" [ngClass]="(i.Is_Temp_Added)?'in':''" class="panel-collapse collapse" aria-expanded="false">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-sm-12 margin-t5">
+                        <div class="form-group">
+                          <label class="control-label">Lab Remarks</label>
+                          <textarea class="form-control" id="Lab_Remarks_Journals{{ind}}" rows="6" style="resize:none"></textarea>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label class="control-label">Select CLO</label>
+                          <select class="form-control" id="Select_CLO_Journals_Lab{{ind}}" (change)="Set_Weightage_lab(ind,'Selected_CLO_Journals_Weightage')">
+                            <option value="0" selected>Select CLO</option>
+                            <option value="{{x.CoursesCLOSID}}" *ngFor="let x of Get_Added_CLOS">{{x.CLOTitle}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label class="control-label">Weightage % <span class="text-danger">*</span></label>
+                          <input type="number" class="form-control input-sm" id="Selected_CLO_Journals_Weightage{{ind}}">
+                          <!--<div *ngIf="submitted && Course_Assessment_Form.CLO_Weightage.errors" class="invalid-feedback">
+                            <div *ngIf="Course_Assessment_Form.CLO_Weightage.errors.required" class="text-danger">CLO weightage is required </div>
+                          </div>-->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <!-- Journals  End -->
+            <!-- Mids  Start -->
+            <div *ngIf="Assessment_Type_Lab===3" class="panel-group" id="accordion6" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="row">
+                    <h5 class="panel-title col-sm-8 padding-t5">
+                      <a data-toggle="collapse" data-parent="#accordion6"
+                         class="collapse-arrow " href="#MidTerm-tab" aria-expanded="false"> Mid Term </a>
+                    </h5>
+                    <div class="col-sm-4 padding-t5">
+                      <div class="form-group">
+                        <input type="checkbox" [ngStyle]="Is_Mid_Marks_Added===true  && {'cursor': 'no-drop'}" [attr.disabled]="Is_Mid_Marks_Added===true ? true : null" [attr.checked]="Is_Mid_Marks_Added===true ? 'checked' : null" id="Mids_Lab"
+                               (change)="Add_Remove_Assessment_For_Lab('Mids',0,'Mids','Lab_Remarks_Mid','Select_CLO_Mid_Lab','Selected_CLO_Mid_Weightage',$event.target.checked)">
+                        <label class="text-success text-bold" *ngIf="Is_Mid_Marks_Added" for="Mids_Lab" [ngStyle]="Is_Mid_Marks_Added===true  && {'cursor': 'no-drop'}">Added</label>
+
+                        <label *ngIf="!Is_Mid_Marks_Added && !Is_Temp_Mids_And_Finals" for="Mids_Lab">Select</label>
+                        <label class="text-warning text-bold" *ngIf="!Is_Mid_Marks_Added && Is_Temp_Mids_And_Finals" for="Mids_Lab">Selected</label>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="MidTerm-tab" class="panel-collapse collapse in" aria-expanded="false">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-sm-12 margin-t5">
+                        <div class="form-group">
+                          <label class="control-label">Assessment Remarks</label>
+                          <textarea class="form-control" id="Lab_Remarks_Mid0" rows="6" style="resize:none"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Mids  End -->
+            <!-- Finals  Start -->
+            <div *ngIf="Assessment_Type_Lab===4" class="panel-group" id="accordion6" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="row">
+                    <h5 class="panel-title col-sm-8 padding-t5">
+                      <a data-toggle="collapse" data-parent="#accordion6"
+                         class="collapse-arrow" href="#FinalTerm-tab" aria-expanded="false"> Final Term </a>
+                    </h5>
+                    <div class="col-sm-4 padding-t5">
+                      <div class="form-group">
+                        <input type="checkbox" [ngStyle]="Is_Finals_Marks_Added===true  && {'cursor': 'no-drop'}" [attr.disabled]="Is_Finals_Marks_Added===true ? true : null" [attr.checked]="Is_Finals_Marks_Added===true ? 'checked' : null" id="Final_Lab"
+                               (change)="Add_Remove_Assessment_For_Lab('Finals',0,'Finals','Lab_Remarks_Final','Select_CLO_Final_Lab','Selected_CLO_Final_Weightage',$event.target.checked)">
+
+                        <label class="text-success text-bold" *ngIf="Is_Finals_Marks_Added" for="Final_Lab" [ngStyle]="Is_Finals_Marks_Added===true  && {'cursor': 'no-drop'}">Added</label>
+                        <label *ngIf="!Is_Finals_Marks_Added && !Is_Temp_Mids_And_Finals" for="Final_Lab">Select</label>
+                        <label class="text-warning text-bold" *ngIf="!Is_Finals_Marks_Added && Is_Temp_Mids_And_Finals" for="Final_Lab">Selected</label>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="FinalTerm-tab" class="panel-collapse collapse in" aria-expanded="false">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-sm-12 margin-t5">
+                        <div class="form-group">
+                          <label class="control-label">Assessment Remarks</label>
+                          <textarea class="form-control" id="Lab_Remarks_Final0" rows="6" style="resize:none"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Finals  End -->
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+  <div class="modal fade modal-wide margin-t41" id="Edit-Assessment-Details-Lab-Modal" tabindex="-1" role="dialog" *ngIf="CourseCategory==4">
+    <div class="modal-dialog" role="document">
+      <div class="modal-right">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="section-heading">
+              <h2 class="pull-left">Edit Assessment Details</h2>
+              <div class="pull-right">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="modal-body">
+            <fieldset class="margin-b15">
+              <legend>Update Assessment Details</legend>
+              <form [formGroup]="CourseAssessmentFormEditLab" (ngSubmit)="onSubmitUpdateLab()">
+                <div class="row">
+                  <div [ngClass]="(Assessment_Type_Lab == 3 || Assessment_Type_Lab == 4)?'col-sm-3':'col-sm-4'">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted_Edit && Course_Assessment_Form_Lab_Edit.Performance_Indicator_Edit.errors }">
+                      <label class="control-label">Select Performance Indicator <span class="text-danger">*</span></label>
+                      <select class="form-control" formControlName="Performance_Indicator_Edit" id="Performance_Indicator_Edit">
+                        <option value="0" selected>Select Performance Indicator</option>
+                        <option value="{{x.Performance_Indicators_ID}}" *ngFor="let x of Lab_Performance_Indicator">{{x.Performance_Indicators_Title}}</option>
+                      </select>
+                      <div *ngIf="submitted_Edit && Course_Assessment_Form_Lab_Edit.Performance_Indicator_Edit.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_Lab_Edit.Performance_Indicator_Edit.errors.required" class="text-danger">Please Select Performance Indicator</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div [ngClass]="(Assessment_Type_Lab == 3 || Assessment_Type_Lab == 4)?'col-sm-3':'col-sm-4'">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted_Edit && Course_Assessment_Form_Lab_Edit.Performance_Indicator_Marks_Edit.errors }">
+                      <label class="control-label">Performance Indicator Marks <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control input-sm" formControlName="Performance_Indicator_Marks_Edit">
+                      <div *ngIf="submitted_Edit && Course_Assessment_Form_Lab_Edit.Performance_Indicator_Marks_Edit.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_Lab_Edit.Performance_Indicator_Marks_Edit.errors.required" class="text-danger">Performance Indicator Marks is required </div>
+                        <div *ngIf="Course_Assessment_Form_Lab_Edit.Performance_Indicator_Marks_Edit.errors.min" class="text-danger">Minimum marks is 0</div>
+                      </div>
+                    </div>
+                  </div>
+                  <ng-container *ngIf="Assessment_Type_Lab == 3">
+                    <div [ngClass]="(Assessment_Type_Lab == 3)?'col-sm-2':'col-sm-4'">
+                      <div class="form-group">
+                        <label class="control-label">Select CLO</label>
+                        <select class="form-control Select_CLO" formControlName="Selected_CLO_Edit" (change)="Set_Weightage_lab_Edit()">
+                          <option value="0" selected>Select CLO</option>
+                          <option value="{{x.CoursesCLOSID}}" *ngFor="let x of Get_Added_CLOS">{{x.CLOTitle}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div [ngClass]="(Assessment_Type_Lab == 3)?'col-sm-2':'col-sm-4'">
+                      <div class="form-group" [ngClass]="{ 'has-error': submitted_Edit && Course_Assessment_Form_Lab_Edit.CLO_Weightage_Edit.errors }">
+                        <label class="control-label">Weightage % <span class="text-danger" *ngIf="Is_Weightage_Mendatory">*</span></label>
+                        <input type="number" class="form-control input-sm" formControlName="CLO_Weightage_Edit">
+                        <div *ngIf="submitted_Edit && Course_Assessment_Form_Lab_Edit.CLO_Weightage_Edit.errors" class="invalid-feedback">
+                          <div *ngIf="Course_Assessment_Form_Lab_Edit.CLO_Weightage_Edit.errors.required" class="text-danger">CLO weightage is required </div>
+                          <div *ngIf="Course_Assessment_Form_Lab_Edit.CLO_Weightage_Edit.errors.min" class="text-danger">Minimum CLO weightage is 0</div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                  <div [ngClass]="(Assessment_Type_Lab == 3)?'col-sm-2':'col-sm-4'">
+                    <div class="form-group">
+                      <label class="control-label">Total Marks</label>
+                      <input type="number" class="form-control input-sm" disabled formControlName="Assessment_Total_Edit">
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-info pull-right" id="Lab_Update_Button" disabled>Update</button>
+              </form>
+            </fieldset>
+            <div class="tab-pane margin-t10">
+              <div class="section-heading pull-left"><h2>View Assessment Details</h2></div>
+              <div class="margin-b5">
+                <div class="clearfix"></div>
+              </div>
+              <fieldset class="margin-b15">
+                <legend>Edited Assessment Details</legend>
+                <div class="dashboard-scroller setups-widget mCustomScrollbar" style="height:15vh">
+                  <div class="table-responsive">
+                    <table class="table table-hover table-theme">
+                      <thead>
+                        <tr>
+                          <th>Performance Indicator</th>
+                          <th>Performance Indicator Marks</th>
+                          <th *ngIf="Assessment_Type_Lab == 3">Mapped CLO</th>
+                          <th *ngIf="Assessment_Type_Lab == 3">Weightage</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <ng-container *ngFor="let i of Selected_Assessment_Sub_Details; let ind = index">
+                          <tr class="cursor-pointer" *ngIf="!i.Is_Deleted">
+                            <td><b><span class="blue">{{i.Performance_Indicator}}</span></b></td>
+                            <td align="center">{{i.Performance_Indicator_Marks}}</td>
+                            <td align="center" *ngIf="Assessment_Type_Lab == 3">{{i.Mapped_CLO_Title}}</td>
+                            <td align="center" *ngIf="Assessment_Type_Lab == 3">{{i.Weightage}}</td>
+                            <td align="center">
+                              <div class="btn-group">
+                                <button (click)="Edit_Temp_Added_Assessment(i,ind)" type="button" class="btn btn-default margin-r5" title="Edit Assessment Details"><i class="app-icon-Amazing-Fusion-61 f12 blue"></i> </button>
+                                <button (click)="Deleted_Edited_Temp_Added_Assessment(ind)" type="button" class="btn btn-default" title="Delete Assessment Details"><i class="app-icon-IconSet-1-33 blue"></i> </button>
+                              </div>
+                            </td>
+                          </tr>
+                        </ng-container>
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </fieldset>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-info" (click)="SaveEditedAssessmentLab()">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-left" style="width:400px">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs fl-n" role="tablist">
+          <li class="active width-100p"><a href="#Assessment-Tools-Details-Edit" role="tab" data-toggle="tab">Selected Assessments</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content margin-b15">
+          <div role="tabpanel" class="tab-pane active" id="Assessment-Tools-Details-Edit">
+            <!-- Edit Assessment Starts -->
+            <div class="panel-group" id="accordion6" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="row">
+                    <h5 class="panel-title col-sm-8 padding-t5"><a data-toggle="collapse" data-parent="#accordion6" class="collapse-arrow" href="#EditAssessment" aria-expanded="false">{{this.Selected_Assessment_Title}}</a> </h5>
+                    <div class="col-sm-4 padding-t5">
+                      <div class="form-group">
+                        <input type="checkbox" disabled checked style="cursor:no-drop">
+                        <label class="text-success text-bold" style="cursor:no-drop">Added</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="EditAssessment" class="panel-collapse collapse in" aria-expanded="false">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-sm-12 margin-t5">
+                        <div class="form-group">
+                          <label class="control-label">Lab Remarks</label>
+                          <textarea class="form-control" id="Lab_Remarks_Assessment_Edit" rows="6" style="resize:none"></textarea>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="Assessment_Type_Lab != 3">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label class="control-label">Select CLO<span class="text-danger">*</span></label>
+                            <select class="form-control" id="Select_CLO_Assessment_Lab_Edit" (change)="Set_Weightage_lab_Edit('0','Select_CLO_Assessment_Lab_Edit')">
+                              <option value="0" selected>Select CLO</option>
+                              <option value="{{x.CoursesCLOSID}}" *ngFor="let x of Get_Added_CLOS">{{x.CLOTitle}}</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label class="control-label">Weightage % <span class="text-danger">*</span></label>
+                            <input type="number" id="Select_CLO_Assessment_Lab_Edit0" class="form-control input-sm" max="100" min="0">
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Edit Assessment  End -->
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+  <!--End Lab Modal-->
+  <!-- FYP Model -->
+  <div class="modal fade modal-wide margin-t41" id="Add-Assessment-Details-FYP-Modal" tabindex="-1" role="dialog" *ngIf="CourseCategory==8">
+    <div class="modal-dialog" role="document">
+      <div class="modal-right">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="section-heading">
+              <h2 class="pull-left">Add Assessment Details</h2>
+              <div class="pull-right">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="modal-body padding-t0">
+            <fieldset class="margin-b15">
+              <legend>Add Assessment Details</legend>
+              <form [formGroup]="CourseAssessmentFormFYP" (ngSubmit)="onSubmitFYP()">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted && Course_Assessment_Form_FYP.Performance_Indicator.errors }">
+                      <label class="control-label">Select Performance Indicator <span class="text-danger">*</span></label>
+                      <select class="form-control" formControlName="Performance_Indicator" id="Performance_Indicator">
+                        <option value="0" selected>Select Performance Indicator</option>
+                        <option value="{{x.Performance_Indicators_ID}}" *ngFor="let x of Lab_Performance_Indicator">{{x.Performance_Indicators_Title}}</option>
+                      </select>
+                      <div *ngIf="submitted && Course_Assessment_Form_FYP.Performance_Indicator.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_FYP.Performance_Indicator.errors.required" class="text-danger">Please Select Performance Indicator</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted && Course_Assessment_Form_FYP.Performance_Indicator_Marks.errors }">
+                      <label class="control-label">Performance Indicator Marks <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control input-sm" formControlName="Performance_Indicator_Marks">
+                      <div *ngIf="submitted && Course_Assessment_Form_FYP.Performance_Indicator_Marks.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_FYP.Performance_Indicator_Marks.errors.required" class="text-danger">Performance Indicator Marks is required </div>
+                        <div *ngIf="Course_Assessment_Form_FYP.Performance_Indicator_Marks.errors.min" class="text-danger">Minimum marks is 0</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted && Course_Assessment_Form_FYP.Selected_CLO.errors }">
+                      <label class="control-label">Select CLO <span class="text-danger">*</span></label>
+                      <select class="form-control" formControlName="Selected_CLO" (change)="Set_Weightage_FYP()">
+                        <option value="0" selected>Select CLO</option>
+                        <option value="{{x.CoursesCLOSID}}" *ngFor="let x of Get_Added_CLOS">{{x.CLOTitle}}</option>
+                      </select>
+                      <div *ngIf="submitted && Course_Assessment_Form_FYP.Selected_CLO.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_FYP.Selected_CLO.errors.required" class="text-danger">Please select CLO</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted && Course_Assessment_Form_FYP.CLO_Weightage.errors }">
+                      <label class="control-label">Weightage % <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control input-sm" formControlName="CLO_Weightage">
+                      <div *ngIf="submitted && Course_Assessment_Form_FYP.CLO_Weightage.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_FYP.CLO_Weightage.errors.required" class="text-danger">CLO weightage is required </div>
+                        <div *ngIf="Course_Assessment_Form_FYP.CLO_Weightage.errors.min" class="text-danger">Minimum CLO weightage is 0</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted && Course_Assessment_Form_FYP.Assessment_Total.errors }">
+                      <label class="control-label">Total Marks <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control input-sm" disabled formControlName="Assessment_Total">
+                      <div *ngIf="submitted && Course_Assessment_Form_FYP.Assessment_Total.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_FYP.Assessment_Total.errors.required" class="text-danger">Assessment Tool is not selected</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-info pull-right">Add</button>
+              </form>
+            </fieldset>
+            <div class="tab-pane margin-t10">
+              <div class="section-heading pull-left"><h2>Assessment Details</h2></div>
+              <div class="margin-b5">
+                <div class="clearfix"></div>
+              </div>
+              <fieldset class="margin-b15">
+                <legend>Added Assessment Details</legend>
+                <div class="dashboard-scroller setups-widget mCustomScrollbar" style="height:15vh">
+                  <div class="table-responsive">
+                    <table class="table table-hover table-theme">
+                      <thead>
+                        <tr>
+                          <th>Performance Indicator</th>
+                          <th>Performance Indicator Marks</th>
+                          <th>Mapped CLO</th>
+                          <th>Weightage</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="cursor-pointer" *ngFor="let i of All_Added_Assessment_Details_FYP;let ind=index">
+                          <td><b><span class="blue">{{i.Performance_Indicator_Title}}</span></b></td>
+                          <td align="center">{{i.Performance_Indicator_Marks}}</td>
+                          <td align="center">{{i.Selected_CLOS_Title}}</td>
+                          <td align="center">{{i.CLO_Weightage}}</td>
+                          <td align="center">
+                            <div class="btn-group">
+                              <button (click)="Deleted_Temp_Added_Assessment_FYP(ind)" type="button" class="btn btn-default margin-r5" title="Delete"><i class="app-icon-IconSet-1-33 blue"></i> </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </fieldset>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-info" (click)="SaveAssessmentFYP()">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-left" style="width:400px;max-height:800px;overflow-y:scroll">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs fl-n" role="tablist">
+          <li class="active width-100p"><a href="#Assessment-Tools-Details" role="tab" data-toggle="tab">Select Assessments</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active">
+            <div class="panel panel-default active" *ngFor="let i of FYPAssessmentToolsStatus; let ind = index">
+              <div class="panel-heading">
+                <div class="row">
+                  <h5 class="panel-title col-sm-8 padding-t5">
+                    <a data-toggle="collapse"
+                       [ngClass]="(i.isAdded)?'':'collapsed'" data-parent="#accordion6"
+                       class="collapse-arrow" [attr.href]="'#FYPAssessmentTool'+ind" aria-expanded="false"> {{i.Title}}</a>
+                  </h5>
+                  <div class="col-sm-4 padding-t5">
+                    <div class="form-group pull-right">
+                      <input *ngIf="i.IsAdded" type="radio" style="cursor:no-drop" checked disabled>
+                      <input *ngIf="!i.IsAdded" type="radio" value="{{i.FYPAssessmentToolID}}" name="AssessmentToolFYP" (click)="SetSelectedAssessment(i)">
+                      <label *ngIf="i.IsAdded" class="text-success text-bold">Added</label>
+                      <label *ngIf="!i.IsAdded">&nbsp;</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="FYPAssessmentTool{{ind}}" [ngClass]="(!i.IsAdded)?'in':''" class="panel-collapse collapse" aria-expanded="false">
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-sm-12 margin-t5">
+                      <div class="form-group">
+                        <label class="control-label">Assessment Remarks</label>
+                        <textarea class="form-control" id="FYPAssessmentTool_textarea{{i.FYPAssessmentToolID}}" rows="6" style="resize:none"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+  <div class="modal fade modal-wide margin-t41" id="Edit-Assessment-Details-FYP-Modal" tabindex="-1" role="dialog" *ngIf="CourseCategory==8">
+    <div class="modal-dialog" role="document">
+      <div class="modal-right">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="section-heading">
+              <h2 class="pull-left">Edit Assessment Details</h2>
+              <div class="pull-right">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="modal-body">
+            <fieldset class="margin-b15">
+              <legend>Update Assessment Details</legend>
+              <form [formGroup]="CourseAssessmentFormEditFYP" (ngSubmit)="onSubmitUpdateFYP()">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted_Edit && Course_Assessment_Form_FYP_Edit.Performance_Indicator_Edit.errors }">
+                      <label class="control-label">Select Performance Indicator <span class="text-danger">*</span></label>
+                      <select class="form-control" formControlName="Performance_Indicator_Edit" id="Performance_Indicator_Edit">
+                        <option value="0" selected>Select Performance Indicator</option>
+                        <option value="{{x.Performance_Indicators_ID}}" *ngFor="let x of Lab_Performance_Indicator">{{x.Performance_Indicators_Title}}</option>
+                      </select>
+                      <div *ngIf="submitted_Edit && Course_Assessment_Form_FYP_Edit.Performance_Indicator_Edit.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_FYP_Edit.Performance_Indicator_Edit.errors.required" class="text-danger">Please Select Performance Indicator</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted_Edit && Course_Assessment_Form_FYP_Edit.Performance_Indicator_Marks_Edit.errors }">
+                      <label class="control-label">Performance Indicator Marks <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control input-sm" formControlName="Performance_Indicator_Marks_Edit">
+                      <div *ngIf="submitted_Edit && Course_Assessment_Form_FYP_Edit.Performance_Indicator_Marks_Edit.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_FYP_Edit.Performance_Indicator_Marks_Edit.errors.required" class="text-danger">Performance Indicator Marks is required </div>
+                        <div *ngIf="Course_Assessment_Form_FYP_Edit.Performance_Indicator_Marks_Edit.errors.min" class="text-danger">Minimum marks is 0</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted_Edit && Course_Assessment_Form_FYP_Edit.Selected_CLO_Edit.errors }">
+                      <label class="control-label">Select CLO</label>
+                      <select class="form-control Select_CLO" formControlName="Selected_CLO_Edit" (change)="Set_Weightage_FYP_Edit()">
+                        <option value="0" selected>Select CLO</option>
+                        <option value="{{x.CoursesCLOSID}}" *ngFor="let x of Get_Added_CLOS">{{x.CLOTitle}}</option>
+                      </select>
+                      <div *ngIf="submitted_Edit && Course_Assessment_Form_FYP_Edit.Selected_CLO_Edit.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_FYP_Edit.Selected_CLO_Edit.errors.required" class="text-danger">Please select CLO</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="form-group" [ngClass]="{ 'has-error': submitted_Edit && Course_Assessment_Form_FYP_Edit.CLO_Weightage_Edit.errors }">
+                      <label class="control-label">Weightage % <span class="text-danger" *ngIf="Is_Weightage_Mendatory">*</span></label>
+                      <input type="number" class="form-control input-sm" formControlName="CLO_Weightage_Edit">
+                      <div *ngIf="submitted_Edit && Course_Assessment_Form_FYP_Edit.CLO_Weightage_Edit.errors" class="invalid-feedback">
+                        <div *ngIf="Course_Assessment_Form_FYP_Edit.CLO_Weightage_Edit.errors.required" class="text-danger">CLO weightage is required </div>
+                        <div *ngIf="Course_Assessment_Form_FYP_Edit.CLO_Weightage_Edit.errors.min" class="text-danger">Minimum CLO weightage is 0</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="form-group">
+                      <label class="control-label">Total Marks</label>
+                      <input type="number" class="form-control input-sm" disabled formControlName="Assessment_Total_Edit">
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-info pull-right" id="Lab_Update_Button" disabled>Update</button>
+              </form>
+            </fieldset>
+            <div class="tab-pane margin-t10">
+              <div class="section-heading pull-left"><h2>View Assessment Details</h2></div>
+              <div class="margin-b5">
+                <div class="clearfix"></div>
+              </div>
+              <fieldset class="margin-b15">
+                <legend>Edited Assessment Details</legend>
+                <div class="dashboard-scroller setups-widget mCustomScrollbar" style="height:15vh">
+                  <div class="table-responsive">
+                    <table class="table table-hover table-theme">
+                      <thead>
+                        <tr>
+                          <th>Performance Indicator</th>
+                          <th>Performance Indicator Marks</th>
+                          <th>Mapped CLO</th>
+                          <th>Weightage</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <ng-container *ngFor="let i of Selected_Assessment_Sub_Details; let ind = index">
+                          <tr class="cursor-pointer" *ngIf="!i.Is_Deleted">
+                            <td><b><span class="blue">{{i.Performance_Indicator}}</span></b></td>
+                            <td align="center">{{i.Performance_Indicator_Marks}}</td>
+                            <td align="center">{{i.Mapped_CLO_Title}}</td>
+                            <td align="center">{{i.Weightage}}</td>
+                            <td align="center">
+                              <div class="btn-group">
+                                <button (click)="Edit_Temp_Added_Assessment(i,ind)" type="button" class="btn btn-default margin-r5" title="Edit Assessment Details"><i class="app-icon-Amazing-Fusion-61 f12 blue"></i> </button>
+                                <button (click)="Deleted_Edited_Temp_Added_Assessment(ind)" type="button" class="btn btn-default" title="Delete Assessment Details"><i class="app-icon-IconSet-1-33 blue"></i> </button>
+                              </div>
+                            </td>
+                          </tr>
+                        </ng-container>
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </fieldset>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-info" (click)="SaveEditedAssessmentFYP()">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-left" style="width:400px">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs fl-n" role="tablist">
+          <li class="active width-100p"><a href="#Assessment-Tools-Details-Edit" role="tab" data-toggle="tab">Selected Assessments</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content margin-b15">
+          <div role="tabpanel" class="tab-pane active" id="Assessment-Tools-Details-Edit">
+            <!-- Edit Assessment Starts -->
+            <div class="panel-group" id="accordion6" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="row">
+                    <h5 class="panel-title col-sm-8 padding-t5"><a data-toggle="collapse" data-parent="#accordion6" class="collapse-arrow" href="#EditAssessment" aria-expanded="false">{{this.Selected_Assessment_Title}}</a> </h5>
+                    <div class="col-sm-4 padding-t5">
+                      <div class="form-group">
+                        <input type="checkbox" disabled checked style="cursor:no-drop">
+                        <label class="text-success text-bold" style="cursor:no-drop">Added</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="EditAssessment" class="panel-collapse collapse in" aria-expanded="false">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-sm-12 margin-t5">
+                        <div class="form-group">
+                          <label class="control-label">Lab Remarks</label>
+                          <textarea class="form-control" id="Lab_Remarks_Assessment_Edit" rows="6" style="resize:none"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Edit Assessment  End -->
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</div>
+
+<div role="tabpanel" class="tab-pane" id="tab-Assessment-Details">
+  <div class="section-heading padding-b5">
+    <h2>Assessment Details</h2>
+    <div class="pull-right" *ngIf="Add_Permission">
+      <button (click)="Show_Add_Assessment_Modal()" data-toggle="modal" class="btn btn-info">Add Assessment Details</button>
+    </div>
+  </div>
+  <div class="margin-b5">
+    <div class="pull-left">
+      <div class="has-feedback width-300">
+        <input type="text" class="form-control" placeholder="Search Records" [(ngModel)]="query">
+        <span class="form-control-feedback"><i class="app-icon-IconSet-1-92"></i></span>
+      </div>
+    </div>
+    <div class="pull-left margin-l5">
+      <div class="form-inline">
+        <div class="form-group margin-r10" style="width:110%">
+          <label class="control-label margin-r10">Show</label>
+          <select class="form-control input-xs margin-r5" (change)="setPage(1,pagesize)" [(ngModel)]="pagesize" style="width: 30%;">
+            <option>10</option>
+            <option>20</option>
+            <option>30</option>
+            <option>50</option>
+            <option>100</option>
+          </select>
+          <label class="control-label">Per Page</label>
+        </div>
+      </div>
+    </div>
+    <div class="pull-left margin-t4 margin-l20">
+      <ul class="nav nav-pills margin-l5">
+        <li class="margin-r15"><span class="fa fa-stop text-success"></span> Above Average</li>
+        <li class="margin-r15"><span class="fa fa-stop text-warning"></span> Marks Not Added</li>
+        <li class="margin-r15"><span class="fa fa-stop text-danger"></span> Below Average</li>
+      </ul>
+    </div>
+    <div class="pull-right hidden">
+      <div class="btn-group left-dropdown">
+        <button class="btn btn-default btn-sm dropdown-toggle margin-r5" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Export <span class="caret"></span> </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <li><a href="#">PDF</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+</div>
+<div class="table-responsive" style="max-height: 50vh; overflow-y:auto">
+  <table class="table table-hover table-theme">
+    <thead>
+      <tr>
+        <th width="4%">Sr. #</th>
+        <th>Title</th>
+        <th width="25%">Assessment Details</th>
+        <th>Ass. Attainment</th>
+        <th>CLOs Attainment</th>
+        <th>Best Perf.</th>
+        <th>Lowest Perf.</th>
+        <th>Scheduled Date</th>
+        <th width="8%" *ngIf="Is_Show_Action_TD" style="z-index: 1;">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let i of Get_Assessment_Details_Course_Lst | filter:query">
+        <tr [ngClass]="[(i.assessmenT_ATTAINMENT >=50 && i.cloS_ATTAINMENT >=50 && i.iS_MARKS_SUBMITTED)?'tr-success':'', ((i.assessmenT_ATTAINMENT < 50 || i.cloS_ATTAINMENT < 50) && i.iS_MARKS_SUBMITTED)?'tr-danger':'',(!i.iS_MARKS_SUBMITTED)?'tr-warning':'']">
+          <td align="center">{{i.Sr_Number}}</td>
+          <td>
+            <b class="blue">
+              <span [innerHTML]="i.assessmenttitle | highlight:query"></span>
+            </b>
+            <p>Total Marks: <b><span [innerHTML]="i.assessmentmarks | highlight:query"></span></b></p>
+          </td>
+          <ng-container *ngIf="i.Is_Loop == false">
+            <td *ngIf="i.Course_Category ==1"><b class="blue">Question: <span [innerHTML]="i.questionnumber | highlight:query"></span> </b><p>Marks: <b><span [innerHTML]="i.questionmarks | highlight:query"></span></b> <span *ngIf="i.mappedclotitle !=0"> | Mapped CLO: <b><span [innerHTML]="i.mappedclotitle | highlight:query"></span></b> | Weightage: <b><span [innerHTML]="i.weightage | highlight:query"></span>%</b></span></p></td>
+            <td *ngIf="i.Course_Category !=1"><b class="blue"><span [innerHTML]="i.questionnumber | highlight:query"></span> </b><p>Marks: <b><span [innerHTML]="i.questionmarks | highlight:query"></span></b> <span *ngIf="i.mappedclotitle !=0"> | Mapped CLO: <b><span [innerHTML]="i.mappedclotitle | highlight:query"></span></b> | Weightage: <b><span [innerHTML]="i.weightage | highlight:query"></span>%</b></span></p></td>
+          </ng-container>
+          <ng-container *ngIf="i.Is_Loop == true">
+            <td *ngIf="i.Course_Category ==1">
+              <ng-container *ngFor="let j of i.Get_Assessment_Sub_Details_Course_Lst">
+                <b class="blue">Question: <span [innerHTML]="j.questionnumber | highlight:query"></span></b><p>Marks: <b><span [innerHTML]="j.questionmarks | highlight:query"></span></b> <span *ngIf="j.mappedclotitle !=0"> | Mapped CLO: <b><span [innerHTML]="j.mappedclotitle | highlight:query"></span></b> | Weightage: <b><span [innerHTML]="j.weightage | highlight:query"></span>%</b></span></p>
+              </ng-container>
+            </td>
+            <td *ngIf="i.Course_Category !=1">
+              <ng-container *ngFor="let j of i.Get_Assessment_Sub_Details_Course_Lst">
+                <b class="blue"><span [innerHTML]="j.questionnumber | highlight:query"></span></b><p>Marks: <b><span [innerHTML]="j.questionmarks | highlight:query"></span></b> <span *ngIf="j.mappedclotitle !=0"> | Mapped CLO: <b><span [innerHTML]="j.mappedclotitle | highlight:query"></span></b> | Weightage: <b><span [innerHTML]="j.weightage | highlight:query"></span>%</b></span></p>
+              </ng-container>
+            </td>
+          </ng-container>
+          <td align="center"><b class="blue"><span [innerHTML]="i.assessmenT_ATTAINMENT | highlight:query"></span>%</b></td>
+          <td align="center"><b class="blue"><span [innerHTML]="i.cloS_ATTAINMENT | highlight:query"></span>%</b></td>
+
+          <td *ngIf="i.iS_MARKS_SUBMITTED"><b class="blue"><span [innerHTML]="i.besT_PERFORMAR_NAME | highlight:query"></span></b><p><span [innerHTML]="i.besT_PERFORMAR_ENROLLMENT | highlight:query"></span></p></td>
+          <td *ngIf="i.iS_MARKS_SUBMITTED"><b class="blue"><span [innerHTML]="i.lowesT_PERFORMAR_NAME | highlight:query"></span></b><p><span [innerHTML]="i.lowesT_PERFORMAR_NAME_ENROLLMENT | highlight:query"></span></p></td>
+          <td align="center" *ngIf="!i.iS_MARKS_SUBMITTED"><b class="blue">-</b></td>
+          <td align="center" *ngIf="!i.iS_MARKS_SUBMITTED"><b class="blue">-</b></td>
+
+          <td align="center"><span [innerHTML]="i.Scheduled_Date | highlight:query"></span></td>
+          <ng-container *ngIf="Is_Show_Action_TD">
+            <td align="center">
+              <div class="btn-group">
+                <ng-container *ngIf="!Is_Permission_Edit_Course_Details && !Is_Have_Special_Permission">
+                  <button [attr.disabled]="i.iS_MARKS_SUBMITTED === true  ? 'disabled' : null" type="button" (click)="Edit_Assessment_Details(i)" class="btn btn-default margin-r5" title="Edit Assessment"><i class="app-icon-Amazing-Fusion-61 f12 blue"></i> </button>
+                </ng-container>
+
+                <ng-container *ngIf="!Is_Permission_Delete_Course_Details && !Is_Have_Special_Permission">
+                  <button type="button" (click)="Delete_Assessment_Details(i)" class="btn btn-default margin-r5" title="Delete Assessment"><i class="app-icon-IconSet-1-33 f12 blue"></i> </button>
+                </ng-container>
+
+                <ng-container *ngIf="Is_Permission_Edit_Course_Details && Is_Have_Special_Permission">
+                  <button type="button" (click)="Edit_Assessment_Details(i)" class="btn btn-default margin-r5" title="Edit Assessment"><i class="app-icon-Amazing-Fusion-61 f12 blue"></i> </button>
+                </ng-container>
+
+                <ng-container *ngIf="Is_Permission_Delete_Course_Details && Is_Have_Special_Permission">
+                  <button type="button" (click)="Delete_Assessment_Details(i)" class="btn btn-default margin-r5" title="Delete Assessment"><i class="app-icon-IconSet-1-33 f12 blue"></i> </button>
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
+
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination-bottom">
+  <div class="pull-left">
+    <div class="form-inline">
+      <div class="form-group" *ngIf="Get_Assessment_Details_Course_Lst==null || Get_Assessment_Details_Course_Lst?.length == 0">
+        <label class="control-label padding-t5">Showing 0 to 0 of 0 entries</label>
+      </div>
+      <div class="form-group" *ngIf="Get_Assessment_Details_Course_Lst?.length >=1">
+        <label class="control-label padding-t5">Showing {{pager?.startIndex+1}} to {{pager?.endIndex+1}} of {{pager?.totalItems}} entries</label>
+      </div>
+    </div>
+  </div>
+  <div class="form-inline pull-right margin-b5">
+    <div class="table-pagination pull-right" *ngIf="pager?.pages && pager?.pages.length">
+      <button data-original-title="First Page" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === 1}" (click)="setPage(1,pagesize)" [disabled]="pager?.currentPage === 1"><i class="fa fa-backward"></i></button>
+      <button data-original-title="Previous" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === 1}" (click)="setPage(pager?.currentPage - 1,pagesize)" [disabled]="pager?.currentPage === 1"><i class="fa fa-caret-left"></i></button>
+      <input type="text" style="width:50px;" value="1" class="form-control" [(ngModel)]="page" (keyup)="setPage(page)" (keypress)="keyRestrict($event,'0123456789')" disabled>
+      <label class="control-label">of  {{pager?.totalPages}}</label>
+      <button data-original-title="Next" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === pager?.totalPages}" (click)="setPage(pager?.currentPage + 1,pagesize)" [disabled]="pager?.currentPage == pager?.totalPages"><i class="fa fa-caret-right"></i></button>
+      <button data-original-title="Last" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === pager?.totalPages}" (click)="setPage(pager?.totalPages,pagesize)" [disabled]="pager?.currentPage == pager?.totalPages"><i class="fa fa-forward"></i></button>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+</div>

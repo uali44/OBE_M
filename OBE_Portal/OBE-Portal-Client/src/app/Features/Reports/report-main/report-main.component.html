@@ -1,0 +1,206 @@
+  <div class="tab-content dashboard-bg" id="Content" *ngIf="Is_Permission_Reports_Main">
+    <div role="tabpanel" class="tab-pane active MainReportTab" id="reports-tab">
+      <div class="row">
+        <div class="col-sm-6" *ngIf="Is_Permission_PLOs_Main_Reporting_Widget">
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active main-dashboard" id="dashboard-tab">
+              <div class="dashboard-box">
+                <div class="box-panel-heading">
+                  <span><i class="iconn app-icon-EHR-Nav-Icons-06"></i></span>
+                  <h1>PLO Level Reporting</h1>
+                </div>
+                <div class="box-panel-body">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <ul class="arrow-blue-list">
+                        <li *ngIf="Is_Permission_PLOs_Coverage"><a (click)="loadTab('PLOs Coverage')" class="underline"><b>PLOs Coverage:</b></a> <span class="text-muted"> Report showing statistics of PLOs coverage intake wise</span></li>
+                        <li *ngIf="Is_Permission_CLO_PLO_Skill_Mapping"><a (click)="loadTab('PLOs Skills Mapping')" class="underline"><b>PLOs Skills Mapping:</b></a> <span class="text-muted"> Report showing CLOs PLOs Skills Mapping courses wise</span></li>
+                        <li *ngIf="Is_Permission_PLOs_Analysis"><a (click)="loadTab('PLOs Analysis')" class="underline"><b>PLOs Analysis:</b></a> <span class="text-muted"> Report showing all the PLOs statistics intake wise</span></li>
+                        <li *ngIf="Is_Permission_PLOs_Analysis"><a (click)="loadTab('PLOs Analysis Average Attainment')" class="underline"><b>PLOs Analysis Average Attainment:</b></a> <span class="text-muted"> Report showing all the PLOs Analysis on Average Attainment of CLOs</span></li>
+                        <li *ngIf="Is_Permission_Skills_Coverage"><a (click)="loadTab('PLOs Skills Coverage')" class="underline"><b>PLOs Skills Coverage:</b></a> <span class="text-muted"> Report showing statistics of skill coverage intake wise</span></li>
+                        <li *ngIf="Is_Permission_PLOs_Coverage_Course_Wise"><a (click)="loadTab('PLOs Coverage Course Wise')" class="underline"><b>PLOs Coverage Courses wise:</b></a> <span class="text-muted"> Report showing statistics of PLOs coverage intake wise and courses wise</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6" *ngIf="Is_Permission_CLOs_And_Assessment_Main_Reporting_Widget">
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active main-dashboard" id="dashboard-tab">
+              <div class="dashboard-box">
+                <div class="box-panel-heading">
+                  <span><i class="iconn app-icon-EHR-Nav-Icons-06"></i></span>
+                  <h1>CLO Level Reporting</h1>
+                </div>
+                <div class="box-panel-body">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <ul class="arrow-blue-list">
+                        <li *ngIf="Is_Permission_Course_Marks_Status"><a (click)="loadTab('Courses Marks Status')" class="underline"><b>Offered Courses Marks Status:</b></a> <span class="text-muted"> Report showing marks status of all offered courses for selected semester</span></li>
+                        <li *ngIf="Is_Permission_Course_Assessment_Resport"><a (click)="loadTab('Courses Assessment Report')" class="underline"><b>Course Assessmnent Report (CAR):</b></a> <span class="text-muted"> Report showing all course attainment</span></li>
+                        <li *ngIf="Is_Permission_Compiled_Result_Report"><a (click)="loadTab('Compiled Result')" class="underline"><b>Compiled Result:</b></a><span class="text-muted"> Report showing course attainment</span></li>
+                        <li *ngIf="Is_Permission_CLO_PLO_Mapping"><a (click)="loadTab('CLOs Mapping')" class="underline"><b>CLOs Mapping Courses wise:</b></a> <span class="text-muted"> Report showing CLOs mapping over PLOs along with courses</span></li>
+                        <li *ngIf="Is_Permission_CLO_Attainment_SemesterWise"><a (click)="loadTab('CLOs Attainment')" class="underline"><b>CLOs Attainment Semester wise:</b></a> <span class="text-muted"> Report showing CLOs Attainment along with courses</span></li>
+                        <li *ngIf="Is_Permission_CLO_Failed_SemesterWise"><a (click)="loadTab('Failed CLOs but Cleared Course')" class="underline"><b>CLOs Failed:</b></a> <span class="text-muted"> Report showing courses in which student cleared the course but failed CLOs for selected semester</span></li>
+
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6" *ngIf="Is_Permission_CQI_Main_Widget">
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active main-dashboard" id="dashboard-tab">
+              <div class="dashboard-box">
+                <div class="box-panel-heading">
+                  <span><i class="iconn app-icon-EHR-Nav-Icons-06"></i></span>
+                  <h1>CQI Level Reporting</h1>
+                </div>
+                <div class="box-panel-body">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <ul class="arrow-blue-list">
+                        <li *ngIf="Is_Permission_CQI_Course_Executive_Summary"><a (click)="loadTab('CQI Course Executive Summary')" class="underline"><b>CQI Course Executive Summary:</b></a> <span class="text-muted"> Report Showing CQI cycle for the courses</span></li>
+                        <li *ngIf="Is_Permission_CQI_PLO_Quhart_Level_Failure_Summary"><a (click)="loadTab('CQI PLO Cohort Level Failure Summary')" class="underline"><b>CQI PLO Cohort Level Failure Summary:</b></a> <span class="text-muted"> Report Showing CQI PLO Cohort Level Failure Summary for direct Assessment</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6" *ngIf="Is_Permission_Indirect_Main_Widget">
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active main-dashboard" id="dashboard-tab">
+              <div class="dashboard-box">
+                <div class="box-panel-heading">
+                  <span><i class="iconn app-icon-EHR-Nav-Icons-06"></i></span>
+                  <h1>Indirect Assessment Reporting</h1>
+                </div>
+                <div class="box-panel-body">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <ul class="arrow-blue-list">
+                        <li *ngIf="Is_Permission_CSP_Summary"><a (click)="loadTab('CSP Summary Report')" class="underline"><b>CSP Summary Report:</b></a> <span class="text-muted"> Report Showing CSP Summary Intake wise</span></li>
+                        <li *ngIf="Is_Permission_Exit_Summary"><a (click)="loadTab('Exit Summary Report')" class="underline"><b>Exit Summary Report:</b></a> <span class="text-muted"> Report Showing Exit Summary Intake wise</span></li>
+                        <li *ngIf="Is_Permission_Internship_Summary"><a (click)="loadTab('Internship Summary Report')" class="underline"><b>Internship Summary Report:</b></a> <span class="text-muted"> Report Showing Internship Summary Intake wise</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-pane active SubReportTab" id="Any-tab">
+      <ng-container *ngIf="Is_Permission_PLOs_Analysis">
+        <ng-container *ngIf="PLOAnalysis">
+          <app-plo-analysis></app-plo-analysis>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="Is_Permission_PLOs_Analysis">
+        <ng-container *ngIf="PLOAnalysisNew">
+          <app-plo-analysis-new></app-plo-analysis-new>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="Is_Permission_Skills_Coverage">
+        <ng-container *ngIf="SkillCoverage">
+          <app-plo-skills-mapping></app-plo-skills-mapping>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="Is_Permission_PLOs_Coverage">
+        <ng-container *ngIf="PLOsCoverage">
+          <app-plo-coverage-semesterwise></app-plo-coverage-semesterwise>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="Is_Permission_PLOs_Coverage_Course_Wise">
+        <ng-container *ngIf="PLOsCoverageCourseWise">
+          <app-plo-coverage-coursewise></app-plo-coverage-coursewise>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="Is_Permission_Course_Marks_Status">
+        <ng-container *ngIf="CourseMarkStatus">
+          <app-course-marks-status></app-course-marks-status>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="Is_Permission_Course_Assessment_Resport">
+        <ng-container *ngIf="CourseAssessmentReport">
+          <app-course-assessment-report></app-course-assessment-report>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="Is_Permission_Compiled_Result_Report">
+        <ng-container *ngIf="CompiledResultReport">
+          <app-compiled-result></app-compiled-result>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="Is_Permission_CLO_PLO_Mapping">
+        <ng-container *ngIf="CLOPLOMapping">
+          <app-clo-plo-mapping></app-clo-plo-mapping>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="Is_Permission_CLO_PLO_Skill_Mapping">
+        <ng-container *ngIf="CLOPLOSkillMapping">
+          <app-clo-plo-skill-mapping></app-clo-plo-skill-mapping>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="Is_Permission_CLO_Attainment_SemesterWise">
+        <ng-container *ngIf="CLOAttainmentSemesterwise">
+          <app-clo-attainment></app-clo-attainment>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="Is_Permission_CLO_Failed_SemesterWise">
+        <ng-container *ngIf="CLOFailedSemesterwise">
+          <app-clo-failed></app-clo-failed>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="Is_Permission_CQI_Course_Executive_Summary">
+        <ng-container *ngIf="CQICourseExecutiveSummary">
+          <app-cqi-executive-summary></app-cqi-executive-summary>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="Is_Permission_CQI_PLO_Quhart_Level_Failure_Summary">
+        <ng-container *ngIf="CQIPLOQuhartLevelFailureSummary">
+          <app-cqi-plo-quhart-level-failure></app-cqi-plo-quhart-level-failure>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="Is_Permission_CSP_Summary">
+        <ng-container *ngIf="CSPSummary">
+          <app-csp-summary></app-csp-summary>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="Is_Permission_Exit_Summary">
+        <ng-container *ngIf="ExitSummary">
+          <app-exit-survey-summary></app-exit-survey-summary>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="Is_Permission_Internship_Summary">
+        <ng-container *ngIf="InternshipSummary">
+          <app-internship-survey-summary></app-internship-survey-summary>
+        </ng-container>
+      </ng-container>
+
+
+    </div>
+  </div>

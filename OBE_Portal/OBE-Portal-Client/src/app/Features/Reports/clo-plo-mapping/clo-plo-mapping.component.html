@@ -1,0 +1,148 @@
+<div role="tabpanel" class="tab-pane active">
+  <div class="section-heading padding-b5">
+    <h2>CLOs Mapping</h2>
+  </div>
+  <div class="margin-b15">
+    <div class="row">
+      <div class="col-sm-12">
+        <fieldset class="padding-b5">
+          <legend>Criteria</legend>
+          <div class="row">
+            <div class="form-group col-sm-3">
+              <label class="control-label">Select Institute <span class="text-danger">*</span></label>
+              <select class="form-control" (change)="Get_Department($event.target.value)" [ngModel]="Temp_Institute_ID" [attr.disabled]="Temp_Institute_ID != 0  ? 'disabled' : null">
+                <option value="0">Select Institute</option>
+                <option value="{{i.InstituteID}}" *ngFor="let i of Institutes">{{i.InstituteShortName}}</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-3">
+              <label class="control-label">Select Department <span class="text-danger">*</span></label>
+              <select class="form-control" (change)="Get_Intakes($event.target.value)" [ngModel]="Temp_Deaprtment_ID" [attr.disabled]="Temp_Deaprtment_ID != 0  ? 'disabled' : null">
+                <option value="0">Select Deparment</option>
+                <option value="{{i.DepartmentID}}" *ngFor="let i of Department">{{i.DepartmentName}}</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-3">
+              <label class="control-label">Select Intake <span class="text-danger">*</span></label>
+              <select class="form-control" id="IntakeID">
+                <option value="0">Select Intake</option>
+                <option value="{{i.AdmissionOpenProgramID}}" *ngFor="let i of Intake">{{i.semesterAlia}}</option>
+              </select>
+            </div>
+            <div class="col-sm-1 margin-t17">
+              <button class="btn btn-info" (click)="GetResultsForSelctedIntake()">Search</button>
+            </div>
+
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+  <div class="section-heading">
+    <h2>CLOs Mapping</h2>
+  </div>
+  <div class="margin-b5">
+    <div class="pull-left">
+      <div class="has-feedback pull-left">
+        <input type="text" class="form-control width-200" placeholder="Search Records" [(ngModel)]="query">
+        <span class="form-control-feedback"><i class="app-icon-IconSet-1-92"></i></span>
+      </div>
+      <div class="pull-left margin-l5">
+        <div class="form-inline">
+          <div class="form-group margin-r10" style="width:110%">
+            <label class="control-label margin-r10">Show</label>
+            <select class="form-control input-xs margin-r5" (change)="setPage(1,pagesize)" [(ngModel)]="pagesize" style="width: 30%;">
+              <option>10</option>
+              <option>20</option>
+              <option>30</option>
+              <option>50</option>
+              <option>100</option>
+            </select>
+            <label class="control-label">Per Page</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pull-right">
+      <div class="btn-group left-dropdown">
+        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Export <span class="caret"></span> </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <li><a (click)="DownloadExcel()">Excel</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <hr>
+  <div class="dashboard-scroller setups-widget mCustomScrollbar" style="max-height: 53vh">
+    <div class="table-responsive">
+      <table class="table table-hover table-theme margin-b30">
+        <thead>
+          <tr>
+            <th align="center">Sr.#</th>
+            <th align="center">Semester</th>
+            <th align="center" width="15%">Course Details</th>
+            <th align="center" width="5%">CLO Title</th>
+            <th align="center" width="30%">Description</th>
+            <th align="center">Mapped PLO</th>
+            <th align="center">Skill / Level</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let i of Clo_Mapping | filter:query ;let idx=index">
+            <tr>
+              <td align="center">{{idx+1}}</td>
+              <td align="center">{{i.semesterAlia}}</td>
+              <td>
+                <b class="blue">
+                  <span [innerHTML]="i.Title | highlight:query"></span>
+                </b>
+                <p><span [innerHTML]="i.Name | highlight:query"></span></p>
+              </td>
+              <td align="center">
+                <b class="blue">
+                  <span [innerHTML]="i.CLOTitle | highlight:query"></span>
+                </b>
+                <p><span [innerHTML]="i.CLO_Attainment | highlight:query"></span>%</p>
+              </td>
+              <td><span [innerHTML]="i.CLODescription | highlight:query"></span></td>
+              <td align="center"><span [innerHTML]="i.PLO_Title | highlight:query"></span></td>
+              <td>
+                <b class="blue">
+                  <span [innerHTML]="i.CLO_Skill_Title | highlight:query"></span>
+                </b>
+                <p><span [innerHTML]="i.CLO_Skill_Level_Title | highlight:query"></span></p>
+              </td>
+            </tr>
+          </ng-container>
+
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination-bottom">
+      <div class="pull-left">
+        <div class="form-inline">
+          <div class="form-group" *ngIf="Clo_Mapping==null || Clo_Mapping?.length == 0">
+            <label class="control-label padding-t5">Showing 0 to 0 of 0 entries</label>
+          </div>
+          <div class="form-group" *ngIf="Clo_Mapping?.length >=1">
+            <label class="control-label padding-t5">Showing {{pager?.startIndex+1}} to {{pager?.endIndex+1}} of {{pager?.totalItems}} entries</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-inline pull-right margin-b5">
+        <div class="table-pagination pull-right" *ngIf="pager?.pages && pager?.pages.length">
+          <button data-original-title="First Page" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === 1}" (click)="setPage(1,pagesize)" [disabled]="pager?.currentPage === 1"><i class="fa fa-backward"></i></button>
+          <button data-original-title="Previous" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === 1}" (click)="setPage(pager?.currentPage - 1,pagesize)" [disabled]="pager?.currentPage === 1"><i class="fa fa-caret-left"></i></button>
+          <input type="text" style="width:50px;" value="1" class="form-control" [(ngModel)]="page" (keyup)="setPage(page)" (keypress)="keyRestrict($event,'0123456789')" disabled>
+          <label class="control-label">of  {{pager?.totalPages}}</label>
+          <button data-original-title="Next" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === pager?.totalPages}" (click)="setPage(pager?.currentPage + 1,pagesize)" [disabled]="pager?.currentPage == pager?.totalPages"><i class="fa fa-caret-right"></i></button>
+          <button data-original-title="Last" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === pager?.totalPages}" (click)="setPage(pager?.totalPages,pagesize)" [disabled]="pager?.currentPage == pager?.totalPages"><i class="fa fa-forward"></i></button>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+
+</div>

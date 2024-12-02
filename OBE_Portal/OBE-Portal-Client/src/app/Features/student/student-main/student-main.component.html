@@ -1,0 +1,261 @@
+<div class="tab-content dashboard-bg">
+  <div role="tabpanel" class="tab-pane active main-dashboard" id="dashboard-tab">
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="dashboard-box">
+          <div class="box-panel-heading text-align-Center">
+            <span><i class="app-icon-IconSet-1-73"></i></span>
+            <h1>
+              Please Email your any concern and feedback related to OBE Portal to: <strong>Muhammadbilal.buic@bahria.edu.pk</strong>
+            </h1>
+          </div>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-lg-9">
+          <div class="col-sm-12">
+            <div class="dashboard-box">
+              <div class="box-panel-heading">
+                <span><i class="iconn app-icon-EHR-Nav-Icons-06"></i></span>
+                <h1>PLO(S) Overall Attainment</h1>
+                <div class="notify">Average Attainment: <b>{{AverageAttainment}}%</b></div>
+              </div>
+              <div class="box-panel-body">
+                <div class="row">
+                  <div id="PLOSAttainment" style="height: 250px"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="dashboard-box">
+              <div class="box-panel-heading">
+                <span><i class="iconn app-icon-EHR-Nav-Icons-06"></i></span>
+                <h1>PLO(S) Details Attainment</h1>
+                <div class="notify">Average Attainment: <b>{{AverageAttainment}}%</b></div>
+              </div>
+              <div class="box-panel-body">
+                <div class="row">
+                  <div id="PLOSDetailsAttainment" style="height: 250px"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-sm-12 col-lg-3">
+          <div class="dashboard-box dash-box-right">
+            <div class="box-panel-heading">
+              <span><i class="app-icon-IconSet-1-81"></i></span>
+              <h1>Overall Progress</h1>
+            </div>
+            <div class="dashboard-scroller setups-widget mCustomScrollbar" style="max-height: 595px !important;">
+              <div class="box-panel-body">
+                <div class="box-panel-inner-box">
+                  <div class="box-panel-inner-body">
+                    <div class="row">
+                      <div class="table-responsive">
+                        <table class="table table-hover table-theme margin-b15">
+                          <thead>
+                            <tr>
+                              <th colspan="2">Courses Summary</th>
+                            </tr>
+                            <tr>
+                              <th width="70%">Title </th>
+                              <th>Progress</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Total Registered Courses</td>
+                              <td align="center">
+                                <b class="blue">{{this.Summary.TotalCoursesCount}}</b>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Total Passed Courses</td>
+                              <td align="center">
+                                <b class="blue">{{this.Summary.TotalPassedCourses}}</b>
+                              </td>
+                            </tr>
+
+                            <tr>
+                              <td>Total Failed Courses</td>
+                              <td align="center">
+                                <b class="blue">{{this.Summary.TotalFailedCourses}}</b>
+                              </td>
+                            </tr>
+
+                            <tr>
+                              <td>Total CLO(s) Studied</td>
+                              <td align="center">
+                                <b class="blue">{{this.Summary.TotalCLOSCount}}</b>
+                              </td>
+                            </tr>
+
+                            <tr>
+                              <td>Total Passed CLO(s)</td>
+                              <td align="center">
+                                <b class="blue">{{this.Summary.TotalPassedCLOS}}</b>
+                              </td>
+                            </tr>
+
+                            <tr>
+                              <td>Total Failed CLO(s)</td>
+                              <td align="center">
+                                <b class="blue">{{this.Summary.TotalFailedCLO}}</b>
+                              </td>
+                            </tr>
+
+                          </tbody>
+                        </table>
+                        <table class="table table-hover table-theme margin-b15">
+                          <thead>
+                            <tr>
+                              <th colspan="2">PLO(S) Summary</th>
+                            </tr>
+                            <tr>
+                              <th width="50%">Title </th>
+                              <th>Progress</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr title="PLO1-Engineering Knowledge">
+                              <td class="text-ellipses">PLO1-Engineering Knowledge</td>
+                              <td>
+                                <div class="progress-style">
+                                  <div class="progress-bar" [style.width]="PLO1+'%'" [ngStyle]="PLO1 > PLOPassingCriteria && {'background':'#0ca918'} || PLO1 < PLOPassingCriteria && {'background':'#d9534f'} || PLO1 == PLOPassingCriteria && {'background':'#ee9e25'}">
+                                    <div class="progress-value">{{PLO1}}%</div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr title="PLO2-Problem Analysis">
+                              <td class="text-ellipses">PLO2-Problem Analysis</td>
+                              <td>
+                                <div class="progress-style">
+                                  <div class="progress-bar" [style.width]="PLO2+'%'" [ngStyle]="PLO2 > PLOPassingCriteria && {'background':'#0ca918'} || PLO2 < PLOPassingCriteria && {'background':'#d9534f'} || PLO2 == PLOPassingCriteria && {'background':'#ee9e25'}">
+                                    <div class="progress-value">{{PLO2}}%</div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr title="PLO3-Design/Development of Solutions">
+                              <td class="text-ellipses">PLO3-Design/Development of Solutions</td>
+                              <td>
+                                <div class="progress-style">
+                                  <div class="progress-bar" [style.width]="PLO3+'%'" [ngStyle]="PLO3 > PLOPassingCriteria && {'background':'#0ca918'} || PLO3 < PLOPassingCriteria && {'background':'#d9534f'} || PLO3 == PLOPassingCriteria && {'background':'#ee9e25'}">
+                                    <div class="progress-value">{{PLO3}}%</div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr title="PLO4-Investigation">
+                              <td class="text-ellipses">PLO4-Investigation</td>
+                              <td>
+                                <div class="progress-style">
+                                  <div class="progress-bar" [style.width]="PLO4+'%'" [ngStyle]="PLO4 > PLOPassingCriteria && {'background':'#0ca918'} || PLO4 < PLOPassingCriteria && {'background':'#d9534f'} || PLO4 == PLOPassingCriteria && {'background':'#ee9e25'}">
+                                    <div class="progress-value">{{PLO4}}%</div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr title="PLO5-Modern Tool Usage">
+                              <td class="text-ellipses">PLO5-Modern Tool Usage</td>
+                              <td>
+                                <div class="progress-style">
+                                  <div class="progress-bar" [style.width]="PLO5+'%'" [ngStyle]="PLO5 > PLOPassingCriteria && {'background':'#0ca918'} || PLO5 < PLOPassingCriteria && {'background':'#d9534f'} || PLO5 == PLOPassingCriteria && {'background':'#ee9e25'}">
+                                    <div class="progress-value">{{PLO5}}%</div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr title="PLO6-The Engineer and Society">
+                              <td class="text-ellipses">PLO6-The Engineer and Society</td>
+                              <td>
+                                <div class="progress-style">
+                                  <div class="progress-bar" [style.width]="PLO6+'%'" [ngStyle]="PLO6 > PLOPassingCriteria && {'background':'#0ca918'} || PLO6 < PLOPassingCriteria && {'background':'#d9534f'} || PLO6 == PLOPassingCriteria && {'background':'#ee9e25'}">
+                                    <div class="progress-value">{{PLO6}}%</div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr title="PLO7-Environment and Sustainability">
+                              <td class="text-ellipses">PLO7-Environment and Sustainability</td>
+                              <td>
+                                <div class="progress-style">
+                                  <div class="progress-bar" [style.width]="PLO7+'%'" [ngStyle]="PLO7 > PLOPassingCriteria && {'background':'#0ca918'} || PLO7 < PLOPassingCriteria && {'background':'#d9534f'} || PLO7 == PLOPassingCriteria && {'background':'#ee9e25'}">
+                                    <div class="progress-value">{{PLO7}}%</div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr title="PLO8-Ethics">
+                              <td class="text-ellipses">PLO8-Ethics</td>
+                              <td>
+                                <div class="progress-style">
+                                  <div class="progress-bar" [style.width]="PLO8+'%'" [ngStyle]="PLO8 > PLOPassingCriteria && {'background':'#0ca918'} || PLO8 < PLOPassingCriteria && {'background':'#d9534f'} || PLO8 == PLOPassingCriteria && {'background':'#ee9e25'}">
+                                    <div class="progress-value">{{PLO8}}%</div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr title="PLO9-Individual and Team Work">
+                              <td class="text-ellipses">PLO9-Individual and Team Work</td>
+                              <td>
+                                <div class="progress-style">
+                                  <div class="progress-bar" [style.width]="PLO9+'%'" [ngStyle]="PLO9 > PLOPassingCriteria && {'background':'#0ca918'} || PLO9 < PLOPassingCriteria && {'background':'#d9534f'} || PLO9 == PLOPassingCriteria && {'background':'#ee9e25'}">
+                                    <div class="progress-value">{{PLO9}}%</div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr title="PLO10-Communication">
+                              <td class="text-ellipses">PLO10-Communication</td>
+                              <td>
+                                <div class="progress-style">
+                                  <div class="progress-bar" [style.width]="PLO10+'%'" [ngStyle]="PLO10 > PLOPassingCriteria && {'background':'#0ca918'} || PLO10 < PLOPassingCriteria && {'background':'#d9534f'} || PLO10 == PLOPassingCriteria && {'background':'#ee9e25'}">
+                                    <div class="progress-value">{{PLO10}}%</div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr title="PLO11-Project Managemen">
+                              <td class="text-ellipses">PLO11-Project Managemen</td>
+                              <td>
+                                <div class="progress-style">
+                                  <div class="progress-bar" [style.width]="PLO11+'%'" [ngStyle]="PLO11 > PLOPassingCriteria && {'background':'#0ca918'} || PLO11 < PLOPassingCriteria && {'background':'#d9534f'} || PLO11 == PLOPassingCriteria && {'background':'#ee9e25'}">
+                                    <div class="progress-value">{{PLO11}}%</div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr title="PLO12-Lifelong Learning">
+                              <td class="text-ellipses">PLO12-Lifelong Learning</td>
+                              <td>
+                                <div class="progress-style">
+                                  <div class="progress-bar" [style.width]="PLO12+'%'" [ngStyle]="PLO12 > PLOPassingCriteria && {'background':'#0ca918'} || PLO12 < PLOPassingCriteria && {'background':'#d9534f'} || PLO12 == PLOPassingCriteria && {'background':'#ee9e25'}">
+                                    <div class="progress-value">{{PLO12}}%</div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="copy-rights">&copy; 2020 Outcome - Based Education Portal - Powered by Bahria University</div>
+  </div>
+</div>

@@ -1,0 +1,216 @@
+<div class="modal-section" style="position: initial;overflow-y:hidden">
+  <div class="modal fade modal-wide margin-t41" id="Course_Details" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="section-heading">
+            <h2 class="pull-left">{{CourseTitle}}</h2>
+            <div class="pull-right">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="tab-content no-padding">
+            <div role="tabpanel" class="tab-pane active">
+              <div class="row">
+                <div role="tabpanel" class="tab-pane active" id="Course-One">
+                  <div class="section-tabs margin-t0">
+                    <div class="tabs-head">
+                      <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" id="tab_Course_CLOS" class="active"><a aria-expanded="true" href="#tab-Course-CLOS" role="tab" data-toggle="tab">Course CLOS <span class="notification">{{this.GetCourseCLOS?.length}}</span> </a> </li>
+                        <li role="presentation" id="tab_Assessment_Details" (click)="GetCourseAssessmentDetailsForStudent()"><a aria-expanded="true" href="#tab-Assessment-Details" role="tab" data-toggle="tab">Assessment And Marks Details <span class="notification">{{this.AssessmentDetails?.length}}</span> </a> </li>
+
+                      </ul>
+                    </div>
+                    <div class="tab-content">
+                      <div role="tabpanel" class="tab-pane active" id="tab-Course-CLOS">
+                        <div class="section-heading">
+                          <h2>Course CLOS</h2>
+                        </div>
+                        <div class="margin-b5 margin-t10">
+                          <ul class="nav nav-pills">
+                            <li class="margin-r15"><span class="fa fa-stop text-success"></span> Above Average</li>
+                            <li class="margin-r15"><span class="fa fa-stop text-danger"></span> Below Average</li>
+                          </ul>
+                        </div>
+                        <div class="table-responsive">
+                          <table class="table table-hover table-theme">
+                            <thead>
+                              <tr>
+                                <th width="5%">Sr. #</th>
+                                <th>Title</th>
+                                <th width="50%">Description</th>
+                                <th>PLO Details</th>
+                                <th>CLO Attainment</th>
+
+                              </tr>
+                            </thead>
+                            <ng-container *ngFor="let i of GetCourseCLOS">
+                              <tr [ngClass]="(i.IsCLOPassed)?'tr-success':'tr-danger'">
+                                <td align="center">{{i.SrNumber}}</td>
+                                <td align="center">
+                                  <b class="blue">
+                                    <span [innerHTML]="i.CLOTitle"></span>
+                                  </b>
+                                </td>
+                                <td><span [innerHTML]="i.CLODescription"></span></td>
+                                <td>
+                                  <b class="blue">
+                                    <span [innerHTML]="i.PLOTitle"></span>
+                                  </b>
+                                  <p>
+                                    <b>
+                                      <span [innerHTML]="i.CLOSkillTitle"></span> |
+                                      <span [innerHTML]="i.CLOSkillLevelTitle"></span>
+                                    </b>
+                                  </p>
+                                </td>
+                                <td align="center"><b class="blue"><span [innerHTML]="i.CLOResult"></span>%</b></td>
+                              </tr>
+                            </ng-container>
+                            <tbody>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div role="tabpanel" class="tab-pane" id="tab-Assessment-Details">
+                        <div class="section-heading">
+                          <h2>Assessment And Marks Details</h2>
+                        </div>
+                        <div class="margin-b5 margin-t10">
+                          <ul class="nav nav-pills">
+                            <li class="margin-r15"><span class="fa fa-stop text-success"></span> Above Average</li>
+                            <li class="margin-r15"><span class="fa fa-stop text-danger"></span> Below Average</li>
+                          </ul>
+                        </div>
+                        <div class="table-responsive">
+                          <div class="table-responsive" style="max-height: 45vh;overflow-y:scroll">
+                            <table class="table table-hover table-theme">
+                              <thead>
+                                <tr>
+                                  <th width="5%" class="text-center">Sr. #</th>
+                                  <th width="25%" class="text-left">Assessment Title</th>
+                                  <th width="60%" class="text-left">Assessment Details</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr class="tr-success" *ngFor="let i of AssessmentDetails; let ind=index">
+                                  <td align="center">{{ind+1}}</td>
+                                  <td>
+                                    <b class="blue"> <span [innerHTML]="i.AssessmentTitle"></span></b>
+                                    <p>
+                                      Obtained Marks: <b class="blue"><span [innerHTML]="i.AssessmentTotalObtainedMarks"></span></b> |
+                                      Total Marks: <b class="blue"><span [innerHTML]="i.AssessmentTotalMarks"></span></b>
+                                    </p>
+                                  </td>
+                                  <ng-container *ngIf="i.IsCourse">
+                                    <td *ngIf="i.IsMultiple">
+                                      <ng-container *ngFor="let j of i.QuestionNumber; let idx=index">
+                                        <b class="blue">Question: <span [innerHTML]="j"></span></b>
+                                        <p>
+                                          Question Marks: <b class="blue"><span [innerHTML]="i.QuestionMarks[idx]"></span></b> |
+                                          Obtained Marks: <b class="blue"><span [innerHTML]="i.ObtainedMarks[idx]"></span></b> |
+                                          Mapped CLO: <b class="blue"><span [innerHTML]="i.CLOTitle[idx]"></span></b> |
+                                          Weightage: <b class="blue"><span [innerHTML]="i.Weightage[idx]"></span>%</b>
+                                        </p>
+                                      </ng-container>
+                                    </td>
+                                    <td *ngIf="!i.IsMultiple">
+                                      <b class="blue">
+                                        Question: <span [innerHTML]="i.QuestionNumber"></span>
+                                      </b><p>
+                                        Question Marks: <b class="blue"><span [innerHTML]="i.QuestionMarks"></span></b> |
+                                        Obtained Marks: <b class="blue"><span [innerHTML]="i.ObtainedMarks"></span></b> |
+                                        Mapped CLO: <b class="blue"><span [innerHTML]="i.CLOTitle"></span></b> |
+                                        Weightage: <b class="blue"><span [innerHTML]="i.Weightage"></span>%</b>
+                                      </p>
+                                    </td>
+                                  </ng-container>
+                                  <ng-container *ngIf="!i.IsCourse">
+                                    <td *ngIf="i.IsMultiple">
+                                      <ng-container *ngFor="let j of i.QuestionNumber; let idx=index">
+                                        <b class="blue"><span [innerHTML]="j"></span></b><p>
+                                        Rubrics Marks: <b class="blue"><span [innerHTML]="i.QuestionMarks[idx]"></span></b> |
+                                        Obtained Marks: <b class="blue"><span [innerHTML]="i.ObtainedMarks[idx]"></span></b> |
+                                        Mapped CLO: <b class="blue"><span [innerHTML]="i.CLOTitle[idx]"></span></b> |
+                                        Weightage: <b class="blue"><span [innerHTML]="i.Weightage[idx]"></span>%</b></p>
+                                      </ng-container>
+                                    </td>
+                                    <td *ngIf="!i.IsMultiple">
+                                      <b class="blue"><span [innerHTML]="i.QuestionNumber"></span></b><p>
+                                      Rubrics Marks: <b class="blue"><span [innerHTML]="i.QuestionMarks"></span></b> |
+                                      Obtained Marks: <b class="blue"><span [innerHTML]="i.ObtainedMarks"></span></b> |
+                                      Mapped CLO: <b class="blue"><span [innerHTML]="i.CLOTitle"></span></b> |
+                                      Weightage: <b class="blue"><span [innerHTML]="i.Weightage"></span>%</b></p>
+                                    </td>
+                                  </ng-container>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</div>
+<div class="tab-content">
+  <div class="row">
+    <ng-container *ngFor="let i of AllSemester">
+      <div class="col-sm-12 margin-b10">
+        <div class="section-heading">
+          <h2 class="blue"><b>{{i.SemesterAlias}}</b></h2>
+        </div>
+        <div class="margin-b5">
+          <div class="text-center">
+            <ul class="nav nav-pills">
+              <li class="margin-r15"><span class="fa fa-stop text-success"></span> Passed</li>
+              <li class="margin-r15"><span class="fa fa-stop text-warning"></span> Marks Not Submitted</li>
+              <li class="margin-r15"><span class="fa fa-stop text-danger"></span> Failed</li>
+            </ul>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover table-theme">
+            <thead>
+              <tr>
+                <th>Sr. #</th>
+                <th>Course Title</th>
+                <th>Total</th>
+                <th>Grade</th>
+                <th>CLOs Title</th>
+                <th>CLOs Attainment</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let j of AllCoursesDetails">
+                <tr *ngIf="i.SemesterID == j.SemesterID" [ngClass]="[(j.IsPassed ==1)?'tr-success':'', (j.IsPassed ==2)?'tr-warning':'',(j.IsPassed ==3)?'tr-danger':'']">
+                  <td align="center">{{j.UniqueSemester}}</td>
+                  <td class="underline" (click)="ShowCourseDetails(j)"><b>{{j.Title}}</b></td>
+                  <td align="center"><b class="blue">{{j.TotalMarks}}</b></td>
+                  <td align="center"><b class="blue">{{j.Grade}}</b></td>
+                  <td [ngClass]="j.CLOTitle=='-'?'text-center':''"><b class="blue">{{j.CLOTitle}}</b></td>
+                  <td [ngClass]="j.CLOResults=='-'?'text-center':''"><b class="blue">{{j.CLOResults}}</b></td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

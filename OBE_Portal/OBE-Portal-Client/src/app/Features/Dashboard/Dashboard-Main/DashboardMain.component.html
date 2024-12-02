@@ -1,0 +1,172 @@
+<div class="tab-content dashboard-bg">
+  <div role="tabpanel" class="tab-pane active main-dashboard" id="dashboard-tab">
+    <div class="row dashboard_Search" *ngIf="Is_Permission_Search_Criteria">
+      <div class="col-lg-12">
+        <app-course-search [Module]="1" *ngIf="Is_Permission_Search_Criteria"></app-course-search>
+        
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-lg-9">
+        <div class="dashboard-box">
+          <div class="box-panel-heading text-align-Center">
+            <span><i class="app-icon-IconSet-1-73"></i></span>
+            <h1>
+              Please Email your any concern and feedback related to OBE Portal to: <strong>Muhammadbilal.buic@bahria.edu.pk</strong>
+            </h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-lg-6">
+            <div class="dashboard-box">
+              <div class="box-panel-heading">
+                <span><i class="iconn app-icon-EHR-Nav-Icons-06"></i></span>
+                <h1>CLOs Attainment </h1>
+                <div class="notify">Average Attainment: <b>{{CLOS_Attainment}}%</b></div>
+              </div>
+              <div class="box-panel-body">
+                <div class="row">
+                  <div id="CLOSAttainment" style="height: 200px"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-lg-6">
+            <div class="dashboard-box">
+              <div class="box-panel-heading">
+                <span><i class="iconn app-icon-EHR-Nav-Icons-06"></i></span>
+                <h1>Assessments Attainment</h1>
+                <div class="notify">Average Attainment: <b>{{this.All_Assessment_Averages}}%</b></div>
+              </div>
+              <div class="box-panel-body">
+                <div class="row">
+                  <div id="AssessmentAttainment" style="height: 200px"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-lg-6">
+            <div class="dashboard-box">
+              <div class="box-panel-heading">
+                <span><i class="iconn app-icon-EHR-Nav-Icons-06"></i></span>
+                <h1>CLOs & Assessment(S) Comparison</h1>
+                <div class="notify">Average Attainment: <b>{{Sum_Of_All_CLOS_Assessment_Attainment}}%</b></div>
+              </div>
+              <div class="box-panel-body">
+                <div class="row">
+                  <div id="PassToFailRation" style="height: 200px"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-lg-6">
+            <div class="dashboard-box">
+              <div class="box-panel-heading">
+                <span><i class="iconn app-icon-EHR-Nav-Icons-06"></i></span>
+                <h1>Overall CLOs Progress</h1>
+                <div class="notify">Average Attainment: <b>{{CLOS_Attainment}}%</b></div>
+              </div>
+              <div class="box-panel-body">
+                <div class="row">
+                  <div id="OverallCoursesProgress" style="height: 200px"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-lg-3">
+        <div class="dashboard-box invoice-widget text-center margin-b15">
+          <div class="box-panel-heading">
+            <span><i class="app-icon-IconSet-1-80"></i></span>
+            <p><b>Assigned Courses</b><span class="notify margin-t0">{{Assigned_Course_Count}}</span></p>
+          </div>
+        </div>
+        <div class="dashboard-box dash-box-right">
+          <div class="box-panel-heading">
+            <span><i class="app-icon-IconSet-1-81"></i></span>
+            <h1>Overall Courses Progress</h1>
+          </div>
+          <div class="dashboard-scroller setups-widget mCustomScrollbar" style="max-height: 495px !important;">
+            <div class="box-panel-body">
+              <div class="box-panel-inner-box">
+                <div class="box-panel-inner-body">
+                  <div class="row" *ngFor="let i of Assessment_Averages">
+                    <div class="table-responsive">
+                      <table class="table table-hover table-theme margin-b15">
+                        <thead>
+                          <tr>
+                            <th colspan="2">{{i.Title}}</th>
+                          </tr>
+                          <tr>
+                            <th width="30%">Title </th>
+                            <th>Progress</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td *ngIf="i.Is_Course">Assignments</td>
+                            <td *ngIf="!i.Is_Course">Assessment</td>
+                            <td>
+                              <div class="progress-style" *ngIf="i.Is_Course">
+                                <div class="progress-bar" [style.width]="i.Assignment_Average+'%'"  [ngStyle]="i.Assignment_Average > 50 && {'background':'#0ca918'} || i.Assignment_Average < 50 && {'background':'#d9534f'} || i.Assignment_Average == 50 && {'background':'#ee9e25'}">
+                                  <div class="progress-value">{{i.Assignment_Average}}%</div>
+                                </div>
+                              </div>
+                              <div class="progress-style" *ngIf="!i.Is_Course">
+                                <div class="progress-bar" [style.width]="i.Assessment_Average+'%'"  [ngStyle]="i.Assessment_Average > 50 && {'background':'#0ca918'} || i.Assessment_Average < 50 && {'background':'#d9534f'} || i.Assessment_Average == 50 && {'background':'#ee9e25'}">
+                                  <div class="progress-value">{{i.Assessment_Average}}%</div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td *ngIf="i.Is_Course">Quizzes</td>
+                            <td *ngIf="!i.Is_Course">Journals</td>
+                            <td>
+                              <div class="progress-style" *ngIf="i.Is_Course">
+                                <div class="progress-bar" [style.width]="i.Quiz_Average+'%'" [ngStyle]="i.Quiz_Average > 50 && {'background':'#0ca918'} || i.Quiz_Average < 50 && {'background':'#d9534f'} || i.Quiz_Average == 50 && {'background':'#ee9e25'}">
+                                  <div class="progress-value">{{i.Quiz_Average}}%</div>
+                                </div>
+                              </div>
+                              <div class="progress-style" *ngIf="!i.Is_Course">
+                                <div class="progress-bar" [style.width]="i.Journals_Average+'%'" [ngStyle]="i.Journals_Average > 50 && {'background':'#0ca918'} || i.Journals_Average < 50 && {'background':'#d9534f'} || i.Journals_Average == 50 && {'background':'#ee9e25'}">
+                                  <div class="progress-value">{{i.Journals_Average}}%</div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Mids</td>
+                            <td>
+                              <div class="progress-style">
+                                <div class="progress-bar" [style.width]="i.Mids_Average+'%'" [ngStyle]="i.Mids_Average > 50 && {'background':'#0ca918'} || i.Mids_Average < 50 && {'background':'#d9534f'} || i.Mids_Average == 50 && {'background':'#ee9e25'}">
+                                  <div class="progress-value">{{i.Mids_Average}}%</div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Finals</td>
+                            <td>
+                              <div class="progress-style">
+                                <div class="progress-bar" [style.width]="i.Finals_Average+'%'" [ngStyle]="i.Finals_Average > 50 && {'background':'#0ca918'} || i.Finals_Average < 50 && {'background':'#d9534f'} || i.Finals_Average == 50 && {'background':'#ee9e25'}">
+                                  <div class="progress-value">{{i.Finals_Average}}%</div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="copy-rights">&copy; 2020 Outcome - Based Education Portal - Powered by Bahria University</div>
+  </div>
+</div>

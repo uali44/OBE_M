@@ -1,0 +1,427 @@
+@charset "utf-8";
+
+/* CSS Document */
+
+/*
+@media (max-width:1400px) {
+#patient-list #notes .notes-content .notes-list {
+	width: 25%;
+}
+#patient-list #notes .notes-content .notes-details {
+	width: 75%;
+}
+
+}
+
+@media (max-width:1200px) {
+#patient-list #notes .notes-content .notes-list {
+	width:30%;
+}
+#patient-list #notes .notes-content .notes-details {
+	width: 70%;
+}
+
+}
+*/
+
+/*new adition by asghar for header progress bar*/
+@media (max-width:1715px) {
+#amazing-fusion header #header-progress-bar{margin-left: 2%;width: 12%;transition: .4s ease;}
+#amazing-fusion header .practice{margin-left: 4%;transition: .4s ease;}
+#amazing-fusion header .practice select.form-control{width: 230px;}
+}
+
+@media (max-width:1637px) {
+#amazing-fusion .theme-carousel .carousel-inner .flex-content {
+    height: 62px;
+}
+}
+
+/*new adition by asghar for header progress bar*/
+@media (max-width:1350px) {
+#amazing-fusion header #header-progress-bar{margin-left: 1%;width: 10%;}
+#amazing-fusion header .practice{margin-left:2%;}
+#amazing-fusion header .practice select.form-control{width:190px;}
+}
+
+
+@media (max-width:1200px) {
+#amazing-fusion .theme-carousel .carousel-inner h3 {
+    border-right: none;
+    padding-bottom: 0;
+}
+#amazing-fusion .theme-carousel .carousel-inner p {
+	padding-top: 5px;
+}
+#amazing-fusion .theme-carousel .width-30p, #amazing-fusion .theme-carousel .width-70p {
+    width: 100%;
+}
+}
+@media (max-width:1024px) {
+
+#amazing-fusion .patient-actions .alert{ width: 12.5vw;}
+#amazing-fusion .patient-actions .alert p{
+        line-height: 13px;
+    font-size: 11px;}
+#patient-list #details .patient-info .info ul li a{ margin-left: 0px;}
+#amazing-fusion .main-dashboard .dashboard-box .box-panel-heading h1{font-size: 15px;}
+#amazing-fusion .breadcrumb li a{ font-size: 12px; line-height: normal;}
+#amazing-fusion .breadcrumb li a span{ font-size: 14px; padding: 3px 8px;}
+        #amazing-fusion .modal-page .modal-dialog {
+    height: 74vh;
+}
+    .popup-scroller {
+    max-height: 60vh;
+}
+    #amazing-fusion .modal .modal-left .tab-content {
+    height: 66vh;
+}
+    #amazing-fusion #messages .modal-page .modal-dialog {
+    height: 78vh;
+}
+   #amazing-fusion #messages .popup-scroller {
+    max-height: 60vh;
+}
+    #amazing-fusion .modal-page .modal-dialog .modal-left .tab-content .popup-scroller {
+    max-height: 56vh;
+}
+    #amazing-fusion .pagination-bottom {
+    width: 88%;
+}
+    #amazing-fusion .main-dashboard .dash-box-right .box-panel-body .box-panel-inner-head h3 { font-size: 14px;}
+    
+        #patient-list #document-viewer iframe {
+    height: 62vh;
+}
+
+    #docview .popup-scroller {
+    max-height: 57vh;
+}
+    
+    body.working-tour .skip-overlay{ right: 12%;}
+    .introjs-tooltip .introjs-tooltiptext{ font-size: 22px;}
+    .introjs-tooltip{ width: 450px;}
+    
+    
+}
+@media (max-width:991px) {
+#amazing-fusion header .practice {
+	margin-left: 27%;
+}
+#amazing-fusion .patient-list-options .search {
+	width: 32%;
+}
+#amazing-fusion .modal {
+	min-width: auto;
+}
+#amazing-fusion .modal-page .modal-dialog .modal-right {
+	width: 405px;
+}
+#amazing-fusion .modal-page .modal-dialog .modal-right .modal-content {
+	width: auto;
+}
+#amazing-fusion .modal-page .modal-dialog .modal-right {
+	width: 535px;
+}
+#amazing-fusion #messages .email-actions .mail-search {
+	width: 53%;
+}
+#amazing-fusion #messages .email-actions .mail-search .has-feedback {
+	width: 70%;
+}
+
+#patient-list #notes .notes-content .notes-list {
+	width: 33%;
+}
+#patient-list #notes .notes-content .notes-details {
+	width: 67%;
+}
+#amazing-fusion .custom-search{ width:200px;}
+#amazing-fusion #messages-tab .pagination-bottom {
+    width: 70.5%;
+}
+}
+
+@media (max-width:900px) {
+#amazing-fusion .modal-page .modal-dialog .modal-right {
+	width: 400px;
+}
+#amazing-fusion #messages .email-actions .mail-search {
+	width: 42%;
+}
+#amazing-fusion #messages .email-actions .mail-search .has-feedback {
+	width: 52%;
+}
+#amazing-fusion .patient-list-options .search {
+    width: auto;
+}
+#amazing-fusion .modal-page .modal-dialog .modal-left,
+#amazing-fusion .modal-wide .modal-dialog .modal-left{ width:241px;}
+#patient-list #notes .notes-content .notes-list {
+	width: 28%;
+}
+#patient-list #notes .notes-content .notes-details {
+	width: 72%;
+}
+#patient-list #notes .notes-content .notes-list {
+	width: 40%;
+}
+#patient-list #notes .notes-content .notes-details {
+	width: 60%;
+}
+#amazing-fusion .custom-search{ width:140px;}
+#amazing-fusion #messages-tab .pagination-bottom {
+    width: 66.5%;
+}
+#amazing-fusion #messages-tab .pagination-bottom {
+    width: 75%;
+}
+    .notes-scroller {
+    max-height: 56vh;
+}
+
+
+    
+}
+
+@media (max-width:768px) {
+#amazing-fusion header .practice {
+	margin-left: 23%;
+}
+#amazing-fusion .patient-list-options .actions {
+	clear: both;
+	margin-top: 10px;
+}
+#amazing-fusion .patient-list-options .search {
+	width: 55%;
+}
+#patient-list .nav-tabs li {
+	margin-top: 3px;
+}
+#amazing-fusion .modal-page .modal-content {
+	width: 500px;
+}
+#amazing-fusion #patient-list .modal-page .modal-dialog .modal-left .nav-tabs {
+	min-width: 205px;
+}
+#amazing-fusion .modal-page .modal-dialog .modal-right,
+#amazing-fusion .modal-wide .modal-dialog .modal-right{
+	width: 400px;
+}
+#patient-list #details .section-tabs .tabs-right {
+	float: none;
+	margin-bottom: 5px;
+}
+#patient-list #details .section-tabs .nav-tabs {
+	float: none;
+}
+#amazing-fusion #messages .email-actions .mail-search {
+	width: 100%;
+	float: none;
+	clear: both;
+	margin: 5px 0 5px 0;
+}
+#amazing-fusion #messages .email-actions .mail-search .has-feedback {
+	width: 70%;
+}
+#amazing-fusion #messages .email-actions .action-left {
+	float: none;
+	clear: both;
+}
+#amazing-fusion #messages .email-actions .action-right {
+	float: none;
+	clear: both;
+	text-align: right;
+}
+#patient-list #notes .notes-content .notes-list {
+	width: 30%;
+}
+#patient-list #notes .notes-content .notes-details {
+	width: 70%;
+}
+#patient-list #notes .notes-content .notes-list {
+	width: 40%;
+}
+#patient-list #notes .notes-content .notes-details {
+	width: 60%;
+}
+    #patient-list #details .patient-info{ float: none; margin-bottom: 8px;}
+    #patient-list #details .patient-actions{ float: none;}
+    #amazing-fusion .patient-actions .alert {
+    width: 32.8%;
+}
+    #amazing-fusion .modal-page .modal-dialog {
+    height: 74vh;
+}
+    .popup-scroller {
+    max-height: 60vh;
+}
+    #amazing-fusion .modal .modal-left .tab-content {
+    height: 66vh;
+}
+    #amazing-fusion #messages .modal-page .modal-dialog {
+    height: 78vh;
+}
+   #amazing-fusion #messages .popup-scroller {
+    max-height: 64vh;
+}
+    #amazing-fusion .modal-page .modal-dialog .modal-left .tab-content .popup-scroller {
+    max-height: 56vh;
+}
+    #amazing-fusion .pagination-bottom {
+    width: 85%;
+}
+    #amazing-fusion #messages-tab .pagination-bottom {
+    width: 66%;
+}
+    #amazing-fusion .modal-page .modal-dialog {
+    height: 72vh;
+}
+    #amazing-fusion .breadcrumb li a span {
+    padding: 7px 8px;
+}
+    #amazing-fusion .center-calendar {
+    left: auto;
+        margin-left: 10px;
+}
+    .profile-scroller {
+    max-height: 68vh;
+}
+    #details .page-scroller {
+    max-height: 73vh;
+}
+    .notes-scroller {
+    max-height: 60vh;
+}
+    
+    .introjs-tooltip .introjs-tooltiptext {
+    font-size: 18px;
+}
+    .introjs-tooltip {
+    width: 360px;
+}
+    body.working-tour .skip-overlay {
+    bottom: 3%;
+    right: 15%;
+}
+    
+    
+}
+
+@media (max-width:640px) and (min-width:540px) {
+#amazing-fusion header .practice {
+	margin-left: 20%;
+}
+#amazing-fusion .modal-page .modal-content {
+	width: 410px;
+}
+#amazing-fusion .modal-page .modal-dialog .modal-left {
+	width: 160px;
+}
+#amazing-fusion #patient-list .modal-page .modal-dialog .modal-left .nav-tabs {
+	min-width: 139px;
+}
+#amazing-fusion #patient-list .modal-page .modal-dialog .modal-left .nav-tabs li a {
+	padding-left: 7px;
+	padding-right: 7px;
+	font-size: 12px;
+}
+#amazing-fusion .modal-page .modal-dialog .modal-right {
+	width: 250px;
+}
+#amazing-fusion #messages .email-actions .mail-search .has-feedback {
+	width: 65%;
+}
+}
+
+@media (max-width:540px) {
+#amazing-fusion header .practice {
+	margin-left: 16%;
+}
+#amazing-fusion .modal-page .modal-dialog .modal-left {
+	float: none;
+}
+#amazing-fusion .modal-page .modal-dialog .modal-right {
+	float: none;
+	width: 350px;
+}
+#amazing-fusion .modal-page .modal-content {
+	width: 350px;
+}
+#amazing-fusion #patient-list .modal-page .modal-dialog .modal-left .tab-content {
+	margin: 0px;
+}
+.modal-open {
+	overflow-x: auto;
+	overflow-y: auto;
+}
+#amazing-fusion #messages .email-actions .mail-search .has-feedback {
+	width: 60%;
+}
+}
+
+@media (max-width:480px) {
+#amazing-fusion {
+	padding-top: 89px;
+}
+#amazing-fusion header .logo {
+	float: none;
+	text-align: center;
+}
+#amazing-fusion header .practice {
+	float: none;
+	text-align: center;
+	margin: 5px 0px;
+}
+#amazing-fusion header .user {
+	float: none;
+	text-align: center;
+}
+#amazing-fusion .patient-list-options .btn-group {
+	float: none;
+	margin: 0px;
+}
+#amazing-fusion .patient-list-options .search {
+	float: none;
+	width: 100%;
+	margin-top: 10px;
+}
+#amazing-fusion .patient-list-options .actions {
+	float: none;
+}
+#amazing-fusion .modal-page .modal-dialog .modal-right {
+	width: 330px;
+}
+#amazing-fusion .modal-page .modal-content {
+	width: 330px;
+}
+#amazing-fusion #messages .email-actions .mail-search .has-feedback {
+	width: 100%;
+}
+}
+
+@media (max-width:360px) {
+#amazing-fusion .modal-page .modal-dialog .modal-right {
+	width: 280px;
+}
+#amazing-fusion .modal-page .modal-content {
+	width: 280px;
+}
+}
+
+
+/*  Browser Hacks
+==========================================*/
+
+/* IE 10+ */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+   .section-tabs .notification {
+	position:absolute;
+	top:5px;
+	right:5px;
+}
+#amazing-fusion #messages-tab .section-tabs .nav-tabs li a,
+#amazing-fusion #tasks-tab .section-tabs .nav-tabs li a{ padding-right:35px;}
+}
+
+

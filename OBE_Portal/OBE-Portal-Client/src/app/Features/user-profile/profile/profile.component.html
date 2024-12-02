@@ -1,0 +1,16 @@
+<div class="tab-content main-tab-content dragging-area">
+  <div class="profile-view">
+    <h2>User Profile</h2>
+    <div>
+      <p><strong>Name:</strong> {{ profile.name }}</p>
+      <p><strong>Email:</strong> {{ profile.email }}</p>
+      <p><strong>Experience:</strong></p>
+      <ul>
+        <li *ngFor="let experience of profile.experience">{{ experience }}</li>
+      </ul>
+      <p><strong>Skills:</strong> {{ profile.skills.join(', ') }}</p>
+      <button class="btn btn-primary" (click)="editProfile()">Edit Profile</button>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,85 @@
+<div class="tab-content dashboard-bg" id="Content" *ngIf="Is_Permission_Setting_Main">
+  <div role="tabpanel" class="tab-pane active MainReportTab" id="settings-tab">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active main-dashboard" id="dashboard-tab">
+            <div class="dashboard-box">
+              <div class="box-panel-heading">
+                <span><i class="icon app-icon-IconSet-1-75"></i></span>
+                <h1>Settings</h1>
+              </div>
+              <div class="box-panel-body">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <ul class="arrow-blue-list">
+                      <li *ngIf="Is_Permission_Settings_Exit_Survey_Form"><a (click)="loadTab('Exit Survey Form')" class="underline"><b>Enable Exit Survey Form:</b></a> <span class="text-muted"> Enable exit survey form for selected intake</span></li>
+                      <li *ngIf="Is_Permission_Setting_Update_Password_And_Role"><a (click)="loadTab('Security')" class="underline"><b>Security and Role:</b></a> <span class="text-muted"> Update User Password and Role</span></li>
+                      <li><a (click)="loadTab('Manage PLOs')" class="underline"><b>Manage PLOs:</b></a> <span class="text-muted"> Add/Update PLOs intake wise</span></li>
+                      <li><a (click)="loadTab('Manage PEOs')" class="underline"><b>Manage PEOs:</b></a> <span class="text-muted"> </span></li>
+                      <li><a (click)="loadTab('Add skills')" class="underline"><b>Add Skills:</b></a> <span class="text-muted"> </span></li>
+
+                      <li><a (click)="loadTab('Assessment Schemes')" class="underline"><b>Assesment Schemes:</b></a> <span class="text-muted"> </span></li>
+
+                    </ul>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div role="tabpanel" class="tab-pane active SubReportTab" id="Any-tab">
+    <ng-container *ngIf="Is_Permission_FYP_Settings">
+      <ng-container *ngIf="FYP_Settings">
+        <app-fyp-settings></app-fyp-settings>
+      </ng-container>
+    </ng-container>
+
+    <ng-container>
+      <ng-container *ngIf="SendForm">
+        <app-send-form></app-send-form>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="Is_Permission_Settings_Exit_Survey_Form">
+      <ng-container *ngIf="Settings_Exit_Survey_Form">
+        <app-exit-survey-form-enable></app-exit-survey-form-enable>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="Is_Permission_Setting_Update_Password_And_Role">
+      <ng-container *ngIf="Setting_Update_Password_And_Role">
+        <app-update-role-and-password></app-update-role-and-password>
+      </ng-container>
+    </ng-container>
+
+    <!--<ng-container *ngIf="Is_Permission_Setting_Manage_PLOs">-->
+    <ng-container>
+      <ng-container *ngIf="Setting_Manage_PLOs">
+        <app-plos></app-plos>
+      </ng-container>
+    </ng-container>
+    <ng-container>
+      <ng-container *ngIf="setting_manage_Assessment">
+        <app-assessment-schemes></app-assessment-schemes>
+      </ng-container>
+    </ng-container>
+
+    <ng-container>
+      <ng-container *ngIf="setting_manage_peos">
+        <app-peos></app-peos>
+      </ng-container>
+    </ng-container>
+    <ng-container>
+      <ng-container *ngIf="setting_add_skill">
+        <app-add-skill></app-add-skill>
+      </ng-container>
+    </ng-container>
+
+  </div>
+</div>

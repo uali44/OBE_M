@@ -1,0 +1,13 @@
+
+<div class="tab-content main-tab-content dragging-area">
+    <div class="tab-pane active" id="dashboard">
+      <div class="tabs-menu">
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" id="Dashboard-Active" (click)="activeClass('d')"><a [routerLink]="['main']" aria-controls="home" id="dashboard-tab" role="tab" data-toggle="tab"><i class="icon app-icon-EHR-Nav-Icons-02 padding-r5"></i> Dashboard </a></li>
+            <li role="presentation" id="Assigned-Courses-Active" (click)="activeClass('a')"><a [routerLink]="['assign']" id="AssignedCourse-tab" role="tab" data-toggle="tab"><i class="app-icon-IconSet-1-80 padding-r5"></i>Assigned Courses </a></li>
+            <li class="clearfix"></li>
+        </ul>
+      </div>
+        <router-outlet></router-outlet>
+    </div>
+  </div>

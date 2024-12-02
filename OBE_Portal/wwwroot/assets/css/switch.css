@@ -1,0 +1,91 @@
+#amazing-fusion .switch{ height:14px;}
+#amazing-fusion .switch .value{ position:relative; top:-3px;}
+#amazing-fusion .cmn-toggle {
+	position: absolute;
+	margin-left: -9999px;
+	visibility: hidden;
+	background:none;
+}
+#amazing-fusion .cmn-toggle+label {
+	display: block;
+	position: relative;
+	cursor: pointer;
+	background:none;
+	outline: 0;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none
+}
+#amazing-fusion input.cmn-toggle-round[type="checkbox"]{
+	width: 30px;
+}
+#amazing-fusion input.cmn-toggle-round+label {
+	padding: 2px;
+	width: 30px;
+	height: 14px;
+	background-color: #ddd;
+	-webkit-border-radius: 60px;
+	-moz-border-radius: 60px;
+	-ms-border-radius: 60px;
+	-o-border-radius: 60px;
+	border-radius: 60px
+}
+#amazing-fusion input.cmn-toggle-round+label:after, input.cmn-toggle-round+label:before {
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 1px;
+	content: "";
+	height: 8px
+}
+#amazing-fusion input.cmn-toggle-round+label:before {
+	right: 0px;
+	height: 14px;
+	border: 2px solid #8fabbf;
+	background: #fff;
+	-webkit-border-radius: 60px;
+	-moz-border-radius: 60px;
+	-ms-border-radius: 60px;
+	-o-border-radius: 60px;
+	border-radius: 60px;
+	-webkit-transition: background .4s;
+	-moz-transition: background .4s;
+	-o-transition: background .4s;
+	transition: background .4s
+}
+#amazing-fusion input.cmn-toggle-round+label:after {
+	width: 8px;
+	margin-top: 3px;
+	margin-left: 3px;
+	background-color: #8fabbf;
+	-webkit-border-radius: 100%;
+	-moz-border-radius: 100%;
+	-ms-border-radius: 100%;
+	-o-border-radius: 100%;
+	border-radius: 100%;
+	-webkit-transition: margin .4s;
+	-moz-transition: margin .4s;
+	-o-transition: margin .4s;
+	transition: margin .4s
+}
+#amazing-fusion input.cmn-toggle-round:checked+label:after {
+	width: 8px;
+	margin-top: 3px;
+	background-color: #1960a7;
+	-webkit-border-radius: 100%;
+	-moz-border-radius: 100%;
+	-ms-border-radius: 100%;
+	-o-border-radius: 100%;
+	border-radius: 100%;
+	-webkit-transition: margin .4s;
+	-moz-transition: margin .4s;
+	-o-transition: margin .4s;
+	transition: margin .4s;
+	margin-left: 18px
+}
+#amazing-fusion input.cmn-toggle-round:checked+label:before {
+	border: 2px solid #1960a7;
+	background: #fff
+}

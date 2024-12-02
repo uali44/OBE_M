@@ -1,0 +1,365 @@
+﻿@page
+@using System.Text.Json
+@{
+    Layout = null;
+    List<OBE_Portal.Core.Entities.CourseSearch.CourseSearchModels> institutes = new List<OBE_Portal.Core.Entities.CourseSearch.CourseSearchModels>();
+    institutes = JsonSerializer.Deserialize<List<OBE_Portal.Core.Entities.CourseSearch.CourseSearchModels>>(ViewBag.institutes);
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="~/assets/login/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet" >
+    <link href="~/assets/images/Bahria-Uni.png" rel="shortcut icon" type="image/png">
+    <script src="~/assets/login/bootstrap.min.js"></script>
+    <script src="~/assets/js/jquery.min.js"></script>
+
+    <title>OBE Portal</title>
+
+    <style>
+        @@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+
+        body {
+            margin: 0;
+            font-size: .9rem;
+            font-weight: 400;
+            line-height: 1.6;
+            color: #212529;
+            text-align: left;
+            background-color: #f5f8fa;
+            overflow-y: auto;
+        }
+
+        .navbar-laravel {
+            background: #0864a6;
+        }
+
+        .navbar-brand, .nav-link, .my-form, .login-form {
+            font-family: Raleway, sans-serif;
+        }
+
+        .my-form {
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+
+            .my-form .row {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+        .login-form {
+            padding: 1.5rem;
+        }
+
+            .login-form .row {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+        .color-white {
+            color: white !important;
+        }
+
+        .footer-fixed {
+            /* position: fixed; */
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            color: white;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .link_custom {
+            float: right;
+            padding-right: 0px;
+        }
+    </style>
+</head>
+<body id="body" class="">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-laravel">
+        <div class="container">
+            <span class="navbar-brand color-white">
+                <img src="~/assets/images/Bahria-Uni.png" height="65" width="95" alt="logo" />
+                <b>Welcome to OBE Portal <p style="margin-left: 102px;margin-top: -25px;font-size: 35px;font-weight: bold;">Bahria University</p> </b>
+            </span>
+        </div>
+    </nav>
+    
+    <main class="login-form">
+        <div class="cotainer">
+            <div class="row justify-content-center">
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header"><strong id="FormHeader">Sign In</strong></div>
+                        <div class="card-body">
+                            <form method="post" id="loginForm">
+                                <div role="alert" class="hidden" id="AlertMessage">
+                                </div>
+                                <div class="form-group">
+                                    <label for="Username" class="control-label"><b>Username/Enrollment:</b></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                                        </div>
+                                        <input style="font-size:12px" name="Username" id="Username" class="form-control" type="text" placeholder="Enter Username/Enrollment">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Password" class="control-label"><b>Password:</b></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                                        </div>
+                                        <input style="font-size:12px" name="Password" id="Password" class="form-control" type="password" placeholder="Enter Password">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="institute" class="control-label"><b>Select Institute</b></label>
+                                    <select style="font-size:12px" class="form-control" id="institute">
+                                        <option value="">Select Institute</option>
+                                        @if (institutes != null)
+                                        {
+                                            @foreach (var item in institutes)
+                                            {
+                                                <option value="@item.InstituteID">@item.InstituteName</option>
+                                            }
+                                        }    
+}
+                                        
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button id="submit" type="submit" class="btn col-lg-12" style="color: #fff; background-color: #0864a6;border-color: #0864a6;" >
+                                        Sign In
+                                    </button>
+                                    <a class="btn btn-link link_custom" onclick="ShowForgotPassword(1)">
+                                        Forgotten password?
+                                    </a>
+                                </div>
+                            </form>
+                            <form method="post" id="ForgotPassword" class="hidden">
+                                <div role="alert" class="hidden" id="AlertMessageForgotPassword"></div>
+                                    <div class="form-group">
+                                        <label for="Username" class="control-label"><b>Username/Enrollment:</b></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                                            </div>
+                                            <input style="font-size:12px" name="UsernameForgotPasssword" id="UsernameForgotPasssword" class="form-control" type="text" placeholder="Enter Username/Enrollment">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Password" class="control-label"><b>Email:</b></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                                            </div>
+                                            <input style="font-size:12px" name="EmailForgotPasssword" id="EmailForgotPasssword" class="form-control" type="email" placeholder="Enter Email">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button id="SendLink" type="submit" class="btn col-lg-12" style="color: #fff; background-color: #0864a6;border-color: #0864a6;">
+                                            Reset Password
+                                        </button>
+                                        <a class="btn btn-link link_custom" onclick="ShowForgotPassword(2)">
+                                            Back to login?
+                                        </a>
+                                    </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer-fixed">
+        <article style="background: #025a99 !important;">
+            <div class="card-body text-center">
+                <h5 class="text-white">Outcome-Based Education <br> Powered By Bahria University </h5>
+            </div>
+        </article>
+    </footer>
+    <script>
+        $(document).ready(function (e) {
+            $("#Username").focus();
+
+            if (localStorage.getItem('Token') != undefined) {
+                window.location.href = "@Url.Content("~/Home/Dashboard")"
+            } else {
+                $("#body").removeClass('hidden');
+            }
+        })
+        $("#loginForm").submit(function (e) {
+            e.preventDefault();
+            var User_Credentials_Request = {};
+            User_Credentials_Request.Username_Request = $("#Username").val();
+            User_Credentials_Request.Password_Request = $("#Password").val();
+            User_Credentials_Request.Institute_Request = $("#institute").val();
+            var temp = $("#Username").val().split('-')[0];
+            if ((temp == '01' || temp == '02' || temp == '03') && $("#Username").val().includes('-')) {
+                User_Credentials_Request.IsStudent = true;
+            } else {
+                User_Credentials_Request.IsStudent = false;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url:  '@Url.Content("/Home/AuthenticateUser")',
+                data: JSON.stringify(User_Credentials_Request),
+                processData: false,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                Accept: "application/json",
+                beforeSend: function () {
+                    localStorage.clear();
+                    $("#AlertMessage").removeClass('alert alert-danger');
+                    $("#AlertMessage").html('Processing your request..')
+                    $("#AlertMessage").addClass('alert alert-primary');
+                    $("#AlertMessage").removeClass('hidden');
+                    $("#Username").removeClass('is-invalid');
+                    $("#Password").removeClass('is-invalid');
+                    $('#submit').attr('disabled', 'disabled');
+                },
+                success: function (response) {
+                    if (response == undefined || response == null) {
+                        $("#Username").focus();
+                        $('#submit').removeAttr('disabled', 'disabled');
+                        $("#AlertMessage").removeClass('alert alert-primary');
+                        $("#AlertMessage").addClass('alert alert-danger');
+                        $("#AlertMessage").html('Invalid Username or Password');
+                        $("#Username").addClass('is-invalid');
+                        $("#Password").addClass('is-invalid');
+                    }
+                    else {
+                        $('#submit').removeAttr('disabled', 'disabled');
+                        $("#AlertMessage").removeClass('alert alert-primary');
+                        $("#AlertMessage").removeClass('alert alert-danger');
+                        $("#AlertMessage").addClass('alert alert-success');
+                        $("#AlertMessage").html('Authenticated. Redirecting...');
+                        $("#Username").removeClass('is-invalid');
+                        $("#Password").removeClass('is-invalid');
+
+                        if (User_Credentials_Request.IsStudent) {
+                            localStorage.setItem("IsStudent", '1');
+                            localStorage.setItem("Token", response.Token);
+                            localStorage.setItem("User_Name", response.User_Name);
+                            localStorage.setItem("StudentID", response.StudentID);
+                            localStorage.setItem("ShowExitForm", response.ShowExitForm);
+                        } else {
+                            localStorage.setItem("IsStudent", '0');
+                            localStorage.setItem("FacultyMember_ID", response.FacultyMemberID)
+                            localStorage.setItem("Token", response.Token);
+                            localStorage.setItem("Semester_ID", response.Semester_ID);
+                            localStorage.setItem("User_Name", response.User_Name);
+                            localStorage.setItem("D_ID", response.DEPARTMENTID);
+                            localStorage.setItem("I_ID", response.INSTITUTEID);
+                            localStorage.setItem("Permissions", JSON.stringify(response.All_Permission));
+                        }
+                        window.location.href = "@Url.Content("~/Home/Dashboard")"
+                    }
+                },
+                error: function (response) {
+                    $("#Username").focus();
+                    $('#submit').removeAttr('disabled', 'disabled');
+                    $("#AlertMessage").removeClass('alert alert-primary');
+                    $("#AlertMessage").addClass('alert alert-danger');
+                    $("#AlertMessage").html('Invalid Username or Password');
+                    $("#Username").addClass('is-invalid');
+                    $("#Password").addClass('is-invalid');
+                }
+            });
+        })
+        $("#ForgotPassword").submit(function (e) {
+            e.preventDefault();
+            var Reset_Password_Request = {};
+            Reset_Password_Request.Username_Request = $("#UsernameForgotPasssword").val();
+            Reset_Password_Request.Email_Request = $("#EmailForgotPasssword").val();
+            Reset_Password_Request.Url_Request = 'https://obe.bahria.edu.pk/';
+            //Reset_Password_Request.Url_Request = 'https://localhost:44338/';
+            
+            var temp = $("#UsernameForgotPasssword").val().split('-')[0];
+            if ((temp == '01' || temp == '02' || temp == '03') && $("#Username").val().includes('-')) {
+                Reset_Password_Request.IsStudent = true;
+            } else {
+                Reset_Password_Request.IsStudent = false;
+            }
+            $.ajax({
+                type: 'POST',
+                url:  '@Url.Content("/Home/ResetPassword")',
+                data: JSON.stringify(Reset_Password_Request),
+                processData: false,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                Accept: "application/json",
+                beforeSend: function () {
+                    localStorage.clear();
+                    $("#AlertMessageForgotPassword").removeClass('alert alert-danger');
+                    $("#AlertMessageForgotPassword").html('Processing your request..')
+                    $("#AlertMessageForgotPassword").addClass('alert alert-primary');
+                    $("#AlertMessageForgotPassword").removeClass('hidden');
+                    $("#UsernameForgotPasssword").removeClass('is-invalid');
+                    $("#EmailForgotPasssword").removeClass('is-invalid');
+                    $('#SendLink').attr('disabled', 'disabled');
+                },
+                success: function (response) {
+                    if (!response) {
+                        $("#UsernameForgotPasssword").focus();
+                        $('#SendLink').removeAttr('disabled', 'disabled');
+                        $("#AlertMessageForgotPassword").removeClass('alert alert-primary');
+                        $("#AlertMessageForgotPassword").addClass('alert alert-danger');
+                        $("#AlertMessageForgotPassword").html('Invalid Username or Email');
+                        $("#UsernameForgotPasssword").addClass('is-invalid');
+                        $("#EmailForgotPasssword").addClass('is-invalid');
+                    }
+                    else {
+                        $('#SendLink').removeAttr('disabled', 'disabled');
+                        $("#AlertMessageForgotPassword").removeClass('alert alert-primary');
+                        $("#AlertMessageForgotPassword").removeClass('alert alert-danger');
+                        $("#AlertMessageForgotPassword").addClass('alert alert-success');
+                        $("#AlertMessageForgotPassword").html('Reset password link is sent to you via email.');
+                        $("#UsernameForgotPasssword").removeClass('is-invalid');
+                        $("#EmailForgotPasssword").removeClass('is-invalid');
+                    }
+                },
+                error: function (response) {
+                    $("#UsernameForgotPasssword").focus();
+                    $('#SendLink').removeAttr('disabled', 'disabled');
+                    $("#AlertMessageForgotPassword").removeClass('alert alert-primary');
+                    $("#AlertMessageForgotPassword").addClass('alert alert-danger');
+                    $("#AlertMessageForgotPassword").html('Invalid Username or Password');
+                    $("#UsernameForgotPasssword").addClass('is-invalid');
+                    $("#EmailForgotPasssword").addClass('is-invalid');
+                }
+            });
+        })
+        function ShowForgotPassword(val) {
+            if (val == 1) {
+                $("#FormHeader").text('');
+                $("#FormHeader").text('Reset Password');
+                $("#loginForm").addClass('hidden');
+                $("#ForgotPassword").removeClass('hidden');
+                $("#UsernameForgotPasssword").focus();
+                $("#UsernameForgotPasssword").val('');
+                $("#EmailForgotPasssword").val('');
+            } else {
+                $("#FormHeader").text('');
+                $("#FormHeader").text('Sign In');
+                $("#loginForm").removeClass('hidden');
+                $("#Username").focus();
+                $("#ForgotPassword").addClass('hidden');
+            }
+        }
+    </script>
+
+</body>
+</html>

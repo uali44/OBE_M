@@ -1,0 +1,21 @@
+<div class="tab-content main-tab-content dragging-area">
+    <div class="tab-pane active" id="reports">
+      <div class="tabs-menu">
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" id="ReportMainTab" class="active"><a href="#reports-tab" role="tab" data-toggle="tab"><i class="icon app-icon-EHR-Nav-Icons-06 padding-r5"></i> Reports Main</a></li>
+          <li role="presentation" id="ReportSubTab" class="active" *ngIf="Is_Sub_Active">
+            <a href="#Any-tab" role="tab" data-toggle="tab">
+              <i class="icon app-icon-EHR-Nav-Icons-06 padding-r5"></i>
+                {{Tab_Title}}
+              <span class="close-tab" title="" data-original-title="Close Tab" (click)="closeTab()"><i class="app-icon-IconSet-1-07"></i></span>
+            </a>
+          </li>
+          <div class="clearfix"></div>
+        </ul>
+      </div>
+      <div class="tab-content">
+        <router-outlet></router-outlet>
+    </div>
+    </div>
+    
+  </div>

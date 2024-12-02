@@ -1,0 +1,324 @@
+<div class="modal-section" style="position: initial;overflow-y:hidden">
+  <div class="modal fade modal-wide margin-t41" id="PLO_Details" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="section-heading">
+            <h2 class="pull-left">{{Selected_PLO}} ( {{Selected_Student_Name}} - {{Selected_Student_Enrollment}})</h2>
+            <div class="pull-right">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <fieldset class="margin-b15">
+            <legend>PLO Attainment Details</legend>
+            <div class="alert alert-info">
+              <p>
+                <span>PLO Attainment: <b>{{Selected_PLO_Attainment}}%</b></span> |
+                <span>Mapped CLOs Count: <b>{{Selected_PLO_Mapped_CLOs_Count}}</b></span> |
+                <span>Passed CLOs Count: <b>{{Selected_PLO_Mapped_CLO_Passed}}</b></span> |
+                <span>Failed CLOs Count: <b>{{Selected_PLO_Mapped_CLO_Failed}}</b></span> |
+                <span>Not Considered CLOs Count: <b>{{Selected_PLO_Mapped_Not_Considered_CLO}}</b></span>
+              </p>
+            </div>
+            <div class="margin-b5">
+              <div class="pull-left">
+                <div class="pull-left margin-t5 margin-l10">
+                  <label class="text-success"><i class="fa fa-stop"></i><span class="color-black"> Above Average</span> </label>
+                </div>
+                <div class="pull-left margin-t5 margin-l10">
+                  <label class="text-danger"><i class="fa fa-stop"></i><span class="color-black"> Below Average</span> </label>
+                </div>
+                <div class="pull-left margin-t5 margin-l10">
+                  <label class="text-warning"><i class="fa fa-stop"></i><span class="color-black"> Not Considered</span> </label>
+                </div>
+              </div>
+              <div class="pull-right">
+                <div class="btn-group left-dropdown">
+                  <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Export <span class="caret"></span> </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a (click)="DownloadSubExcel()">Excel</a></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            <div class="table-responsive" style="max-height: 34vh;overflow-y: auto;">
+              <table class="table table-hover table-theme margin-b30">
+                <thead>
+                  <tr>
+                    <th>Sr.</th>
+                    <th>Semester</th>
+                    <th>Course / Faculty</th>
+                    <th>Grade</th>
+                    <th>CLO Title</th>
+                    <th>CLO Attainment</th>
+                    <th style="z-index:1" *ngIf="!IsGradeFExcludedConditional">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let i of Selected_PLO_And_Student_Details; let idx=index">
+                    <tr [ngClass]="[(i.Status==1)?'tr-danger':'',(i.Status==2)?'tr-success':'',(i.Status==3)?'tr-warning':'']">
+                      <td align="center">{{idx+1}}</td>
+                      <td align="center">{{i.semesterAlia}}</td>
+                      <td>
+                        <b><span class="blue"><span [innerHTML]="i.Title"></span></span></b>
+                        <p><span [innerHTML]="i.Name"></span></p>
+                      </td>
+
+                      <td align="center">
+                        <b><span class="blue"><span [innerHTML]="i.Grade"></span></span></b>
+                      </td>
+                      <td align="center">
+                        <b><span class="blue"><span [innerHTML]="i.CLOTitle"></span></span></b>
+                      </td>
+                      <td align="center">
+                        <b><span class="blue"><span [innerHTML]="i.CLOResult"></span>%</span></b>
+                      </td>
+                      <td align="center" *ngIf="!IsGradeFExcludedConditional">
+                        <div class="btn-group">
+                          <button type="button" (click)="ExcludeCLOFromAnalysis(i.CLOResultID)" class="btn btn-default margin-r5" title="Excldue/Include CLO">
+                            <i *ngIf="i.status!=3" class="app-icon-IconSet-1-33 f12 blue"></i>
+                            <i *ngIf="i.status==3" class="app-icon-Amazing-Fusion-100 f12 blue"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </fieldset>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</div>
+<div role="tabpanel" class="tab-pane active">
+  <div class="section-heading padding-b5">
+    <h2>CQI PLO Cohort Level Failure Summary</h2>
+  </div>
+  <div class="margin-b15">
+    <div class="row">
+      <div class="col-sm-12">
+        <fieldset class="padding-b5">
+          <legend>Criteria</legend>
+          <div class="row">
+            <div class="form-group col-sm-3">
+              <label class="control-label">Select Institute <span class="text-danger">*</span></label>
+              <select class="form-control" (change)="Get_Department($event.target.value)" [ngModel]="Temp_Institute_ID" [attr.disabled]="Temp_Institute_ID != 0  ? 'disabled' : null">
+                <option value="0">Select Institute</option>
+                <option value="{{i.InstituteID}}" *ngFor="let i of Institutes">{{i.InstituteShortName}}</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-3">
+              <label class="control-label">Select Department <span class="text-danger">*</span></label>
+              <select class="form-control" (change)="Get_Intakes($event.target.value)" [ngModel]="Temp_Deaprtment_ID" [attr.disabled]="Temp_Deaprtment_ID != 0  ? 'disabled' : null">
+                <option value="0">Select Deparment</option>
+                <option value="{{i.DepartmentID}}" *ngFor="let i of Department">{{i.DepartmentName}}</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-3">
+              <label class="control-label">Select Intake <span class="text-danger">*</span></label>
+              <select class="form-control" id="IntakeID">
+                <option value="0">Select Intake</option>
+                <option value="{{i.AdmissionOpenProgramID}}" *ngFor="let i of Intake">{{i.semesterAlia}}</option>
+              </select>
+            </div>
+            <div class="col-sm-3 margin-t17">
+              <button class="btn btn-info" (click)="GetPLOsResultsForSelctedIntake()">Search</button>
+            </div>
+
+          </div>
+        </fieldset>
+      </div>
+      <div class="col-sm-12">
+        <fieldset class="margin-b15">
+          <legend>Summary</legend>
+          <div class="col-sm-12">
+            <div id="PLOsAttainment" style="height: 125px"></div>
+          </div>
+
+        </fieldset>
+      </div>
+    </div>
+  </div>
+  <div class="section-heading">
+    <h2>CQI PLO Cohort Level Failure Summary</h2>
+  </div>
+  <div class="margin-b5">
+    <div class="pull-left">
+      <div class="has-feedback pull-left">
+        <input type="text" class="form-control width-200" placeholder="Search Records" [(ngModel)]="query">
+        <span class="form-control-feedback"><i class="app-icon-IconSet-1-92"></i></span>
+      </div>
+      <div class="pull-left margin-l5">
+        <div class="form-inline">
+          <div class="form-group margin-r10" style="width:110%">
+            <label class="control-label margin-r10">Show</label>
+            <select class="form-control input-xs margin-r5" (change)="setPage(1,pagesize)" [(ngModel)]="pagesize" style="width: 30%;">
+              <option>10</option>
+              <option>20</option>
+              <option>30</option>
+              <option>50</option>
+              <option>100</option>
+            </select>
+            <label class="control-label">Per Page</label>
+          </div>
+        </div>
+      </div>
+      <div class="pull-left margin-t5 margin-l10">
+        <!--<label class="text-success"><i class="fa fa-stop"></i><span class="color-black">    Above Average</span> </label>-->
+      </div>
+      <div class="pull-left margin-t5 margin-l10">
+        <label class="text-warning"><i class="fa fa-stop"></i><span class="color-black">    Need Attention</span> </label>
+      </div>
+      <div class="pull-left margin-t5 margin-l10">
+        <label class="text-danger"><i class="fa fa-stop"></i><span class="color-black">    Below Average</span> </label>
+      </div>
+
+    </div>
+    <div class="pull-right">
+      <div class="btn-group left-dropdown">
+        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Export <span class="caret"></span> </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <li><a (click)="DownloadExcel()">Excel</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <hr>
+</div>
+<div class="table-responsive" style="max-height: 34vh;overflow-y:auto">
+  <table class="table table-hover table-theme margin-b30">
+    <thead>
+      <tr>
+        <th align="center">Sr.#</th>
+        <th align="center">Name</th>
+        <th align="center">PLO1</th>
+        <th align="center">PLO2</th>
+        <th align="center">PLO3</th>
+        <th align="center">PLO4</th>
+        <th align="center">PLO5</th>
+        <th align="center">PLO6</th>
+        <th align="center">PLO7</th>
+        <th align="center">PLO8</th>
+        <th align="center">PLO9</th>
+        <th align="center">PLO10</th>
+        <th align="center">PLO11</th>
+        <th align="center">PLO12</th>
+        <!--<th align="center" style="z-index: 1;">Action</th>-->
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let i of PLOs_Analysis | filter:query ;let idx=index">
+        <tr>
+          <td align="center">{{idx+1}}</td>
+          <td>
+            <b><span class="blue"><span [innerHTML]="i.Name | highlight:query"></span></span></b>
+            <p><span [innerHTML]="i.Enrollment | highlight:query"></span></p>
+          </td>
+          <td [ngClass]="[(i.PLO_One_Attainment == i.PLO_Passing_Criteria)?'bg-warning':'', (i.PLO_One_Attainment < i.PLO_Passing_Criteria)?'bg-danger':'']"
+              align="center"
+              (click)="Get_PLO_Sub_Details(i.StudentID,i.Name,i.Enrollment,i.PLO_One_Attainment,i.Total_PLO_One_Count,i.PLO_One_Pass_Count,i.PLO_One_Fail_Count,1)">
+            <b><span class="blue underline"><span [innerHTML]="i.PLO_One_Attainment | highlight:query"></span>%</span></b>
+          </td>
+          <td [ngClass]="[(i.PLO_Two_Attainment == i.PLO_Passing_Criteria)?'bg-warning':'', (i.PLO_Two_Attainment < i.PLO_Passing_Criteria)?'bg-danger':'']"
+              align="center"
+              (click)="Get_PLO_Sub_Details(i.StudentID,i.Name,i.Enrollment,i.PLO_Two_Attainment,i.Total_PLO_Two_Count,i.PLO_Two_Pass_Count,i.PLO_Two_Fail_Count,2)">
+            <b><span class="blue underline"><span [innerHTML]="i.PLO_Two_Attainment | highlight:query"></span>%</span></b>
+          </td>
+          <td [ngClass]="[(i.PLO_Three_Attainment == i.PLO_Passing_Criteria)?'bg-warning':'', (i.PLO_Three_Attainment < i.PLO_Passing_Criteria)?'bg-danger':'']"
+              align="center"
+              (click)="Get_PLO_Sub_Details(i.StudentID,i.Name,i.Enrollment,i.PLO_Three_Attainment,i.Total_PLO_Three_Count,i.PLO_Three_Pass_Count,i.PLO_Three_Fail_Count,3)">
+            <b><span class="blue underline"><span [innerHTML]="i.PLO_Three_Attainment | highlight:query"></span>%</span></b>
+          </td>
+          <td [ngClass]="[(i.PLO_Four_Attainment == i.PLO_Passing_Criteria)?'bg-warning':'', (i.PLO_Four_Attainment < i.PLO_Passing_Criteria)?'bg-danger':'']"
+              align="center"
+              (click)="Get_PLO_Sub_Details(i.StudentID,i.Name,i.Enrollment,i.PLO_Four_Attainment,i.Total_PLO_Four_Count,i.PLO_Four_Pass_Count,i.PLO_Four_Fail_Count,4)">
+            <b><span class="blue underline"><span [innerHTML]="i.PLO_Four_Attainment | highlight:query"></span>%</span></b>
+          </td>
+          <td [ngClass]="[(i.PLO_Five_Attainment == i.PLO_Passing_Criteria)?'bg-warning':'', (i.PLO_Five_Attainment < i.PLO_Passing_Criteria)?'bg-danger':'']"
+              align="center"
+              (click)="Get_PLO_Sub_Details(i.StudentID,i.Name,i.Enrollment,i.PLO_Five_Attainment,i.Total_PLO_Five_Count,i.PLO_Five_Pass_Count,i.PLO_Five_Fail_Count,5)">
+            <b><span class="blue underline"><span [innerHTML]="i.PLO_Five_Attainment | highlight:query"></span>%</span></b>
+          </td>
+          <td [ngClass]="[(i.PLO_Six_Attainment == i.PLO_Passing_Criteria)?'bg-warning':'', (i.PLO_Six_Attainment < i.PLO_Passing_Criteria)?'bg-danger':'']"
+              align="center"
+              (click)="Get_PLO_Sub_Details(i.StudentID,i.Name,i.Enrollment,i.PLO_Six_Attainment,i.Total_PLO_Six_Count,i.PLO_Six_Pass_Count,i.PLO_Six_Fail_Count,6)">
+            <b><span class="blue underline"><span [innerHTML]="i.PLO_Six_Attainment | highlight:query"></span>%</span></b>
+          </td>
+
+          <td [ngClass]="[(i.PLO_Seven_Attainment == i.PLO_Passing_Criteria)?'bg-warning':'', (i.PLO_Seven_Attainment < i.PLO_Passing_Criteria)?'bg-danger':'']"
+              align="center"
+              (click)="Get_PLO_Sub_Details(i.StudentID,i.Name,i.Enrollment,i.PLO_Seven_Attainment,i.Total_PLO_Seven_Count,i.PLO_Seven_Pass_Count,i.PLO_Seven_Fail_Count,7)">
+            <b><span class="blue underline"><span [innerHTML]="i.PLO_Seven_Attainment | highlight:query"></span>%</span></b>
+          </td>
+
+          <td [ngClass]="[(i.PLO_Eight_Attainment == i.PLO_Passing_Criteria)?'bg-warning':'', (i.PLO_Eight_Attainment < i.PLO_Passing_Criteria)?'bg-danger':'']"
+              align="center"
+              (click)="Get_PLO_Sub_Details(i.StudentID,i.Name,i.Enrollment,i.PLO_Eight_Attainment,i.Total_PLO_Eight_Count,i.PLO_Eight_Pass_Count,i.PLO_Eight_Fail_Count,8)">
+            <b><span class="blue underline"><span [innerHTML]="i.PLO_Eight_Attainment | highlight:query"></span>%</span></b>
+          </td>
+          <td [ngClass]="[(i.PLO_Nine_Attainment == i.PLO_Passing_Criteria)?'bg-warning':'', (i.PLO_Nine_Attainment < i.PLO_Passing_Criteria)?'bg-danger':'']"
+              align="center"
+              (click)="Get_PLO_Sub_Details(i.StudentID,i.Name,i.Enrollment,i.PLO_Nine_Attainment,i.Total_PLO_Nine_Count,i.PLO_Nine_Pass_Count,i.PLO_Nine_Fail_Count,9)">
+            <b><span class="blue underline"><span [innerHTML]="i.PLO_Nine_Attainment | highlight:query"></span>%</span></b>
+          </td>
+          <td [ngClass]="[(i.PLO_Ten_Attainment == i.PLO_Passing_Criteria)?'bg-warning':'', (i.PLO_Ten_Attainment < i.PLO_Passing_Criteria)?'bg-danger':'']"
+              align="center"
+              (click)="Get_PLO_Sub_Details(i.StudentID,i.Name,i.Enrollment,i.PLO_Ten_Attainment,i.Total_PLO_Ten_Count,i.PLO_Ten_Pass_Count,i.PLO_Ten_Fail_Count,10)">
+            <b><span class="blue underline"><span [innerHTML]="i.PLO_Ten_Attainment | highlight:query"></span>%</span></b>
+          </td>
+          <td [ngClass]="[(i.PLO_Eleven_Attainment == i.PLO_Passing_Criteria)?'bg-warning':'', (i.PLO_Eleven_Attainment < i.PLO_Passing_Criteria)?'bg-danger':'']"
+              align="center"
+              (click)="Get_PLO_Sub_Details(i.StudentID,i.Name,i.Enrollment,i.PLO_Eleven_Attainment,i.Total_PLO_Eleven_Count,i.PLO_Eleven_Pass_Count,i.PLO_Eleven_Fail_Count,11)">
+            <b><span class="blue underline"><span [innerHTML]="i.PLO_Eleven_Attainment | highlight:query"></span>%</span></b>
+          </td>
+          <td [ngClass]="[(i.PLO_Twelth_Attainment == i.PLO_Passing_Criteria)?'bg-warning':'', (i.PLO_Twelth_Attainment < i.PLO_Passing_Criteria)?'bg-danger':'']"
+              align="center"
+              (click)="Get_PLO_Sub_Details(i.StudentID,i.Name,i.Enrollment,i.PLO_Twelth_Attainment,i.Total_PLO_Twelth_Count,i.PLO_Twelth_Pass_Count,i.PLO_Twelth_Fail_Count,12)">
+            <b><span class="blue underline"><span [innerHTML]="i.PLO_Twelth_Attainment | highlight:query"></span>%</span></b>
+          </td>
+          <!--<td align="center">
+            <div class="btn-group">
+              <button type="button" (click)="ExcludeStudentFromAnalysis(i.StudentID)" class="btn btn-default margin-r5" title="Excldue Student">
+                <i class="app-icon-IconSet-1-33 f12 blue"></i>
+              </button>
+            </div>
+          </td>-->
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
+<div class="pagination-bottom">
+  <div class="pull-left">
+    <div class="form-inline">
+      <div class="form-group" *ngIf="PLOs_Analysis==null || PLOs_Analysis?.length == 0">
+        <label class="control-label padding-t5">Showing 0 to 0 of 0 entries</label>
+      </div>
+      <div class="form-group" *ngIf="PLOs_Analysis?.length >=1">
+        <label class="control-label padding-t5">Showing {{pager?.startIndex+1}} to {{pager?.endIndex+1}} of {{pager?.totalItems}} entries</label>
+      </div>
+    </div>
+  </div>
+  <div class="form-inline pull-right margin-b5">
+    <div class="table-pagination pull-right" *ngIf="pager?.pages && pager?.pages.length">
+      <button data-original-title="First Page" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === 1}" (click)="setPage(1,pagesize)" [disabled]="pager?.currentPage === 1"><i class="fa fa-backward"></i></button>
+      <button data-original-title="Previous" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === 1}" (click)="setPage(pager?.currentPage - 1,pagesize)" [disabled]="pager?.currentPage === 1"><i class="fa fa-caret-left"></i></button>
+      <input type="text" style="width:50px;" value="1" class="form-control" [(ngModel)]="page" (keyup)="setPage(page)" (keypress)="keyRestrict($event,'0123456789')" disabled>
+      <label class="control-label">of  {{pager?.totalPages}}</label>
+      <button data-original-title="Next" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === pager?.totalPages}" (click)="setPage(pager?.currentPage + 1,pagesize)" [disabled]="pager?.currentPage == pager?.totalPages"><i class="fa fa-caret-right"></i></button>
+      <button data-original-title="Last" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === pager?.totalPages}" (click)="setPage(pager?.totalPages,pagesize)" [disabled]="pager?.currentPage == pager?.totalPages"><i class="fa fa-forward"></i></button>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+</div>

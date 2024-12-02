@@ -1,0 +1,388 @@
+/*  28-October-2016 Encounter Print Template
+=================================================================*/
+/***** Bootstrap Css *****/
+* {
+    box-sizing: border-box;
+}
+*::before, *::after {
+    box-sizing: border-box;
+}
+.pull-right {
+  float: right !important;
+}
+.pull-left {
+  float: left !important;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: " ";
+}
+.clearfix:after {
+  clear: both;
+}
+.text-right {
+	text-align:right;
+}
+/***** Encounter Print Top Bar *****/
+.encounter-body {
+	background:#363B41;
+	font-family: 'Roboto';
+	font-size: 10pt;
+}
+.encounter-body .encounter-print-tab {
+	background: #4a5159;
+    padding: 4px 15px;
+    position: fixed;
+    top: 0;
+	left:0;
+    width: 100%;
+    z-index: 99;
+}
+.encounter-print-tab h3{
+	font-size:15pt;
+	color:#fff;
+	margin: 5px 0;
+}
+.encounter-print-tab ul {
+	list-style: outside none none;
+    margin: 0;
+	padding-top: 6px;
+	display:inline-block;
+	padding-left:0px;
+}
+.encounter-print-tab ul li {
+	float: left;
+    margin-right: 20px;
+}
+.encounter-print-tab ul li:last-child {
+	margin-right: 0;
+}
+.encounter-print-tab ul li a {
+	color: #fff;
+    font-size: 11pt;
+	text-decoration: none;
+}
+.encounter-print-tab ul li i{
+	color: #ccc;
+    font-size: 13pt;
+    padding-right: 5px;
+}
+.encounter-print-tab ul li .app-icon-IconSet-1-67 {
+	padding:0 0 0 5px;
+}
+.dropdown-content:after, .dropdown-content:before {
+	bottom: 100%;
+	right: 5%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.dropdown-content:after {
+	border-color: rgba(255, 255, 255, 0);
+	border-bottom-color: #fff;
+	border-width: 12px;
+	margin-left: -12px;
+}
+.dropdown-content:before {
+	border-color: rgba(255, 255, 255, 0);
+	border-bottom-color: #fff;
+	border-width: 13px;
+	margin-left: -13px;
+}
+.dropdown-content h3 {
+    border-bottom: 1px solid #c5c6c7;
+    color: #333333;
+    font-size: 14px;
+    margin-bottom: 0;
+    padding: 5px 15px 7px;
+}
+.dropdown-content ul {
+    color: #333333;
+    float: left;
+    font-size: 13px;
+    line-height: 24px;
+    list-style: outside none none;
+    margin: 0;
+    padding: 10px 15px;
+}
+.encounter-body .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+	margin-top: 14px;
+    z-index: 3;
+	border: 1px solid #d9d9d9;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 5px 0px;
+}
+/* .dropdown:hover .dropdown-content {
+    display: block;
+} */
+.encounter-print-tab .dropdown-content {
+	background:#f8f9fa;
+	right: 0;
+}
+.dropdown-content.multi-column {
+    width: 450px;
+}
+.dropdown-content.multi-column .dropdown-content {
+    display: block ;
+    position: static ;
+    margin: 0 ;
+    border: none ;
+    box-shadow: none ;
+}
+.encounter-print-tab .dropdown-content .list-left, 
+.encounter-print-tab .dropdown-content .list-right {
+	float:left;
+}
+.encounter-print-tab .dropdown-content li {
+	float:none;
+}
+.encounter-print-tab .dropdown-content li a {
+	color:#333333;
+}
+.encounter-print-tab .popover-footer {
+    background: #eff3f6;
+    border-top: 1px solid #ccc;
+    padding: 10px 15px;
+}
+.encounter-print-tab .btn {
+	border-radius: 0;
+    font-size: 10pt;
+    min-width: 60px;
+	font-weight: normal;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 4px 12px;
+    text-align: center;
+	border: 1px solid #5cace6;
+}
+.encounter-print-tab.btn-default {
+    border-color: #0864a6;
+    color: #333333;
+	background: #fff;
+}
+.encounter-print-tab .btn-info {
+    background: #5cace6;
+    border-color: #3987bf;
+	color: #fff;
+}
+/***** Encounter Print Header *****/
+.encounter-print-preview {
+	background: #fff;
+    padding-top: 40px;
+	margin:auto;
+    max-width: 100%;
+    width: 1100px;
+}
+.encounter-print-header {
+	background: #f1f2f6;
+    padding: 15px;
+	border-bottom: 1px solid #4b5159;
+}
+.encounter-print-header .encounter-header-left {
+	float: left;
+}
+.encounter-print-header .encounter-header-left img, 
+.encounter-print-header .encounter-header-left .encounter-header-content {
+	display:inline-block;
+	margin:0px;
+}
+.encounter-print-header .encounter-header-left img {
+	border-right: 1px solid #9d9e9e;
+    padding-right: 10px;
+	vertical-align:top;
+}
+.encounter-print-header .encounter-header-content h2, 
+.encounter-print-header .encounter-header-content p {
+	margin:0px;
+} 
+.encounter-print-header .encounter-header-content {
+	padding-left: 10px;
+}
+.encounter-print-header .encounter-header-content h2 {
+	font-size: 11pt;
+	line-height: 18px;
+	margin-bottom: 5px;
+}
+.encounter-print-header .encounter-header-right {
+	float: right;
+	text-align: right;
+}
+/***** Encounter Print Body *****/
+.encounter-print-body {
+	background: #fff;
+	border-bottom: 1px solid #4b5159;
+    padding: 30px;
+}
+.encounter-print-body .epb-left, 
+.encounter-print-body .epb-right {
+	float:left;	
+}
+.encounter-print-body .epb-left {
+    padding-right: 15px;
+    width: 40%;
+}
+.encounter-print-body .epb-right {
+	width:60%;
+	padding-left: 15px;
+	padding-right: 15px;
+	border-left: 1px solid #999999;
+}
+.encounter-print-body h3 {
+	border-bottom: 2px solid #6cafe0;
+    color: #333333;
+    display: inline-block;
+    font-size: 11pt;
+    padding-bottom: 3px;
+    text-transform: uppercase;
+	margin-bottom: 10px;
+}
+.epb-box {
+	display:block;
+	margin-bottom: 20px;
+}
+
+.encounter-print-body p,  
+.encounter-print-footer p, 
+.encounter-print-footer-bar p {
+	color:#666666;
+	font-size: 10pt;
+	margin: 0;
+}
+.encounter-print-body label {
+	color: #333333;
+    display: block;
+    font-size: 10pt;
+    font-weight: 500;
+	margin-bottom: 5px;
+}
+.encounter-print-body .epb-right .table > thead > tr > th, 
+.encounter-print-body .epb-right .table > thead > tr > th,
+.encounter-print-body .epb-right .table > tbody > tr > th,
+.encounter-print-body .epb-right .table > tfoot > tr > th,
+.encounter-print-body .epb-right .table > thead > tr > td,
+.encounter-print-body .epb-right .table > tbody > tr > td,
+.encounter-print-body .epb-right .table > tfoot > tr > td {
+	border:0px;
+}
+.encounter-print-body .epb-right .table td {
+	color: #666666;
+    font-size: 10pt;
+    height: 20px;
+    padding: 0;
+}
+.content-info-box {
+	border: 1px solid #999;
+    display: block;
+    margin-top: 30px;
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+}
+/***** Encounter Print Sign Area *****/
+.encounter-print-footer {
+	background: #fff;
+	border-bottom: 1px solid #4b5159;
+    padding: 30px;
+}
+.encounter-print-footer p {
+    text-transform: uppercase;
+}
+.encounter-print-footer .epf-right {
+	margin-top: 32px;
+}
+.encounter-print-footer-bar {
+	background: #f1f2f6;
+    padding: 10px 20px 20px;
+    text-align: center;
+}
+.encounter-print-footer-bar p {
+	text-transform:uppercase;
+}
+/*Custom Checkbox and Radio Buttons*/
+.encounter-print-tab input[type="checkbox"]:not(old), #amazing-fusion input[type="radio"]:not(old) {
+	margin-bottom: 0;
+	margin-left: 0;
+	margin-right: 0;
+	margin-top: 0;
+	opacity: 0;
+	padding-bottom: 0;
+	padding-left: 0;
+	padding-right: 0;
+	padding-top: 0;
+	width: 26px;
+	position: absolute;
+}
+.encounter-print-tab input[type="checkbox"]:not(old) + label {
+	background-attachment: scroll;
+	background-clip: border-box;
+	background-color: rgba(0, 0, 0, 0);
+	background-image: url("../images/checks.png");
+	background-origin: padding-box;
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+	background-size: auto auto;
+	display: inline-block;
+	line-height: 15px;
+	padding-left: 18px;
+	white-space: normal;
+	height: 14px;
+	padding-top: 0px;
+	margin: 0px;
+}
+.encounter-print-tab input[type="radio"]:not(old) + label {
+	background-attachment: scroll;
+	background-clip: border-box;
+	background-color: rgba(0, 0, 0, 0);
+	background-image: url("../images/checks.png");
+	background-origin: padding-box;
+	background-position: 0px -71px;
+	background-repeat: no-repeat;
+	background-size: auto auto;
+	display: inline-block;
+	line-height: 15px;
+	margin-left: -23px;
+	padding-left: 18px;
+	white-space: normal;
+	height: 15px;
+	padding-top: 0px;
+	margin: 0px;
+}
+.encounter-print-tab input[type="checkbox"]:checked:not(old) + label {
+	background-position: -0px -24px;
+}
+.encounter-print-tab input[type="radio"]:checked:not(old) + label {
+	background-position: -0px -47px;
+}
+#amazing-fusion .table-detail > thead > tr > th, 
+#amazing-fusion .table-detail > tbody > tr > th, 
+#amazing-fusion .table-detail > tfoot > tr > th, 
+#amazing-fusion .table-detail > thead > tr > td, 
+#amazing-fusion .table-detail > tbody > tr > td, 
+#amazing-fusion .table-detail > tfoot > tr > td {
+	height: 25px;
+    padding: 0 7px;
+}
+/*Helper Classes*/
+.margin-t5 {
+	margin-top: 5px;
+}
+.margin-b5 {
+	margin-bottom: 5px;
+}
+.padding-l10 {
+	padding-left: 10px;
+}
