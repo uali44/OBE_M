@@ -430,7 +430,7 @@ function HeaderComponent_div_1_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "a", 39);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](2, "OBE Portal ");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "sup");
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4, "1.0");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4, "1.0(Beta)");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
@@ -440,7 +440,7 @@ function HeaderComponent_div_2_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "a", 40);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](2, "OBE Portal ");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "sup");
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4, "1.0");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4, "1.0(Beta)");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
@@ -1175,7 +1175,7 @@ _angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__["platformBrowser"]().boot
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! E:\New\New\obe_portal\obe-portal-client\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! E:\OBE_repoM\OBE_M\obe_portal\obe-portal-client\src\main.ts */"./src/main.ts");
 
 
 /***/ })

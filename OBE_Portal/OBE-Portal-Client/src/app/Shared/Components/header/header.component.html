@@ -1,6 +1,6 @@
 <header>
-    <div class="logo" *ngIf="IsStudent"><a routerLink="student/main" style="cursor: pointer;">OBE Portal <sup>1.0</sup> </a></div>
-    <div class="logo" *ngIf="!IsStudent"><a routerLink="dashboard/main" style="cursor: pointer;">OBE Portal <sup>1.0</sup> </a></div>
+    <div class="logo" *ngIf="IsStudent"><a routerLink="student/main" style="cursor: pointer;">OBE Portal <sup>1.0(Beta)</sup> </a></div>
+    <div class="logo" *ngIf="!IsStudent"><a routerLink="dashboard/main" style="cursor: pointer;">OBE Portal <sup>1.0(Beta)</sup> </a></div>
     <div class="practice" data-toggle="tooltip" data-placement="bottom" id="HeaderSemesterDropdown">
       <h5>Select Semester</h5>
       <select class="form-control" (change)="UpdateSemesterID($event)">
