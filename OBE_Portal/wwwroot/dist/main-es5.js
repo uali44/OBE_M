@@ -758,7 +758,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "sup");
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4, "1.0(Beta)");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4, "1.0");
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -778,7 +778,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "sup");
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4, "1.0(Beta)");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4, "1.0");
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -2201,7 +2201,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   /***/
   function _(module, exports, __webpack_require__) {
     module.exports = __webpack_require__(
-    /*! E:\OBE_repoM\OBE_M\obe_portal\obe-portal-client\src\main.ts */
+    /*! C:\Users\pc\Documents\New\New\obe_portal\obe-portal-client\src\main.ts */
     "./src/main.ts");
     /***/
   }
