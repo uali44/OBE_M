@@ -53,7 +53,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     AssessmentSchemesComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({
       type: AssessmentSchemesComponent,
       selectors: [["app-assessment-schemes"]],
-      decls: 9,
+      decls: 11,
       vars: 0,
       consts: [["role", "tabpanel", 1, "tab-pane", "active"], [1, "section-heading", "padding-b5"]],
       template: function AssessmentSchemesComponent_Template(rf, ctx) {
@@ -80,7 +80,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](7, "h2");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](8, "is it changed?>");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](8, "is it changed?");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](9, "h2");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](10, " how is it working");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
