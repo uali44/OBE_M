@@ -20,7 +20,7 @@ class AssessmentSchemesComponent {
     }
 }
 AssessmentSchemesComponent.ɵfac = function AssessmentSchemesComponent_Factory(t) { return new (t || AssessmentSchemesComponent)(); };
-AssessmentSchemesComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: AssessmentSchemesComponent, selectors: [["app-assessment-schemes"]], decls: 9, vars: 0, consts: [["role", "tabpanel", 1, "tab-pane", "active"], [1, "section-heading", "padding-b5"]], template: function AssessmentSchemesComponent_Template(rf, ctx) { if (rf & 1) {
+AssessmentSchemesComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: AssessmentSchemesComponent, selectors: [["app-assessment-schemes"]], decls: 7, vars: 0, consts: [["role", "tabpanel", 1, "tab-pane", "active"], [1, "section-heading", "padding-b5"]], template: function AssessmentSchemesComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "div", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](2, "h2");
@@ -30,10 +30,7 @@ AssessmentSchemesComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["�
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](4, "h1");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](5, "This is assessment Detail Component");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](6, " assessment scheme is showing here chose your assessment scheme ");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](7, "h2");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](8, "another change");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](6, " assessment scheme is here\n");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
     } }, styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL0ZlYXR1cmVzL3NldHRpbmcvYXNzZXNzbWVudC1zY2hlbWVzL2Fzc2Vzc21lbnQtc2NoZW1lcy5jb21wb25lbnQuY3NzIn0= */"] });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AssessmentSchemesComponent, [{
