@@ -341,5 +341,5 @@ healthchecksdb
 *.json
 OBE_Portal/OBE-Portal-Client/angular.json
 
-OBE_Portal/wwwroot/
-OBE_Portal/wwwroot/dist/
+OBE_Portal/wwwroot
+OBE_Portal/wwwroot/dist
