@@ -49,62 +49,28 @@
       </tbody>
     </table>
   </div>
-          
-    
-         
+  <div class="modal fade" id="SelectModal" tabindex="-1" aria-labelledby="SelectModalLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="SelectModalLabel">Select Assessment Scheme</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form style="padding:10px;">
+          <label class="control-label">Select Scheme <span class="text-danger">*</span></label>
+          <select id="schemeID" class="form-control" (change)="GetAScheme()">
+            <option value="0">Select Scheme</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+          </select>
 
-
-          <!-- Display Table -->
-
-          <div class="margin-b15">
-            <div class="row">
-              <div class="col-sm-12">
-                <fieldset class="padding-b5">
-                  <legend>Criteria</legend>
-                  <div class="row">
-                    <div class="form-group col-sm-3">
-                      <label class="control-label">Select Institute <span class="text-danger">*</span></label>
-                      <select class="form-control" (change)="Get_Department($event.target.value)" [ngModel]="Temp_Institute_ID" [attr.disabled]="Temp_Institute_ID != 0  ? 'disabled' : null">
-                        <option value="0">Select Institute</option>
-                        <option value="{{i.InstituteID}}" *ngFor="let i of Institutes">{{i.InstituteShortName}}</option>
-                      </select>
-                    </div>
-                    <div class="form-group col-sm-3">
-                      <label class="control-label">Select Department <span class="text-danger">*</span></label>
-                      <select class="form-control" (change)="Get_Intakes($event.target.value)" [ngModel]="Temp_Deaprtment_ID" [attr.disabled]="Temp_Deaprtment_ID != 0  ? 'disabled' : null">
-                        <option value="0">Select Deparment</option>
-                        <option value="{{i.DepartmentID}}" *ngFor="let i of Department">{{i.DepartmentName}}</option>
-                      </select>
-                    </div>
-                    <div class="form-group col-sm-3">
-                      <label class="control-label">Select Intake <span class="text-danger">*</span></label>
-                      <select class="form-control" id="IntakeID">
-                        <option value="0">Select Intake</option>
-                        <option value="{{i.AdmissionOpenProgramID}}" *ngFor="let i of Intake">{{i.semesterAlia}}</option>
-                      </select>
-                    </div>
-                    <div class="col-sm-1 margin-t17">
-                      <button class="btn btn-info" (click)="GetAScheme()">Search</button>
-                    </div>
-
-                  </div>
-                </fieldset>
-              </div>
-
-            </div>
-          </div>
-          <div class="pull-right">
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addDataModal">
-              Add New Scheme
-            </button>
-          </div>
-          <div style="clear:both;"></div>
-
-          <div class="section-heading">
-            <h2>Current Assessment Scheme</h2>
-          </div>
-
-
+          <br />
+          <br />
+          <br />
+          <br />
+          <h3>Assessment Details</h3>
           <div class="table-responsive" style="max-height: 34vh;overflow-y:auto">
             <table class="table table-hover table-theme margin-b30">
               <thead>
@@ -126,31 +92,144 @@
 
                   <th>PLO Passing Priteria</th>
 
-                  <th>Actions</th>
+
 
                 </tr>
               </thead>
 
               <tbody>
                 <!--<ng-container *ngFor="let i of All_PLOS | filter:query">
-            <tr>
-              <td align="center">{{i.Sr_Number}}</td>
-              <td align="center">
-                <b class="blue">
-                  <span [innerHTML]="i.PLO_Title | highlight:query"></span>
-                </b>
-              </td>
-              <td>  <span [innerHTML]="i.PLO_Description | highlight:query"></span></td>
-              <td> <label onclick="">Delete</label></td>
+          <tr>
+            <td align="center">{{i.Sr_Number}}</td>
+            <td align="center">
+              <b class="blue">
+                <span [innerHTML]="i.PLO_Title | highlight:query"></span>
+              </b>
+            </td>
+            <td>  <span [innerHTML]="i.PLO_Description | highlight:query"></span></td>
+            <td> <label onclick="">Delete</label></td>
 
 
 
 
 
-            </tr>
-          </ng-container>-->
+          </tr>
+        </ng-container>-->
               </tbody>
             </table>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Select</button>
+            </div>
+
+
           </div>
+        </form>
+      </div>
+      </div>
+    </div>
+
+
+        <!-- Display Table -->
+
+        <div class="margin-b15">
+          <div class="row">
+            <div class="col-sm-12">
+              <fieldset class="padding-b5">
+                <legend>Criteria</legend>
+                <div class="row">
+                  <div class="form-group col-sm-3">
+                    <label class="control-label">Select Institute <span class="text-danger">*</span></label>
+                    <select class="form-control" (change)="Get_Department($event.target.value)" [ngModel]="Temp_Institute_ID" [attr.disabled]="Temp_Institute_ID != 0  ? 'disabled' : null">
+                      <option value="0">Select Institute</option>
+                      <option value="{{i.InstituteID}}" *ngFor="let i of Institutes">{{i.InstituteShortName}}</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-sm-3">
+                    <label class="control-label">Select Department <span class="text-danger">*</span></label>
+                    <select class="form-control" (change)="Get_Intakes($event.target.value)" [ngModel]="Temp_Deaprtment_ID" [attr.disabled]="Temp_Deaprtment_ID != 0  ? 'disabled' : null">
+                      <option value="0">Select Deparment</option>
+                      <option value="{{i.DepartmentID}}" *ngFor="let i of Department">{{i.DepartmentName}}</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-sm-3">
+                    <label class="control-label">Select Intake <span class="text-danger">*</span></label>
+                    <select class="form-control" id="IntakeID">
+                      <option value="0">Select Intake</option>
+                      <option value="{{i.AdmissionOpenProgramID}}" *ngFor="let i of Intake">{{i.semesterAlia}}</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-1 margin-t17">
+                    <button class="btn btn-info" (click)="GetAScheme()">Search</button>
+                  </div>
+
+                </div>
+              </fieldset>
+            </div>
+
+          </div>
+        </div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addDataModal">
+            Add New Scheme
+          </button>
+          <button type="button" class="btn btn-info" data-toggle="modal" data-target="#SelectModal" style="margin-left:5px;">
+            Select Assessment Scheme
+          </button>
+        </div>
+        <div style="clear:both;"></div>
+
+        <div class="section-heading">
+          <h2>Current Assessment Scheme</h2>
+        </div>
+
+
+        <div class="table-responsive" style="max-height: 34vh;overflow-y:auto">
+          <table class="table table-hover table-theme margin-b30">
+            <thead>
+              <tr>
+                <th>Sr#</th>
+                <th>Assignment</th>
+                <th>Quiz</th>
+                <th>Course Mids</th>
+
+                <th>Course Finals</th>
+                <th>Assessment</th>
+                <th>Journals</th>
+                <th>Open Ended Labs</th>
+                <th>Lab Mids</th>
+
+                <th>Lab Finals</th>
+                <th>Passing Criteria  </th>
+                <th>CLO Passing Priteria</th>
+
+                <th>PLO Passing Priteria</th>
+
+                <th>Actions</th>
+
+              </tr>
+            </thead>
+
+            <tbody>
+              <!--<ng-container *ngFor="let i of All_PLOS | filter:query">
+                <tr>
+                  <td align="center">{{i.Sr_Number}}</td>
+                  <td align="center">
+                    <b class="blue">
+                      <span [innerHTML]="i.PLO_Title | highlight:query"></span>
+                    </b>
+                  </td>
+                  <td>  <span [innerHTML]="i.PLO_Description | highlight:query"></span></td>
+                  <td> <label onclick="">Delete</label></td>
+
+
+
+
+
+                </tr>
+              </ng-container>-->
+            </tbody>
+          </table>
+        </div>
 
       </div>
