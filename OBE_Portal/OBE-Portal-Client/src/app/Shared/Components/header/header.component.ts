@@ -41,7 +41,7 @@ export class HeaderComponent implements OnInit {
 
 
     this.interConnectedService.CurrentSemesterID.subscribe(message => message = GlobalService.Semester_ID.toString()) // for get data
-    this.GetSemesterList();
+    this.GetSemesterList(); 
   }
   MustMatch(controlName: string, matchingControlName: string) {
     return (formGroup: FormGroup) => {

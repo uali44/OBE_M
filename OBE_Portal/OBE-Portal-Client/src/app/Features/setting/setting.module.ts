@@ -11,6 +11,8 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { PipessharedModule } from '../../Shared/Pipe/pipesshared.module';
 
+import { SearchFormComponent } from '../../Shared/Components/searchForm/searchForm.component';
+
 import { SettingRoutingModule } from './setting-routing.module';
 import { SettingMainComponent } from './setting-main/setting-main.component';
 import { SettingComponent } from './setting.component';
@@ -24,8 +26,9 @@ import { AssessmentSchemesComponent } from './assessment-schemes/assessment-sche
 import { PeosComponent } from './peos/peos.component';
 import { AddSkillComponent } from'./skills/add-skill.component'
 
+
 @NgModule({
-  declarations: [SettingMainComponent, SettingComponent, FypSettingsComponent, SendFormComponent, ExitSurveyFormEnableComponent, UpdateRoleAndPasswordComponent, ManagePlosComponent, PlosComponent, AssessmentSchemesComponent, PeosComponent, AddSkillComponent],
+  declarations: [SettingMainComponent, SettingComponent, FypSettingsComponent, SendFormComponent, ExitSurveyFormEnableComponent, UpdateRoleAndPasswordComponent, ManagePlosComponent, PlosComponent, AssessmentSchemesComponent, PeosComponent, AddSkillComponent, SearchFormComponent],
   imports: [
     CommonModule,
     SettingRoutingModule,
