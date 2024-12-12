@@ -12,10 +12,13 @@ namespace OBE_Portal.Infrastructure.Interfaces.CourseSearch
         Task<List<Deparments>> GetDepartment(long InstitueID);
         Task<List<FacultyMembers>> GetFacultyMembersForSelectedDepartmentAndSemester(long Department_ID, long Semester_ID);
         Task<List<GetIntakeForSelectedDepartment>> GetIntakes(long Department_ID);
+   
         Task<List<GetAllSemester>> GetAllSemester();
         Task<List<GetIntakeStudentsResponse>> GetIntakeStudents(long Department_ID);
+
         Task<List<GetCourseResponse>> GetCQILevelCourses(GetFacultyMembersRequest Request);
         Task<bool> DeleteStudentFromCourse(long Request);
         Task<List<FacultyMembersResponse>> getFacultyMember(string Request);
+        Task<List<GetProgramsForSelectedDepartment>> GetPrograms(long Department_ID);
     }
 }

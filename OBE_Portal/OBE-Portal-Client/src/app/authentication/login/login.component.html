@@ -1,0 +1,77 @@
+
+<div id="body" class="">
+  <nav class="navbar navbar-expand-lg navbar-light navbar-laravel">
+    <div class="container">
+      <span class="navbar-brand color-white">
+        
+        <img src="/assets/images/Bahria-Uni.png"  height="65" width="95" alt="logo" />
+        <b>Welcome to OBE Portal <p style="margin-left: 102px;margin-top: -25px;font-size: 35px;font-weight: bold;">Bahria University</p> </b>
+      </span>
+    </div>
+  </nav>
+
+  <main class="login-form">
+    <div class="cotainer">
+      <div class="row justify-content-center">
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-header"><strong id="FormHeader">Sign In</strong></div>
+            <div class="card-body">
+              <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                  <label for="Username"><b>Username/Enrollment:</b></label>
+                  <input id="Username"
+                         type="text"
+                         formControlName="Username"
+                         class="form-control"
+                         placeholder="Enter your Username/Enrollment " />
+                  <div *ngIf="loginForm.controls['username'].invalid && loginForm.controls['username'].touched">
+                    <small class="error-text" *ngIf="loginForm.controls['email'].hasError('required')">Username/Enrollment is required.</small>
+                    <small class="error-text" *ngIf="loginForm.controls['email'].hasError('email')">Please enter a valid Username/Enrollment.</small>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="password"><b>Password</b></label>
+                  <input id="password"
+                         type="password"
+                         formControlName="password"
+                         class="form-control"
+                         placeholder="Enter your password" />
+                  <div *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched">
+                    <small class="error-text" *ngIf="loginForm.controls['password'].hasError('required')">Password is required.</small>
+                    <small class="error-text" *ngIf="loginForm.controls['password'].hasError('minlength')">Password must be at least 6 characters long.</small>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label">Select Institute <span class="text-danger">*</span></label>
+                  <select class="form-control" [ngModel]="Temp_Institute_ID" [attr.disabled]="Temp_Institute_ID != 0  ? 'disabled' : null">
+                    <option value="0">Select Institute</option>
+                    <option value="{{i.InstituteID}}" *ngFor="let i of Institutes">{{i.InstituteShortName}}</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <button id="submit" type="submit" class="btn col-lg-12" style="color: #fff; background-color: #0864a6;border-color: #0864a6;" [disabled]="loginForm.invalid"  >
+                    Sign In
+                  </button>
+                  <a class="btn btn-link link_custom" routerLink="/ForgetPassword">
+                    Forgotten password?
+                  </a>
+                </div>
+              
+              </form>
+           
+               </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="footer-fixed">
+    <article style="background: #025a99 !important;">
+      <div class="card-body text-center">
+        <h5 class="text-white">Outcome-Based Education <br> Powered By Bahria University </h5>
+      </div>
+    </article>
+  </footer>
+  </div>

@@ -130,6 +130,35 @@ namespace OBE_Portal.Infrastructure.Implementations.CourseSearch
                 throw;
             }
         }
+
+
+        async Task<List<GetProgramsForSelectedDepartment>> ICourseSearch.GetPrograms(long Department_ID)
+        {
+            try
+            {
+                Console.WriteLine("reached");
+
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    var DepartmentID = new SqlParameter("@DEPARTMENT_ID", Department_ID);
+                    List<GetProgramsForSelectedDepartment> response = await _context.Set<GetProgramsForSelectedDepartment>().FromSqlInterpolated($"EXEC sp_Get_Programs {DepartmentID}").ToListAsync();
+                    if (response != null)
+                    {
+                        return response;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
         async Task<List<GetIntakeStudentsResponse>> ICourseSearch.GetIntakeStudents(long AdmissionOpenProgramID)
         {
             try

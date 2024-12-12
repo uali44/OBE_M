@@ -28,6 +28,9 @@ export class CoursesSearchService {
   Get_Intakes<T>(data: any): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'CourseSearch/GetIntakes', data);
   }
+  Get_Programs<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'CourseSearch/GetPrograms', data);
+  }
   Get_All_Semester<T>(): Observable<any> {
     return this.http.get<any>(this.baseUrl + 'CourseSearch/GetAllSemester');
   }
@@ -43,4 +46,5 @@ export class CoursesSearchService {
   DeleteStudentFromCourse<T>(data: any): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'CourseSearch/DeleteStudentFromCourse', data);
   }
+
 }

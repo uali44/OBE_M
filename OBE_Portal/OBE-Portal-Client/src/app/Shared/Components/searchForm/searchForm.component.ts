@@ -22,6 +22,7 @@ export class SearchFormComponent implements OnInit {
   Institutes: [] = [];
   Department: [] = [];
   Intake: [] = [];
+  Programs: [] = [];
   Temp_Institute_ID: number;
   Temp_Deaprtment_ID: number;
 
@@ -169,6 +170,32 @@ export class SearchFormComponent implements OnInit {
           this.toastr.error("Internal server error occured while processing your request", "Error!");
         });
   }
+
+  Get_Programs(val) {
+    if (val == undefined || val == null || val == "")
+      return;
+    this.ngxService.start();
+    this.Programs = [];
+    this._CoursesSearchService.Get_Programs(Number(val)).
+      subscribe(
+        response => {
+          try {
+            if (response != null) {
+              this.Programs = response;
+            }
+            this.ngxService.stop();
+          } catch (e) {
+            this.ngxService.stop();
+            this.toastr.error("Internal server error occured while processing your request", "Error!");
+          }
+
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Internal server error occured while processing your request", "Error!");
+        });
+  }
+
   GetAScheme() { }
 
   addData() {

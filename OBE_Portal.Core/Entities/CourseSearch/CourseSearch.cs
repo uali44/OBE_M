@@ -31,6 +31,12 @@ namespace OBE_Portal.Core.Entities.CourseSearch
         public int AdmissionOpenProgramID { get; set; }
         public string semesterAlia { get; set; }
     }
+    public class GetProgramsForSelectedDepartment
+    {
+        public int ProgramID { get; set; }
+        public string ProgramName { get; set; }
+    }
+
     public class GetAllSemester
     {
         public int SemesterID { get; set; }

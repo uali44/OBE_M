@@ -40,7 +40,7 @@ const routes: Routes = [
   ,
   {
     path: 'PLOS',
-    loadChildren: () => import('./../Features/plos/plos.module').then(m => m.PLOSModule),
+    loadChildren: () => import('./../authentication/authentication.module').then(m => m.AuthenticationModule),
     canActivate: [AuthGuard]
   }
 ];
