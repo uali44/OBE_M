@@ -33,23 +33,7 @@ export class SearchFormComponent implements OnInit {
   Is_Have_Special_Permission: boolean = false;
   Add_Permission: boolean = false;
 
-  dataForm: FormGroup;
-  dataEntries: any[] = [];
-
-  formFields = [
-    { name: 'assignment', label: 'Assignment', type: 'number' },
-    { name: 'quiz', label: 'Quiz', type: 'number' },
-    { name: 'courseMids', label: 'Course Mids', type: 'number' },
-    { name: 'courseFinals', label: 'Course Finals', type: 'number' },
-    { name: 'assessment', label: 'Assessments', type: 'number' },
-    { name: 'journals', label: 'Journals', type: 'number' },
-    { name: 'openEndedLabs', label: 'Open Ended Labs', type: 'number' },
-    { name: 'labMids', label: 'Lab Mids', type: 'number' },
-    { name: 'labFinals', label: 'Lab Finals', type: 'number' },
-    { name: 'passingCriteria', label: 'Passing Criteria', type: 'number' },
-    { name: 'cloPassingCriteria', label: 'CLO Passing Criteria', type: 'number' },
-    { name: 'ploPassingCriteria', label: 'PLO Passing Criteria', type: 'number' }
-  ];
+  
 
   constructor(
     private _CoursesSearchService: CoursesSearchService,
@@ -60,12 +44,7 @@ export class SearchFormComponent implements OnInit {
     private CoursesCLOSService: CoursesCLOSService,
     private pagerService: PagerService,
   ) {
-    const formGroupConfig = {};
-    this.formFields.forEach(field => {
-      formGroupConfig[field.name] = ['', Validators.required];
-    });
-    this.dataForm = this.formBuilder.group(formGroupConfig);
-
+    
 
     this.Temp_Institute_ID = 0;
     this.Temp_Deaprtment_ID = 0;
@@ -127,7 +106,7 @@ export class SearchFormComponent implements OnInit {
             if (response != null) {
               if (this.Temp_Deaprtment_ID != 0) {
                 this.Department = response.filter(x => x.DepartmentID == this.Temp_Deaprtment_ID);
-                this.Get_Intakes(this.Temp_Deaprtment_ID);
+                this.Get_Programs(this.Temp_Deaprtment_ID);
               } else {
                 this.Department = response;
               }
@@ -198,29 +177,9 @@ export class SearchFormComponent implements OnInit {
 
   GetAScheme() { }
 
-  addData() {
-    if (this.dataForm.valid) {
-      this.dataEntries.push(this.dataForm.value);
-      this.dataForm.reset();
-      const modal = document.getElementById('addDataModal');
-      if (modal) {
-        modal.classList.remove('show');
-        modal.style.display = 'none';
-        document.body.classList.remove('modal-open');
-        document.body.removeAttribute('style');
-      }
-    }
-  }
+  
 
-
-  deleteEntry(index: number) {
-    this.dataEntries.splice(index, 1);
-  }
-
-  saveData() {
-    // Save dataEntries to the database via service
-    console.log('Saving data to database:', this.dataEntries);
-  }
+ 
 
 
 }

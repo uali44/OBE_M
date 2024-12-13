@@ -136,7 +136,7 @@ namespace OBE_Portal.Infrastructure.Implementations.CourseSearch
         {
             try
             {
-                Console.WriteLine("reached");
+               
 
                 using (SqlCommand comm = new SqlCommand())
                 {
@@ -151,9 +151,12 @@ namespace OBE_Portal.Infrastructure.Implementations.CourseSearch
                         return null;
                     }
                 }
+               
+
             }
-            catch (Exception)
+            catch (Exception )
             {
+              
                 throw;
             }
         }

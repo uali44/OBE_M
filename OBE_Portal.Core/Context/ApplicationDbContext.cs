@@ -87,7 +87,10 @@ namespace OBE_Portal.Core.Context
             modelBuilder.Entity<FacultyMembersResponse>().HasNoKey();
             modelBuilder.Entity<GetUserResponse>().HasNoKey();
             modelBuilder.Entity<Roles>().HasNoKey();
-            
+            modelBuilder.Entity<GetProgramsForSelectedDepartment>().HasNoKey();
+
+
+
         }
         
         //public DbSet<Authentication> user { get; set; }

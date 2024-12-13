@@ -25,9 +25,9 @@
                   </div>
                   <div class="form-group col-sm-3">
                     <label class="control-label">Select Program <span class="text-danger">*</span></label>
-                    <select class="form-control" id="ProgramID">
-                      <option value="0">Select Intake</option>
-                      <option value="{{i.ProgramID}}" *ngFor="let i of Intake">{{i.ProgramName}}</option>
+                    <select class="form-control" (change)="Get_Programs($event.target.value)"   id="ProgramID">
+                      <option value="0">Select Program</option>
+                      <option value="{{i.ProgramID}}" *ngFor="let i of Programs">{{i.ProgramName}}</option>
                     </select>
                   </div>
 
