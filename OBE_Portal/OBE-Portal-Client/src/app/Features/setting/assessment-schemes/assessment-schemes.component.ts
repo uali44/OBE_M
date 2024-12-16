@@ -34,20 +34,14 @@ export class AssessmentSchemesComponent implements OnInit {
 
   dataForm: FormGroup;
   dataEntries: any[] = [];
-
+  dataTable: any[] = [];
   formFields = [
-    { name: 'assignment', label: 'Assignment', type: 'number' },
-    { name: 'quiz', label: 'Quiz', type: 'number' },
-    { name: 'courseMids', label: 'Course Mids', type: 'number' },
-    { name: 'courseFinals', label: 'Course Finals', type: 'number' },
-    { name: 'assessment', label: 'Assessments', type: 'number' },
-    { name: 'journals', label: 'Journals', type: 'number' },
-    { name: 'openEndedLabs', label: 'Open Ended Labs', type: 'number' },
-    { name: 'labMids', label: 'Lab Mids', type: 'number' },
-    { name: 'labFinals', label: 'Lab Finals', type: 'number' },
-    { name: 'passingCriteria', label: 'Passing Criteria', type: 'number' },
-    { name: 'cloPassingCriteria', label: 'CLO Passing Criteria', type: 'number' },
-    { name: 'ploPassingCriteria', label: 'PLO Passing Criteria', type: 'number' }
+    { name: 'passingCr', label: 'Passing Critria', type: 'number' },
+    { name: 'CLOpassingCr', label: 'CLO Passing Critria', type: 'number' },
+    { name: 'PLOpassingCr', label: 'PLO Passing Critria', type: 'number' },
+    { name: 'assessment', label: 'Assessment Type', type: 'text' },
+    { name: 'percentage', label: 'Percentage', type: 'number' },
+   
   ];
 
   constructor(
@@ -81,113 +75,32 @@ export class AssessmentSchemesComponent implements OnInit {
 
   ngOnInit(): void {
     this.All_PLOS = [];
-    this.Get_Institutes();
+   
   
 
   }
 
-  Get_Institutes() {
-    this.ngxService.start();
-    this.Institutes = [];
-    this._CoursesSearchService.Get_Institute().
-      subscribe(
-        response => {
-          try {
-            if (response != null) {
-              if (this.Temp_Institute_ID != 0) {
-                this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
-                this.Get_Department(this.Temp_Institute_ID);
-              } else {
-                this.Institutes = response;
-              }
-
-            }
-            this.ngxService.stop();
-          } catch (e) {
-            this.ngxService.stop();
-            this.toastr.error("Internal server error occured while processing your request", "Error!");
-          }
-
-        },
-        error => {
-          this.ngxService.stop();
-          this.toastr.error("Internal server error occured while processing your request", "Error!");
-        });
-  }
-  Get_Department(val) {
-    if (val == undefined || val == null || val == "")
-      return;
-    this.ngxService.start();
-    this.Department = [];
-    this._CoursesSearchService.Get_Department(Number(val)).
-      subscribe(
-        response => {
-          try {
-            if (response != null) {
-              if (this.Temp_Deaprtment_ID != 0) {
-                this.Department = response.filter(x => x.DepartmentID == this.Temp_Deaprtment_ID);
-                this.Get_Intakes(this.Temp_Deaprtment_ID);
-              } else {
-                this.Department = response;
-              }
-            }
-            this.ngxService.stop();
-          } catch (e) {
-            this.ngxService.stop();
-            this.toastr.error("Internal server error occured while processing your request", "Error!");
-          }
-
-
-        },
-        error => {
-          this.ngxService.stop();
-          this.toastr.error("Internal server error occured while processing your request", "Error!");
-        });
-  }
-
-  Get_Intakes(val) {
-    if (val == undefined || val == null || val == "")
-      return;
-    this.ngxService.start();
-    this.Intake = [];
-    this._CoursesSearchService.Get_Intakes(Number(val)).
-      subscribe(
-        response => {
-          try {
-            if (response != null) {
-              this.Intake = response;
-            }
-            this.ngxService.stop();
-          } catch (e) {
-            this.ngxService.stop();
-            this.toastr.error("Internal server error occured while processing your request", "Error!");
-          }
-
-        },
-        error => {
-          this.ngxService.stop();
-          this.toastr.error("Internal server error occured while processing your request", "Error!");
-        });
-  }
+ 
   GetAScheme() { }
 
   addData() {
     if (this.dataForm.valid) {
-      this.dataEntries.push(this.dataForm.value);
-      this.dataForm.reset();
-      const modal = document.getElementById('addDataModal');
-      if (modal) {
-        modal.classList.remove('show');
-        modal.style.display = 'none';
-        document.body.classList.remove('modal-open');
-        document.body.removeAttribute('style');
+      this.dataTable.push([ this.dataForm.get('assessment')?.value, this.dataForm.get('percentage')?.value ]);
+      // this.dataEntries.push(this.dataForm.value);
+      this.dataForm.get('assessment').reset('');
+      this.dataForm.get('percentage').reset('');
+      const element = document.getElementById('assessment'); // Get the input element to focus
+      if (element) {
+        element.focus(); // Shift focus to the new field
       }
+    //  this.dataForm.reset();
+     
     }
   }
 
 
   deleteEntry(index: number) {
-    this.dataEntries.splice(index, 1);
+    this.dataTable.splice(index, 1);
   }
 
   saveData() {
