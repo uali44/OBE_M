@@ -69,6 +69,7 @@ export class SearchFormComponent implements OnInit {
   Get_Institutes() {
     this.ngxService.start();
     this.Institutes = [];
+  //  this.Temp_Institute_ID = GlobalService.Institute_ID;
     this._CoursesSearchService.Get_Institute().
       subscribe(
         response => {
@@ -99,6 +100,7 @@ export class SearchFormComponent implements OnInit {
       return;
     this.ngxService.start();
     this.Department = [];
+  //  this.Temp_Deaprtment_ID = GlobalService.Deaprtment_ID;
     this._CoursesSearchService.Get_Department(Number(val)).
       subscribe(
         response => {
