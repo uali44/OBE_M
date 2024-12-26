@@ -131,6 +131,34 @@ namespace OBE_Portal.Infrastructure.Implementations.CourseSearch
             }
         }
 
+        async Task<List<getstatus>> ICourseSearch.GetStatus(long FacultyMemberID)
+        {
+            try
+            {
+
+
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    var FacultyMember = new SqlParameter("@FacultyMemberID", FacultyMemberID);
+                    List<getstatus> response = await _context.Set<getstatus>().FromSqlInterpolated($"EXEC sp_get_status {FacultyMember}").ToListAsync();
+                    if (response != null)
+                    {
+                        return response;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
         async Task<List<GetProgramsForSelectedDepartment>> ICourseSearch.GetPrograms(long Department_ID)
         {

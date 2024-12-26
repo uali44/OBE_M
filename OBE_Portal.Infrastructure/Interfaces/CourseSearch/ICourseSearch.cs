@@ -20,5 +20,7 @@ namespace OBE_Portal.Infrastructure.Interfaces.CourseSearch
         Task<bool> DeleteStudentFromCourse(long Request);
         Task<List<FacultyMembersResponse>> getFacultyMember(string Request);
         Task<List<GetProgramsForSelectedDepartment>> GetPrograms(long Department_ID);
+        Task<List<getstatus>> ICourseSearch.GetStatus(long FacultyMemberID);
+        Task<List<getstatus>> GetStatus(long FacultyMemberID);
     }
 }

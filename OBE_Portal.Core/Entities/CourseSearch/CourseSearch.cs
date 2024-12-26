@@ -36,7 +36,10 @@ namespace OBE_Portal.Core.Entities.CourseSearch
         public int ProgramID { get; set; }
         public string ProgramName { get; set; }
     }
-
+    public class getstatus
+    {
+        public int statusID { get; set; }
+    }
     public class GetAllSemester
     {
         public int SemesterID { get; set; }

@@ -26,7 +26,7 @@ export class SearchFormComponent implements OnInit {
   Temp_Institute_ID: number;
   Temp_Deaprtment_ID: number;
 
-
+  user_status: number;
   Is_Permission_Institute: boolean = false;
   Is_Permission_Deaprtment: boolean = false;
   Is_Permission_Faculty: boolean = false;
@@ -62,10 +62,37 @@ export class SearchFormComponent implements OnInit {
   ngOnInit(): void {
     this.All_PLOS = [];
     this.Get_Institutes();
-  
+    this.getStatus(GlobalService.FacultyMember_ID)
 
   }
+  getStatus(val) {
+    this._CoursesSearchService.Get_Status(val).
+      subscribe(
+        response => {
+          try {
+            if (response != null) {
+              if (this.Temp_Institute_ID != 0) {
+                //this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
+                //this.Get_Department(this.Temp_Institute_ID);
+              } else {
+                this.user_status = response;
+              }
 
+            }
+            this.ngxService.stop();
+          } catch (e) {
+            this.ngxService.stop();
+            this.toastr.error("Internal server error occured while processing your request", "Error!");
+          }
+
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Internal server error occured while processing your request", "Error!");
+        });
+
+
+  }
   Get_Institutes() {
     this.ngxService.start();
     this.Institutes = [];

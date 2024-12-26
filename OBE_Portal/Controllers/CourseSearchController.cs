@@ -135,6 +135,28 @@ namespace OBE_Portal.Controllers
                 throw;
             }
         }
+        [HttpPost("GetStatus")]
+        public async Task<IActionResult> GetStatus([FromBody] long request)
+        {
+            try
+            {
+                if (request > 0)
+                {
+                    var respone = await _courseSearch.GetStatus(request).ConfigureAwait(true);
+                    if (respone != null)
+                        return Ok(respone);
+                    else
+                        return Ok(respone);
+                }
+                else
+                    return Ok(null);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         [HttpPost("GetIntakeStudents")]
         public async Task<IActionResult> GetIntakeStudents([FromBody] long request)
         {
