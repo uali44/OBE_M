@@ -9,6 +9,7 @@ import { HighlightPipe } from '../../../Shared/Pipe/highlight.pipe';
 import { FilterPipe } from '../../../Shared/Pipe/filter';
 import { CoursesCLOSService } from './../../../Services/CourseCLOS/coursesCLO.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { forEach } from 'underscore';
 
 
 @Component({
@@ -26,7 +27,7 @@ export class SearchFormComponent implements OnInit {
   Temp_Institute_ID: number;
   Temp_Deaprtment_ID: number;
 
-  user_status:[]=[];
+  user_status: any[]=[];
   Is_Permission_Institute: boolean = false;
   Is_Permission_Deaprtment: boolean = false;
   Is_Permission_Faculty: boolean = false;
@@ -64,6 +65,12 @@ export class SearchFormComponent implements OnInit {
     this.Get_Institutes();
     
     this.getStatus(GlobalService.FacultyMember_ID)
+  
+
+
+    const statuses = this.user_status.filter(status => status.userStatus === 1);
+    console.log("Matching statuses:", statuses);
+
 
   }
   getStatus(val) {
