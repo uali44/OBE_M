@@ -66,6 +66,7 @@ export class SearchFormComponent implements OnInit {
 
   }
   getStatus(val) {
+    this.ngxService.start();
     this._CoursesSearchService.Get_Status(val).
       subscribe(
         response => {
@@ -73,7 +74,11 @@ export class SearchFormComponent implements OnInit {
             if (response != null) {
               if (this.Temp_Institute_ID != 0) {
                 //this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
+
                 //this.Get_Department(this.Temp_Institute_ID);
+
+                this.user_status = response;
+
               } else {
                 this.user_status = response;
               }
