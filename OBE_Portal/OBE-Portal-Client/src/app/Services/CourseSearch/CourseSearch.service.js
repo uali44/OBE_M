@@ -26,7 +26,7 @@ let CoursesSearchService = class CoursesSearchService {
   }
 
   Get_Status(data) {
-    return this.http.post (this.baseUrl + 'CourseSearch/GetStatus', data);
+    return this.http.post(this.baseUrl + 'CourseSearch/GetStatus', data);
   }
     Get_All_Semester() {
         return this.http.get(this.baseUrl + 'CourseSearch/GetAllSemester');

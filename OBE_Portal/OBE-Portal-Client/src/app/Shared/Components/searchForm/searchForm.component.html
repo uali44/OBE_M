@@ -46,7 +46,12 @@
                 </div>
               </fieldset>
             </div>
-            {{user_status}}
+            
+            <div *ngFor="let status of user_status">
+              <label>
+                User Status: {{ status.userStatus }}
+              </label>
+            </div>
           </div>
         </div>
    

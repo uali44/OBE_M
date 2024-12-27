@@ -38,7 +38,7 @@ namespace OBE_Portal.Core.Entities.CourseSearch
     }
     public class getstatus
     {
-        public int statusID { get; set; }
+        public int userStatus { get; set; }
     }
     public class GetAllSemester
     {

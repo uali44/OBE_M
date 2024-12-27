@@ -152,8 +152,9 @@ namespace OBE_Portal.Controllers
                     return Ok(null);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message); 
                 throw;
             }
         }

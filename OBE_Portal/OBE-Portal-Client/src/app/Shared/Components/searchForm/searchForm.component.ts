@@ -26,7 +26,7 @@ export class SearchFormComponent implements OnInit {
   Temp_Institute_ID: number;
   Temp_Deaprtment_ID: number;
 
-  user_status: number;
+  user_status:[]=[];
   Is_Permission_Institute: boolean = false;
   Is_Permission_Deaprtment: boolean = false;
   Is_Permission_Faculty: boolean = false;
@@ -62,6 +62,7 @@ export class SearchFormComponent implements OnInit {
   ngOnInit(): void {
     this.All_PLOS = [];
     this.Get_Institutes();
+    
     this.getStatus(GlobalService.FacultyMember_ID)
 
   }
