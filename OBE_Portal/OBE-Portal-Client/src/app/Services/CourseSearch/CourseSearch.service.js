@@ -25,8 +25,8 @@ let CoursesSearchService = class CoursesSearchService {
     return this.http.post(this.baseUrl + 'CourseSearch/GetPrograms', data);
   }
 
-  Get_Status<T>(data: any): Observable<any> {
-    return this.http.post < any > (this.baseUrl + 'CourseSearch/GetStatus', data);
+  Get_Status(data) {
+    return this.http.post (this.baseUrl + 'CourseSearch/GetStatus', data);
   }
     Get_All_Semester() {
         return this.http.get(this.baseUrl + 'CourseSearch/GetAllSemester');

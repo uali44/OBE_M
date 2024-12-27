@@ -88,6 +88,7 @@ namespace OBE_Portal.Core.Context
             modelBuilder.Entity<GetUserResponse>().HasNoKey();
             modelBuilder.Entity<Roles>().HasNoKey();
             modelBuilder.Entity<GetProgramsForSelectedDepartment>().HasNoKey();
+            modelBuilder.Entity<getstatus>().HasNoKey();
 
 
 
