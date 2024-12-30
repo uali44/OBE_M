@@ -70,6 +70,22 @@ namespace OBE_Portal.Controllers
                 throw;
             }
         }
+        [HttpPost("GetDepartmentDean")]
+        public async Task<IActionResult> GetDepartmentDean([FromBody] DepartmentDeanRequest request)
+        {
+            try
+            {
+                var respone = await _courseSearch.GetDepartmentDean(request.FacultyMemberID,request.InstituteID).ConfigureAwait(true);
+                if (respone != null)
+                    return Ok(respone);
+                else
+                    return Ok(respone);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         [HttpPost("GetFacultyMembersForSelectedDepartmentAndSemester")]
         public async Task<IActionResult> GetFacultyMembersForSelectedDepartmentAndSemester([FromBody] GetFacultyMembersRequest request)
         {

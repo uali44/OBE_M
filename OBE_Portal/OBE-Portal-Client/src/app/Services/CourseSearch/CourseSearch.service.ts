@@ -19,6 +19,10 @@ export class CoursesSearchService {
     return this.http.post<any>(this.baseUrl + 'CourseSearch/GetDepartment', data);
   }
 
+  Get_DepartmentDean<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'CourseSearch/GetDepartmentDean', data);
+  }
+
   getFacultyMember<T>(data: any): Observable<any> {
     return this.http.get<any>(this.baseUrl + 'CourseSearch/getFacultyMember?username='+data);
   }

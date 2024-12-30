@@ -21,6 +21,11 @@ namespace OBE_Portal.Core.Entities.CourseSearch
         public int FacultyMemberID { get; set; }
         public string Name { get; set; }
     }
+    public class DepartmentDeanRequest
+    {
+        public long InstituteID { get; set; }
+        public long FacultyMemberID { get; set; }
+    }
     public class GetFacultyMembersRequest
     {
         public long Department_ID { get; set; }

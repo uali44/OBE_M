@@ -107,6 +107,30 @@ namespace OBE_Portal.Infrastructure.Implementations.CourseSearch
                 throw;
             }
         }
+        async Task<List<Deparments>> ICourseSearch.GetDepartmentDean(long InstitueID,long FacultyMemberID)
+        {
+            try
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    var FacultyMember = new SqlParameter("@FacultyMemberID", FacultyMemberID);
+                    var Institue_ID = new SqlParameter("@InstituteID", InstitueID);
+                    List<Deparments> response = await _context.Set<Deparments>().FromSqlInterpolated($"EXEC sp_get_department_dean {FacultyMember},{Institue_ID}").ToListAsync();
+                    if (response != null)
+                    {
+                        return response;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         async Task<List<FacultyMembers>> ICourseSearch.GetFacultyMembersForSelectedDepartmentAndSemester(long Department_ID, long Semester_ID)
         {
             try

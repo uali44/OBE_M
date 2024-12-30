@@ -11,7 +11,10 @@ let CoursesSearchService = class CoursesSearchService {
     }
     Get_Department(data) {
         return this.http.post(this.baseUrl + 'CourseSearch/GetDepartment', data);
-    }
+  }
+  Get_DepartmentDean(data) {
+    return this.http.post(this.baseUrl + 'CourseSearch/GetDepartmentDean', data);
+  }
     getFacultyMember(data) {
         return this.http.get(this.baseUrl + 'CourseSearch/getFacultyMember?username=' + data);
     }

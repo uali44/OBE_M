@@ -24,5 +24,6 @@ namespace OBE_Portal.Infrastructure.Interfaces.CourseSearch
         Task<List<getstatus>> GetStatus(long FacultyMemberID);
      
         Task<List<CourseSearchModels>> GetInstitutedean(long FacultyMemberID);
+        Task<List<Deparments>> GetDepartmentDean(long InstitueID, long facultyMemberID);
     }
 }
