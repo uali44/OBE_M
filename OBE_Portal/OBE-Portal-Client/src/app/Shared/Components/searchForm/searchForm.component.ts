@@ -156,6 +156,7 @@ export class SearchFormComponent implements OnInit {
           response => {
             try {
               if (response != null) {
+
                 if (this.Temp_Institute_ID != 0) {
                   this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
                   this.Get_Department(this.Temp_Institute_ID);
@@ -182,33 +183,67 @@ export class SearchFormComponent implements OnInit {
       return;
     this.ngxService.start();
     this.Department = [];
-  //  this.Temp_Deaprtment_ID = GlobalService.Deaprtment_ID;
-    this._CoursesSearchService.Get_Department(Number(val)).
-      subscribe(
-        response => {
-          try {
-            if (response != null) {
-              if (this.Temp_Deaprtment_ID != 0) {
-                this.Department = response.filter(x => x.DepartmentID == this.Temp_Deaprtment_ID);
-                this.Get_Programs(this.Temp_Deaprtment_ID);
-              } else {
-                this.Department = response;
+    //  this.Temp_Deaprtment_ID = GlobalService.Deaprtment_ID;
+
+    if (this.ustatus == 2) {
+
+
+      this._CoursesSearchService.Get_DepartmentDean(Number(val), GlobalService.FacultyMember_ID).
+        subscribe(
+          response => {
+            try {
+              if (response != null) {
+                //if (this.Temp_Deaprtment_ID != 0) {
+                //  this.Department = response.filter(x => x.DepartmentID == this.Temp_Deaprtment_ID);
+                //  this.Get_Programs(this.Temp_Deaprtment_ID);
+                //} else {
+                  this.Department = response;
+              //  }
               }
+              this.ngxService.stop();
+            } catch (e) {
+              this.ngxService.stop();
+              this.toastr.error("Internal server error occured while processing your request", "Error!");
             }
-            this.ngxService.stop();
-          } catch (e) {
+
+
+          },
+          error => {
             this.ngxService.stop();
             this.toastr.error("Internal server error occured while processing your request", "Error!");
-          }
+          });
 
 
-        },
-        error => {
-          this.ngxService.stop();
-          this.toastr.error("Internal server error occured while processing your request", "Error!");
-        });
+    }
+    else {
+
+
+      this._CoursesSearchService.Get_Department(Number(val)).
+        subscribe(
+          response => {
+            try {
+              if (response != null) {
+                if (this.Temp_Deaprtment_ID != 0) {
+                  this.Department = response.filter(x => x.DepartmentID == this.Temp_Deaprtment_ID);
+                  this.Get_Programs(this.Temp_Deaprtment_ID);
+                } else {
+                  this.Department = response;
+                }
+              }
+              this.ngxService.stop();
+            } catch (e) {
+              this.ngxService.stop();
+              this.toastr.error("Internal server error occured while processing your request", "Error!");
+            }
+
+
+          },
+          error => {
+            this.ngxService.stop();
+            this.toastr.error("Internal server error occured while processing your request", "Error!");
+          });
+    }
   }
-
   Get_Intakes(val) {
     if (val == undefined || val == null || val == "")
       return;
