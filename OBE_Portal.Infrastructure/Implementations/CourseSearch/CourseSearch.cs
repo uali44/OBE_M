@@ -38,6 +38,30 @@ namespace OBE_Portal.Infrastructure.Implementations.CourseSearch
                 throw;
             }
         }
+
+        async Task<List<CourseSearchModels>> ICourseSearch.GetInstitutedean(long FacultyMemberID)
+        {
+            try
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    var FacultyMember = new SqlParameter("@FacultyMemberID", FacultyMemberID);
+                    List<CourseSearchModels> response = await _context.Set<CourseSearchModels>().FromSqlInterpolated($"EXEC sp_get_institute_dean {FacultyMember}").ToListAsync();
+                    if (response != null)
+                    {
+                        return response;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         async Task<List<GetAllSemester>> ICourseSearch.GetAllSemester()
         {
             try

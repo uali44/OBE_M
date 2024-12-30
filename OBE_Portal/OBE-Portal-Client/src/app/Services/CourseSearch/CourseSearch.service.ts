@@ -34,6 +34,9 @@ export class CoursesSearchService {
   Get_Status<T>(data: any): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'CourseSearch/GetStatus', data);
   }
+  Get_Institute_dean<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'CourseSearch/GetInstitutedean', data);
+  }
   Get_All_Semester<T>(): Observable<any> {
     return this.http.get<any>(this.baseUrl + 'CourseSearch/GetAllSemester');
   }

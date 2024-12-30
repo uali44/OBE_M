@@ -27,7 +27,8 @@ export class SearchFormComponent implements OnInit {
   Temp_Institute_ID: number;
   Temp_Deaprtment_ID: number;
 
-  user_status: any[]=[];
+  user_status: any[] = [];
+  ustatus: number;
   Is_Permission_Institute: boolean = false;
   Is_Permission_Deaprtment: boolean = false;
   Is_Permission_Faculty: boolean = false;
@@ -49,7 +50,7 @@ export class SearchFormComponent implements OnInit {
 
     this.Temp_Institute_ID = 0;
     this.Temp_Deaprtment_ID = 0;
-    this.Is_Permission_Institute = GlobalService.Permissions.indexOf("Institute_Dropdown") >= 0 ? true : false;
+   this.Is_Permission_Institute = GlobalService.Permissions.indexOf("Institute_Dropdown") >= 0 ? true : false;
     this.Is_Permission_Deaprtment = GlobalService.Permissions.indexOf("Department_Dropdown") >= 0 ? true : false;
     if (!this.Is_Permission_Institute) {
       this.Temp_Institute_ID = GlobalService.Institute_ID;
@@ -62,15 +63,21 @@ export class SearchFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.All_PLOS = [];
+    this.getStatus(GlobalService.FacultyMember_ID);
+
     this.Get_Institutes();
-    
-    this.getStatus(GlobalService.FacultyMember_ID)
+
   
 
 
-    const statuses = this.user_status.filter(status => status.userStatus === 1);
-    console.log("Matching statuses:", statuses);
+   
+   
 
+    if (this.ustatus == 1) {
+
+      console.log("entered");
+
+    }
 
   }
   getStatus(val) {
@@ -80,15 +87,13 @@ export class SearchFormComponent implements OnInit {
         response => {
           try {
             if (response != null) {
-              if (this.Temp_Institute_ID != 0) {
-                //this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
-
-                //this.Get_Department(this.Temp_Institute_ID);
-
+              {
                 this.user_status = response;
-
-              } else {
-                this.user_status = response;
+                this.user_status.forEach(status => {
+                  this.ustatus = status.userStatus;
+                  console.log("User Status:", this.ustatus);
+                });
+                this.Get_Institutes();
               }
 
             }
@@ -107,33 +112,70 @@ export class SearchFormComponent implements OnInit {
 
   }
   Get_Institutes() {
+
+
     this.ngxService.start();
     this.Institutes = [];
-  //  this.Temp_Institute_ID = GlobalService.Institute_ID;
-    this._CoursesSearchService.Get_Institute().
-      subscribe(
-        response => {
-          try {
-            if (response != null) {
-              if (this.Temp_Institute_ID != 0) {
-                this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
-                this.Get_Department(this.Temp_Institute_ID);
-              } else {
-                this.Institutes = response;
-              }
+    //  this.Temp_Institute_ID = GlobalService.Institute_ID;
+    if (this.ustatus == 2) {
+      console.log(this.ustatus+"abc");
+      this._CoursesSearchService.Get_Institute_dean(GlobalService.FacultyMember_ID).
+        subscribe(
+          response => {
+            try {
+              if (response != null) {
+                this.Temp_Institute_ID = 0;
+                //if (this.Temp_Institute_ID != 0) {
+                //  this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
+                //  this.Get_Department(this.Temp_Institute_ID);
+                //} else {
+                  this.Institutes = response;
+               // }
 
+              }
+              this.ngxService.stop();
+            } catch (e) {
+              this.ngxService.stop();
+              this.toastr.error("Internal server error occured while processing your request", "Error!");
             }
-            this.ngxService.stop();
-          } catch (e) {
+
+          },
+          error => {
             this.ngxService.stop();
             this.toastr.error("Internal server error occured while processing your request", "Error!");
-          }
+          });
 
-        },
-        error => {
-          this.ngxService.stop();
-          this.toastr.error("Internal server error occured while processing your request", "Error!");
-        });
+
+      console.log("entered");
+
+    }
+    else {
+
+      this._CoursesSearchService.Get_Institute().
+        subscribe(
+          response => {
+            try {
+              if (response != null) {
+                if (this.Temp_Institute_ID != 0) {
+                  this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
+                  this.Get_Department(this.Temp_Institute_ID);
+                } else {
+                  this.Institutes = response;
+                }
+
+              }
+              this.ngxService.stop();
+            } catch (e) {
+              this.ngxService.stop();
+              this.toastr.error("Internal server error occured while processing your request", "Error!");
+            }
+
+          },
+          error => {
+            this.ngxService.stop();
+            this.toastr.error("Internal server error occured while processing your request", "Error!");
+          });
+    }
   }
   Get_Department(val) {
     if (val == undefined || val == null || val == "")

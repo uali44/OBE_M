@@ -158,6 +158,31 @@ namespace OBE_Portal.Controllers
                 throw;
             }
         }
+
+        [HttpPost("GetInstituteDean")]
+        public async Task<IActionResult> GetInsitutedean([FromBody] long request)
+        {
+            try
+            {
+                if (request > 0)
+                {
+                    var respone = await _courseSearch.GetInstitutedean(request).ConfigureAwait(true);
+                    if (respone != null)
+                        return Ok(respone);
+                    else
+                        return Ok(respone);
+                }
+                else
+                    return Ok(null);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
         [HttpPost("GetIntakeStudents")]
         public async Task<IActionResult> GetIntakeStudents([FromBody] long request)
         {
