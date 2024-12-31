@@ -75,7 +75,7 @@ namespace OBE_Portal.Controllers
         {
             try
             {
-                var respone = await _courseSearch.GetDepartmentDean(request.FacultyMemberID,request.InstituteID).ConfigureAwait(true);
+                var respone = await _courseSearch.GetDepartmentDean(request.InstituteID,request.FacultyMemberID).ConfigureAwait(true);
                 if (respone != null)
                     return Ok(respone);
                 else
