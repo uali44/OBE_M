@@ -186,9 +186,13 @@ export class SearchFormComponent implements OnInit {
     //  this.Temp_Deaprtment_ID = GlobalService.Deaprtment_ID;
 
     if (this.ustatus == 2) {
+      this.Temp_Deaprtment_ID = 0;
+      const payload = {
+        InstituteID: Number(val),
+        FacultyMemberID: GlobalService.FacultyMember_ID
+      };
 
-
-      this._CoursesSearchService.Get_DepartmentDean(Number(val), GlobalService.FacultyMember_ID).
+      this._CoursesSearchService.Get_DepartmentDean(payload).
         subscribe(
           response => {
             try {
