@@ -22,6 +22,7 @@ export class CvComponentComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       phoneNumber: [''],
       summary: [''],
+      Role:[''],
       education: this.fb.array([]),
       experience: this.fb.array([]),
       roles: this.fb.array([])
