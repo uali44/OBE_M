@@ -43,6 +43,13 @@ const routes: Routes = [
     loadChildren: () => import('./../authentication/authentication.module').then(m => m.AuthenticationModule),
     canActivate: [AuthGuard]
   }
+  ,
+  {
+    path: 'Profile',
+    loadChildren: () => import('./../Features/cv-module/cv-module.module').then(m => m.CvModuleModule),
+
+    canActivate: [AuthGuard]
+  }
 ];
 
 @NgModule({
