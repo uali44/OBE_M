@@ -16,8 +16,8 @@ let CvComponentComponent = class CvComponentComponent {
             // fullName: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             phoneNumber: [''],
-            summary: [''],
             Role: [''],
+            FacultyType: [''],
             education: this.fb.array([]),
             experience: this.fb.array([]),
             roles: this.fb.array([]),
@@ -150,7 +150,9 @@ let CvComponentComponent = class CvComponentComponent {
         const consultancy = this.fb.group({
             client: ['', Validators.required],
             project: ['', Validators.required],
-            duration: ['', Validators.required]
+            duration: ['', Validators.required],
+            startDate: ['', Validators.required],
+            endDate: ['', Validators.required],
         });
         this.consultanciesArray.push(consultancy);
     }
@@ -161,7 +163,8 @@ let CvComponentComponent = class CvComponentComponent {
         const training = this.fb.group({
             trainingName: ['', Validators.required],
             provider: ['', Validators.required],
-            date: ['', Validators.required]
+            startDate: ['', Validators.required],
+            endDate: ['', Validators.required]
         });
         this.trainingArray.push(training);
     }
@@ -172,7 +175,9 @@ let CvComponentComponent = class CvComponentComponent {
         const project = this.fb.group({
             projectName: ['', Validators.required],
             client: ['', Validators.required],
-            duration: ['', Validators.required]
+            duration: ['', Validators.required],
+            startDate: ['', Validators.required],
+            endDate: ['', Validators.required]
         });
         this.projectArray.push(project);
     }

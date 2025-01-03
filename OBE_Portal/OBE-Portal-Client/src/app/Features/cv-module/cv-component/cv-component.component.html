@@ -11,12 +11,13 @@
         <h3>Personal Information</h3>
 
         <div class="form-group">
-          Name: {{this.name}}
+          <h2> Name: </h2>
+          <h3>    {{this.name}}</h3>
           <!--<label for="fullName">Full Name</label>
-  <input id="fullName" type="text" formControlName="fullName" value="{{ GlobalService.Name}}">
-  <div class="error" *ngIf="isFieldInvalid('fullName')" >
-    Name is required
-  </div>-->
+    <input id="fullName" type="text" formControlName="fullName" value="{{ GlobalService.Name}}">
+    <div class="error" *ngIf="isFieldInvalid('fullName')" >
+      Name is required
+    </div>-->
         </div>
 
         <div class="form-group">
@@ -41,7 +42,15 @@
             <option>Additional</option>
           </select>
         </div>
-
+       
+        <div class="form-group">
+          <label for="FacultyType">Faculty Type</label>
+          <select id="FacultyType" formControlName="FacultyType">
+            <option>Visiting/Suuporting</option>
+            <option>Permanent/Participating</option>
+           
+          </select>
+        </div>
       </div>
 
       <!-- Education -->
@@ -213,6 +222,16 @@
                 <label>Duration</label>
                 <input type="text" formControlName="duration">
               </div>
+              <div class="form-group">
+                <label>Start Date</label>
+                <input type="date" formControlName="startDate" />
+              </div>
+
+              <div class="form-group">
+                <label>End Date</label>
+                <input type="date"
+                       formControlName="endDate" />
+              </div>
               <button type="button" class="remove-btn" (click)="removeConsultancy(i)">Remove</button>
             </div>
           </div>
@@ -233,9 +252,16 @@
                 <label>Provider</label>
                 <input type="text" formControlName="provider">
               </div>
+             
               <div class="form-group">
-                <label>Date</label>
-                <input type="date" formControlName="date">
+                <label>Start Date</label>
+                <input type="date" formControlName="startDate" />
+              </div>
+
+              <div class="form-group">
+                <label>End Date</label>
+                <input type="date"
+                       formControlName="endDate" />
               </div>
               <button type="button" class="remove-btn" (click)="removeTraining(i)">Remove</button>
             </div>
@@ -245,7 +271,7 @@
       </div>
       <!--Projects-->
       <div class="form-section">
-        <h3>Projects</h3>
+        <h3>Projects Supervised</h3>
         <div formArrayName="project">
           <div *ngFor="let proj of projectArray.controls; let i = index">
             <div [formGroupName]="i" class="project-item">
@@ -262,6 +288,17 @@
               <div class="form-group">
                 <label>Duration</label>
                 <input type="text" formControlName="duration">
+              </div>
+
+              <div class="form-group">
+                <label>Start Date</label>
+                <input type="date" formControlName="startDate" />
+              </div>
+
+              <div class="form-group">
+                <label>End Date</label>
+                <input type="date"
+                       formControlName="endDate" />
               </div>
 
               <button type="button" class="remove-btn" (click)="removeProject(i)">Remove</button>
