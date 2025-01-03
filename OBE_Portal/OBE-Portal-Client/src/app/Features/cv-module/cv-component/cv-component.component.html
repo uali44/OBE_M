@@ -46,8 +46,8 @@
         <div class="form-group">
           <label for="FacultyType">Faculty Type</label>
           <select id="FacultyType" formControlName="FacultyType">
-            <option>Visiting/Suuporting</option>
-            <option>Permanent/Participating</option>
+            <option>VFM/Suuporting</option>
+            <option>PFM/Participating</option>
            
           </select>
         </div>
@@ -340,7 +340,7 @@
 
       <div class="form-actions">
         <button type="button" (click)="resetForm()">Reset</button>
-        <button type="submit" [disabled]="!cvForm.valid">Save CV</button>
+        <button type="submit" [disabled]="!cvForm.valid">Save Profile Data</button>
       </div>
     </form>
   </div>
