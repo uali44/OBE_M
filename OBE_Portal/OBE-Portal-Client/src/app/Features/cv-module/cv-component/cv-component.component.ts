@@ -258,7 +258,7 @@ export class CvComponentComponent implements OnInit {
   onSubmit(): void {
     if (this.cvForm.valid) {
       console.log(this.cvForm.value);
-      alert('CV data saved successfully!');
+      alert('Data saved successfully!');
     } else {
       alert('Please fill in all required fields');
     }
