@@ -15,11 +15,15 @@
     </div> -->
     <div class="user" data-toggle="tooltip" data-placement="bottom">
       <ul>
+
         <li class="dropdown left-dropdown">
           <a href="javascript:voide(0)" class="dropdown-toggle" data-toggle="dropdown"><i class="app-icon-Amazing-Fusion-35"></i> {{this.User_Name}} <b class="caret"></b></a>
           <ul class="dropdown-menu">
+            <li class="dropdown left-dropdown" routerLinkActive="active"><a [routerLink]="['Profile']"> <i class="icon app-icon-IconSet-1-80"></i> Edit Profile </a></li>
+
             <li><a (click)="ShowChangePassword()"><i class="fa fa-key"></i> Change Password</a></li>
             <li><a (click)="Logout()"><i class="app-icon-IconSet-1-95"></i> Logout</a></li>
+
           </ul>
         </li>
       </ul>
