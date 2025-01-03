@@ -11,16 +11,17 @@
         <h3>Personal Information</h3>
 
         <div class="form-group">
-          <label for="fullName">Full Name</label>
-          <input id="fullName" type="text" formControlName="fullName">
-          <div class="error" *ngIf="isFieldInvalid('fullName')">
-            Name is required
-          </div>
+          Name: {{this.name}}
+          <!--<label for="fullName">Full Name</label>
+  <input id="fullName" type="text" formControlName="fullName" value="{{ GlobalService.Name}}">
+  <div class="error" *ngIf="isFieldInvalid('fullName')" >
+    Name is required
+  </div>-->
         </div>
 
         <div class="form-group">
           <label for="email">Email</label>
-          <input id="email" type="email" formControlName="email">
+          <input id="email" type="email" formControlName="email" value="">
           <div class="error" *ngIf="isFieldInvalid('email')">
             Valid email is required
           </div>
@@ -31,7 +32,7 @@
           <input id="phone" type="tel" formControlName="phoneNumber">
         </div>
         <div class="form-group">
-          <label for="Role">Qualification</label>
+          <label for="Role">Role Based On Qualification</label>
           <select id="Role" formControlName="Role">
             <option>SA</option>
             <option>PA</option>
@@ -40,7 +41,7 @@
             <option>Additional</option>
           </select>
         </div>
-     
+
       </div>
 
       <!-- Education -->
@@ -75,21 +76,39 @@
       <div class="form-section">
         <h3>Work Experience</h3>
         <div formArrayName="experience">
-          <div *ngFor="let exp of experienceArray.controls; let i=index">
+          <div *ngFor="let exp of experienceArray.controls; let i = index">
             <div [formGroupName]="i" class="experience-item">
               <div class="form-group">
                 <label>Company</label>
-                <input type="text" formControlName="company">
+                <input type="text" formControlName="company" />
               </div>
 
               <div class="form-group">
                 <label>Position</label>
-                <input type="text" formControlName="position">
+                <input type="text" formControlName="position" />
               </div>
 
               <div class="form-group">
-                <label>Duration</label>
-                <input type="text" formControlName="duration">
+                <label>Start Date</label>
+                <input type="date" formControlName="startDate" />
+              </div>
+
+              <div class="form-group">
+                <label>End Date</label>
+                <input type="date"
+                       formControlName="endDate"
+                       />
+              </div>
+
+              <div class="form-group">
+                <input type="checkbox"
+                       class="checkbox" formControlName="currentlyWorking" />
+
+                <label>
+
+                  Currently Working Here
+
+                </label>
               </div>
 
               <div class="form-group">
@@ -104,31 +123,183 @@
         </div>
       </div>
 
-      <!-- Skills -->
-      <div class="form-section">
-        <h3>Role</h3>
-        <div formArrayName="roles">
-          <div *ngFor="let roles of rolesArray.controls; let i=index">
-            <div [formGroupName]="i" class="roles-item">
-             
 
+      <!--Research-->
+      <div class="form-section">
+        <h3>Research</h3>
+        <div formArrayName="research">
+          <div *ngFor="let res of researchArray.controls; let i = index">
+            <div [formGroupName]="i" class="research-item">
               <div class="form-group">
-                <label>Level</label>
-                <select formControlName="level">
-                  <option>SA</option>
-                  <option>PA</option>
-                  <option>SP</option>
-                  <option>IP</option>
-                  <option>Additional</option>
-                </select>
+                <label>Title</label>
+                <input type="text" formControlName="title">
               </div>
 
-            <!--  <button type="button" class="remove-btn" (click)="removeRole(i)">Remove</button>-->
+              <div class="form-group">
+                <label>Field</label>
+                <input type="text" formControlName="field">
+              </div>
+
+              <div class="form-group">
+                <label>URL</label>
+                <input type="text" formControlName="status">
+              </div>
+
+              <button type="button" class="remove-btn" (click)="removeResearch(i)">Remove</button>
             </div>
           </div>
-          <button type="button" class="add-btn" (click)="addRole()">Add Role</button>
+          <button type="button" class="add-btn" (click)="addResearch()">Add Research</button>
         </div>
       </div>
+      <!--Ongoing research-->
+      <div class="form-section">
+        <h3>Ongoing Research</h3>
+        <div formArrayName="ongoingResearch">
+          <div *ngFor="let res of ongoingResearchArray.controls; let i = index">
+            <div [formGroupName]="i" class="ongoing-research-item">
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" formControlName="title">
+              </div>
+              <div class="form-group">
+                <label>Field</label>
+                <input type="text" formControlName="field">
+              </div>
+              <div class="form-group">
+                <label>Start Date</label>
+                <input type="date" formControlName="startDate">
+              </div>
+              <button type="button" class="remove-btn" (click)="removeOngoingResearch(i)">Remove</button>
+            </div>
+          </div>
+          <button type="button" class="add-btn" (click)="addOngoingResearch()">Add Ongoing Research</button>
+        </div>
+      </div>
+      <!--Research Group-->
+      <div class="form-section">
+        <h3>Research Group</h3>
+        <div formArrayName="Researchgroup">
+          <div *ngFor="let group of researchGroupArray.controls; let i = index">
+            <div [formGroupName]="i" class="research-group-item">
+              <div class="form-group">
+                <label>Group Name</label>
+                <input type="text" formControlName="groupName">
+              </div>
+              <div class="form-group">
+                <label>Role</label>
+                <input type="text" formControlName="role">
+              </div>
+              <button type="button" class="remove-btn" (click)="removeResearchGroup(i)">Remove</button>
+            </div>
+          </div>
+          <button type="button" class="add-btn" (click)="addResearchGroup()">Add Research Group</button>
+        </div>
+      </div>
+      <!--Consultancies-->
+      <div class="form-section">
+        <h3>Consultancies</h3>
+        <div formArrayName="consultancies">
+          <div *ngFor="let consultancy of consultanciesArray.controls; let i = index">
+            <div [formGroupName]="i" class="consultancy-item">
+              <div class="form-group">
+                <label>Client</label>
+                <input type="text" formControlName="client">
+              </div>
+              <div class="form-group">
+                <label>Project</label>
+                <input type="text" formControlName="project">
+              </div>
+              <div class="form-group">
+                <label>Duration</label>
+                <input type="text" formControlName="duration">
+              </div>
+              <button type="button" class="remove-btn" (click)="removeConsultancy(i)">Remove</button>
+            </div>
+          </div>
+          <button type="button" class="add-btn" (click)="addConsultancy()">Add Consultancy</button>
+        </div>
+      </div>
+      <!--Training-->
+      <div class="form-section">
+        <h3>Training</h3>
+        <div formArrayName="training">
+          <div *ngFor="let train of trainingArray.controls; let i = index">
+            <div [formGroupName]="i" class="training-item">
+              <div class="form-group">
+                <label>Training Name</label>
+                <input type="text" formControlName="trainingName">
+              </div>
+              <div class="form-group">
+                <label>Provider</label>
+                <input type="text" formControlName="provider">
+              </div>
+              <div class="form-group">
+                <label>Date</label>
+                <input type="date" formControlName="date">
+              </div>
+              <button type="button" class="remove-btn" (click)="removeTraining(i)">Remove</button>
+            </div>
+          </div>
+          <button type="button" class="add-btn" (click)="addTraining()">Add Training</button>
+        </div>
+      </div>
+      <!--Projects-->
+      <div class="form-section">
+        <h3>Projects</h3>
+        <div formArrayName="project">
+          <div *ngFor="let proj of projectArray.controls; let i = index">
+            <div [formGroupName]="i" class="project-item">
+              <div class="form-group">
+                <label>Project Name</label>
+                <input type="text" formControlName="projectName">
+              </div>
+
+              <div class="form-group">
+                <label>Client</label>
+                <input type="text" formControlName="client">
+              </div>
+
+              <div class="form-group">
+                <label>Duration</label>
+                <input type="text" formControlName="duration">
+              </div>
+
+              <button type="button" class="remove-btn" (click)="removeProject(i)">Remove</button>
+            </div>
+          </div>
+          <button type="button" class="add-btn" (click)="addProject()">Add Project</button>
+        </div>
+      </div>
+      <!--Guest Speaker Sessions-->
+      <div class="form-section">
+        <h3>Guest Speaker Sessions</h3>
+        <div formArrayName="GuesstSpeaker">
+          <div *ngFor="let gs of GuestSpeakerArray.controls; let i = index">
+            <div [formGroupName]="i" class="guest-speaker-item">
+              <div class="form-group">
+                <label>Event</label>
+                <input type="text" formControlName="event">
+              </div>
+
+              <div class="form-group">
+                <label>Topic</label>
+                <input type="text" formControlName="topic">
+              </div>
+
+              <div class="form-group">
+                <label>Date</label>
+                <input type="date" formControlName="date">
+              </div>
+
+              <button type="button" class="remove-btn" (click)="removeGuestSpeaker(i)">Remove</button>
+            </div>
+          </div>
+          <button type="button" class="add-btn" (click)="addGuestSpeaker()">Add Guest Speaker Session</button>
+        </div>
+      </div>
+
+
+
 
       <div class="form-actions">
         <button type="button" (click)="resetForm()">Reset</button>
