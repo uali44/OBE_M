@@ -269,5 +269,12 @@ export class CvComponentComponent implements OnInit {
     this.educationArray.clear();
     this.experienceArray.clear();
     this.rolesArray.clear();
+    this.researchArray.clear();
+    this.consultanciesArray.clear();
+    this.GuestSpeakerArray.clear();
+    this.ongoingResearchArray.clear();
+    this.projectArray.clear();
+    this.researchGroupArray.clear();
+    this.trainingArray.clear();
   }
 }
