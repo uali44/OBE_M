@@ -154,7 +154,7 @@ export class CvComponentComponent implements OnInit {
     const researchs = this.fb.group({
       title: ['', Validators.required],
       field: ['', Validators.required],
-      status: ['', Validators.required]
+      publishedURL: ['', Validators.required]
     });
 
     this.researchArray.push(researchs);
