@@ -37,128 +37,125 @@
 
     <form [formGroup]="cvForm" (ngSubmit)="onSubmit()">
       <!-- Personal Information -->
-      <div class="form-section">
-        <h3>Personal Information</h3>
+      <!--<div class="form-section">
+    <h3>Personal Information</h3>
 
-        <div class="form-group">
-          <h2> Name: </h2>
-          <h3>    {{this.name}}</h3>
-          <!--<label for="fullName">Full Name</label>
-          <input id="fullName" type="text" formControlName="fullName" value="{{ GlobalService.Name}}">
-          <div class="error" *ngIf="isFieldInvalid('fullName')" >
-            Name is required
-          </div>-->
-        </div>
+    <div class="form-group">
+      <h2> Name: </h2>
+      <h3>    {{this.name}}</h3>-->
+      <!--<label for="fullName">Full Name</label>
+  <input id="fullName" type="text" formControlName="fullName" value="{{ GlobalService.Name}}">
+  <div class="error" *ngIf="isFieldInvalid('fullName')" >
+    Name is required
+  </div>-->
+      <!--</div>
 
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input id="email" type="email" formControlName="email" value="">
-          <div class="error" *ngIf="isFieldInvalid('email')">
-            Valid email is required
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="phone">Phone Number</label>
-          <input id="phone" type="tel" formControlName="phoneNumber">
-        </div>
-        <div class="form-group">
-          <label for="Role">Role Based On Qualification</label>
-          <select id="Role" formControlName="Role">
-            <option>SA</option>
-            <option>PA</option>
-            <option>SP</option>
-            <option>IP</option>
-            <option>Additional</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="FacultyType">Faculty Type</label>
-          <select id="FacultyType" formControlName="FacultyType">
-            <option>VFM/Suuporting</option>
-            <option>PFM/Participating</option>
-
-          </select>
-        </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" value="">
+      <div class="error" *ngIf="isFieldInvalid('email')">
+        Valid email is required
       </div>
+    </div>
 
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input id="phone" type="tel" formControlName="phoneNumber">
+    </div>
+    <div class="form-group">
+      <label for="Role">Role Based On Qualification</label>
+      <select id="Role" formControlName="Role">
+        <option>SA</option>
+        <option>PA</option>
+        <option>SP</option>
+        <option>IP</option>
+        <option>Additional</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="FacultyType">Faculty Type</label>
+      <select id="FacultyType" formControlName="FacultyType">
+        <option>VFM/Suuporting</option>
+        <option>PFM/Participating</option>
+
+      </select>
+    </div>
+  </div>-->
       <!-- Education -->
-      <div class="form-section">
-        <h3>Education</h3>
-        <div formArrayName="education">
-          <div *ngFor="let edu of educationArray.controls; let i=index">
-            <div [formGroupName]="i" class="education-item">
-              <div class="form-group">
-                <label>Institution</label>
-                <input type="text" formControlName="institution">
-              </div>
-
-              <div class="form-group">
-                <label>Degree</label>
-                <input type="text" formControlName="degree">
-              </div>
-
-              <div class="form-group">
-                <label>Year</label>
-                <input type="number" formControlName="year">
-              </div>
-
-              <button type="button" class="remove-btn" (click)="removeEducation(i)">Remove</button>
-            </div>
-          </div>
-          <button type="button" class="add-btn" (click)="addEducation()">Add Education</button>
-        </div>
+      <div class="education-section">
+        <h2>Education</h2>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Institution</th>
+              <th>Degree</th>
+              <th>Field</th>
+              <th>Year</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!--<tr *ngFor="let edu of education">-->
+            <tr>
+              <td><!--{{ edu.institution }}--></td>
+              <td><!--{{ edu.degree }}--></td>
+              <td><!--{{ edu.field }}--></td>
+              <td><!--{{ edu.year }}--></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <!-- Experience -->
-      <div class="form-section">
-        <h3>Work Experience</h3>
-        <div formArrayName="experience">
-          <div *ngFor="let exp of experienceArray.controls; let i = index">
-            <div [formGroupName]="i" class="experience-item">
-              <div class="form-group">
-                <label>Company</label>
-                <input type="text" formControlName="company" />
-              </div>
 
-              <div class="form-group">
-                <label>Position</label>
-                <input type="text" formControlName="position" />
-              </div>
 
-              <div class="form-group">
-                <label>Start Date</label>
-                <input type="date" formControlName="startDate" />
-              </div>
-
-              <div class="form-group">
-                <label>End Date</label>
-                <input type="date"
-                       formControlName="endDate" />
-              </div>
-
-              <div class="form-group">
-                <input type="checkbox"
-                       class="checkbox" formControlName="currentlyWorking" />
-
-                <label>
-
-                  Currently Working Here
-
-                </label>
-              </div>
-
-              <div class="form-group">
-                <label>Description</label>
-                <textarea formControlName="description" rows="3"></textarea>
-              </div>
-
-              <button type="button" class="remove-btn" (click)="removeExperience(i)">Remove</button>
-            </div>
+      <!--<div class="form-section">
+    <h3>Education</h3>
+    <div formArrayName="education">
+      <div *ngFor="let edu of educationArray.controls; let i=index">
+        <div [formGroupName]="i" class="education-item">
+          <div class="form-group">
+            <label>Institution</label>
+            <input type="text" formControlName="institution">
           </div>
-          <button type="button" class="add-btn" (click)="addExperience()">Add Experience</button>
+
+          <div class="form-group">
+            <label>Degree</label>
+            <input type="text" formControlName="degree">
+          </div>
+
+          <div class="form-group">
+            <label>Year</label>
+            <input type="number" formControlName="year">
+          </div>
+
+          <button type="button" class="remove-btn" (click)="removeEducation(i)">Remove</button>
         </div>
+      </div>
+      <button type="button" class="add-btn" (click)="addEducation()">Add Education</button>
+    </div>
+  </div>-->
+      <!-- Experience -->
+      <div class="experience-section">
+        <h2>Experience</h2>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Company</th>
+              <th>Position</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+            </tr>
+          </thead>
+          <tbody>
+           <!-- <tr *ngFor="let exp of experience">-->
+            <tr>
+              <td><!--{{ exp.company }}--></td>
+              <td><!--{{ exp.position }}--></td>
+              <td><!--{{ exp.startDate }}--></td>
+              <td><!--{{ exp.endDate }}--></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
 

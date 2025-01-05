@@ -118,7 +118,7 @@ let CvComponentComponent = class CvComponentComponent {
         const researchs = this.fb.group({
             title: ['', Validators.required],
             field: ['', Validators.required],
-            status: ['', Validators.required]
+            publishedURL: ['', Validators.required]
         });
         this.researchArray.push(researchs);
     }
@@ -198,7 +198,7 @@ let CvComponentComponent = class CvComponentComponent {
     onSubmit() {
         if (this.cvForm.valid) {
             console.log(this.cvForm.value);
-            alert('CV data saved successfully!');
+            alert('Data saved successfully!');
         }
         else {
             alert('Please fill in all required fields');
@@ -209,6 +209,13 @@ let CvComponentComponent = class CvComponentComponent {
         this.educationArray.clear();
         this.experienceArray.clear();
         this.rolesArray.clear();
+        this.researchArray.clear();
+        this.consultanciesArray.clear();
+        this.GuestSpeakerArray.clear();
+        this.ongoingResearchArray.clear();
+        this.projectArray.clear();
+        this.researchGroupArray.clear();
+        this.trainingArray.clear();
     }
 };
 CvComponentComponent = __decorate([
