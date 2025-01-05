@@ -1,5 +1,35 @@
 <div class="tab-content main-tab-content dragging-area" style="padding:10px;">
 
+  <div class="user-profile">
+    <h2>User Profile</h2>
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td><strong>Name:</strong></td>
+          <td>{{ this.name }}</td>
+        </tr>
+        <tr>
+          <td><strong>Email:</strong></td>
+          <td><!--{{ user.email }}--></td>
+        </tr>
+        <tr>
+          <td><strong>Phone Number:</strong></td>
+          <td><!--{{ user.phoneNumber }}--></td>
+        </tr>
+        <tr>
+          <td><strong>Faculty Type:</strong></td>
+          <td><!--{{ user.facultyType }}--></td>
+        </tr>
+        <tr>
+          <td><strong>Role:</strong></td>
+          <td><!--{{ user.role }}--></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
   <!-- cv-builder.component.html -->
   <!-- cv-component.component.html -->
   <div class="cv-form-container">
@@ -14,10 +44,10 @@
           <h2> Name: </h2>
           <h3>    {{this.name}}</h3>
           <!--<label for="fullName">Full Name</label>
-    <input id="fullName" type="text" formControlName="fullName" value="{{ GlobalService.Name}}">
-    <div class="error" *ngIf="isFieldInvalid('fullName')" >
-      Name is required
-    </div>-->
+          <input id="fullName" type="text" formControlName="fullName" value="{{ GlobalService.Name}}">
+          <div class="error" *ngIf="isFieldInvalid('fullName')" >
+            Name is required
+          </div>-->
         </div>
 
         <div class="form-group">
@@ -42,13 +72,13 @@
             <option>Additional</option>
           </select>
         </div>
-       
+
         <div class="form-group">
           <label for="FacultyType">Faculty Type</label>
           <select id="FacultyType" formControlName="FacultyType">
             <option>VFM/Suuporting</option>
             <option>PFM/Participating</option>
-           
+
           </select>
         </div>
       </div>
@@ -105,8 +135,7 @@
               <div class="form-group">
                 <label>End Date</label>
                 <input type="date"
-                       formControlName="endDate"
-                       />
+                       formControlName="endDate" />
               </div>
 
               <div class="form-group">
@@ -252,7 +281,7 @@
                 <label>Provider</label>
                 <input type="text" formControlName="provider">
               </div>
-             
+
               <div class="form-group">
                 <label>Start Date</label>
                 <input type="date" formControlName="startDate" />
