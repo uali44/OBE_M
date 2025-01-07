@@ -8,6 +8,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using OBE_Portal.Core.Context;
 using OBE_Portal.Core.Entities.Profile;
+using OBE_Portal.Core.Entities.Login;
 
 
 namespace OBE_Portal.Infrastructure.Implementations.Profile
@@ -23,30 +24,31 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
 
         async Task<bool> IProfile.AddFacultyData(List<profileData> Request)
         {
+          
             try
             {
+                
                 using (SqlCommand comm = new SqlCommand())
                 {
-                    int response = 0;
-                    for (int i = 0; i < Request.Count; i++)
-                    {
-                        var CLO_Title = new SqlParameter("@CLO_Title", Request[i].CLO_Title);
-                        var Description = new SqlParameter("@Description", Request[i].Description);
-                        var Selected_Skill_ID = new SqlParameter("@Selected_Skill_ID", Request[i].Selected_Skill_ID);
-                        var Selected_Skill_Level_ID = new SqlParameter("@Selected_Skill_Level_ID", Request[i].Selected_Skill_Level_ID);
-                       
-                        response = await _context.Database.ExecuteSqlRawAsync($"EXEC SP_Add_Course_CLOS @CLO_Title,@Description,@Selected_Skill_ID,@Selected_Skill_Level_ID,@Created_By,@OfferedCourseID,@Selected_PLO_ID",
-                            CLO_Title, Description, Selected_Skill_ID, Selected_Skill_Level_ID, Created_By, OfferedCourseID, Selected_PLO_ID
-                            );
-                    }
-                    if (response > 0)
+                    
+                    
+                        var FacultyMEmberID = new SqlParameter("@FacultyMemberID",Request[0].FacultyMemberID );
+                        var Phone = new SqlParameter("@Phone", Request[0].Phone);
+                        var FacultyType = new SqlParameter("@FacultyType", Request[0].FacultyType);
+                        var FacultyRole = new SqlParameter("@FacultyRole", Request[0].FacultyRole);
+
+                       var response = await _context.Database.ExecuteSqlRawAsync($"EXEC AddFacultyDetail @FacultyMemberID,@Phone,@FacultyType,@FacultyRole", FacultyMEmberID, Phone, FacultyType, FacultyRole);
+                    if (response ==0 || response==1)
                         return true;
                     else
                         return false;
+                
+                   
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine($"Error in AddFacultyData: {ex}");
                 throw;
             }
 
