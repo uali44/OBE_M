@@ -8,7 +8,7 @@ namespace OBE_Portal.Core.Entities.Profile
 {
    public class profileData
     {
-        public string FacultyMemberID { get; set; }
+        public long FacultyMemberID { get; set; }
         public string Phone { get; set; }
         public string FacultyType { get; set; }
         public string FacultyRole { get; set; }

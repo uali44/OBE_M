@@ -22,7 +22,7 @@ export class ProfileComponent implements OnInit {
   username: string;
 
   faculty: any = {
-    FacultyMemberID: Number,
+    FacultyMemberID: 0,
     phone: '',
     FacultyType: '',
     FacultyRole: '',
@@ -49,7 +49,7 @@ export class ProfileComponent implements OnInit {
     console.log(this.faculty);
     this.faculty.FacultyMemberID = GlobalService.FacultyMember_ID;
     this.ngxService.start();
-    this.ProfileService.AddFacultyData(this.faculty).
+    this.ProfileService.AddFacultyData([this.faculty]).
       subscribe(
         data => {
           this.ngxService.stop();

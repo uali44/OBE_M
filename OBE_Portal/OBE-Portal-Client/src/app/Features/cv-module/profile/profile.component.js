@@ -12,7 +12,7 @@ let ProfileComponent = class ProfileComponent {
         this.pagerService = pagerService;
         this.msgForDashboard = msgForDashboard;
         this.faculty = {
-            FacultyMemberID: Number,
+            FacultyMemberID: 0,
             phone: '',
             FacultyType: '',
             FacultyRole: '',
@@ -27,7 +27,7 @@ let ProfileComponent = class ProfileComponent {
         console.log(this.faculty);
         this.faculty.FacultyMemberID = GlobalService.FacultyMember_ID;
         this.ngxService.start();
-        this.ProfileService.AddFacultyData(this.faculty).
+        this.ProfileService.AddFacultyData([this.faculty]).
             subscribe(data => {
             this.ngxService.stop();
             if (data) {

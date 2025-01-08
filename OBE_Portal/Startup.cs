@@ -43,6 +43,8 @@ using OBE_Portal.Infrastructure.Interfaces.Setting;
 using OBE_Portal.Infrastructure.Implementations.Setting;
 using OBE_Portal.Infrastructure.Interfaces.IndirectAssessment;
 using OBE_Portal.Infrastructure.Implementations.IndirectAssessment;
+using OBE_Portal.Infrastructure.Interfaces.Profile;
+using OBE_Portal.Infrastructure.Implementations.Profile;
 
 namespace OBE_Portal
 {
@@ -96,6 +98,7 @@ namespace OBE_Portal
             services.AddTransient<ICompiledResult, CompiledResult>();
             services.AddTransient<ICourseSearch, CourseSearch>();
             services.AddTransient<IReport, Report>();
+            services.AddTransient<IProfile, Profile>();
             services.AddTransient<IStudent, Student>();
             services.AddTransient<ISetting, Setting>();
             services.AddTransient<IIndirectAssessment, IndirectAssessment>();

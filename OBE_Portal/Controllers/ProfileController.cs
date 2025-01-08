@@ -26,6 +26,8 @@ namespace OBE_Portal.Controllers
         {
             try
             {
+                if (Request == null || !Request.Any())
+                    return BadRequest("Invalid input data");
                 if (Request != null)
                 {
                     var respone = await profile.AddFacultyData(Request).ConfigureAwait(true);
