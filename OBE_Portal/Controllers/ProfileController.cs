@@ -34,7 +34,7 @@ namespace OBE_Portal.Controllers
                     if (respone)
                         return Ok(respone);
                     else
-                        return Ok(false);
+                        return Ok(respone);
                 }
                 else
                     return Ok(false);
@@ -45,6 +45,89 @@ namespace OBE_Portal.Controllers
             }
         }
 
+
+        [HttpPost("AddFacultyEducation")]
+        public async Task<IActionResult> AddFacultyEducation([FromBody] List<education> Request)
+        {
+            try
+            {
+                if (Request == null || !Request.Any())
+                    return BadRequest("Invalid input data");
+                if (Request != null)
+                {
+                    var respone = await profile.AddFacultyEducation(Request).ConfigureAwait(true);
+                    if (respone)
+                        return Ok(respone);
+                    else
+                        return Ok(respone);
+                }
+                else
+                    return Ok(false);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost("AddFacultyExperience")]
+        public async Task<IActionResult> AddFacultyExperience([FromBody] List<experience> Request)
+        {
+            try
+            {
+                if (Request == null || !Request.Any())
+                    return BadRequest("Invalid input data");
+                if (Request != null)
+                {
+                    var respone = await profile.AddFacultyExperience(Request).ConfigureAwait(true);
+                    if (respone)
+                        return Ok(respone);
+                    else
+                        return Ok(respone);
+                }
+                else
+                    return Ok(false);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+        [HttpGet("GetActivities")]
+        public async Task<IActionResult> GetActivities()
+        {
+            try
+            {
+                var respone = await profile.GetActivities().ConfigureAwait(true);
+                if (respone != null)
+                    return Ok(respone);
+                else
+                    return Ok(respone);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost("GetActivitySubDetails")]
+        public async Task<IActionResult> GetActivitySubDetails([FromBody] long ActivityID)
+        {
+            try
+            {
+                var respone = await profile.GetActivitySubDetails(ActivityID).ConfigureAwait(true);
+                if (respone != null)
+                    return Ok(respone);
+                else
+                    return Ok(respone);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
     }
 }

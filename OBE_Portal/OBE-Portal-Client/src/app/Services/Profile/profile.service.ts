@@ -17,4 +17,19 @@ export class ProfileService {
   AddFacultyData<T>(data: any): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'Profile/AddFacultyData', data);
   }
+
+  AddFacultyEducation<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Profile/AddFacultyEducation', data);
+  }
+  AddFacultyExperience<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Profile/AddFacultyExperience', data);
+  }
+  GetActivities<T>(): Observable<any> {
+    return this.http.get<any>(this.baseUrl + 'Profile/GetActivities');
+
+  }
+  GetActivitySubDetails <T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Profile/GetActivitySubDetails', data);
+  }
+
 }

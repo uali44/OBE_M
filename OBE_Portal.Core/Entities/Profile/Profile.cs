@@ -14,4 +14,36 @@ namespace OBE_Portal.Core.Entities.Profile
         public string FacultyRole { get; set; }
 
     }
+    public class education
+    {
+        public int FacultyMemberID { get; set; }
+        public string EduInstitute { get; set; }
+        public string degree { get; set; }
+        public string Field { get; set; }
+        public int year { get; set; }
+
+
+    }
+
+    public class experience
+    {
+        public int FacultyMemberID { get; set; }
+        public string Position { get; set; }
+        public string Company { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+    }
+    public class ActivityList
+    {
+        public int ActivityID { get; set; }
+        public string ActivityName { get; set; }
+        public string ActivityType { get; set; }
+    }
+    public class ActivitySubDetail
+    {
+        public int ActivityID { get; set; }
+        public string SubDetail { get; set; }
+        public string SubType { get; set; }
+    }
+
 }

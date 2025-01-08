@@ -1,6 +1,48 @@
 <div class="tab-content main-tab-content dragging-area" style="padding:10px;">
 
 
+  <div class="modal" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="dynamicModalLabel">Dynamic Modal</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="container">
+          <form [formGroup]="activityForm" (ngSubmit)="onSubmit()">
+            <!-- Select Activity -->
+            <div class="form-group">
+              <label for="activity">Select Activity</label>
+              <select id="activity" formControlName="activity" (change)="onActivityChange($event.target.value)" class="form-control">
+                <option value="" disabled>Select an Activity</option>
+                <option *ngFor="let activity of activities" [value]="activity.ActivityID">
+                  {{ activity.ActivityName }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Dynamic Fields -->
+            <div *ngFor="let field of fields" class="form-group">
+              <label [for]="field.FieldName">{{ field.FieldName }}</label>
+              <input [type]="field.FieldType"
+                     [id]="field.FieldName"
+                     class="form-control"
+                     [formControlName]="field.FieldName"
+                     [placeholder]="'Enter ' + field.FieldName" />
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary" [disabled]="!activityForm.valid">Submit</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+
 
   <app-profile></app-profile>
 
@@ -17,7 +59,7 @@
 
 
 
- 
+
 
 
 

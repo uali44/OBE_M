@@ -28,7 +28,8 @@ export class ProfileComponent implements OnInit {
     FacultyRole: '',
   };
 
-  FacultyType: string[] = ['Permanent', 'Visiting', 'Adjunct'];
+  FacultyType: string[] = ['Permanent/Participating', 'Visiting/Supporting'];
+  FacultyRole: string[] = ['SA','PA','SP','IP','Additional'];
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -53,15 +54,16 @@ export class ProfileComponent implements OnInit {
       subscribe(
         data => {
           this.ngxService.stop();
-          if (data) {
-            this.toastr.success("CLOs added successfully", "Success");
+         /* if (data) {*/
+            this.toastr.success("Profile Updated successfully", "Success");
             $("#addFacultyModal").modal("hide");
             
            // this.msgForDashboard.UpdateCourseDetailsCounts(GlobalService.TempFacultyMember_ID.toString());
-          }
-          else {
-            this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
-          }
+          //}
+          //else {
+          //  console.log(data);
+          //  this.toastr.error("Error occured while processing your request.", "Error");
+          //}
         },
         error => {
           this.ngxService.stop();

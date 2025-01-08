@@ -9,6 +9,7 @@ using OBE_Portal.Core.Entities.CourseSearch;
 using OBE_Portal.Core.Entities.Dashboard;
 using OBE_Portal.Core.Entities.Header;
 using OBE_Portal.Core.Entities.Login;
+using OBE_Portal.Core.Entities.Profile;
 using OBE_Portal.Core.Entities.Reports;
 using OBE_Portal.Core.Entities.Setting;
 using OBE_Portal.Core.Entities.Student;
@@ -89,6 +90,8 @@ namespace OBE_Portal.Core.Context
             modelBuilder.Entity<Roles>().HasNoKey();
             modelBuilder.Entity<GetProgramsForSelectedDepartment>().HasNoKey();
             modelBuilder.Entity<getstatus>().HasNoKey();
+            modelBuilder.Entity<ActivityList>().HasNoKey();
+            modelBuilder.Entity<ActivitySubDetail>().HasNoKey();
 
 
 
