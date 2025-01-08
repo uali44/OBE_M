@@ -112,7 +112,7 @@ namespace OBE_Portal.Controllers
             }
         }
 
-        [HttpPost("GetActivitySubDetails")]
+        [HttpGet("GetActivitySubDetails")]
         public async Task<IActionResult> GetActivitySubDetails([FromBody] long ActivityID)
         {
             try
