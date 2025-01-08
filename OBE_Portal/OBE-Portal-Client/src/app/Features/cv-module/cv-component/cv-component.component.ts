@@ -20,10 +20,12 @@ declare const $: any;
   styleUrls: ['./cv-component.component.css']
 })
 export class CvComponentComponent implements OnInit {
-  cvForm: FormGroup;
+  activityForm: FormGroup;
   name: string;
   activities: any[] = [];
+  fields: any[] = [];
   selectedActivityId: number = null;
+  
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -35,12 +37,16 @@ export class CvComponentComponent implements OnInit {
     private msgForDashboard: InterconnectedService
 
   ) {
+    this.activityForm = this.formBuilder.group({
+      activity: ['', Validators.required]
+    });
     this.initForm();
   }
 
   ngOnInit(): void {
 
     this.name = GlobalService.Name;
+    this.fetchActivities();
   }
 
   private initForm(): void {
@@ -60,23 +66,34 @@ export class CvComponentComponent implements OnInit {
   }
 
 
-  // Form field error checking methods
-  isFieldInvalid(fieldName: string): boolean {
-    const field = this.cvForm.get(fieldName);
-    return field ? (field.invalid && field.touched) : false;
+  onActivityChange(activityId: number): void {
+    this.selectedActivityId = activityId;
+    this.fetchFields(activityId);
+  }
+  
+  fetchFields(activityId: number): void {
+    this.ProfileService.GetActivitySubDetails(activityId).subscribe(
+      (data) => {
+        this.fields = data;
+
+        // Dynamically add controls to the form
+        this.fields.forEach((field) => {
+          this.activityForm.addControl(field.FieldName, this.formBuilder.control('', Validators.required));
+        });
+      },
+      (error) => {
+        console.error('Error fetching fields:', error);
+      }
+    );
   }
 
-  
-  
 
 
 
   onSubmit(): void {
-    if (this.cvForm.valid) {
-      console.log(this.cvForm.value);
-      alert('Data saved successfully!');
-    } else {
-      alert('Please fill in all required fields');
+
+    if (this.activityForm.valid) {
+      console.log(this.activityForm.value);
     }
   }
 

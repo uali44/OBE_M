@@ -95,13 +95,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }
 
       if (rf & 2) {
-        var i_r1595 = ctx.$implicit;
+        var i_r1613 = ctx.$implicit;
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpropertyInterpolate"]("value", i_r1595.InstituteID);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpropertyInterpolate"]("value", i_r1613.InstituteID);
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](i_r1595.InstituteShortName);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](i_r1613.InstituteShortName);
       }
     }
 
@@ -115,13 +115,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }
 
       if (rf & 2) {
-        var i_r1596 = ctx.$implicit;
+        var i_r1614 = ctx.$implicit;
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpropertyInterpolate"]("value", i_r1596.DepartmentID);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpropertyInterpolate"]("value", i_r1614.DepartmentID);
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](i_r1596.DepartmentName);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](i_r1614.DepartmentName);
       }
     }
 
@@ -135,13 +135,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }
 
       if (rf & 2) {
-        var i_r1597 = ctx.$implicit;
+        var i_r1615 = ctx.$implicit;
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpropertyInterpolate"]("value", i_r1597.AdmissionOpenProgramID);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpropertyInterpolate"]("value", i_r1615.AdmissionOpenProgramID);
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](i_r1597.semesterAlia);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](i_r1615.semesterAlia);
       }
     }
 
@@ -155,13 +155,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }
 
       if (rf & 2) {
-        var i_r1598 = ctx.$implicit;
+        var i_r1616 = ctx.$implicit;
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpropertyInterpolate"]("value", i_r1598.StudentID);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpropertyInterpolate"]("value", i_r1616.StudentID);
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate2"]("", i_r1598.Name, " (", i_r1598.Enrollment, " )");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate2"]("", i_r1616.Name, " (", i_r1616.Enrollment, " )");
       }
     }
 
@@ -11791,7 +11791,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
     function IndirectAssessmentsComponent_li_8_Template(rf, ctx) {
       if (rf & 1) {
-        var _r1590 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵgetCurrentView"]();
+        var _r1608 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵgetCurrentView"]();
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "li", 9);
 
@@ -11804,11 +11804,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](4, "span", 11);
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function IndirectAssessmentsComponent_li_8_Template_span_click_4_listener($event) {
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r1590);
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r1608);
 
-          var ctx_r1589 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"]();
+          var ctx_r1607 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"]();
 
-          return ctx_r1589.closeTab();
+          return ctx_r1607.closeTab();
         });
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](5, "i", 12);
@@ -12154,6 +12154,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           return this.http.post(this.baseUrl + 'CourseSearch/GetDepartment', data);
         }
       }, {
+        key: "Get_DepartmentDean",
+        value: function Get_DepartmentDean(data) {
+          return this.http.post(this.baseUrl + 'CourseSearch/GetDepartmentDean', data);
+        }
+      }, {
         key: "getFacultyMember",
         value: function getFacultyMember(data) {
           return this.http.get(this.baseUrl + 'CourseSearch/getFacultyMember?username=' + data);
@@ -12167,6 +12172,21 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         key: "Get_Intakes",
         value: function Get_Intakes(data) {
           return this.http.post(this.baseUrl + 'CourseSearch/GetIntakes', data);
+        }
+      }, {
+        key: "Get_Programs",
+        value: function Get_Programs(data) {
+          return this.http.post(this.baseUrl + 'CourseSearch/GetPrograms', data);
+        }
+      }, {
+        key: "Get_Status",
+        value: function Get_Status(data) {
+          return this.http.post(this.baseUrl + 'CourseSearch/GetStatus', data);
+        }
+      }, {
+        key: "Get_Institute_dean",
+        value: function Get_Institute_dean(data) {
+          return this.http.post(this.baseUrl + 'CourseSearch/GetInstitutedean', data);
         }
       }, {
         key: "Get_All_Semester",

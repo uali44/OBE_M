@@ -33,6 +33,7 @@
 
             <!-- Submit Button -->
             <button type="submit" class="btn btn-primary" [disabled]="!activityForm.valid">Submit</button>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">Close</button>
           </form>
         </div>
 
@@ -54,7 +55,11 @@
   <!-- cv-component.component.html -->
 
 
-
+  <div class="pull-right">
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dynamicModal">
+      Add Activiies
+    </button>
+  </div>
 
 
 
