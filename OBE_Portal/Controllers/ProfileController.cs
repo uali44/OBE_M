@@ -112,12 +112,12 @@ namespace OBE_Portal.Controllers
             }
         }
 
-        [HttpGet("GetActivitySubDetails")]
-        public async Task<IActionResult> GetActivitySubDetails([FromBody] long ActivityID)
+        [HttpPost("GetActivitySubDetails")]
+        public async Task<IActionResult> GetActivitySubDetails([FromBody] SubDetailRequest Request )
         {
             try
             {
-                var respone = await profile.GetActivitySubDetails(ActivityID).ConfigureAwait(true);
+                var respone = await profile.GetActivitySubDetails(Request.ActivityID).ConfigureAwait(true);
                 if (respone != null)
                     return Ok(respone);
                 else
@@ -128,6 +128,22 @@ namespace OBE_Portal.Controllers
                 throw;
             }
         }
+
+        [HttpPost("SaveActivityData")]
+        public async Task<IActionResult> SaveActivityData([FromBody] ActivityData activityData)
+        {
+            try
+            {
+                var response = await profile.SaveActivityData(activityData).ConfigureAwait(true);
+                return Ok(response);
+            }
+            catch (Exception )
+            {
+                throw;
+            }
+        }
+
+
 
     }
 }

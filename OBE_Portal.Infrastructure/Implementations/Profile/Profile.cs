@@ -11,11 +11,12 @@ using OBE_Portal.Core.Entities.Profile;
 using OBE_Portal.Core.Entities.Login;
 using OBE_Portal.Core.Entities.CourseSearch;
 using OBE_Portal.Infrastructure.Interfaces.CourseSearch;
-
+using System.Data;
+using System.Data.SqlClient;
 
 namespace OBE_Portal.Infrastructure.Implementations.Profile
 {
-   public class Profile :  IProfile
+    public class Profile : IProfile
     {
         private readonly ApplicationDbContext _context;
         public Profile(ApplicationDbContext context)
@@ -26,10 +27,10 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
 
         async Task<bool> IProfile.AddFacultyData(List<profileData> Request)
         {
-          
+
             try
             {
-                
+
                 using (SqlCommand comm = new SqlCommand())
                 {
                     int response = 0;
@@ -41,14 +42,14 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                         var FacultyType = new SqlParameter("@FacultyType", Request[i].FacultyType);
                         var FacultyRole = new SqlParameter("@FacultyRole", Request[i].FacultyRole);
 
-                         response = await _context.Database.ExecuteSqlRawAsync($"EXEC AddFacultyDetail @FacultyMemberID,@Phone,@FacultyType,@FacultyRole", FacultyMEmberID, Phone, FacultyType, FacultyRole);
+                        response = await _context.Database.ExecuteSqlRawAsync($"EXEC AddFacultyDetail @FacultyMemberID,@Phone,@FacultyType,@FacultyRole", FacultyMEmberID, Phone, FacultyType, FacultyRole);
                     }
-                        if (response ==0 || response==1)
+                    if (response == 0 || response == 1)
                         return true;
                     else
                         return false;
-                
-                   
+
+
                 }
             }
             catch (Exception ex)
@@ -78,11 +79,11 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                         var Year = new SqlParameter("@year", Request[i].year);
 
 
-                       response= await _context.Database.ExecuteSqlRawAsync(
-                              "EXEC AddFacultyEducation @FacultyMemberID, @EduInstitute, @degree, @Field, @year",
-                              FacultyMemberID, EduInstitute, Degree, Field, Year);
+                        response = await _context.Database.ExecuteSqlRawAsync(
+                               "EXEC AddFacultyEducation @FacultyMemberID, @EduInstitute, @degree, @Field, @year",
+                               FacultyMemberID, EduInstitute, Degree, Field, Year);
                     }
-                    if (response >0)
+                    if (response > 0)
                         return true;
                     else
                         return false;
@@ -121,8 +122,8 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                         await _context.Database.ExecuteSqlRawAsync(
        "EXEC AddFacultyExperience @FacultyMemberID, @Position, @Company, @StartDate, @EndDate",
        facultyMemberIdParam, positionParam, companyParam, startDateParam, endDateParam);
-                    
-                }
+
+                    }
                     if (response > 0)
                         return true;
                     else
@@ -188,9 +189,52 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
         }
 
 
-    }
+         async Task<bool> IProfile.SaveActivityData(ActivityData activityData)
+        {
+            using (SqlCommand comm = new SqlCommand())
+            {
+                try
+                {
+                    var detailIDParam = new SqlParameter("@DetailID", SqlDbType.Int)
+                    {
+                        Direction = ParameterDirection.Output
+                    };
 
+
+                    // Insert into FacultyActivity
+                    var facultyActivityId = await _context.Database.ExecuteSqlRawAsync(
+                        "EXEC AddFacultyActivity @FacultyID, @ActivityID, @DetailID OUT",
+                        new SqlParameter("@FacultyID", activityData.FacultyID),
+                        new SqlParameter("@ActivityID", activityData.ActivityID),
+                        detailIDParam
+                    );
+                    int detailID = (int)detailIDParam.Value;
+                    // Insert into FacultyActivityDetail
+                    foreach (var detail in activityData.Details)
+                    {
+                        await _context.Database.ExecuteSqlRawAsync(
+                            "EXEC AddFacultyActivityDetail @DetailID, @DetailName, @DetailValue",
+                            new SqlParameter("@DetailID", detailID),
+                            new SqlParameter("@DetailName", detail.DetailName),
+                            new SqlParameter("@DetailValue", detail.DetailValue)
+                        );
+                    }
+
+
+                    return true;
+                }
+                catch
+                {
+
+                    throw;
+                }
+            }
+        }
+
+
+    }
+}
   
 
 
-}
+

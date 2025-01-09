@@ -23,12 +23,12 @@
 
             <!-- Dynamic Fields -->
             <div *ngFor="let field of fields" class="form-group">
-              <label [for]="field.FieldName">{{ field.FieldName }}</label>
-              <input [type]="field.FieldType"
-                     [id]="field.FieldName"
+              <label [for]="field.subDtail">{{ field.subDetail }}</label>
+              <input [type]="field.SubType"
+                     [id]="field.subDetail"
                      class="form-control"
-                     [formControlName]="field.FieldName"
-                     [placeholder]="'Enter ' + field.FieldName" />
+                     [formControlName]="field.subDetail"
+                     [placeholder]="'Enter ' + field.subDetail" />
             </div>
 
             <!-- Submit Button -->

@@ -42,8 +42,26 @@ namespace OBE_Portal.Core.Entities.Profile
     public class ActivitySubDetail
     {
         public int ActivityID { get; set; }
-        public string SubDetail { get; set; }
+        public string subDetail { get; set; }
         public string SubType { get; set; }
     }
+    public class SubDetailRequest
+    {
+       public long ActivityID { get; set; }
+    }
+
+    public class ActivityData
+    {
+        public int FacultyID { get; set; }
+        public int ActivityID { get; set; }
+        public List<ActivityDetail> Details { get; set; }
+    }
+
+    public class ActivityDetail
+    {
+        public string DetailName { get; set; }
+        public string DetailValue { get; set; }
+    }
+
 
 }

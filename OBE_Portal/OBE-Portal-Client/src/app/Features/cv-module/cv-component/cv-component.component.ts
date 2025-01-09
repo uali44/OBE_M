@@ -25,7 +25,7 @@ export class CvComponentComponent implements OnInit {
   activities: any[] = [];
   fields: any[] = [];
   selectedActivityId: number = null;
-  
+
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -50,7 +50,7 @@ export class CvComponentComponent implements OnInit {
   }
 
   private initForm(): void {
-   
+
   }
 
 
@@ -66,19 +66,29 @@ export class CvComponentComponent implements OnInit {
   }
 
 
-  onActivityChange(activityId: number): void {
-    this.selectedActivityId = activityId;
-    this.fetchFields(activityId);
-  }
-  
-  fetchFields(activityId: number): void {
-    this.ProfileService.GetActivitySubDetails(activityId).subscribe(
-      (data) => {
-        this.fields = data;
+  onActivityChange(val): void {
 
+    this.selectedActivityId = val;
+    Object.keys(this.activityForm.controls).forEach(key => {
+      if (key !== 'activity') { 
+        this.activityForm.removeControl(key);
+      }
+    });
+
+    this.fetchFields(val);
+    this.activityForm.controls['activity'].setValue(this.selectedActivityId);
+  }
+
+  fetchFields(val): void {
+    const requestdata = { ActivityID: val }
+    this.ProfileService.GetActivitySubDetails(requestdata).subscribe(
+      (data) => {
+
+        this.fields = data;
+        console.log(this.fields);
         // Dynamically add controls to the form
         this.fields.forEach((field) => {
-          this.activityForm.addControl(field.FieldName, this.formBuilder.control('', Validators.required));
+          this.activityForm.addControl(field.subDetail, this.formBuilder.control('', Validators.required));
         });
       },
       (error) => {
@@ -92,12 +102,28 @@ export class CvComponentComponent implements OnInit {
 
   onSubmit(): void {
 
-    if (this.activityForm.valid) {
-      console.log(this.activityForm.value);
+    if (this.activityForm.invalid) {
+      return;
     }
+
+    const activityData = {
+      FacultyID: GlobalService.FacultyMember_ID, // This should come from your context
+      ActivityID: this.selectedActivityId,
+      Details: this.fields.map((field) => ({
+        DetailName: field.subDetail,
+        DetailValue: this.activityForm.value[field.subDetail],
+      })),
+    };
+
+    this.ProfileService.SaveActivity(activityData).subscribe((response) => {
+      if (response) {
+        this.toastr.success('Activity saved successfully.');
+        this.activityForm.reset();
+      } else {
+        this.toastr.error('Failed to save activity.');
+      }
+    });
   }
 
-  resetForm(): void {
-   
-  }
+
 }

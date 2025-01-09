@@ -28,8 +28,13 @@ export class ProfileService {
     return this.http.get<any>(this.baseUrl + 'Profile/GetActivities');
 
   }
-  GetActivitySubDetails <T>(data: any): Observable<any> {
+  GetActivitySubDetails<T>(data: any): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'Profile/GetActivitySubDetails', data);
   }
+
+  SaveActivity<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Profile/SaveActivityData', data);
+  }
+
 
 }
