@@ -54,6 +54,35 @@
   <!-- cv-builder.component.html -->
   <!-- cv-component.component.html -->
 
+  <div *ngFor="let activity of groupedActivities">
+    <!-- Activity Title -->
+    <h2>{{ activity.ActivityName }}</h2>
+
+    <!-- Activity Details Table -->
+    <table class="table table-bordered table-hover table-theme margin-b30">
+      <thead>
+        <tr>
+          <th *ngFor="let detailName of getDetailNames(activity)">
+            {{ detailName }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let detail of activity.Details">
+          <td *ngFor="let detailName of getDetailNames(activity)">
+            {{ detail.SubDetails[detailName] || 'N/A' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="pull-right">
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dynamicModal">
+        Add {{ activity.ActivityName }}
+      </button>
+    </div>
+  </div>
+
+
 
   <div class="pull-right">
     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dynamicModal">

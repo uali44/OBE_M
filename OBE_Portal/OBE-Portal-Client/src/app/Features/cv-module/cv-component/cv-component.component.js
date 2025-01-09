@@ -1,221 +1,132 @@
 import { __decorate } from "tslib";
 // cv-component.component.ts
 import { Component } from '@angular/core';
-import { Validators } from '@angular/forms';
 import { GlobalService } from '../../../Shared/Services/Global/global.service';
+import { Validators } from '@angular/forms';
 let CvComponentComponent = class CvComponentComponent {
-    constructor(fb) {
-        this.fb = fb;
+    constructor(_CoursesSearchService, toastr, ngxService, _ReportsService, formBuilder, ProfileService, pagerService, msgForDashboard) {
+        this._CoursesSearchService = _CoursesSearchService;
+        this.toastr = toastr;
+        this.ngxService = ngxService;
+        this._ReportsService = _ReportsService;
+        this.formBuilder = formBuilder;
+        this.ProfileService = ProfileService;
+        this.pagerService = pagerService;
+        this.msgForDashboard = msgForDashboard;
+        this.activities = [];
+        this.fields = [];
+        this.selectedActivityId = null;
+        this.groupedActivities = [];
+        this.activityForm = this.formBuilder.group({
+            activity: ['', Validators.required]
+        });
         this.initForm();
     }
     ngOnInit() {
         this.name = GlobalService.Name;
+        this.fetchActivities();
+        this.loadActivities(GlobalService.FacultyMember_ID);
     }
     initForm() {
-        this.cvForm = this.fb.group({
-            // fullName: ['', Validators.required],
-            email: ['', [Validators.required, Validators.email]],
-            phoneNumber: [''],
-            Role: [''],
-            FacultyType: [''],
-            education: this.fb.array([]),
-            experience: this.fb.array([]),
-            roles: this.fb.array([]),
-            research: this.fb.array([]),
-            ongoingResearch: this.fb.array([]),
-            Researchgroup: this.fb.array([]),
-            consultancies: this.fb.array([]),
-            training: this.fb.array([]),
-            project: this.fb.array([]),
-            GuesstSpeaker: this.fb.array([])
+    }
+    fetchActivities() {
+        this.ProfileService.GetActivities().subscribe((data) => {
+            this.activities = data;
+        }, (error) => {
+            console.error('Error fetching activities:', error);
         });
     }
-    // Form field error checking methods
-    isFieldInvalid(fieldName) {
-        const field = this.cvForm.get(fieldName);
-        return field ? (field.invalid && field.touched) : false;
-    }
-    // Getters for form arrays
-    get educationArray() {
-        return this.cvForm.get('education');
-    }
-    get ongoingResearchArray() {
-        return this.cvForm.get('ongoingResearch');
-    }
-    get researchGroupArray() {
-        return this.cvForm.get('Researchgroup');
-    }
-    get consultanciesArray() {
-        return this.cvForm.get('consultancies');
-    }
-    get trainingArray() {
-        return this.cvForm.get('training');
-    }
-    get experienceArray() {
-        return this.cvForm.get('experience');
-    }
-    get rolesArray() {
-        return this.cvForm.get('roles');
-    }
-    get researchArray() {
-        return this.cvForm.get('research');
-    }
-    get projectArray() {
-        return this.cvForm.get('project');
-    }
-    get GuestSpeakerArray() {
-        return this.cvForm.get('GuesstSpeaker');
-    }
-    // Education methods
-    addEducation() {
-        const education = this.fb.group({
-            institution: ['', Validators.required],
-            degree: ['', Validators.required],
-            year: ['', Validators.required]
-        });
-        this.educationArray.push(education);
-    }
-    removeEducation(index) {
-        this.educationArray.removeAt(index);
-    }
-    // Experience methods
-    addExperience() {
-        var _a;
-        const experience = this.fb.group({
-            company: ['', Validators.required],
-            position: ['', Validators.required],
-            startDate: ['', Validators.required],
-            endDate: [''],
-            currentlyWorking: [false],
-            description: ['', Validators.required]
-        });
-        (_a = experience.get('currentlyWorking')) === null || _a === void 0 ? void 0 : _a.valueChanges.subscribe((checked) => {
-            const endDateControl = experience.get('endDate');
-            if (checked) {
-                endDateControl === null || endDateControl === void 0 ? void 0 : endDateControl.disable();
-                endDateControl === null || endDateControl === void 0 ? void 0 : endDateControl.reset(); // Optional: Clears the value
-            }
-            else {
-                endDateControl === null || endDateControl === void 0 ? void 0 : endDateControl.enable();
+    onActivityChange(val) {
+        this.selectedActivityId = val;
+        Object.keys(this.activityForm.controls).forEach(key => {
+            if (key !== 'activity') {
+                this.activityForm.removeControl(key);
             }
         });
-        this.experienceArray.push(experience);
+        this.fetchFields(val);
+        this.activityForm.controls['activity'].setValue(this.selectedActivityId);
     }
-    removeExperience(index) {
-        this.experienceArray.removeAt(index);
-    }
-    // roles methods
-    addRole() {
-        const role = this.fb.group({
-            level: ['1']
+    fetchFields(val) {
+        const requestdata = { ActivityID: val };
+        this.ProfileService.GetActivitySubDetails(requestdata).subscribe((data) => {
+            this.fields = data;
+            console.log(this.fields);
+            // Dynamically add controls to the form
+            this.fields.forEach((field) => {
+                this.activityForm.addControl(field.subDetail, this.formBuilder.control('', Validators.required));
+            });
+        }, (error) => {
+            console.error('Error fetching fields:', error);
         });
-        this.rolesArray.push(role);
-    }
-    removeRole(index) {
-        this.rolesArray.removeAt(index);
-    }
-    addResearch() {
-        const researchs = this.fb.group({
-            title: ['', Validators.required],
-            field: ['', Validators.required],
-            publishedURL: ['', Validators.required]
-        });
-        this.researchArray.push(researchs);
-    }
-    removeResearch(index) {
-        this.researchArray.removeAt(index);
-    }
-    addOngoingResearch() {
-        const ongoingResearch = this.fb.group({
-            title: ['', Validators.required],
-            field: ['', Validators.required],
-            startDate: ['', Validators.required]
-        });
-        this.ongoingResearchArray.push(ongoingResearch);
-    }
-    removeOngoingResearch(index) {
-        this.ongoingResearchArray.removeAt(index);
-    }
-    addResearchGroup() {
-        const researchGroup = this.fb.group({
-            groupName: ['', Validators.required],
-            role: ['', Validators.required]
-        });
-        this.researchGroupArray.push(researchGroup);
-    }
-    removeResearchGroup(index) {
-        this.researchGroupArray.removeAt(index);
-    }
-    addConsultancy() {
-        const consultancy = this.fb.group({
-            client: ['', Validators.required],
-            project: ['', Validators.required],
-            duration: ['', Validators.required],
-            startDate: ['', Validators.required],
-            endDate: ['', Validators.required],
-        });
-        this.consultanciesArray.push(consultancy);
-    }
-    removeConsultancy(index) {
-        this.consultanciesArray.removeAt(index);
-    }
-    addTraining() {
-        const training = this.fb.group({
-            trainingName: ['', Validators.required],
-            provider: ['', Validators.required],
-            startDate: ['', Validators.required],
-            endDate: ['', Validators.required]
-        });
-        this.trainingArray.push(training);
-    }
-    removeTraining(index) {
-        this.trainingArray.removeAt(index);
-    }
-    addProject() {
-        const project = this.fb.group({
-            projectName: ['', Validators.required],
-            client: ['', Validators.required],
-            duration: ['', Validators.required],
-            startDate: ['', Validators.required],
-            endDate: ['', Validators.required]
-        });
-        this.projectArray.push(project);
-    }
-    removeProject(index) {
-        this.projectArray.removeAt(index);
-    }
-    addGuestSpeaker() {
-        const guestSpeaker = this.fb.group({
-            event: ['', Validators.required],
-            topic: ['', Validators.required],
-            date: ['', Validators.required]
-        });
-        this.GuestSpeakerArray.push(guestSpeaker);
-    }
-    removeGuestSpeaker(index) {
-        this.GuestSpeakerArray.removeAt(index);
     }
     onSubmit() {
-        if (this.cvForm.valid) {
-            console.log(this.cvForm.value);
-            alert('Data saved successfully!');
+        if (this.activityForm.invalid) {
+            return;
         }
-        else {
-            alert('Please fill in all required fields');
-        }
+        const activityData = {
+            FacultyID: GlobalService.FacultyMember_ID,
+            ActivityID: this.selectedActivityId,
+            Details: this.fields.map((field) => ({
+                DetailName: field.subDetail,
+                DetailValue: this.activityForm.value[field.subDetail],
+            })),
+        };
+        this.ProfileService.SaveActivity(activityData).subscribe((response) => {
+            if (response) {
+                this.toastr.success('Activity saved successfully.');
+                this.activityForm.reset();
+                this.loadActivities(GlobalService.FacultyMember_ID);
+            }
+            else {
+                this.toastr.error('Failed to save activity.');
+            }
+        });
     }
-    resetForm() {
-        this.cvForm.reset();
-        this.educationArray.clear();
-        this.experienceArray.clear();
-        this.rolesArray.clear();
-        this.researchArray.clear();
-        this.consultanciesArray.clear();
-        this.GuestSpeakerArray.clear();
-        this.ongoingResearchArray.clear();
-        this.projectArray.clear();
-        this.researchGroupArray.clear();
-        this.trainingArray.clear();
+    loadActivities(facultyId) {
+        this.ProfileService.GetFacultyActivity(facultyId).subscribe((response) => {
+            this.groupedActivities = response;
+            console.log(response);
+            console.log(this.groupedActivities);
+        });
+    }
+    groupDataByActivity(data) {
+        const grouped = data.reduce((result, current) => {
+            const activityName = current.ActivityName;
+            // If activity doesn't exist in the result, initialize it
+            if (!result[activityName]) {
+                result[activityName] = {
+                    ActivityName: activityName,
+                    Details: [],
+                };
+            }
+            // Find the existing detail entry by DetailID
+            let detailEntry = result[activityName].Details.find((d) => d.DetailID === current.DetailID);
+            // If the detail entry doesn't exist, create a new one
+            if (!detailEntry) {
+                detailEntry = {
+                    DetailID: current.DetailID,
+                    SubDetails: {},
+                };
+                result[activityName].Details.push(detailEntry);
+            }
+            // Add the sub-detail name and value
+            detailEntry.SubDetails[current.DetailName] = current.DetailValue;
+            return result;
+        }, {});
+        // Convert the grouped object to an array for iteration
+        return Object.values(grouped);
+    }
+    /**
+     * Extracts unique sub-detail names (headers) for a given activity.
+     * @param activity Activity object.
+     * @returns Array of unique sub-detail names.
+     */
+    getDetailNames(activity) {
+        if (!activity.Details || activity.Details.length === 0) {
+            return [];
+        }
+        // Extract keys (DetailNames) from the first SubDetails object
+        return Object.keys(activity.Details[0].SubDetails);
     }
 };
 CvComponentComponent = __decorate([

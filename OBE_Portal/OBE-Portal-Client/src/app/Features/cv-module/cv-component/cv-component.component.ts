@@ -26,6 +26,7 @@ export class CvComponentComponent implements OnInit {
   fields: any[] = [];
   selectedActivityId: number = null;
 
+  groupedActivities: any[] = [];
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -47,6 +48,7 @@ export class CvComponentComponent implements OnInit {
 
     this.name = GlobalService.Name;
     this.fetchActivities();
+    this.loadActivities(GlobalService.FacultyMember_ID);
   }
 
   private initForm(): void {
@@ -119,11 +121,68 @@ export class CvComponentComponent implements OnInit {
       if (response) {
         this.toastr.success('Activity saved successfully.');
         this.activityForm.reset();
+        this.loadActivities(GlobalService.FacultyMember_ID);
       } else {
         this.toastr.error('Failed to save activity.');
       }
     });
   }
 
+  loadActivities(facultyId: number): void {
+    this.ProfileService.GetFacultyActivity(facultyId).subscribe((response) => {
+      this.groupedActivities = response;
+      console.log(response);
+      console.log(this.groupedActivities);
+    });
+  }
+
+  groupDataByActivity(data: any[]): any[] {
+    const grouped = data.reduce((result, current) => {
+      const activityName = current.ActivityName;
+
+      // If activity doesn't exist in the result, initialize it
+      if (!result[activityName]) {
+        result[activityName] = {
+          ActivityName: activityName,
+          Details: [],
+        };
+      }
+
+      // Find the existing detail entry by DetailID
+      let detailEntry = result[activityName].Details.find(
+        (d: any) => d.DetailID === current.DetailID
+      );
+
+      // If the detail entry doesn't exist, create a new one
+      if (!detailEntry) {
+        detailEntry = {
+          DetailID: current.DetailID,
+          SubDetails: {},
+        };
+        result[activityName].Details.push(detailEntry);
+      }
+
+      // Add the sub-detail name and value
+      detailEntry.SubDetails[current.DetailName] = current.DetailValue;
+
+      return result;
+    }, {});
+
+    // Convert the grouped object to an array for iteration
+    return Object.values(grouped);
+  }
+
+  /**
+   * Extracts unique sub-detail names (headers) for a given activity.
+   * @param activity Activity object.
+   * @returns Array of unique sub-detail names.
+   */
+  getDetailNames(activity: any): string[] {
+    if (!activity.Details || activity.Details.length === 0) {
+      return [];
+    }
+    // Extract keys (DetailNames) from the first SubDetails object
+    return Object.keys(activity.Details[0].SubDetails);
+  }
 
 }
