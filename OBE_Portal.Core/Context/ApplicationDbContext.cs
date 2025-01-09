@@ -92,7 +92,7 @@ namespace OBE_Portal.Core.Context
             modelBuilder.Entity<getstatus>().HasNoKey();
             modelBuilder.Entity<ActivityList>().HasNoKey();
             modelBuilder.Entity<ActivitySubDetail>().HasNoKey();
-
+            modelBuilder.Entity<ActivityDetailResult>().HasNoKey();
 
 
         }

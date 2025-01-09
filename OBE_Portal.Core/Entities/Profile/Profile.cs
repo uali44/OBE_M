@@ -63,5 +63,30 @@ namespace OBE_Portal.Core.Entities.Profile
         public string DetailValue { get; set; }
     }
 
+    public class ActivityDetailResult
+    {
+        public int ActivityID { get; set; }
+        public string ActivityName { get; set; }
+        public int DetailID { get; set; }
+        public string DetailName { get; set; }
+        public string DetailValue { get; set; }
+        public int FacultyID { get; set; }
+    }
+
+    public class ActivityDetailsDto
+    {
+        public string ActivityName { get; set; }
+        public int FacultyID { get; set; }
+        public List<ActivityDetailDto> Details { get; set; }
+    }
+
+    public class ActivityDetailDto
+    {
+        public int DetailID { get; set; }
+        public string DetailName { get; set; }
+        public Dictionary<string, string> SubDetails { get; set; } // DetailName as key, DetailValue as value
+    }
+
+
 
 }

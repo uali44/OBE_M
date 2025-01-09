@@ -231,6 +231,45 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
             }
         }
 
+        async Task<List<ActivityDetailsDto>> IProfile.GetFacultyActivity(int FacultyID)
+        {
+            try
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    var faculty = new SqlParameter("@FacultyID", FacultyID);
+                    var response = await _context.Set<ActivityDetailResult>().FromSqlInterpolated($"EXEC GetFacultyActivity {faculty}").ToListAsync();
+                    if (response != null)
+                    {
+                        var groupedActivities = response
+             .GroupBy(d => d.ActivityName)
+             .Select(g => new ActivityDetailsDto
+             {
+                 ActivityName = g.Key,
+                 FacultyID = g.First().FacultyID,
+                 Details = g.GroupBy(d => d.DetailID)
+                            .Select(detailGroup => new ActivityDetailDto
+                            {
+                                DetailID = detailGroup.Key,
+                                DetailName = detailGroup.First().DetailName,
+                                SubDetails = detailGroup.ToDictionary(d => d.DetailName, d => d.DetailValue)
+                            }).ToList()
+             }).ToList();
+
+                        return groupedActivities;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
 
     }
 }

@@ -145,5 +145,22 @@ namespace OBE_Portal.Controllers
 
 
 
+        [HttpPost("GetFacultyActivity")]
+        public async Task<IActionResult> GetFacultyActivity([FromBody] int FacultyID)
+        {
+            try
+            {
+                var respone = await profile.GetFacultyActivity(FacultyID).ConfigureAwait(true);
+                if (respone != null)
+                    return Ok(respone);
+                else
+                    return Ok(respone);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }

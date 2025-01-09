@@ -17,5 +17,6 @@ namespace OBE_Portal.Infrastructure.Interfaces.Profile
         Task<List<ActivityList>> GetActivities();
         Task<List<ActivitySubDetail>> GetActivitySubDetails(long ActivityID);
         Task<bool> SaveActivityData(ActivityData activityData);
+        Task<List<ActivityDetailsDto>> GetFacultyActivity(int FacultyID);
     }
 }
