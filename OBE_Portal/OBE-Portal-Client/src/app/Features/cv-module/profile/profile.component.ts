@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { GlobalService } from '../../../Shared/Services/Global/global.service';
 import { CoursesSearchService } from '../../../Services/CourseSearch/CourseSearch.service';
 import { ToastrService } from 'ngx-toastr';
@@ -11,6 +11,8 @@ import { ProfileService } from './../../../Services/Profile/profile.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { InterconnectedService } from '../../../Shared/Services/Global/interconnected.service';
+import { Observable } from 'rxjs';
+
 declare const $: any;
 
 @Component({
@@ -20,14 +22,24 @@ declare const $: any;
 })
 export class ProfileComponent implements OnInit {
   username: string;
-
+  email: string;
   faculty: any = {
     FacultyMemberID: 0,
     phone: '',
     FacultyType: '',
     FacultyRole: '',
   };
-
+  //facultydata: any = {
+ 
+  //  FacultyMemberID :0,
+  //  Name :"",
+  //  Email :"" ,
+  //  Phone:"",
+  //  FacultyType :"",
+  //  FacultyRole :"",
+  //};
+  facultydata: any=null;
+  data: any;
   FacultyType: string[] = ['Permanent/Participating', 'Visiting/Supporting'];
   FacultyRole: string[] = ['SA','PA','SP','IP','Additional'];
   constructor(
@@ -38,13 +50,20 @@ export class ProfileComponent implements OnInit {
     private formBuilder: FormBuilder,
     private ProfileService: ProfileService,
     private pagerService: PagerService,
-    private msgForDashboard: InterconnectedService
+    private msgForDashboard: InterconnectedService,
+    private cdr: ChangeDetectorRef
+   
   ) { }
 
   ngOnInit(): void {
+
+    this.getFaculty();
+   
     this.username = GlobalService.Name;
     this.faculty.FacultyMemberID = GlobalService.FacultyMember_ID;
+
   }
+ 
   addFaculty()
   {
     console.log(this.faculty);
@@ -54,16 +73,11 @@ export class ProfileComponent implements OnInit {
       subscribe(
         data => {
           this.ngxService.stop();
-         /* if (data) {*/
+        
             this.toastr.success("Profile Updated successfully", "Success");
             $("#addFacultyModal").modal("hide");
             
-           // this.msgForDashboard.UpdateCourseDetailsCounts(GlobalService.TempFacultyMember_ID.toString());
-          //}
-          //else {
-          //  console.log(data);
-          //  this.toastr.error("Error occured while processing your request.", "Error");
-          //}
+         
         },
         error => {
           this.ngxService.stop();
@@ -71,5 +85,29 @@ export class ProfileComponent implements OnInit {
         });
   }
 
+  getFaculty() {
+    console.log(this.faculty);
+   
+    this.ngxService.start();
+    this.ProfileService.GetFacultyDetails(GlobalService.FacultyMember_ID).
+      subscribe(
+        data => {
+          this.ngxService.stop();
+         
+          this.facultydata = data;
+          this.email = data.Email;
+          console.log(this.facultydata);
+          console.log(this.facultydata[0].Email)
+        
+
+         
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
+        });
   }
+
+
+}
 

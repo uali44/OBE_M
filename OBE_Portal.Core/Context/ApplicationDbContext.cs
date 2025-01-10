@@ -93,6 +93,7 @@ namespace OBE_Portal.Core.Context
             modelBuilder.Entity<ActivityList>().HasNoKey();
             modelBuilder.Entity<ActivitySubDetail>().HasNoKey();
             modelBuilder.Entity<ActivityDetailResult>().HasNoKey();
+            modelBuilder.Entity<FacultyDetails>().HasNoKey();
 
 
         }

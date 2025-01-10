@@ -40,4 +40,8 @@ export class ProfileService {
     return this.http.post<any>(this.baseUrl + 'Profile/GetFacultyActivity', data);
   }
 
+  GetFacultyDetails<T>(data: number): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Profile/GetFacultyDetails', data);
+  }
+
 }

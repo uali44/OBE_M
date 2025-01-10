@@ -6,7 +6,19 @@ using System.Threading.Tasks;
 
 namespace OBE_Portal.Core.Entities.Profile
 {
-   public class profileData
+
+
+    public class FacultyDetails
+    {
+        public int FacultyMemberID { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string FacultyType { get; set; }
+        public string FacultyRole { get; set; }
+    }
+
+    public class profileData
     {
         public long FacultyMemberID { get; set; }
         public string Phone { get; set; }

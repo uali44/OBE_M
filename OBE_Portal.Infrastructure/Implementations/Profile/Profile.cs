@@ -60,6 +60,31 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
 
         }
 
+        async Task<List<FacultyDetails>> IProfile.GetFacultyDetails(int FacultyID)
+        {
+            try
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    var FacultyMemberID = new SqlParameter("@FacultyMemberID", FacultyID);
+                    List<FacultyDetails> response = await _context.Set<FacultyDetails>().FromSqlInterpolated($"EXEC GetFacultyDetailsByID {FacultyMemberID}").ToListAsync();
+                    if (response != null)
+                    {
+                        return response;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
         async Task<bool> IProfile.AddFacultyEducation(List<education> Request)
         {
 

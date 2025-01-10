@@ -81,56 +81,60 @@
     </div>
   </div>
  
-  <div style="border:1px solid grey;">
-    <h2>User Profile</h2>
-    <table class="table table-bordered">
-      <tbody>
-        <tr>
-          <td><strong>Name:</strong></td>
-          <td>{{ this.username }}</td>
-        </tr>
-      
-        tr
-        <tr>
-          <td><strong>Email :</strong></td>
-          <td><!--{{ user.email }}--></td>
-        </tr>
-        <tr>
-          <td><strong>Phone Number:</strong></td>
-          <td><!--{{ user.phoneNumber }}--></td>
-        </tr>
-        <tr>
-          <td><strong>Faculty Type:</strong></td>
-          
+  <div  *ngIf="facultydata">
+  
+      <h1>User Profile</h1>
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td style="width:30%" ><strong>Name:</strong></td>
+            <td>{{ this.username }}</td>
+          </tr>
 
-          
-          <td><!--{{ user.facultyType }}--></td>
-        </tr>
+
+          <tr>
+            <td style="width:30%"><strong>Email :</strong></td>
+            <td>{{ facultydata[0].Email || 'no data' }}</td>
+          </tr>
+          <tr>
+            <td style="width:30%"><strong>Phone Number:</strong></td>
+            <td>{{ facultydata[0].Phone }}</td>
+          </tr>
+          <tr>
+            <td style="width:30%"><strong>Faculty Type:</strong></td>
 
 
 
-
-
-        <tr>
+            <td>{{ facultydata[0].FacultyType }}</td>
+          </tr>
 
 
 
 
 
-          <td><strong>Role:</strong></td>
-          <td><!--{{ user.role }}--></td>
-          
-        </tr>
+          <tr>
 
-      </tbody>
-    </table>
 
+
+
+
+            <td style="width:30%"><strong>Role:</strong></td>
+            <td>{{ facultydata[0].FacultyRole }}</td>
+
+          </tr>
+
+        </tbody>
+      </table>
+     
     <div class="pull-right">
 
       <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addFacultyModal">
         Update Data
       </button>
     </div>
-
+  
   </div>
+ 
+
+
   </div>
