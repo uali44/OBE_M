@@ -43,5 +43,12 @@ export class ProfileService {
   GetFacultyDetails<T>(data: number): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'Profile/GetFacultyDetails', data);
   }
+  GetEducation<T>(data: number): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Profile/GetEducation', data);
+  }
+  GetExperience<T>(data: number): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Profile/GetExperience', data);
+  }
+  
 
 }

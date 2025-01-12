@@ -27,6 +27,15 @@ let ProfileService = class ProfileService {
     GetFacultyActivity(data) {
         return this.http.post(this.baseUrl + 'Profile/GetFacultyActivity', data);
     }
+    GetFacultyDetails(data) {
+        return this.http.post(this.baseUrl + 'Profile/GetFacultyDetails', data);
+    }
+    GetEducation(data) {
+        return this.http.post(this.baseUrl + 'Profile/GetEducation', data);
+    }
+    GetExperience(data) {
+        return this.http.post(this.baseUrl + 'Profile/GetExperience', data);
+    }
 };
 ProfileService = __decorate([
     Injectable({
