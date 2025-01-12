@@ -180,5 +180,32 @@ namespace OBE_Portal.Controllers
         }
 
 
+        [HttpPost("GetEducation")]
+        public async Task<IActionResult> GetEducation(int facultyMemberID)
+        {
+            try
+            {
+                var educationData = await profile.GetEducation(facultyMemberID).ConfigureAwait(true) ;
+                return Ok(educationData);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost("GetExperience")]
+        public async Task<IActionResult> GetExperience(int facultyMemberID)
+        {
+            try
+            {
+                var educationData = await profile.GetExperience(facultyMemberID).ConfigureAwait(true);
+                return Ok(educationData);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

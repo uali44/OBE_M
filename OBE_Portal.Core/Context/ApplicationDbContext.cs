@@ -94,8 +94,8 @@ namespace OBE_Portal.Core.Context
             modelBuilder.Entity<ActivitySubDetail>().HasNoKey();
             modelBuilder.Entity<ActivityDetailResult>().HasNoKey();
             modelBuilder.Entity<FacultyDetails>().HasNoKey();
-
-
+            modelBuilder.Entity<FacultyEducation>().HasNoKey();
+            modelBuilder.Entity<FacultyExperience>().HasNoKey();
         }
         
         //public DbSet<Authentication> user { get; set; }

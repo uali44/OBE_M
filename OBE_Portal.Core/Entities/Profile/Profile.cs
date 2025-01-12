@@ -36,6 +36,15 @@ namespace OBE_Portal.Core.Entities.Profile
 
 
     }
+    public class FacultyEducation
+    {
+        public int EduID { get; set; }
+        public int FacultyMemberID { get; set; }
+        public string EduInstitute { get; set; }
+        public string Degree { get; set; }
+        public string Field { get; set; }
+        public int Year { get; set; }
+    }
 
     public class experience
     {
@@ -45,6 +54,16 @@ namespace OBE_Portal.Core.Entities.Profile
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
     }
+    public class FacultyExperience
+    {
+        public int ExpID { get; set; }
+        public int FacultyMemberID { get; set; }
+        public string Position { get; set; }
+        public string Company { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime? EndDate { get; set; } // Nullable if end date is not set
+    }
+
     public class ActivityList
     {
         public int ActivityID { get; set; }

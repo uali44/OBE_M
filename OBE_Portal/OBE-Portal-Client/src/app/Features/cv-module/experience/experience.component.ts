@@ -21,6 +21,7 @@ declare const $: any;
 export class ExperienceComponent implements OnInit {
 
   experienceForm: FormGroup;
+  experienceData: any[] = [];
 
   constructor(
     private _CoursesSearchService: CoursesSearchService,
@@ -43,7 +44,22 @@ export class ExperienceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getExperience();
   }
+
+  getExperience() {
+    const facultyMemberID = GlobalService.FacultyMember_ID; // Replace with the actual FacultyMemberID
+    this.ProfileService.GetExperience(facultyMemberID).subscribe({
+      next: (data) => {
+        this.experienceData = data;
+        console.log("Education data" + this.experienceData);
+      },
+      error: (err) => {
+        console.error('Error fetching education data:', err);
+      },
+    });
+  }
+
   addExperience() {
     if (this.experienceForm.valid) {
       const experienceData = this.experienceForm.value;

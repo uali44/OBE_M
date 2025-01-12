@@ -20,6 +20,9 @@ declare const $: any;
 })
 export class EducationComponent implements OnInit {
   educationForm: FormGroup;
+  educationData: any[] = [];
+
+
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -43,8 +46,23 @@ export class EducationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getEduction();
   }
 
+  getEduction() {
+    const facultyMemberID = GlobalService.FacultyMember_ID; // Replace with the actual FacultyMemberID
+    this.ProfileService.GetEducation(facultyMemberID).subscribe({
+      next: (data) => {
+        this.educationData = data;
+
+        console.log("Education data"+this.educationData);
+
+      },
+      error: (err) => {
+        console.error('Error fetching education data:', err);
+      },
+    });
+  }
   addEducation() {
     if (this.educationForm.valid) {
       const educationData = this.educationForm.value;
@@ -55,16 +73,11 @@ export class EducationComponent implements OnInit {
         subscribe(
           data => {
             this.ngxService.stop();
-            /* if (data) {*/
+         
             this.toastr.success("Education successfully", "Success");
             $("#addFacultyEducation").modal("hide");
 
-            // this.msgForDashboard.UpdateCourseDetailsCounts(GlobalService.TempFacultyMember_ID.toString());
-            //}
-            //else {
-            //  console.log(data);
-            //  this.toastr.error("Error occured while processing your request.", "Error");
-            //}
+           
           },
           error => {
             this.ngxService.stop();

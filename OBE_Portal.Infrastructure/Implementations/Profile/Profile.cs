@@ -295,6 +295,56 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
             }
         }
 
+        async Task<List<FacultyEducation>> IProfile.GetEducation(int facultyMemberID)
+        {
+            try
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+
+                    var facultyMemberIDParam = new SqlParameter("@FacultyMemberID", facultyMemberID);
+                    var response = await _context.Set<FacultyEducation>().FromSqlInterpolated($"EXEC GetFacultyEducation  {facultyMemberIDParam}")
+                    .ToListAsync();
+                    if (response !=null)
+                    {
+                        return response;
+                    }
+                    else
+                    { return null; }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching education data", ex);
+            }
+        }
+
+        async Task<List<FacultyExperience>> IProfile.GetExperience(int facultyMemberID)
+        {
+            try
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+
+                    var facultyMemberIDParam = new SqlParameter("@FacultyMemberID", facultyMemberID);
+                    var response = await _context.Set<FacultyExperience>().FromSqlInterpolated($"EXEC GetFacultyExperience  {facultyMemberIDParam}")
+                    .ToListAsync();
+                    if (response != null)
+                    {
+                        return response;
+                    }
+                    else
+                    { return null; }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching education data", ex);
+            }
+        }
+
 
     }
 }

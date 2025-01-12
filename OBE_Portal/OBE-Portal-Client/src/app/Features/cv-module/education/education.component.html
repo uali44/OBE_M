@@ -49,12 +49,12 @@
       </tr>
     </thead>
     <tbody>
-      <!--<tr *ngFor="let edu of education">-->
-      <tr>
-        <td><!--{{ edu.institution }}--></td>
-        <td><!--{{ edu.degree }}--></td>
-        <td><!--{{ edu.field }}--></td>
-        <td><!--{{ edu.year }}--></td>
+      <tr *ngFor="let edu of educationData; let i = index">
+       
+        <td>{{ edu.eduInstitute }}</td>
+        <td>{{ edu.degree }}</td>
+        <td>{{ edu.field }}</td>
+        <td>{{ edu.year }}</td>
       </tr>
     </tbody>
   </table>
