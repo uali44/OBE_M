@@ -303,14 +303,9 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                 {
 
                     var facultyMemberIDParam = new SqlParameter("@FacultyMemberID", facultyMemberID);
-                    var response = await _context.Set<FacultyEducation>().FromSqlInterpolated($"EXEC GetFacultyEducation  {facultyMemberIDParam}")
+                    List<FacultyEducation> response = await _context.Set<FacultyEducation>().FromSqlInterpolated($"EXEC GetFacultyEducation {facultyMemberIDParam}")
                     .ToListAsync();
-                    if (response !=null)
-                    {
-                        return response;
-                    }
-                    else
-                    { return null; }
+                    return response;
 
                 }
             }

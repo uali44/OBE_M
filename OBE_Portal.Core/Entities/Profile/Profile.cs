@@ -43,7 +43,7 @@ namespace OBE_Portal.Core.Entities.Profile
         public string EduInstitute { get; set; }
         public string Degree { get; set; }
         public string Field { get; set; }
-        public int Year { get; set; }
+        public string Year { get; set; }
     }
 
     public class experience

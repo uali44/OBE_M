@@ -26,10 +26,12 @@ let ExperienceComponent = class ExperienceComponent {
     }
     getExperience() {
         const facultyMemberID = GlobalService.FacultyMember_ID; // Replace with the actual FacultyMemberID
+        this.ngxService.start();
         this.ProfileService.GetExperience(facultyMemberID).subscribe({
             next: (data) => {
                 this.experienceData = data;
-                console.log("Education data" + this.experienceData);
+                console.log("Exp data" + this.experienceData);
+                this.ngxService.stop();
             },
             error: (err) => {
                 console.error('Error fetching education data:', err);

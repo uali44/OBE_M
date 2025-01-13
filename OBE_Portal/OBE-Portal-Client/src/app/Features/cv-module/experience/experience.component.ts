@@ -48,11 +48,13 @@ export class ExperienceComponent implements OnInit {
   }
 
   getExperience() {
-    const facultyMemberID = GlobalService.FacultyMember_ID; // Replace with the actual FacultyMemberID
+    const facultyMemberID = GlobalService.FacultyMember_ID;
+   
     this.ProfileService.GetExperience(facultyMemberID).subscribe({
       next: (data) => {
         this.experienceData = data;
-        console.log("Education data" + this.experienceData);
+        console.log("Exp data" + this.experienceData);
+        
       },
       error: (err) => {
         console.error('Error fetching education data:', err);

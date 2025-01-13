@@ -50,7 +50,7 @@ export class EducationComponent implements OnInit {
   }
 
   getEduction() {
-    const facultyMemberID = GlobalService.FacultyMember_ID; // Replace with the actual FacultyMemberID
+    const facultyMemberID = GlobalService.FacultyMember_ID; 
     this.ProfileService.GetEducation(facultyMemberID).subscribe({
       next: (data) => {
         this.educationData = data;

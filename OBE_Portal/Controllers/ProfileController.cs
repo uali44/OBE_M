@@ -181,7 +181,7 @@ namespace OBE_Portal.Controllers
 
 
         [HttpPost("GetEducation")]
-        public async Task<IActionResult> GetEducation(int facultyMemberID)
+        public async Task<IActionResult> GetEducation([FromBody] int facultyMemberID)
         {
             try
             {
@@ -195,7 +195,7 @@ namespace OBE_Portal.Controllers
         }
 
         [HttpPost("GetExperience")]
-        public async Task<IActionResult> GetExperience(int facultyMemberID)
+        public async Task<IActionResult> GetExperience([FromBody] int facultyMemberID)
         {
             try
             {
