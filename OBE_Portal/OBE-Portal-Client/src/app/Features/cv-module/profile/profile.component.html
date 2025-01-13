@@ -20,6 +20,7 @@
         </div>
         <div class="modal-body">
 
+         Name: {{ this.username }}
 
           <form #facultyForm="ngForm">
             <!-- Phone Number -->
@@ -30,7 +31,10 @@
                      id="phone"
                      name="phone"
                      [(ngModel)]="faculty.phone"
-                     required />
+                     required
+               
+
+                     />
             </div>
             <!-- Faculty Type -->
             <div class="form-group">
@@ -39,7 +43,10 @@
                       id="FacultyType"
                       name="FacultyType"
                       [(ngModel)]="faculty.FacultyType"
-                      required>
+                      required
+                     >
+
+                      
                 <option value="" disabled selected>Select Faculty Type</option>
                 <option *ngFor="let type of FacultyType" [value]="type">
                   {{ type }}
@@ -94,18 +101,18 @@
 
           <tr>
             <td style="width:30%"><strong>Email :</strong></td>
-            <td>{{ facultydata[0].Email || 'no data' }}</td>
+            <td>{{ facultydata[0]?.Email  }}</td>
           </tr>
           <tr>
             <td style="width:30%"><strong>Phone Number:</strong></td>
-            <td>{{ facultydata[0].Phone }}</td>
+            <td>{{ facultydata[0]?.Phone }}</td>
           </tr>
           <tr>
             <td style="width:30%"><strong>Faculty Type:</strong></td>
 
 
 
-            <td>{{ facultydata[0].FacultyType }}</td>
+            <td>{{ facultydata[0]?.FacultyType }}</td>
           </tr>
 
 
@@ -119,19 +126,22 @@
 
 
             <td style="width:30%"><strong>Role:</strong></td>
-            <td>{{ facultydata[0].FacultyRole }}</td>
+            <td>{{ facultydata[0]?.FacultyRole }}</td>
 
           </tr>
 
         </tbody>
       </table>
      
-    <div class="pull-right">
+      <div class="pull-right">
 
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addFacultyModal">
-        Update Data
-      </button>
-    </div>
+        <!--<button type="button" class="btn btn-info" (click)="openFacultyModal()" data-toggle="modal" data-target="#addFacultyModal">
+    Update Data
+  </button>-->
+        <button type="button" class="btn btn-info" (click)="openFacultyModal()" >
+          Update Data
+        </button>
+      </div>
   
   </div>
  

@@ -61,9 +61,20 @@ export class ProfileComponent implements OnInit {
    
     this.username = GlobalService.Name;
     this.faculty.FacultyMemberID = GlobalService.FacultyMember_ID;
+    this.faculty.phone = this.facultydata.phone;
 
   }
- 
+  openFacultyModal() {
+    // Set values for the modal
+    this.faculty = {
+      phone: this.facultydata[0].Phone,
+      FacultyType: this.facultydata[0].FacultyType ,
+      FacultyRole: this.facultydata[0].FacultyRole,
+    };
+
+    // Open the modal (using jQuery for simplicity, you can replace with Angular modal handling)
+    $('#addFacultyModal').modal('show');
+  }
   addFaculty()
   {
     console.log(this.faculty);
@@ -75,8 +86,8 @@ export class ProfileComponent implements OnInit {
           this.ngxService.stop();
         
             this.toastr.success("Profile Updated successfully", "Success");
-            $("#addFacultyModal").modal("hide");
-            
+          $("#addFacultyModal").modal("hide");
+          this.getFaculty();
          
         },
         error => {

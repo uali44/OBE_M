@@ -207,5 +207,53 @@ namespace OBE_Portal.Controllers
                 throw;
             }
         }
+
+        [HttpPost("DeleteExperience")]
+        public async Task<IActionResult> DeleteExperience([FromBody] int ExpID)
+        {
+            try
+            {
+                var response = await profile.DeleteExperience(ExpID).ConfigureAwait(true);
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost("DeleteEducation")]
+        public async Task<IActionResult> DeleteEducation([FromBody] int EduID)
+        {
+            try
+            {
+                var response = await profile.DeleteEducation(EduID).ConfigureAwait(true);
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
+        [HttpPost("DeleteActivity")]
+        public async Task<IActionResult> DeleteActivity([FromBody] int detailID)
+        {
+            try
+            {
+                var response = await profile.DeleteActivity(detailID).ConfigureAwait(true);
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
+
     }
 }

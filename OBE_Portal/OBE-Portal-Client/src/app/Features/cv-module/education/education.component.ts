@@ -20,7 +20,7 @@ declare const $: any;
 })
 export class EducationComponent implements OnInit {
   educationForm: FormGroup;
-  educationData: any[] = [];
+  educations: any[]=[];
 
 
   constructor(
@@ -50,12 +50,13 @@ export class EducationComponent implements OnInit {
   }
 
   getEduction() {
-    const facultyMemberID = GlobalService.FacultyMember_ID; 
+    const facultyMemberID = GlobalService.FacultyMember_ID;
+
     this.ProfileService.GetEducation(facultyMemberID).subscribe({
       next: (data) => {
-        this.educationData = data;
-
-        console.log("Education data"+this.educationData);
+        this.educations = data;
+        console.log( data)
+        console.log("Education data" , this.educations);
 
       },
       error: (err) => {
@@ -67,7 +68,7 @@ export class EducationComponent implements OnInit {
     if (this.educationForm.valid) {
       const educationData = this.educationForm.value;
       console.log('Education Data:', educationData);
-      // Call your service to save the data
+      
       this.ngxService.start();
       this.ProfileService.AddFacultyEducation([educationData]).
         subscribe(
@@ -77,7 +78,7 @@ export class EducationComponent implements OnInit {
             this.toastr.success("Education successfully", "Success");
             $("#addFacultyEducation").modal("hide");
 
-           
+            this.getEduction();
           },
           error => {
             this.ngxService.stop();
@@ -88,4 +89,26 @@ export class EducationComponent implements OnInit {
       this.educationForm.reset(); // Reset the form after submission
     }
   }
+
+
+  confirmDelete(eduID: number) {
+    if (confirm('Are you sure you want to delete this experience?')) {
+      this.ProfileService.DeleteEducation(eduID).subscribe({
+        next: (response) => {
+          console.log('Delete Response:', response);
+          this.toastr.success("Education deleted successfully.", "Success");
+
+          this.getEduction();
+        },
+        error: (err) => {
+          console.error('Error deleting experience:', err);
+          this.toastr.error("Failed to delete education.", "Failed");
+
+        },
+      });
+    }
+  }
+
+
+
 }

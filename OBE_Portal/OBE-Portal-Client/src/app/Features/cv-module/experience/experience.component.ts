@@ -22,7 +22,7 @@ export class ExperienceComponent implements OnInit {
 
   experienceForm: FormGroup;
   experienceData: any[] = [];
-
+  currentlyWorking: boolean = false;
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -39,6 +39,7 @@ export class ExperienceComponent implements OnInit {
       Company: ['', Validators.required],
       StartDate: ['', Validators.required],
       EndDate: ['']
+     
     });
 
   }
@@ -62,26 +63,27 @@ export class ExperienceComponent implements OnInit {
     });
   }
 
+
+
   addExperience() {
     if (this.experienceForm.valid) {
       const experienceData = this.experienceForm.value;
-      console.log('Education Data:', experienceData);
-      // Call your service to save the data
+      experienceData.FacultyMemberID = GlobalService.FacultyMember_ID;
+      console.log('Experience Data:', experienceData);
+      if (this.currentlyWorking) {
+        experienceData.EndDate = null; 
+      }
       this.ngxService.start();
       this.ProfileService.AddFacultyExperience([experienceData]).
         subscribe(
           data => {
             this.ngxService.stop();
-            /* if (data) {*/
+           
             this.toastr.success("Experience added successfully", "Success");
             $("#addFacultyExpereince").modal("hide");
+            this.getExperience();
 
-            // this.msgForDashboard.UpdateCourseDetailsCounts(GlobalService.TempFacultyMember_ID.toString());
-            //}
-            //else {
-            //  console.log(data);
-            //  this.toastr.error("Error occured while processing your request.", "Error");
-            //}
+           
           },
           error => {
             this.ngxService.stop();
@@ -89,7 +91,40 @@ export class ExperienceComponent implements OnInit {
           });
 
 
-      this.experienceForm.reset(); // Reset the form after submission
+      this.experienceForm.reset(); 
     }
   }
+  onCurrentlyWorkingChange(event: any) {
+    this.currentlyWorking = event.target.checked;
+    if (this.currentlyWorking) {
+      this.experienceForm.get('EndDate')?.setValue(null); // Clear EndDate
+      this.experienceForm.get('EndDate')?.disable(); // Disable EndDate input
+    } else {
+      this.experienceForm.get('EndDate')?.enable(); // Enable EndDate input
+    }
+  }
+
+
+  confirmDelete(expID: number) {
+    if (confirm('Are you sure you want to delete this experience?')) {
+      this.ProfileService.DeleteExperience(expID).subscribe({
+        next: (response) => {
+          console.log('Delete Response:', response);
+          this.toastr.success("Experience deleted successfully.", "Success");
+         
+          this.getExperience(); 
+        },
+        error: (err) => {
+          console.error('Error deleting experience:', err);
+          this.toastr.error("Failed to delete experience.", "Failed");
+          
+        },
+      });
+    }
+  }
+
+
+
+
+
 }

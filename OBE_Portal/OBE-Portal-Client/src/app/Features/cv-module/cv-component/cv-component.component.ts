@@ -25,7 +25,7 @@ export class CvComponentComponent implements OnInit {
   activities: any[] = [];
   fields: any[] = [];
   selectedActivityId: number = null;
-
+  selectedActivity: any = null;
   groupedActivities: any[] = [];
   constructor(
     private _CoursesSearchService: CoursesSearchService,
@@ -109,7 +109,7 @@ export class CvComponentComponent implements OnInit {
     }
 
     const activityData = {
-      FacultyID: GlobalService.FacultyMember_ID, // This should come from your context
+      FacultyID: GlobalService.FacultyMember_ID, 
       ActivityID: this.selectedActivityId,
       Details: this.fields.map((field) => ({
         DetailName: field.subDetail,
@@ -135,7 +135,24 @@ export class CvComponentComponent implements OnInit {
       console.log(this.groupedActivities);
     });
   }
+  deleteActivity(detailID: number) {
+    if (confirm('Are you sure you want to delete this experience?')) {
+      this.ProfileService.DeleteActivity(detailID).subscribe({
+        next: (response) => {
+          console.log('Delete Response:', response);
+          this.toastr.success("Acivity deleted successfully.", "Success");
 
+          this.loadActivities(GlobalService.FacultyMember_ID);
+        },
+        error: (err) => {
+          console.error('Error deleting experience:', err);
+          this.toastr.error("Failed to delete Activity.", "Failed");
+
+        },
+      });
+
+    }
+  }
   groupDataByActivity(data: any[]): any[] {
     const grouped = data.reduce((result, current) => {
       const activityName = current.ActivityName;
@@ -184,5 +201,19 @@ export class CvComponentComponent implements OnInit {
     // Extract keys (DetailNames) from the first SubDetails object
     return Object.keys(activity.Details[0].SubDetails);
   }
+
+
+
+  openModal(activityN: any): void {
+    
+    this.selectedActivity = this.activities.find(activity => activity.ActivityName === activityN);
+
+    this.activityForm.get('activity')?.setValue(this.selectedActivity.ActivityID, { emitEvent: true });
+    this.onActivityChange(this.selectedActivity.ActivityID);
+   
+    $('#dynamicModal').modal('show');  
+  }
+
+
 
 }

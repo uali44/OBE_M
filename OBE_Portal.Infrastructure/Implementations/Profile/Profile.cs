@@ -141,7 +141,7 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                         var positionParam = new SqlParameter("@Position", Request[i].Position);
                         var companyParam = new SqlParameter("@Company", Request[i].Company);
                         var startDateParam = new SqlParameter("@StartDate", Request[i].StartDate);
-                        var endDateParam = new SqlParameter("@EndDate", Request[i].EndDate);
+                        var endDateParam = new SqlParameter("@EndDate", Request[i].EndDate ?? (object)DBNull.Value);
 
 
                         await _context.Database.ExecuteSqlRawAsync(
@@ -305,7 +305,14 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                     var facultyMemberIDParam = new SqlParameter("@FacultyMemberID", facultyMemberID);
                     List<FacultyEducation> response = await _context.Set<FacultyEducation>().FromSqlInterpolated($"EXEC GetFacultyEducation {facultyMemberIDParam}")
                     .ToListAsync();
-                    return response;
+                    if (response != null)
+                    {
+                        return response;
+                    }
+                    else
+                    {
+                        return null;
+                    }
 
                 }
             }
@@ -341,7 +348,59 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
         }
 
 
-    }
+        async Task<bool> IProfile.DeleteExperience(int expID)
+        {
+            try
+            {
+                var ExpIDParam = new SqlParameter("@ExpID", expID);
+                int result = await _context.Database.ExecuteSqlRawAsync("EXEC DeleteExperience @ExpID", ExpIDParam);
+
+                return result > 0; // Returns true if at least one row was deleted
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        async Task<bool> IProfile.DeleteEducation(int eduID)
+        {
+            try
+            {
+                var EduIDParam = new SqlParameter("@EduID", eduID);
+                int result = await _context.Database.ExecuteSqlRawAsync("EXEC DeleteEducation @EduID", EduIDParam);
+
+                return result > 0; // Returns true if at least one row was deleted
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
+        async Task<bool> IProfile.DeleteActivity(int detailID)
+        {
+            try
+            {
+                var DetailIDParam = new SqlParameter("@DetailID", detailID);
+                int result = await _context.Database.ExecuteSqlRawAsync("EXEC DeleteActivityDetail @DetailID", DetailIDParam);
+
+                return result > 0; // Returns true if at least one row was deleted
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+    
+    
+
+
+
+
+}
 }
   
 

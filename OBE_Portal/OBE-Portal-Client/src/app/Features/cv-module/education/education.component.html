@@ -46,15 +46,22 @@
         <th>Degree</th>
         <th>Field</th>
         <th>Year</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let edu of educationData; let i = index">
-       
-        <td>{{ edu.eduInstitute }}</td>
-        <td>{{ edu.degree }}</td>
-        <td>{{ edu.field }}</td>
-        <td>{{ edu.year }}</td>
+      <tr *ngFor="let edu of educations">
+
+        <td>{{ edu.EduInstitute }}</td>
+        <td>{{ edu.Degree }}</td>
+        <td>{{ edu.Field }}</td>
+        <td>{{ edu.Year }}</td>
+        <td>
+          <button (click)="confirmDelete(edu.EduID)" class="btn btn-danger">
+            Delete
+          </button>
+        </td>
+
       </tr>
     </tbody>
   </table>

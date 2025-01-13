@@ -26,9 +26,22 @@
               <input type="date" id="startDate" class="form-control" formControlName="StartDate" />
             </div>
             <div class="mb-3">
-              <label for="endDate" class="form-label">End Date</label>
-              <input type="date" id="endDate" class="form-control" formControlName="EndDate" />
+
+              <input type="checkbox"
+                     id="currentlyWorking"
+                     (change)="onCurrentlyWorkingChange($event)" />
+              <label for="currentlyWorking" class="form-label">Currently Working</label>
+
             </div>
+            <div class="mb-3">
+              <label for="endDate" class="form-label">End Date</label>
+              <input type="date"
+                     id="endDate"
+                     class="form-control"
+                     formControlName="EndDate"
+                     [disabled]="currentlyWorking" />
+            </div>
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -48,15 +61,21 @@
         <th>Position</th>
         <th>Start Date</th>
         <th>End Date</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let exp of experienceData;">
-       
-        <td>{{ exp.position }}</td>
-        <td>{{ exp.company }}</td>
-        <td>{{ exp.startDate | date: 'yyyy-MM-dd' }}</td>
-        <td>{{ exp.endDate ? (exp.endDate | date: 'yyyy-MM-dd') : 'Present' }}</td>
+
+        <td>{{ exp.Position }}</td>
+        <td>{{ exp.Company }}</td>
+        <td>{{ exp.StartDate | date: 'yyyy-MM-dd' }}</td>
+        <td>{{ exp.EndDate ? (exp.EndDate | date: 'yyyy-MM-dd') : 'Present' }}</td>
+        <td>
+          <button (click)="confirmDelete(exp.ExpID)" class="btn btn-danger">
+            Delete
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
