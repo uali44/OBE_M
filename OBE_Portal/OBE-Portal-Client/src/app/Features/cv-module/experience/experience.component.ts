@@ -71,19 +71,19 @@ export class ExperienceComponent implements OnInit {
       experienceData.FacultyMemberID = GlobalService.FacultyMember_ID;
       console.log('Experience Data:', experienceData);
       if (this.currentlyWorking) {
-        experienceData.EndDate = null; 
+        experienceData.EndDate = null;
       }
       this.ngxService.start();
       this.ProfileService.AddFacultyExperience([experienceData]).
         subscribe(
           data => {
             this.ngxService.stop();
-           
+
             this.toastr.success("Experience added successfully", "Success");
             $("#addFacultyExpereince").modal("hide");
             this.getExperience();
 
-           
+
           },
           error => {
             this.ngxService.stop();
@@ -91,7 +91,10 @@ export class ExperienceComponent implements OnInit {
           });
 
 
-      this.experienceForm.reset(); 
+      this.experienceForm.reset();
+    }
+    else {
+      alert("Please enter all fields ");
     }
   }
   onCurrentlyWorkingChange(event: any) {

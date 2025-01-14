@@ -68,13 +68,13 @@ export class EducationComponent implements OnInit {
     if (this.educationForm.valid) {
       const educationData = this.educationForm.value;
       console.log('Education Data:', educationData);
-      
+
       this.ngxService.start();
       this.ProfileService.AddFacultyEducation([educationData]).
         subscribe(
           data => {
             this.ngxService.stop();
-         
+
             this.toastr.success("Education successfully", "Success");
             $("#addFacultyEducation").modal("hide");
 
@@ -87,6 +87,12 @@ export class EducationComponent implements OnInit {
 
 
       this.educationForm.reset(); // Reset the form after submission
+    }
+    else {
+      alert("Please Enter All Fields and make sure year is greater than 1900");
+        
+
+      
     }
   }
 

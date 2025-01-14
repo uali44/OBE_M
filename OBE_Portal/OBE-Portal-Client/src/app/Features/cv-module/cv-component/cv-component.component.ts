@@ -146,6 +146,8 @@ export class CvComponentComponent implements OnInit {
   onSubmit(): void {
 
     if (this.activityForm.invalid) {
+
+      alert("Please Enter All Fields");
       return;
     }
 
