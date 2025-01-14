@@ -272,6 +272,7 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
              {
                  ActivityName = g.Key,
                  FacultyID = g.First().FacultyID,
+                 ActivityType = g.First().ActivityType,
                  Details = g.GroupBy(d => d.DetailID)
                             .Select(detailGroup => new ActivityDetailDto
                             {

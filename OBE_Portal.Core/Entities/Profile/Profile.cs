@@ -102,11 +102,13 @@ namespace OBE_Portal.Core.Entities.Profile
         public string DetailName { get; set; }
         public string DetailValue { get; set; }
         public int FacultyID { get; set; }
+        public string ActivityType { get; set; }
     }
 
     public class ActivityDetailsDto
     {
         public string ActivityName { get; set; }
+        public string ActivityType { get; set; }
         public int FacultyID { get; set; }
         public List<ActivityDetailDto> Details { get; set; }
     }

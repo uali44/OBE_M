@@ -27,6 +27,9 @@ export class CvComponentComponent implements OnInit {
   selectedActivityId: number = null;
   selectedActivity: any = null;
   groupedActivities: any[] = [];
+  groupedActivitiest: { [key: string]: any[] } = {}; // Grouped by ActivityType
+  activityTypes: string[] = []; // Unique Activity Types
+  selectedTab: string;
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -42,6 +45,7 @@ export class CvComponentComponent implements OnInit {
       activity: ['', Validators.required]
     });
     this.initForm();
+    this.selectedTab = this.getActivityTypes()[0];
   }
 
   ngOnInit(): void {
@@ -49,7 +53,44 @@ export class CvComponentComponent implements OnInit {
     this.name = GlobalService.Name;
     this.fetchActivities();
     this.loadActivities(GlobalService.FacultyMember_ID);
+    this.groupActivitiesByType();
+    this.activityTypes = this.getActivityTypes();
+    console.log("activitytype", this.activityTypes);
   }
+
+  getActivityTypes(): string[] {
+    const activityTypes = this.groupedActivities.map(activity => activity.ActivityType);
+    const uniqueTypes = [...new Set(activityTypes)]; // Remove duplicates
+    return uniqueTypes;
+  }
+  sanitizeType(type: string): string {
+    return type.replace(/\s+/g, '_');
+  }
+
+  groupActivitiesByType() {
+    this.groupedActivitiest = this.groupedActivities.reduce((acc, activity) => {
+      const type = activity.ActivityType;
+      if (!acc[type]) {
+        acc[type] = [];
+      }
+      acc[type].push(activity);
+      return acc;
+    }, {});
+  }
+  setActiveTab(type: string): void {
+    this.selectedTab = type;
+  }
+  //getActivityTypes(): string[] {
+  //  return Object.keys(this.groupedActivitiest);
+  //}
+
+  getDetailKeys(activity: any): string[] {
+    return activity.Details?.[0]?.SubDetails ? Object.keys(activity.Details[0].SubDetails) : [];
+  }
+
+
+
+
 
   private initForm(): void {
 
@@ -133,6 +174,11 @@ export class CvComponentComponent implements OnInit {
       this.groupedActivities = response;
       console.log(response);
       console.log(this.groupedActivities);
+
+    
+
+
+
     });
   }
   deleteActivity(detailID: number) {
@@ -202,6 +248,7 @@ export class CvComponentComponent implements OnInit {
     return Object.keys(activity.Details[0].SubDetails);
   }
 
+ 
 
 
   openModal(activityN: any): void {

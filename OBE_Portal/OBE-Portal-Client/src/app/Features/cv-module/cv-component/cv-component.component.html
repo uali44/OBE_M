@@ -53,47 +53,126 @@
   <br />
 
   <!-- cv-builder.component.html -->
-  <!-- cv-component.component.html -->
+   <!--cv-component.component.html--> 
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item" *ngFor="let type of getActivityTypes(); let i = index">
+      <a class="nav-link"
+         [class.active]="i === 0"
+         data-toggle="tab"
+         [attr.href]="'#' + sanitizeType(type)">
+         <!--Dynamic href based on type--> 
+        {{ type }}
+      </a>
+    </li>
+  </ul>
+
+  <!-- Tabs Content -->
+  <div class="tab-content">
+    <div class="tab-pane fade"
+         *ngFor="let type of getActivityTypes(); let i = index"
+         [class.show]="i === 0"
+         [class.active]="i === 0"
+         [attr.id]="sanitizeType(type)">
+       <!--Dynamic id based on type--> 
+      <h3>{{ type }}</h3>
+
+      <div *ngFor="let activity of groupedActivities">
+
+        <div *ngIf="activity.ActivityType === type">
+
+           <!--Activity Title--> 
+          <h2>{{ activity.ActivityName }}</h2>
+
+           <!--Activity Details Table--> 
+          <table class="table table-bordered table-hover table-theme margin-b30">
+            <thead>
+              <tr>
+                <th *ngFor="let detailName of getDetailNames(activity)">
+                  {{ detailName }}
+                </th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let detail of activity.Details">
+                <td *ngFor="let detailName of getDetailNames(activity)">
+                  {{ detail.SubDetails[detailName] || 'N/A' }}
+                </td>
+                <td>
+                  <div class="pull-right">
+                    <button type="button" class="btn btn-danger" (click)="deleteActivity(detail.DetailID)">
+                      Delete
+
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="pull-right">
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dynamicModal">
+              Add {{ activity.ActivityName }}
+            </button>
+          </div>
+          <div class="pull-right">
+            <button type="button" class="btn btn-info" (click)="openModal(activity.ActivityName)">
+
+              Add {{ activity.ActivityName  }}
+            </button>
+          </div>
+
+          <br />
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+  
 
  
 
 
-  <div *ngFor="let activity of groupedActivities">
-    <!-- Activity Title -->
-    <h2>{{ activity.ActivityName }}</h2>
 
-    <!-- Activity Details Table -->
-    <table class="table table-bordered table-hover table-theme margin-b30">
-      <thead>
-        <tr>
-          <th *ngFor="let detailName of getDetailNames(activity)">
-            {{ detailName }}
-          </th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let detail of activity.Details">
-          <td *ngFor="let detailName of getDetailNames(activity)">
-            {{ detail.SubDetails[detailName] || 'N/A' }}
-          </td>
-          <td>
-            <div class="pull-right">
-              <button type="button" class="btn btn-danger" (click)="deleteActivity(detail.DetailID)">
-                Delete
+  <!--<div *ngFor="let activity of groupedActivities">-->
+  <!-- Activity Title -->
+  <!--<h2>{{ activity.ActivityName }}</h2>-->
+  <!-- Activity Details Table -->
+  <!--<table class="table table-bordered table-hover table-theme margin-b30">
+    <thead>
+      <tr>
+        <th *ngFor="let detailName of getDetailNames(activity)">
+          {{ detailName }}
+        </th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let detail of activity.Details">
+        <td *ngFor="let detailName of getDetailNames(activity)">
+          {{ detail.SubDetails[detailName] || 'N/A' }}
+        </td>
+        <td>
+          <div class="pull-right">
+            <button type="button" class="btn btn-danger" (click)="deleteActivity(detail.DetailID)">
+              Delete
 
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <!--<div class="pull-right">
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dynamicModal">
-        Add {{ activity.ActivityName }}
-      </button>
-    </div>-->
-    <div class="pull-right">
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>-->
+  <!--<div class="pull-right">
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dynamicModal">
+      Add {{ activity.ActivityName }}
+    </button>
+  </div>-->
+  <!--<div class="pull-right">
       <button type="button" class="btn btn-info" (click)="openModal(activity.ActivityName)">
 
         Add {{ activity.ActivityName  }}
@@ -101,7 +180,7 @@
     </div>
 
     <br />
-  </div>
+  </div>-->
 
   <div style="clear:both;"></div>
   <div class="pull-right">

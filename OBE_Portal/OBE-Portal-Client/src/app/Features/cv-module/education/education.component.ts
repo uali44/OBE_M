@@ -92,7 +92,7 @@ export class EducationComponent implements OnInit {
 
 
   confirmDelete(eduID: number) {
-    if (confirm('Are you sure you want to delete this experience?')) {
+    if (confirm('Are you sure you want to delete this Education Data?')) {
       this.ProfileService.DeleteEducation(eduID).subscribe({
         next: (response) => {
           console.log('Delete Response:', response);
