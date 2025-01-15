@@ -76,7 +76,7 @@ export class EducationComponent implements OnInit {
             this.ngxService.stop();
 
             this.toastr.success("Education successfully", "Success");
-            $("#addFacultyEducation").modal("hide");
+            $("#addEducationModal").modal("hide");
 
             this.getEduction();
           },
@@ -86,33 +86,59 @@ export class EducationComponent implements OnInit {
           });
 
 
-      this.educationForm.reset(); // Reset the form after submission
+      this.educationForm.reset(); 
     }
     else {
-      alert("Please Enter All Fields and make sure year is greater than 1900");
+      
         
-
+      Swal.fire("Please Enter All Fields and make sure year is greater than 1900");
       
     }
   }
 
 
   confirmDelete(eduID: number) {
-    if (confirm('Are you sure you want to delete this Education Data?')) {
-      this.ProfileService.DeleteEducation(eduID).subscribe({
-        next: (response) => {
-          console.log('Delete Response:', response);
-          this.toastr.success("Education deleted successfully.", "Success");
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this Education Data!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
 
-          this.getEduction();
-        },
-        error: (err) => {
-          console.error('Error deleting experience:', err);
-          this.toastr.error("Failed to delete education.", "Failed");
 
-        },
-      });
-    }
+
+
+      if (result.value) {
+        this.ProfileService.DeleteEducation(eduID).subscribe(
+          () => {
+            Swal.fire('Deleted!', 'Your Education Data has been deleted.', 'success');
+            this.getEduction();
+          },
+          error => {
+            Swal.fire('Error!', 'Failed to delete Education Data.', 'error');
+          }
+        );
+      }
+    });
+
+
+  //  if (confirm('Are you sure you want to delete this Education Data?')) {
+  //    this.ProfileService.DeleteEducation(eduID).subscribe({
+  //      next: (response) => {
+  //        console.log('Delete Response:', response);
+  //        this.toastr.success("Education deleted successfully.", "Success");
+
+  //        this.getEduction();
+  //      },
+  //      error: (err) => {
+  //        console.error('Error deleting experience:', err);
+  //        this.toastr.error("Failed to delete education.", "Failed");
+
+  //      },
+  //    });
+  //  }
   }
 
 

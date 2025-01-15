@@ -10,7 +10,7 @@ import { HighlightPipe } from '../../../Shared/Pipe/highlight.pipe';
 import { FilterPipe } from '../../../Shared/Pipe/filter';
 import { ProfileService } from './../../../Services/Profile/profile.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 import { InterconnectedService } from '../../../Shared/Services/Global/interconnected.service';
 declare const $: any;
 
@@ -55,12 +55,14 @@ export class CvComponentComponent implements OnInit {
     this.loadActivities(GlobalService.FacultyMember_ID);
     this.groupActivitiesByType();
     this.activityTypes = this.getActivityTypes();
-    console.log("activitytype", this.activityTypes);
+   
   }
 
   getActivityTypes(): string[] {
     const activityTypes = this.groupedActivities.map(activity => activity.ActivityType);
-    const uniqueTypes = [...new Set(activityTypes)]; // Remove duplicates
+    const uniqueTypes = [...new Set(activityTypes)]; 
+  
+   
     return uniqueTypes;
   }
   sanitizeType(type: string): string {
@@ -147,7 +149,8 @@ export class CvComponentComponent implements OnInit {
 
     if (this.activityForm.invalid) {
 
-      alert("Please Enter All Fields");
+    
+      Swal.fire("Please Enter All Fields");
       return;
     }
 
@@ -164,6 +167,7 @@ export class CvComponentComponent implements OnInit {
       if (response) {
         this.toastr.success('Activity saved successfully.');
         this.activityForm.reset();
+        $("#dynamicModal").modal("hide");
         this.loadActivities(GlobalService.FacultyMember_ID);
       } else {
         this.toastr.error('Failed to save activity.');
@@ -174,32 +178,63 @@ export class CvComponentComponent implements OnInit {
   loadActivities(facultyId: number): void {
     this.ProfileService.GetFacultyActivity(facultyId).subscribe((response) => {
       this.groupedActivities = response;
-      console.log(response);
-      console.log(this.groupedActivities);
+      //console.log(response);
+      //console.log(this.groupedActivities);
 
-    
+      this.selectedTab = this.groupedActivities[0].ActivityType;
+     
 
 
 
     });
+
+   
+
   }
   deleteActivity(detailID: number) {
-    if (confirm('Are you sure you want to delete this experience?')) {
-      this.ProfileService.DeleteActivity(detailID).subscribe({
-        next: (response) => {
-          console.log('Delete Response:', response);
-          this.toastr.success("Acivity deleted successfully.", "Success");
 
-          this.loadActivities(GlobalService.FacultyMember_ID);
-        },
-        error: (err) => {
-          console.error('Error deleting experience:', err);
-          this.toastr.error("Failed to delete Activity.", "Failed");
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this activity!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
 
-        },
-      });
+    
 
-    }
+
+      if (result.value) {
+        this.ProfileService.DeleteActivity(detailID).subscribe(
+          () => {
+            Swal.fire('Deleted!', 'Your activity has been deleted.', 'success');
+            this.loadActivities(GlobalService.FacultyMember_ID);
+          },
+          error => {
+            Swal.fire('Error!', 'Failed to delete activity.', 'error');
+          }
+        );
+      }
+    });
+
+
+    //if (confirm('Are you sure you want to delete this experience?')) {
+    //  this.ProfileService.DeleteActivity(detailID).subscribe({
+    //    next: (response) => {
+    //      console.log('Delete Response:', response);
+    //      this.toastr.success("Acivity deleted successfully.", "Success");
+
+    //      this.loadActivities(GlobalService.FacultyMember_ID);
+    //    },
+    //    error: (err) => {
+    //      console.error('Error deleting experience:', err);
+    //      this.toastr.error("Failed to delete Activity.", "Failed");
+
+    //    },
+    //  });
+
+   // }
   }
   groupDataByActivity(data: any[]): any[] {
     const grouped = data.reduce((result, current) => {

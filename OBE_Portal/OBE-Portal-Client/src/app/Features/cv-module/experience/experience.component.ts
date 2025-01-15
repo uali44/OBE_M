@@ -80,7 +80,7 @@ export class ExperienceComponent implements OnInit {
             this.ngxService.stop();
 
             this.toastr.success("Experience added successfully", "Success");
-            $("#addFacultyExpereince").modal("hide");
+            $("#addExperienceModal").modal("hide");
             this.getExperience();
 
 
@@ -94,7 +94,8 @@ export class ExperienceComponent implements OnInit {
       this.experienceForm.reset();
     }
     else {
-      alert("Please enter all fields ");
+     
+      Swal.fire("Please enter all fields ");
     }
   }
   onCurrentlyWorkingChange(event: any) {
@@ -109,21 +110,47 @@ export class ExperienceComponent implements OnInit {
 
 
   confirmDelete(expID: number) {
-    if (confirm('Are you sure you want to delete this experience?')) {
-      this.ProfileService.DeleteExperience(expID).subscribe({
-        next: (response) => {
-          console.log('Delete Response:', response);
-          this.toastr.success("Experience deleted successfully.", "Success");
+
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this Experience Data!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
+
+
+
+
+      if (result.value) {
+        this.ProfileService.DeleteExperience(expID).subscribe(
+          () => {
+            Swal.fire('Deleted!', 'Your Experience Data has been deleted.', 'success');
+            this.getExperience(); 
+          },
+          error => {
+            Swal.fire('Error!', 'Failed to delete Experience Data.', 'error');
+          }
+        );
+      }
+    });
+    //if (confirm('Are you sure you want to delete this experience?')) {
+    //  this.ProfileService.DeleteExperience(expID).subscribe({
+    //    next: (response) => {
+    //      console.log('Delete Response:', response);
+    //      this.toastr.success("Experience deleted successfully.", "Success");
          
-          this.getExperience(); 
-        },
-        error: (err) => {
-          console.error('Error deleting experience:', err);
-          this.toastr.error("Failed to delete experience.", "Failed");
+    //      this.getExperience(); 
+    //    },
+    //    error: (err) => {
+    //      console.error('Error deleting experience:', err);
+    //      this.toastr.error("Failed to delete experience.", "Failed");
           
-        },
-      });
-    }
+    //    },
+    //  });
+    //}
   }
 
 
