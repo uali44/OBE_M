@@ -5,10 +5,9 @@ import { CvComponentComponent } from './cv-component/cv-component.component';
 const routes: Routes = [
 
   {
-    path: '',
-    component: CvComponentComponent
+    path: '', component: CvComponentComponent
   }
- 
+ /*{ path: '', component:  }*/
 
 ];
 

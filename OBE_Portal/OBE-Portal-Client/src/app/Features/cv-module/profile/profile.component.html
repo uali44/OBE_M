@@ -78,9 +78,9 @@
                   data-dismiss="modal">
             Cancel
           </button>
-          <button type="button"
+          <button  type="button"
                   class="btn btn-primary"
-                  (click)="addFaculty()">
+                  (click)="addFaculty()" [disabled]="!facultyForm.valid">
             Update
           </button>
         </div>

@@ -23,17 +23,19 @@
 
             <!-- Dynamic Fields -->
             <div *ngFor="let field of fields" class="form-group">
-              <label [for]="field.subDtail">{{ field.subDetail }}</label>
+              <label [for]="sanitizeType(field.subDetail)">{{ field.subDetail }}</label>
               <input [type]="field.SubType"
-                     [id]="field.subDetail"
+                     [id]="sanitizeType(field.subDetail)"
                      class="form-control"
-                     [formControlName]="field.subDetail"
+                     [formControlName]="sanitizeType(field.subDetail)"
                      [placeholder]="'Enter ' + field.subDetail" />
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="btn btn-primary" [disabled]="!activityForm.valid">Submit</button>
-            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">Close</button>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" [disabled]="!activityForm.valid">Submit</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel</button>
+            </div>
           </form>
         </div>
 
@@ -42,7 +44,7 @@
   </div>
 
 
-
+ 
 
 
   <app-profile></app-profile>
@@ -54,118 +56,119 @@
 
   <!-- cv-builder.component.html -->
   <!--cv-component.component.html-->
-  <div class="tabs-menu">
-    <ul class="nav nav-tabs" role="tablist">
-      <li class="nav-item" *ngFor="let type of getActivityTypes()" style="background-color:lightblue;">
-        <a class="nav-link"
-           (click)="setActiveTab(type)"
-           [class.active]="selectedTab === type"
-           data-toggle="tab"
-           [attr.href]="'#' + sanitizeType(type)"
-           style="color: #1960a7"
-           >
-          <!--Dynamic href based on type-->
-          <h4> {{ type }} </h4>
-        </a>
-      </li>
-    </ul>
+  <div class="tab-cont">
+    <div class="tabs-menu" id="dashboard">
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" *ngFor="let type of getActivityTypes()">
+          <a class="nav-link"
+             (click)="setActiveTab(type)"
+             [class.active]="selectedTab === type"
+             data-toggle="tab"
+             [attr.href]="'#' + sanitizeType(type)">
+            <!--Dynamic href based on type-->
+            <h4> {{ type }} </h4>
+          </a>
+        </li>
+      </ul>
     </div>
-    <!-- Tabs Content -->
-    <div class="tab-content">
-      <div *ngFor="let type of getActivityTypes()">
-        <!--<div class="tab-pane "
 
-         [class.show]="i === 0"
-         [class.active]="i === 0"
-         [attr.id]="sanitizeType(type)">-->
-        <div class="tab-pane "
-             *ngIf="selectedTab==type"
-             [attr.id]="sanitizeType(type)">
-          <br />
-          <br />
-          <!--Dynamic id based on type-->
-          <h1>{{ type }}</h1>
-          <br />
-          <br />
+  </div>
+  <!-- Tabs Content -->
+  <div class="tab-content">
+    <div *ngFor="let type of getActivityTypes()">
+      <!--<div class="tab-pane "
 
-          <div *ngFor="let activity of groupedActivities">
+       [class.show]="i === 0"
+       [class.active]="i === 0"
+       [attr.id]="sanitizeType(type)">-->
+      <div class="tab-pane "
+           *ngIf="selectedTab==type"
+           [attr.id]="sanitizeType(type)">
+        <br />
+        <br />
+        <!--Dynamic id based on type-->
+        <h1>{{ type }}</h1>
+        <br />
+        <br />
 
-            <div *ngIf="activity.ActivityType === type">
+        <div *ngFor="let activity of groupedActivities">
 
-              <!--Activity Title-->
-              <h2>{{ activity.ActivityName }}</h2>
+          <div *ngIf="activity.ActivityType === type">
 
-              <!--Activity Details Table-->
-              <table class="table table-bordered table-hover table-theme margin-b30">
-                <thead>
-                  <tr>
-                    <th *ngFor="let detailName of getDetailNames(activity)">
-                      {{ detailName }}
-                    </th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let detail of activity.Details">
-                    <td *ngFor="let detailName of getDetailNames(activity)">
-                      <a href="{{ detail.SubDetails[detailName] || '#' }}" target="_blank" *ngIf="detailName==='URL'">Click to visit :  </a>
-                      {{ detail.SubDetails[detailName] || 'N/A' }}
-                    </td>
-                    <td>
-                      <div class="pull-right">
-                        <button type="button" class="btn btn-danger" (click)="deleteActivity(detail.DetailID)">
-                          Delete
+            <!--Activity Title-->
+            <h2>{{ activity.ActivityName }}</h2>
 
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <!--Activity Details Table-->
+            <table class="table table-bordered table-hover table-theme margin-b30">
+              <thead>
+                <tr>
+                  <th *ngFor="let detailName of getDetailNames(activity)">
+                    {{ detailName }}
+                  </th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let detail of activity.Details">
+                  <td *ngFor="let detailName of getDetailNames(activity)">
+                    <a href="{{ detail.SubDetails[detailName] || '#' }}" target="_blank" *ngIf="detailName==='URL'">Click to visit :  </a>
+                    {{ detail.SubDetails[detailName] || 'N/A' }}
+                  </td>
+                  <td>
+                    <div class="pull-right">
+                      <button type="button" class="btn btn-danger" (click)="deleteActivity(detail.DetailID)">
+                        Delete
 
-              <div class="pull-right">
-                <button type="button" class="btn btn-info" (click)="openModal(activity.ActivityName)">
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
-                  Add {{ activity.ActivityName  }}
-                </button>
-              </div>
+            <div class="pull-right">
+              <button type="button" class="btn btn-info" (click)="openModal(activity.ActivityName)">
 
-              <br />
+                Add {{ activity.ActivityName  }}
+              </button>
             </div>
 
-
+            <br />
           </div>
+
+
         </div>
       </div>
     </div>
-
-
-
-
-
-
-
-
-
-  
-
-    <div style="clear:both;"></div>
-  <br />
-  <br />
-    <div class="pull-right">
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dynamicModal">
-        Add Activities
-      </button>
-    </div>
-
-
-
-
-
-
-
-
-
-
   </div>
+
+
+
+
+
+
+
+
+
+
+
+  <div style="clear:both;"></div>
+  <br />
+  <br />
+  <div class="pull-right">
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dynamicModal">
+      Add Activities
+    </button>
+  </div>
+
+
+
+
+
+
+
+
+
+
+</div>
 

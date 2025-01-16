@@ -11,18 +11,23 @@ import { IndustrialComponent } from './industrial/industrial.component';
 import { IntellectualComponent } from './intellectual/intellectual.component';
 import { AcadamicComponent } from './acadamic/acadamic.component';
 import { PagerService } from '../../Shared/Services/Global/Pager';
+
+
+
 @NgModule({
   declarations: [CvComponentComponent, ProfileComponent, EducationComponent, ExperienceComponent, IndustrialComponent, IntellectualComponent, AcadamicComponent],
   imports: [
     CommonModule,
     CvModuleRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+
   ],
  
    exports: [
     CommonModule,
-    FormsModule, // Export FormsModule for other modules
+     FormsModule, // Export FormsModule for other modules
+
   ],
   providers: [PagerService],
 })

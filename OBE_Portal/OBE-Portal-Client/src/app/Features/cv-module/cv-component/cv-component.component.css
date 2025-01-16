@@ -1,7 +1,26 @@
-/*.tab-pane {
-  display: none;  
-}
 
-  .tab-pane.active.show {
-    display: block; 
-  }*/
+.tab-pane {
+ /* border-top: 2px solid skyblue;*/
+  padding:10px;
+}
+.nav-item {
+
+  background-color: lightblue;
+}
+.nav-link {
+    border:1px solid grey;
+  color: white;
+  background-color:#1960a7;
+}
+  .nav-link.active {
+    background-color: white !important;
+    color: black !important;
+    border-top: 2px solid skyblue !important;
+  }
+tabs-menu {
+ 
+}
+tab-cont {
+ 
+  margin-top: 100px !important;
+}

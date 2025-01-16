@@ -90,8 +90,8 @@ export class EducationComponent implements OnInit {
     }
     else {
       
-        
-      Swal.fire("Please Enter All Fields and make sure year is greater than 1900");
+      this.toastr.error("Please Enter All Fields.The value for year must be greater than 1900", "Error");
+     
       
     }
   }

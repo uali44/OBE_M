@@ -30,6 +30,9 @@ export class CvComponentComponent implements OnInit {
   groupedActivitiest: { [key: string]: any[] } = {}; // Grouped by ActivityType
   activityTypes: string[] = []; // Unique Activity Types
   selectedTab: string;
+  Is_Permission_Search_Criteria: boolean = false;
+  facultyID: number;
+
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -40,19 +43,27 @@ export class CvComponentComponent implements OnInit {
     private pagerService: PagerService,
     private msgForDashboard: InterconnectedService
 
+
   ) {
     this.activityForm = this.formBuilder.group({
       activity: ['', Validators.required]
     });
     this.initForm();
     this.selectedTab = this.getActivityTypes()[0];
+    this.Is_Permission_Search_Criteria = GlobalService.Permissions.indexOf("Search_Criteria_Main") >= 0 ? true : false;
   }
 
   ngOnInit(): void {
+    if (GlobalService.TempFacultyMember_ID == null) {
+      this.facultyID = GlobalService.FacultyMember_ID
+    }
+    else {
 
+      this.facultyID = GlobalService.TempFacultyMember_ID;
+    }
     this.name = GlobalService.Name;
     this.fetchActivities();
-    this.loadActivities(GlobalService.FacultyMember_ID);
+    this.loadActivities(this.facultyID);
     this.groupActivitiesByType();
     this.activityTypes = this.getActivityTypes();
    
@@ -133,7 +144,7 @@ export class CvComponentComponent implements OnInit {
         console.log(this.fields);
         // Dynamically add controls to the form
         this.fields.forEach((field) => {
-          this.activityForm.addControl(field.subDetail, this.formBuilder.control('', Validators.required));
+          this.activityForm.addControl(this.sanitizeType( field.subDetail), this.formBuilder.control('', Validators.required));
         });
       },
       (error) => {
@@ -149,17 +160,17 @@ export class CvComponentComponent implements OnInit {
 
     if (this.activityForm.invalid) {
 
-    
-      Swal.fire("Please Enter All Fields");
+      this.toastr.error("Please Enter All Fields", "Error");
+     
       return;
     }
 
     const activityData = {
-      FacultyID: GlobalService.FacultyMember_ID, 
+      FacultyID: this.facultyID , 
       ActivityID: this.selectedActivityId,
       Details: this.fields.map((field) => ({
         DetailName: field.subDetail,
-        DetailValue: this.activityForm.value[field.subDetail],
+        DetailValue: this.activityForm.value[this.sanitizeType( field.subDetail)],
       })),
     };
 
@@ -168,7 +179,7 @@ export class CvComponentComponent implements OnInit {
         this.toastr.success('Activity saved successfully.');
         this.activityForm.reset();
         $("#dynamicModal").modal("hide");
-        this.loadActivities(GlobalService.FacultyMember_ID);
+        this.loadActivities(this.facultyID);
       } else {
         this.toastr.error('Failed to save activity.');
       }
@@ -209,7 +220,7 @@ export class CvComponentComponent implements OnInit {
         this.ProfileService.DeleteActivity(detailID).subscribe(
           () => {
             Swal.fire('Deleted!', 'Your activity has been deleted.', 'success');
-            this.loadActivities(GlobalService.FacultyMember_ID);
+            this.loadActivities(this.facultyID);
           },
           error => {
             Swal.fire('Error!', 'Failed to delete activity.', 'error');

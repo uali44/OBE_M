@@ -95,7 +95,7 @@ export class ExperienceComponent implements OnInit {
     }
     else {
      
-      Swal.fire("Please enter all fields ");
+      this.toastr.error("Please Enter All Fields", "Error");
     }
   }
   onCurrentlyWorkingChange(event: any) {
