@@ -12,8 +12,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  Institutes: [] = [];
-  Temp_Institute_ID: number;
+  Institutes: any[] = [];
+ 
   loginForm: FormGroup;
   constructor(
     private _CoursesSearchService: CoursesSearchService,
@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({
       Username: ['', [Validators.required,]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+      Institute_ID: ['', [Validators.required]],
     });
   }
   Get_Institutes() {
@@ -35,10 +36,7 @@ export class LoginComponent implements OnInit {
         response => {
           try {
             if (response != null) {
-              if (this.Temp_Institute_ID != 0) {
-                this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
-               
-              } else {
+             {
                 this.Institutes = response;
               }
 
@@ -57,6 +55,7 @@ export class LoginComponent implements OnInit {
   }
   ngOnInit(): void {
     this.Get_Institutes();
+
   }
   onSubmit() {
     if (this.loginForm.valid) {

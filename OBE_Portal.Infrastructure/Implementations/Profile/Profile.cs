@@ -60,7 +60,7 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
 
         }
 
-        async Task<List<FacultyDetails>> IProfile.GetFacultyDetails(int FacultyID)
+        async Task<List<FacultyDetails>> IProfile.GetFacultyDetails(long FacultyID)
         {
             try
             {

@@ -163,7 +163,7 @@ namespace OBE_Portal.Controllers
         }
 
         [HttpPost("GetFacultyDetails")]
-        public async Task<IActionResult> GetFacultyDetails([FromBody] int FacultyID)
+        public async Task<IActionResult> GetFacultyDetails([FromBody] long FacultyID)
         {
             try
             {

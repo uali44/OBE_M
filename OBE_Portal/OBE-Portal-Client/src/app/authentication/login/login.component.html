@@ -11,7 +11,7 @@
   </nav>
 
   <main class="login-form">
-    <div class="cotainer">
+    <!--<div class="cotainer">-->
       <div class="row justify-content-center">
         <div class="col-md-3">
           <div class="card">
@@ -25,9 +25,9 @@
                          formControlName="Username"
                          class="form-control"
                          placeholder="Enter your Username/Enrollment " />
-                  <div *ngIf="loginForm.controls['username'].invalid && loginForm.controls['username'].touched">
-                    <small class="error-text" *ngIf="loginForm.controls['email'].hasError('required')">Username/Enrollment is required.</small>
-                    <small class="error-text" *ngIf="loginForm.controls['email'].hasError('email')">Please enter a valid Username/Enrollment.</small>
+                  <div *ngIf="loginForm.controls['Username'].invalid && loginForm.controls['Username'].touched">
+                    <small class="error-text" *ngIf="loginForm.controls['Username'].hasError('required')">Username/Enrollment is required.</small>
+                  
                   </div>
                 </div>
 
@@ -45,16 +45,17 @@
                 </div>
                 <div class="form-group">
                   <label class="control-label">Select Institute <span class="text-danger">*</span></label>
-                  <select class="form-control" [ngModel]="Temp_Institute_ID" [attr.disabled]="Temp_Institute_ID != 0  ? 'disabled' : null">
+                  <select class="form-control" formControlName="Institute_ID" >
                     <option value="0">Select Institute</option>
                     <option value="{{i.InstituteID}}" *ngFor="let i of Institutes">{{i.InstituteShortName}}</option>
+
                   </select>
                 </div>
                 <div class="form-group">
                   <button id="submit" type="submit" class="btn col-lg-12" style="color: #fff; background-color: #0864a6;border-color: #0864a6;" [disabled]="loginForm.invalid"  >
                     Sign In
                   </button>
-                  <a class="btn btn-link link_custom" routerLink="/ForgetPassword">
+                  <a class="btn btn-link link_custom" [routerLink]="'ForgetPassword'">
                     Forgotten password?
                   </a>
                 </div>
@@ -65,7 +66,7 @@
           </div>
         </div>
       </div>
-    </div>
+    <!--</div>-->
   </main>
   <footer class="footer-fixed">
     <article style="background: #025a99 !important;">

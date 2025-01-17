@@ -63,7 +63,7 @@ export class CvComponentComponent implements OnInit {
     }
     this.name = GlobalService.Name;
     this.fetchActivities();
-    this.loadActivities(this.facultyID);
+    this.loadActivities();
     this.groupActivitiesByType();
     this.activityTypes = this.getActivityTypes();
    
@@ -179,15 +179,25 @@ export class CvComponentComponent implements OnInit {
         this.toastr.success('Activity saved successfully.');
         this.activityForm.reset();
         $("#dynamicModal").modal("hide");
-        this.loadActivities(this.facultyID);
+        this.loadActivities();
       } else {
         this.toastr.error('Failed to save activity.');
       }
     });
   }
 
-  loadActivities(facultyId: number): void {
-    this.ProfileService.GetFacultyActivity(facultyId).subscribe((response) => {
+  loadActivities(): void {
+
+    if (GlobalService.TempFacultyMember_ID == null) {
+      this.facultyID = GlobalService.FacultyMember_ID
+    }
+    else {
+
+      this.facultyID = GlobalService.TempFacultyMember_ID;
+    }
+    console.log(GlobalService.TempFacultyMember_ID);
+
+    this.ProfileService.GetFacultyActivity(this.facultyID).subscribe((response) => {
       this.groupedActivities = response;
       //console.log(response);
       //console.log(this.groupedActivities);
@@ -220,7 +230,7 @@ export class CvComponentComponent implements OnInit {
         this.ProfileService.DeleteActivity(detailID).subscribe(
           () => {
             Swal.fire('Deleted!', 'Your activity has been deleted.', 'success');
-            this.loadActivities(this.facultyID);
+            this.loadActivities();
           },
           error => {
             Swal.fire('Error!', 'Failed to delete activity.', 'error');

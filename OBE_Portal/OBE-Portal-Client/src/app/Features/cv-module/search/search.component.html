@@ -1,0 +1,34 @@
+<div class="row margin-b15">
+  <div class="col-sm-12 col-lg-12">
+    <fieldset class="padding-b5">
+      <legend>Criteria</legend>
+      <div class="row">
+        <div class="form-group col-sm-4">
+          <label class="control-label">Institute</label>
+          <select class="form-control" (change)="Get_Department($event.target.value)" [ngModel]="Temp_Institute_ID" [attr.disabled]="Temp_Institute_ID != 0  ? 'disabled' : null">
+            <option value="0">Select Institute</option>
+            <option value="{{i.InstituteID}}" *ngFor="let i of Institutes">{{i.InstituteShortName}}</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-4">
+          <label class="control-label">Deparment</label>
+          <select class="form-control" (change)="Get_FacultyMembers($event.target.value)" [ngModel]="Temp_Deaprtment_ID" [attr.disabled]="Temp_Deaprtment_ID != 0  ? 'disabled' : null">
+            <option value="0">Select Deparment</option>
+            <option value="{{i.DepartmentID}}" *ngFor="let i of Department">{{i.DepartmentName}}</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-3">
+          <label class="control-label">Faculty Member</label>
+          <select class="form-control" [(ngModel)]="FacultyMemberID"   (onchange)="GetAssignedCourses()">
+            <option value="0">Select Faculty</option>
+            <option value="{{i.FacultyMemberID}}" *ngFor="let i of Faculty">{{i.Name}}</option>
+          </select>
+        </div>
+        <div class="col-sm-1 margin-t17">
+          <button class="btn btn-info" (click)="GetAssignedCourses()">Search</button>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+</div>
+

@@ -11,11 +11,12 @@ import { IndustrialComponent } from './industrial/industrial.component';
 import { IntellectualComponent } from './intellectual/intellectual.component';
 import { AcadamicComponent } from './acadamic/acadamic.component';
 import { PagerService } from '../../Shared/Services/Global/Pager';
+import { SearchComponent } from './search/search.component';
 
 
 
 @NgModule({
-  declarations: [CvComponentComponent, ProfileComponent, EducationComponent, ExperienceComponent, IndustrialComponent, IntellectualComponent, AcadamicComponent],
+  declarations: [CvComponentComponent, ProfileComponent, EducationComponent, ExperienceComponent, IndustrialComponent, IntellectualComponent, AcadamicComponent, SearchComponent],
   imports: [
     CommonModule,
     CvModuleRoutingModule,

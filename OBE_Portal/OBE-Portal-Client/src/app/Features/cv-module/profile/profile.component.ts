@@ -67,9 +67,9 @@ export class ProfileComponent implements OnInit {
   openFacultyModal() {
     // Set values for the modal
     this.faculty = {
-      phone: this.facultydata[0].Phone,
-      FacultyType: this.facultydata[0].FacultyType ,
-      FacultyRole: this.facultydata[0].FacultyRole,
+      phone: this.facultydata[0]?.Phone || '',
+      FacultyType: this.facultydata[0]?.FacultyType ||'' ,
+      FacultyRole: this.facultydata[0]?.FacultyRole || '', 
     };
 
     // Open the modal (using jQuery for simplicity, you can replace with Angular modal handling)
@@ -106,7 +106,7 @@ export class ProfileComponent implements OnInit {
           this.ngxService.stop();
          
           this.facultydata = data;
-          this.email = data.Email;
+          this.email = data?.Email || '';
           console.log(this.facultydata);
           console.log(this.facultydata[0].Email)
         
