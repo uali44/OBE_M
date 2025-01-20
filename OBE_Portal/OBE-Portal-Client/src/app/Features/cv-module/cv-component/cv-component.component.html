@@ -4,10 +4,14 @@
   <div class="modal" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="dynamicModalLabel">Add Activities</h5>
-
+        <div class="section-heading">
+          <h2 class="pull-left">Add Activities</h2>
+          <div class="pull-right">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+          </div>
         </div>
+        <div class="clearfix"></div>
+
         <div class="container">
           <form [formGroup]="activityForm" (ngSubmit)="onSubmit()">
             <!-- Select Activity -->
@@ -19,6 +23,9 @@
                   {{ activity.ActivityName }}
                 </option>
               </select>
+              <div *ngIf="activityForm.controls['activity'].invalid && activityForm.controls['activity'].touched">
+                <div class="text-danger" *ngIf="activityForm.controls['activity'].hasError('required')">Username/Enrollment is required.</div>
+              </div>
             </div>
 
             <!-- Dynamic Fields -->
@@ -29,12 +36,20 @@
                      class="form-control"
                      [formControlName]="sanitizeType(field.subDetail)"
                      [placeholder]="'Enter ' + field.subDetail" />
+
+
+              <div *ngIf="activityForm.controls[sanitizeType(field.subDetail)].invalid && activityForm.controls[sanitizeType(field.subDetail)].touched">
+                <div class="text-danger" *ngIf="activityForm.controls[sanitizeType(field.subDetail)].hasError('required')">{{field.subDetail}} is required.</div>
+              </div>
+
+
             </div>
 
             <!-- Submit Button -->
             <div class="modal-footer">
-              <button type="submit" class="btn btn-primary" [disabled]="!activityForm.valid">Submit</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel</button>
+
+              <button type="submit" class="btn btn-primary" [disabled]="!activityForm.valid">Submit</button>
             </div>
           </form>
         </div>
@@ -44,10 +59,8 @@
   </div>
 
 
-  <!--<app-search></app-search>
-  <div class="pull-right">
-    <button class="btn btn-info" (click)="loadActivities()">Search</button>
-  </div>-->
+
+
 
   <app-profile></app-profile>
   <br />
@@ -58,11 +71,12 @@
 
   <!-- cv-builder.component.html -->
   <!--cv-component.component.html-->
-  <div class="tab-cont">
-    <div class="tabs-menu" id="dashboard">
+  <!--<div class="tab-cont">-->
+  <div class="section-tabs no-margin">
+    <div class="tabs-head" >
       <ul class="nav nav-tabs" role="tablist">
-        <li class="nav-item" *ngFor="let type of getActivityTypes()">
-          <a class="nav-link"
+        <li class="" *ngFor="let type of getActivityTypes()">
+          <a class=""
              (click)="setActiveTab(type)"
              [class.active]="selectedTab === type"
              data-toggle="tab"
@@ -74,7 +88,7 @@
       </ul>
     </div>
 
-  </div>
+  
   <!-- Tabs Content -->
   <div class="tab-content">
     <div *ngFor="let type of getActivityTypes()">
@@ -86,57 +100,66 @@
       <div class="tab-pane "
            *ngIf="selectedTab==type"
            [attr.id]="sanitizeType(type)">
-        <br />
-        <br />
-        <!--Dynamic id based on type-->
-        <h1>{{ type }}</h1>
-        <br />
-        <br />
+        <!--<br />
+        <br />-->
+        
+        <!--<div class="section-heading ">
+          <h1>{{ type }}</h1>
+        </div>-->
+        <!--<br />
+        <br />-->
 
         <div *ngFor="let activity of groupedActivities">
 
           <div *ngIf="activity.ActivityType === type">
 
             <!--Activity Title-->
-            <h2>{{ activity.ActivityName }}</h2>
+            <fieldset class="margin-b15">
+              <legend>{{ activity.ActivityName }}</legend>
 
-            <!--Activity Details Table-->
-            <table class="table table-bordered table-hover table-theme margin-b30">
-              <thead>
-                <tr>
-                  <th *ngFor="let detailName of getDetailNames(activity)">
-                    {{ detailName }}
-                  </th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let detail of activity.Details">
-                  <td *ngFor="let detailName of getDetailNames(activity)">
-                    <a href="{{ detail.SubDetails[detailName] || '#' }}" target="_blank" *ngIf="detailName==='URL'">Click to visit :  </a>
-                    {{ detail.SubDetails[detailName] || 'N/A' }}
-                  </td>
-                  <td>
-                    <div class="pull-right">
-                      <button type="button" class="btn btn-danger" (click)="deleteActivity(detail.DetailID)">
-                        Delete
 
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+              <!--Activity Details Table-->
+              <table class="table table-bordered table-hover table-theme margin-b30">
+                <thead>
+                  <tr>
+                    <th *ngFor="let detailName of getDetailNames(activity)">
 
-            <div class="pull-right">
-              <button type="button" class="btn btn-info" (click)="openModal(activity.ActivityName)">
+                      {{ detailName }}
 
-                Add {{ activity.ActivityName  }}
-              </button>
-            </div>
 
+                    </th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let detail of activity.Details">
+                    <td *ngFor="let detailName of getDetailNames(activity)">
+                      <a href="{{ detail.SubDetails[detailName] || '#' }}" target="_blank" *ngIf="detailName==='URL'">Click to visit :  </a>
+                      {{ detail.SubDetails[detailName] || 'N/A' }}
+                    </td>
+                    <td>
+                      <div class="pull-right">
+                        <button type="button" class="btn btn-default margin-r5" (click)="deleteActivity(detail.DetailID)">
+                          <i class="app-icon-IconSet-1-33 blue"></i>
+
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="pull-right">
+                <button type="button" class="btn btn-info" (click)="openModal(activity.ActivityName)">
+
+                  Add {{ activity.ActivityName  }}
+                </button>
+              </div>
+            </fieldset>
             <br />
           </div>
+
+
 
 
         </div>
@@ -144,7 +167,7 @@
     </div>
   </div>
 
-
+  </div>
 
 
 

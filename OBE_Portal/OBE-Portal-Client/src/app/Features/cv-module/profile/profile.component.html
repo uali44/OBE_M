@@ -10,13 +10,15 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addFacultyModalLabel">Update Basic Information</h5>
-          <button type="button"
-                  class="close"
-                  data-dismiss="modal"
-                  aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <div class="section-heading">
+            <h2 class="pull-left">Update Basic Information</h2>
+            <div class="pull-right">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          
+          
         </div>
         <div class="modal-body">
 
@@ -31,10 +33,9 @@
                      id="phone"
                      name="phone"
                      [(ngModel)]="faculty.phone"
-                     required
-               
+                     required />
+              <div *ngIf="facultyForm.controls.phone?.errors?.required && facultyForm.controls.phone?.touched" class="text-danger">Phone Number is required </div>
 
-                     />
             </div>
             <!-- Faculty Type -->
             <div class="form-group">
@@ -43,15 +44,17 @@
                       id="FacultyType"
                       name="FacultyType"
                       [(ngModel)]="faculty.FacultyType"
-                      required
-                     >
+                      required>
 
-                      
+
                 <option value="" disabled selected>Select Faculty Type</option>
                 <option *ngFor="let type of FacultyType" [value]="type">
                   {{ type }}
                 </option>
               </select>
+
+              <div *ngIf="facultyForm.controls.FacultyType?.errors?.required && facultyForm.controls.FacultyType?.touched" class="text-danger">Faculty Type is required </div>
+
             </div>
             <!-- Faculty Role -->
 
@@ -64,11 +67,13 @@
                       name="FacultyRole"
                       [(ngModel)]="faculty.FacultyRole"
                       required>
-                <option value="" disabled selected>Select Faculty Type</option>
+                <option value="" disabled selected>Select Faculty Role</option>
                 <option *ngFor="let role of FacultyRole" [value]="role">
                   {{ role }}
                 </option>
               </select>
+              <div *ngIf="facultyForm.controls.FacultyRole?.errors?.required && facultyForm.controls.FacultyRole?.touched" class="text-danger">Faculty Role is required </div>
+
             </div>
           </form>
         </div>
@@ -88,63 +93,67 @@
     </div>
   </div>
  
-  <div  *ngIf="facultydata">
-  
-      <h1>User Profile</h1>
-      <table class="table table-bordered">
-        <tbody>
-          <tr>
-            <td style="width:30%" ><strong>Name:</strong></td>
-            <td>{{ this.username }}</td>
-          </tr>
-
-
-          <tr>
-            <td style="width:30%"><strong>Email :</strong></td>
-            <td>{{ facultydata[0]?.Email  }}</td>
-          </tr>
-          <tr>
-            <td style="width:30%"><strong>Phone Number:</strong></td>
-            <td>{{ facultydata[0]?.Phone }}</td>
-          </tr>
-          <tr>
-            <td style="width:30%"><strong>Faculty Type:</strong></td>
-
-
-
-            <td>{{ facultydata[0]?.FacultyType }}</td>
-          </tr>
-
-
-
-
-
-          <tr>
-
-
-
-
-
-            <td style="width:30%"><strong>Role:</strong></td>
-            <td>{{ facultydata[0]?.FacultyRole }}</td>
-
-          </tr>
-
-        </tbody>
-      </table>
-     
-      <div class="pull-right">
-
-        <!--<button type="button" class="btn btn-info" (click)="openFacultyModal()" data-toggle="modal" data-target="#addFacultyModal">
-    Update Data
-  </button>-->
-        <button type="button" class="btn btn-info" (click)="openFacultyModal()" >
-          Update Data
-        </button>
+  <div *ngIf="facultydata">
+    <div class="section-heading">
+      <h1 class="">User Profile</h1>
       </div>
-  
-  </div>
- 
+    <div class="clearfix"></div>
+      <fieldset class="margin-b15">
+        <legend>Basic Information</legend>
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <td style="width:30%"><strong>Name:</strong></td>
+              <td>{{ this.username }}</td>
+            </tr>
+
+
+            <tr>
+              <td style="width:30%"><strong>Email :</strong></td>
+              <td>{{ facultydata[0]?.Email  }}</td>
+            </tr>
+            <tr>
+              <td style="width:30%"><strong>Phone Number:</strong></td>
+              <td>{{ facultydata[0]?.Phone }}</td>
+            </tr>
+            <tr>
+              <td style="width:30%"><strong>Faculty Type:</strong></td>
+
+
+
+              <td>{{ facultydata[0]?.FacultyType }}</td>
+            </tr>
+
+
+
+
+
+            <tr>
+
+
+
+
+
+              <td style="width:30%"><strong>Role:</strong></td>
+              <td>{{ facultydata[0]?.FacultyRole }}</td>
+
+            </tr>
+
+          </tbody>
+        </table>
+
+        <div class="pull-right">
+
+          <!--<button type="button" class="btn btn-info" (click)="openFacultyModal()" data-toggle="modal" data-target="#addFacultyModal">
+          Update Data
+        </button>-->
+          <button type="button" class="btn btn-info" (click)="openFacultyModal()">
+            Update Data
+          </button>
+        </div>
+      </fieldset>
+    </div>
+
 
 
   </div>
