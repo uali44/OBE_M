@@ -8,28 +8,41 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addExperienceModalLabel">Add Experience</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="section-heading">
+            <h2 class="pull-left">Add Experience</h2>
+            <div class="pull-right">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+            </div>
+          </div>
+          <div class="clearfix"></div>
         </div>
         <form [formGroup]="experienceForm" (ngSubmit)="addExperience()">
           <div class="modal-body">
             <div class="mb-3">
               <label for="position" class="form-label">Position</label>
               <input type="text" id="position" class="form-control" formControlName="Position" placeholder="Enter Position" />
+              <div *ngIf=" experienceForm.get('Position')?.errors?.required && experienceForm.get('Position')?.touched" class="text-danger">Position is required </div>
+
+
             </div>
             <div class="mb-3">
               <label for="company" class="form-label">Company</label>
               <input type="text" id="company" class="form-control" formControlName="Company" placeholder="Enter Company Name" />
+              <div *ngIf="experienceForm.get('Company')?.errors?.required && experienceForm.get('Company')?.touched" class="text-danger">Position is required </div>
+
             </div>
             <div class="mb-3">
               <label for="startDate" class="form-label">Start Date</label>
               <input type="date" id="startDate" class="form-control" formControlName="StartDate" />
+              <div *ngIf="experienceForm.get('StartDate')?.errors?.required && experienceForm.get('StartDate')?.touched" class="text-danger">Position is required </div>
+
             </div>
             <div class="mb-3">
 
               <input type="checkbox"
                      id="currentlyWorking"
                      (change)="onCurrentlyWorkingChange($event)" />
+
               <label for="currentlyWorking" class="form-label">Currently Working</label>
 
             </div>
@@ -40,12 +53,15 @@
                      class="form-control"
                      formControlName="EndDate"
                      [disabled]="currentlyWorking" />
+              <!--   <div *ngIf="experienceForm.endDate.errors.required" class="text-danger">Position is required </div>-->
+
             </div>
 
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="submit" class="btn btn-primary pull-right" [disabled]="!experienceForm.valid">Add</button>
+            <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal">Cancel</button>
+
           </div>
         </form>
       </div>
@@ -53,37 +69,39 @@
   </div>
 
 
-  <h2>Experience</h2>
-  <table class="table table-bordered table-hover table-theme margin-b30">
-    <thead>
-      <tr>
-        <th>Company</th>
-        <th>Position</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let exp of experienceData;">
+ 
+  <fieldset class="margin-b15">
+    <legend>Experience</legend>
+    <table class="table table-bordered table-hover table-theme margin-b30">
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Position</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let exp of experienceData;">
 
-        <td>{{ exp.Position }}</td>
-        <td>{{ exp.Company }}</td>
-        <td>{{ exp.StartDate | date: 'yyyy-MM-dd' }}</td>
-        <td>{{ exp.EndDate ? (exp.EndDate | date: 'yyyy-MM-dd') : 'Present' }}</td>
-        <td>
-          <button (click)="confirmDelete(exp.ExpID)" class="btn btn-danger">
-            Delete
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          <td>{{ exp.Position }}</td>
+          <td>{{ exp.Company }}</td>
+          <td>{{ exp.StartDate | date: 'yyyy-MM-dd' }}</td>
+          <td>{{ exp.EndDate ? (exp.EndDate | date: 'yyyy-MM-dd') : 'Present' }}</td>
+          <td>
+            <button (click)="confirmDelete(exp.ExpID)" class="btn btn-default margin-r5">
+              <i class="app-icon-IconSet-1-33 blue"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-  <div class="pull-right">
-  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addExperienceModal">
-    Add Experience
-  </button>
-</div>
-
+    <div class="pull-right">
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addExperienceModal">
+        Add Experience
+      </button>
+    </div>
+    </fieldset>
 </div>
