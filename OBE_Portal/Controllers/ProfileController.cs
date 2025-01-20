@@ -254,6 +254,21 @@ namespace OBE_Portal.Controllers
 
 
 
+        [HttpPost("GetAllData")]
+        public async Task<IActionResult> getAllData([FromBody] long facultyMemberID)
+        {
+            try
+            {
+                var educationData = await profile.getAllData(facultyMemberID).ConfigureAwait(true);
+                return Ok(educationData);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
 
     }
 }

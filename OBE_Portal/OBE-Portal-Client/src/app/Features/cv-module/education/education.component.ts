@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { GlobalService } from '../../../Shared/Services/Global/global.service';
 import { CoursesSearchService } from '../../../Services/CourseSearch/CourseSearch.service';
 import { ToastrService } from 'ngx-toastr';
@@ -19,8 +19,9 @@ declare const $: any;
   styleUrls: ['./education.component.css']
 })
 export class EducationComponent implements OnInit {
+  @Input() educations: any[] = [];
   educationForm: FormGroup;
-  educations: any[]=[];
+ 
 
 
   constructor(
@@ -31,7 +32,8 @@ export class EducationComponent implements OnInit {
     private formBuilder: FormBuilder,
     private ProfileService: ProfileService,
     private pagerService: PagerService,
-    private msgForDashboard: InterconnectedService
+    private msgForDashboard: InterconnectedService,
+    
 
   ) {
     this.educationForm = this.formBuilder.group({
@@ -46,7 +48,7 @@ export class EducationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getEduction();
+   // this.getEduction();
   }
 
   getEduction() {

@@ -83,13 +83,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let exp of experienceData;">
+        <tr *ngFor="let exp of exper;">
 
           <td>{{ exp.Position }}</td>
           <td>{{ exp.Company }}</td>
           <td>{{ exp.StartDate | date: 'yyyy-MM-dd' }}</td>
           <td>{{ exp.EndDate ? (exp.EndDate | date: 'yyyy-MM-dd') : 'Present' }}</td>
-          <td>
+          <td align="center">
             <button (click)="confirmDelete(exp.ExpID)" class="btn btn-default margin-r5">
               <i class="app-icon-IconSet-1-33 blue"></i>
             </button>

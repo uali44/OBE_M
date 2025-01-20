@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { GlobalService } from '../../../Shared/Services/Global/global.service';
 import { CoursesSearchService } from '../../../Services/CourseSearch/CourseSearch.service';
 import { ToastrService } from 'ngx-toastr';
@@ -19,9 +19,10 @@ declare const $: any;
   styleUrls: ['./experience.component.css']
 })
 export class ExperienceComponent implements OnInit {
+   @Input() exper: any[]=[];
 
   experienceForm: FormGroup;
-  experienceData: any[] = [];
+  experienceData: any[] = this.exper;
   currentlyWorking: boolean = false;
   constructor(
     private _CoursesSearchService: CoursesSearchService,
@@ -45,7 +46,10 @@ export class ExperienceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getExperience();
+    // this.getExperience();
+    this.experienceData = this.exper;
+    console.log("exp data", this.exper);
+    console.log("exp data", this.experienceData);
   }
 
   getExperience() {

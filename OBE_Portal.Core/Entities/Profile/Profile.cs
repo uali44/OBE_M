@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace OBE_Portal.Core.Entities.Profile
 {
+    public class RequestData
+    {
+        public List<FacultyDetails> FacultyDetails { get; set; }
+        public List<FacultyEducation> FacultyEducation { get; set; }
+        public List<FacultyExperience> facultyExperience {  get; set; }
 
+        public List<ActivityList> ActivityList { get; set; }
+        public List<ActivityDetailsDto> ActivityDetails { get; set; }
+        //public ActivitySubDetail ActivitySubDetail { get; set; }
+    }
 
     public class FacultyDetails
     {

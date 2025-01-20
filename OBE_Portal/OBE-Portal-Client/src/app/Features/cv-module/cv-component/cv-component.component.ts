@@ -32,6 +32,8 @@ export class CvComponentComponent implements OnInit {
   selectedTab: string;
   Is_Permission_Search_Criteria: boolean = false;
   facultyID: number;
+  education: any[] = [];
+  experience: any[] = [];
 
   constructor(
     private _CoursesSearchService: CoursesSearchService,
@@ -62,8 +64,9 @@ export class CvComponentComponent implements OnInit {
       this.facultyID = GlobalService.TempFacultyMember_ID;
     }
     this.name = GlobalService.Name;
-    this.fetchActivities();
-    this.loadActivities();
+    this.loaddata();
+   // this.fetchActivities();
+   // this.loadActivities();
     this.groupActivitiesByType();
     this.activityTypes = this.getActivityTypes();
    
@@ -185,7 +188,33 @@ export class CvComponentComponent implements OnInit {
       }
     });
   }
+  loaddata(): void {
+    if (GlobalService.TempFacultyMember_ID == null) {
+      this.facultyID = GlobalService.FacultyMember_ID
+    }
+    else {
 
+      this.facultyID = GlobalService.TempFacultyMember_ID;
+    }
+
+    this.ProfileService.getAllData(this.facultyID).subscribe((response) => {
+      
+      this.education = response.FacultyEducation;
+     
+      this.groupedActivities = response.ActivityDetails;
+      this.experience = response.facultyExperience;
+      this.activities = response.ActivityList
+   //   console.log("xp", this.experience);
+      //console.log(this.groupedActivities);
+      //this.selectedTab = this.groupedActivities[0].ActivityType;
+
+      this.setActiveTab(this.activities[0].ActivityType);
+
+
+
+    });
+
+  } 
   loadActivities(): void {
 
     if (GlobalService.TempFacultyMember_ID == null) {

@@ -1,5 +1,11 @@
-<div class="tab-content main-tab-content dragging-area" style="padding:10px;">
-
+<div class="tab-content main-tab-content dragging-area">
+  <div class="tab-pane active" id="reports">
+    <div class="tabs-menu">
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" id="FrameworkMainTab" class="active"><a href="#framework-tab" role="tab" data-toggle="tab"><i class="app-icon-Amazing-Fusion-35"></i> User Profile</a></li>
+      </ul>
+    </div>
+  </div>
 
   <div class="modal" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -59,141 +65,145 @@
   </div>
 
 
+  <div style="padding:10px">
 
 
+    <app-profile></app-profile>
+    <br />
+    <app-education [educations]="education"></app-education>
+    <br />
+    <app-experience [exper]="experience"></app-experience>
+    <br />
 
-  <app-profile></app-profile>
-  <br />
-  <app-education></app-education>
-  <br />
-  <app-experience></app-experience>
-  <br />
-
-  <!-- cv-builder.component.html -->
-  <!--cv-component.component.html-->
-  <!--<div class="tab-cont">-->
-  <div class="section-tabs no-margin">
-    <div class="tabs-head" >
-      <ul class="nav nav-tabs" role="tablist">
-        <li class="" *ngFor="let type of getActivityTypes()">
-          <a class=""
-             (click)="setActiveTab(type)"
-             [class.active]="selectedTab === type"
-             data-toggle="tab"
-             [attr.href]="'#' + sanitizeType(type)">
-            <!--Dynamic href based on type-->
-            <h4> {{ type }} </h4>
-          </a>
-        </li>
-      </ul>
-    </div>
-
-  
-  <!-- Tabs Content -->
-  <div class="tab-content">
-    <div *ngFor="let type of getActivityTypes()">
-      <!--<div class="tab-pane "
-
-       [class.show]="i === 0"
-       [class.active]="i === 0"
-       [attr.id]="sanitizeType(type)">-->
-      <div class="tab-pane "
-           *ngIf="selectedTab==type"
-           [attr.id]="sanitizeType(type)">
-        <!--<br />
-        <br />-->
-        
-        <!--<div class="section-heading ">
-          <h1>{{ type }}</h1>
-        </div>-->
-        <!--<br />
-        <br />-->
-
-        <div *ngFor="let activity of groupedActivities">
-
-          <div *ngIf="activity.ActivityType === type">
-
-            <!--Activity Title-->
-            <fieldset class="margin-b15">
-              <legend>{{ activity.ActivityName }}</legend>
+    <!-- cv-builder.component.html -->
+    <!--cv-component.component.html-->
+    <!--<div class="tab-cont">-->
+    <div class="section-tabs no-margin">
+      <div class="tabs-head">
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="" *ngFor="let type of getActivityTypes();let i = index">
+            <a class=""
+               (click)="setActiveTab(type)"
+               [class.active]="selectedTab === type"
+               
+               data-toggle="tab"
+               [attr.href]="'#' + sanitizeType(type)"
 
 
-              <!--Activity Details Table-->
-              <table class="table table-bordered table-hover table-theme margin-b30">
-                <thead>
-                  <tr>
-                    <th *ngFor="let detailName of getDetailNames(activity)">
+               >
+              <!--Dynamic href based on type-->
+              <h4> {{ type }} </h4>
+            </a>
+          </li>
+        </ul>
+      </div>
 
-                      {{ detailName }}
+
+      <!-- Tabs Content -->
+      <div class="tab-content">
+        <div *ngFor="let type of getActivityTypes()">
+          <!--<div class="tab-pane "
+
+           [class.show]="i === 0"
+           [class.active]="i === 0"
+           [attr.id]="sanitizeType(type)">-->
+          <div class="tab-pane "
+               *ngIf="selectedTab==type"
+               [attr.id]="sanitizeType(type)">
+            <!--<br />
+            <br />-->
+            <!--<div class="section-heading ">
+              <h1>{{ type }}</h1>
+            </div>-->
+            <!--<br />
+            <br />-->
+
+            <div *ngFor="let activity of groupedActivities">
+
+              <div *ngIf="activity.ActivityType === type">
+
+                <!--Activity Title-->
+                <fieldset class="margin-b15">
+                  <legend>{{ activity.ActivityName }}</legend>
 
 
-                    </th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let detail of activity.Details">
-                    <td *ngFor="let detailName of getDetailNames(activity)">
-                      <a href="{{ detail.SubDetails[detailName] || '#' }}" target="_blank" *ngIf="detailName==='URL'">Click to visit :  </a>
-                      {{ detail.SubDetails[detailName] || 'N/A' }}
-                    </td>
-                    <td>
-                      <div class="pull-right">
-                        <button type="button" class="btn btn-default margin-r5" (click)="deleteActivity(detail.DetailID)">
-                          <i class="app-icon-IconSet-1-33 blue"></i>
+                  <!--Activity Details Table-->
+                  <table class="table table-bordered table-hover table-theme margin-b30">
+                    <thead>
+                      <tr>
+                        <th *ngFor="let detailName of getDetailNames(activity)">
 
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                          {{ detailName }}
 
-              <div class="pull-right">
-                <button type="button" class="btn btn-info" (click)="openModal(activity.ActivityName)">
 
-                  Add {{ activity.ActivityName  }}
-                </button>
+                        </th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let detail of activity.Details">
+                        <td *ngFor="let detailName of getDetailNames(activity)">
+                          <a href="{{ detail.SubDetails[detailName] || '#' }}" target="_blank" *ngIf="detailName==='URL'">Click to visit :  </a>
+                          {{ detail.SubDetails[detailName] || 'N/A' }}
+                        </td>
+                        <td align="center">
+                          
+                            <button type="button" class="btn btn-default margin-r5" (click)="deleteActivity(detail.DetailID)">
+                              <i class="app-icon-IconSet-1-33 blue"></i>
+
+                            </button>
+                        
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <div class="pull-right">
+                    <button type="button" class="btn btn-info" (click)="openModal(activity.ActivityName)">
+
+                      Add {{ activity.ActivityName  }}
+                    </button>
+                  </div>
+                </fieldset>
+                <br />
               </div>
-            </fieldset>
-            <br />
+
+
+
+
+            </div>
           </div>
-
-
-
-
         </div>
       </div>
+
     </div>
-  </div>
+
+
+
+
+
+
+
+
+
+    <div style="clear:both;"></div>
+    <br />
+    <br />
+    <div class="pull-right">
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dynamicModal">
+        Add Activities
+      </button>
+    </div>
+
+
+
+
+
+
+
+
+
 
   </div>
-
-
-
-
-
-
-
-
-
-  <div style="clear:both;"></div>
-  <br />
-  <br />
-  <div class="pull-right">
-    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dynamicModal">
-      Add Activities
-    </button>
-  </div>
-
-
-
-
-
-
-
-
-
 
 </div>
-
