@@ -41,7 +41,8 @@ export class ProfileComponent implements OnInit {
   facultydata: any=null;
   data: any;
   FacultyType: string[] = ['Permanent/Participating', 'Visiting/Supporting'];
-  FacultyRole: string[] = ['SA','PA','SP','IP','Additional'];
+  FacultyRole: string[] = ['SA', 'PA', 'SP', 'IP', 'Additional'];
+  facultyId: number;
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -79,6 +80,7 @@ export class ProfileComponent implements OnInit {
   {
     console.log(this.faculty);
     this.faculty.FacultyMemberID = GlobalService.FacultyMember_ID;
+
     this.ngxService.start();
     this.ProfileService.AddFacultyData([this.faculty]).
       subscribe(
@@ -97,10 +99,16 @@ export class ProfileComponent implements OnInit {
   }
 
   getFaculty() {
-    console.log(this.faculty);
+    if (GlobalService.TempFacultyMember_ID == null) {
+      this.facultyId = GlobalService.FacultyMember_ID
+    }
+    else {
+
+      this.facultyId = GlobalService.TempFacultyMember_ID
+    }
    
     this.ngxService.start();
-    this.ProfileService.GetFacultyDetails(GlobalService.FacultyMember_ID).
+    this.ProfileService.GetFacultyDetails(this.facultyId).
       subscribe(
         data => {
           this.ngxService.stop();

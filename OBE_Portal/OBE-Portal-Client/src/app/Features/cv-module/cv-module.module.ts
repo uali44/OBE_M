@@ -12,11 +12,12 @@ import { IntellectualComponent } from './intellectual/intellectual.component';
 import { AcadamicComponent } from './acadamic/acadamic.component';
 import { PagerService } from '../../Shared/Services/Global/Pager';
 import { SearchComponent } from './search/search.component';
+import { FilterComponent } from './filter/filter.component';
 
 
 
 @NgModule({
-  declarations: [CvComponentComponent, ProfileComponent, EducationComponent, ExperienceComponent, IndustrialComponent, IntellectualComponent, AcadamicComponent, SearchComponent],
+  declarations: [CvComponentComponent, ProfileComponent, EducationComponent, ExperienceComponent, IndustrialComponent, IntellectualComponent, AcadamicComponent, SearchComponent, FilterComponent],
   imports: [
     CommonModule,
     CvModuleRoutingModule,

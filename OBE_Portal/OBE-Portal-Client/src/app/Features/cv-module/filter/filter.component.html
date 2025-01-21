@@ -1,4 +1,4 @@
-<div class="tab-content main-tab-content dragging-area">
+<<div class="tab-content main-tab-content dragging-area">
   <div class="tab-pane active" id="reports">
     <div class="tabs-menu">
       <ul class="nav nav-tabs" role="tablist">
@@ -66,16 +66,44 @@
 
 
   <div style="padding:10px">
-
-
-    <app-profile ></app-profile>
+    <app-search></app-search>
+    <button class="btn btn-primary" (click)="loaddata()">Search</button>
+    <app-profile></app-profile>
     <br />
     <app-education [educations]="education"></app-education>
     <br />
     <app-experience [exper]="experience"></app-experience>
     <br />
 
-   
+    <div class="filter-controls">
+      <!-- Input for Year -->
+      <label for="filterYear">Filter Activities After Year:</label>
+      <input id="filterYear"
+             type="number"
+             [(ngModel)]="filterYear"
+             placeholder="Enter year (e.g., 2023)" />
+
+      <!-- Button to Apply Filter -->
+      <button class="btn btn-primary" (click)="applyYearFilter()">
+        Apply Filter
+      </button>
+    </div>
+    <div *ngFor="let activity of filteredActivities">
+      <h2>{{ activity.ActivityName }}</h2>
+      <p>{{ activity.ActivityType }}</p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th *ngFor="let key of getDetailKeys(activity)">{{ key }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let detail of activity.Details">
+            <td *ngFor="let key of getDetailKeys(activity)">{{ detail.SubDetails[key] }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
 
     <!-- cv-builder.component.html -->
@@ -103,19 +131,19 @@
         <div *ngFor="let type of getActivityTypes()">
           <!--<div class="tab-pane "
 
-        [class.show]="i === 0"
-        [class.active]="i === 0"
-        [attr.id]="sanitizeType(type)">-->
+          [class.show]="i === 0"
+          [class.active]="i === 0"
+          [attr.id]="sanitizeType(type)">-->
           <div class="tab-pane "
                *ngIf="selectedTab==type"
                [attr.id]="sanitizeType(type)">
             <!--<br />
-          <br />-->
+            <br />-->
             <!--<div class="section-heading ">
-            <h1>{{ type }}</h1>
-          </div>-->
+              <h1>{{ type }}</h1>
+            </div>-->
             <!--<br />
-          <br />-->
+            <br />-->
 
             <div *ngFor="let activity of groupedActivities">
 
@@ -192,11 +220,6 @@
       <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dynamicModal">
         Add Activities
       </button>
-
-      <a class="btn btn-link link_custom" [routerLink]="'search'">
-        Search
-      </a>
-
     </div>
 
 

@@ -1,4 +1,3 @@
-// cv-component.component.ts
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../../Shared/Services/Global/global.service';
 import { CoursesSearchService } from '../../../Services/CourseSearch/CourseSearch.service';
@@ -15,11 +14,11 @@ import { InterconnectedService } from '../../../Shared/Services/Global/interconn
 declare const $: any;
 
 @Component({
-  selector: 'app-cv-component',
-  templateUrl: './cv-component.component.html',
-  styleUrls: ['./cv-component.component.css']
+  selector: 'app-filter',
+  templateUrl: './filter.component.html',
+  styleUrls: ['./filter.component.css']
 })
-export class CvComponentComponent implements OnInit {
+export class FilterComponent implements OnInit {
   activityForm: FormGroup;
   name: string;
   activities: any[] = [];
@@ -68,18 +67,18 @@ export class CvComponentComponent implements OnInit {
     }
     this.name = GlobalService.Name;
     this.loaddata();
-   // this.fetchActivities();
-   // this.loadActivities();
+    // this.fetchActivities();
+    // this.loadActivities();
     this.groupActivitiesByType();
     this.activityTypes = this.getActivityTypes();
-   
+
   }
 
   getActivityTypes(): string[] {
     const activityTypes = this.groupedActivities.map(activity => activity.ActivityType);
-    const uniqueTypes = [...new Set(activityTypes)]; 
-  
-   
+    const uniqueTypes = [...new Set(activityTypes)];
+
+
     return uniqueTypes;
   }
   sanitizeType(type: string): string {
@@ -132,7 +131,7 @@ export class CvComponentComponent implements OnInit {
 
     this.selectedActivityId = val;
     Object.keys(this.activityForm.controls).forEach(key => {
-      if (key !== 'activity') { 
+      if (key !== 'activity') {
         this.activityForm.removeControl(key);
       }
     });
@@ -150,7 +149,7 @@ export class CvComponentComponent implements OnInit {
         console.log(this.fields);
         // Dynamically add controls to the form
         this.fields.forEach((field) => {
-          this.activityForm.addControl(this.sanitizeType( field.subDetail), this.formBuilder.control('', Validators.required));
+          this.activityForm.addControl(this.sanitizeType(field.subDetail), this.formBuilder.control('', Validators.required));
         });
       },
       (error) => {
@@ -167,16 +166,16 @@ export class CvComponentComponent implements OnInit {
     if (this.activityForm.invalid) {
 
       this.toastr.error("Please Enter All Fields", "Error");
-     
+
       return;
     }
 
     const activityData = {
-      FacultyID: this.facultyID , 
+      FacultyID: this.facultyID,
       ActivityID: this.selectedActivityId,
       Details: this.fields.map((field) => ({
         DetailName: field.subDetail,
-        DetailValue: this.activityForm.value[this.sanitizeType( field.subDetail)],
+        DetailValue: this.activityForm.value[this.sanitizeType(field.subDetail)],
       })),
     };
 
@@ -204,14 +203,14 @@ export class CvComponentComponent implements OnInit {
   }
 
   filterActivities(groupedActivities: any, filterValue: number): any {
-    const filterKeys = ['StartDate', 'Date', 'Year','Start-Year']; // Possible keys to filter by
+    const filterKeys = ['StartDate', 'Date', 'Year', 'Start-Year']; // Possible keys to filter by
 
     return groupedActivities.filter(activity =>
       activity.Details.some(detail =>
         filterKeys.some(key => {
           const value = detail.SubDetails[key];
           // Convert value to a number (or Date object) for comparison
-          if (key === 'Year' || key=== 'Start-Year') {
+          if (key === 'Year' || key === 'Start-Year') {
             return Number(value) > filterValue; // Compare year as a number
           } else if (key === 'StartDate' || key === 'Date') {
             return new Date(value) > new Date(`${filterValue}-01-01`); // Compare dates
@@ -235,26 +234,26 @@ export class CvComponentComponent implements OnInit {
 
       this.facultyID = GlobalService.TempFacultyMember_ID;
     }
-
+    console.log(this.facultyID);
     this.ProfileService.getAllData(this.facultyID).subscribe((response) => {
-      
+
       this.education = response.FacultyEducation;
-     
+
       this.groupedActivities = response.ActivityDetails;
       this.experience = response.facultyExperience;
       this.activities = response.ActivityList
-   //   console.log("xp", this.experience);
-      console.log("grp",this.groupedActivities);
+      //   console.log("xp", this.experience);
+      console.log("grp", this.groupedActivities);
       //this.selectedTab = this.groupedActivities[0].ActivityType;
 
       this.setActiveTab(this.activities[0].ActivityType);
-      
-    
+
+
 
 
     });
 
-  } 
+  }
   loadActivities(): void {
 
     if (GlobalService.TempFacultyMember_ID == null) {
@@ -272,13 +271,13 @@ export class CvComponentComponent implements OnInit {
       //console.log(this.groupedActivities);
 
       this.selectedTab = this.groupedActivities[0].ActivityType;
-     
+
 
 
 
     });
 
-   
+
 
   }
   deleteActivity(detailID: number) {
@@ -292,7 +291,7 @@ export class CvComponentComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
 
-    
+
 
 
       if (result.value) {
@@ -324,7 +323,7 @@ export class CvComponentComponent implements OnInit {
     //    },
     //  });
 
-   // }
+    // }
   }
   groupDataByActivity(data: any[]): any[] {
     const grouped = data.reduce((result, current) => {
@@ -375,17 +374,17 @@ export class CvComponentComponent implements OnInit {
     return Object.keys(activity.Details[0].SubDetails);
   }
 
- 
+
 
 
   openModal(activityN: any): void {
-    
+
     this.selectedActivity = this.activities.find(activity => activity.ActivityName === activityN);
 
     this.activityForm.get('activity')?.setValue(this.selectedActivity.ActivityID, { emitEvent: true });
     this.onActivityChange(this.selectedActivity.ActivityID);
-   
-    $('#dynamicModal').modal('show');  
+
+    $('#dynamicModal').modal('show');
   }
 
 

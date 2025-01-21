@@ -59,4 +59,9 @@ export class ProfileService {
   DeleteActivity<T>(data: number): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'Profile/DeleteActivity', data);
   }
+
+  getAllData<T>(data: number): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Profile/getAllData', data);
+  }
+
 }

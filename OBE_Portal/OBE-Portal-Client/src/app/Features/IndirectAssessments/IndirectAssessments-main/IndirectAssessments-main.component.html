@@ -47,12 +47,12 @@
         <li role="presentation"> <a aria-expanded="true" href="#ExitSurveyForm" role="tab" data-toggle="tab">Exit Survey Form</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#InternshipForm" role="tab" data-toggle="tab">Internship Form</a> </li>
 
-        <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICEE" role="tab" data-toggle="tab">Alumni Survey Form EE</a> </li>
-        <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICEE" role="tab" data-toggle="tab">Employer Survey Form EE</a> </li>
-        <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICCE" role="tab" data-toggle="tab">Alumni Survey Form CE</a> </li>
-        <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICCE" role="tab" data-toggle="tab">Employer Survey Form CE</a> </li>
-        <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICSE" role="tab" data-toggle="tab">Alumni Survey Form SE</a> </li>
-        <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICSE" role="tab" data-toggle="tab">Employer Survey Form SE</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICEE" role="tab" data-toggle="tab"   *ngIf="dept===4" >Alumni Survey Form EE</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICEE" role="tab" data-toggle="tab" *ngIf="dept===4">Employer Survey Form EE</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICCE" role="tab" data-toggle="tab" *ngIf="dept===2">Alumni Survey Form CE</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICCE" role="tab" data-toggle="tab" *ngIf="dept===2">Employer Survey Form CE</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICSE" role="tab" data-toggle="tab" *ngIf="dept===8">Alumni Survey Form SE</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICSE" role="tab" data-toggle="tab" *ngIf="dept===8">Employer Survey Form SE</a> </li>
       </ul>
     </div>
     <div class="tab-content">
@@ -61,7 +61,7 @@
           <b>Please respond to the following by selecting the most appropriate choice for candidate</b>
         </h4>
         <h4 class="text-center">
-          <b>5: Very strong	   4: Strong	3: Moderate	  2: Weak	1: very Weak       0: Not applicable</b>
+          <b>5: Very strong	   4: Strong	3: Moderate	  2: Weak	1: very Weak       <!--0: Not applicable--></b>
         </h4>
         <hr />
         <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">

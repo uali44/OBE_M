@@ -25,7 +25,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
   Is_Permission_Faculty: boolean = false;
   Temp_Institute_ID: number;
   Temp_Deaprtment_ID: number;
-
+  dept: number;
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -53,6 +53,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       this.CloseTabContent();
       this.Get_Institutes();
     });
+    this.dept = GlobalService.Deaprtment_ID;
   }
   Get_Institutes() {
     this.IntakeID = 0;
