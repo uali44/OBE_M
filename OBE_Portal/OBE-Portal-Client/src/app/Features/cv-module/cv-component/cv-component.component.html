@@ -84,7 +84,9 @@
     <div class="section-tabs no-margin">
       <div class="tabs-head">
         <ul class="nav nav-tabs" role="tablist">
-          <li class="" *ngFor="let type of getActivityTypes();let i = index"  [attr.id]="'#' + sanitizeType(type)+i" >
+          <li  *ngFor="let type of getActivityTypes();let i = index"
+               [class.active]="i === 0"
+              [attr.id]="'#' + sanitizeType(type)+i" >
             <a  class=""
                (click)="setActiveTab(type)"
                [class.active]="selectedTab === type"
@@ -112,14 +114,14 @@
                *ngIf="selectedTab==type"
                [attr.id]="sanitizeType(type)">
             <!--<br />
-          <br />-->
+  <br />-->
             <!--<div class="section-heading ">
-            <h1>{{ type }}</h1>
-          </div>-->
+    <h1>{{ type }}</h1>
+  </div>-->
             <!--<br />
-          <br />-->
+  <br />-->
 
-            <div *ngFor="let activity of groupedActivities">
+            <div *ngFor="let activity of activities">
 
               <div *ngIf="activity.ActivityType === type">
 
@@ -130,6 +132,67 @@
 
                   <!--Activity Details Table-->
                   <table class="table table-bordered table-hover table-theme margin-b30">
+                    <thead>
+                      <tr>
+                        <th *ngFor="let detailName of filterdDetail(activity.ActivityID)">
+
+                          {{ detailName.subDetail }}
+
+
+                        </th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let gactivity of groupedActivities">
+                        <ng-container *ngIf="activity.ActivityName===gactivity.ActivityName">
+                          <tr *ngFor="let detail of gactivity.Details">
+
+                            <td *ngFor="let detailName of getDetailNames(gactivity)">
+                              <a href="{{ detail.SubDetails[detailName] || '#' }}" target="_blank" *ngIf="detailName==='URL'">Click to visit :  </a>
+                              {{ detail.SubDetails[detailName] || 'N/A' }}
+                            </td>
+                            <td align="center">
+
+                              <button type="button" class="btn btn-default margin-r5" (click)="deleteActivity(detail.DetailID)">
+                                <i class="app-icon-IconSet-1-33 blue"></i>
+
+                              </button>
+
+                            </td>
+                          </tr>
+                       </ng-container>
+                      </ng-container>
+                    </tbody>
+                  </table>
+
+                  <div class="pull-right">
+                    <button type="button" class="btn btn-info" (click)="openModal(activity.ActivityName)">
+
+                      Add {{ activity.ActivityName  }}
+                    </button>
+                  </div>
+                </fieldset>
+                <br />
+              </div>
+
+
+
+
+            </div>
+
+
+            <!--<div *ngFor="let activity of groupedActivities">
+
+              <div *ngIf="activity.ActivityType === type">-->
+
+                <!--Activity Title-->
+                <!--<fieldset class="margin-b15">
+                  <legend>{{ activity.ActivityName }}</legend>-->
+
+
+                  <!--Activity Details Table-->
+                  <!--<table class="table table-bordered table-hover table-theme margin-b30">
                     <thead>
                       <tr>
                         <th *ngFor="let detailName of getDetailNames(activity)">
@@ -172,7 +235,7 @@
 
 
 
-            </div>
+            </div>-->
           </div>
         </div>
       </div>

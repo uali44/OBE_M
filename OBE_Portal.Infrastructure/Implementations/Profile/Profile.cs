@@ -72,7 +72,7 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                 var experience=await GetExperience((int)facultyID);
                 var facultyActivity=await GetFacultyActivity((int)facultyID);
                 var activityList = await GetActivities();
-                
+                var activitySubDetail= await _context.Set<ActivitySubDetail>().FromSqlInterpolated($"EXEC GetAllActivitySubDetails").ToListAsync();
                 return new RequestData
                 {
 
@@ -81,7 +81,7 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                     facultyExperience = experience,
                     ActivityDetails=facultyActivity,
                     ActivityList=activityList,
-
+                    ActivitySubDetail=activitySubDetail,
 
                 };
             

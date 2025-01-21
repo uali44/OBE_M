@@ -37,7 +37,7 @@ export class CvComponentComponent implements OnInit {
   filterYear: number | null = null;
   filteredActivities: any[] = [];
   Faculty: any[] = [];
-
+  activitySub: any[] = [];
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -192,36 +192,9 @@ export class CvComponentComponent implements OnInit {
     });
   }
 
-  applyYearFilter() {
+ 
 
-    if (!this.filterYear) {
-      Swal.fire('Error!', 'Please enter a valid year to filter.', 'error');
-      return;
-    }
-    this.filteredActivities = this.filterActivities(this.groupedActivities, this.filterYear);
-    //const filtered = this.filterActivities(this.groupedActivities, 2020);
-    //console.log("filter", filtered);
-  }
-
-  filterActivities(groupedActivities: any, filterValue: number): any {
-    const filterKeys = ['StartDate', 'Date', 'Year','Start-Year']; // Possible keys to filter by
-
-    return groupedActivities.filter(activity =>
-      activity.Details.some(detail =>
-        filterKeys.some(key => {
-          const value = detail.SubDetails[key];
-          // Convert value to a number (or Date object) for comparison
-          if (key === 'Year' || key=== 'Start-Year') {
-            return Number(value) > filterValue; // Compare year as a number
-          } else if (key === 'StartDate' || key === 'Date') {
-            return new Date(value) > new Date(`${filterValue}-01-01`); // Compare dates
-          }
-          return false;
-        })
-      )
-    );
-  }
-
+ 
 
 
 
@@ -243,19 +216,30 @@ export class CvComponentComponent implements OnInit {
       this.groupedActivities = response.ActivityDetails;
       this.experience = response.facultyExperience;
       this.activities = response.ActivityList
-      this.Faculty = response.FacultyDetails
+      this.Faculty = response.FacultyDetails;
+      this.activitySub = response.ActivitySubDetail
    //   console.log("xp", this.experience);
-      console.log("grp",this.groupedActivities);
+      //console.log("grp",this.groupedActivities);
       //this.selectedTab = this.groupedActivities[0].ActivityType;
 
       this.setActiveTab(this.activities[0].ActivityType);
       $("#" + this.sanitizeType( this.activities[0].ActivityType) + "0").class = 'active';
-      $("#" + this.sanitizeType(this.activities[0].ActivityType) + "0").active=true;
-
+      $("#" + this.sanitizeType(this.activities[0].ActivityType) + "0").active = true;
+      console.log("filter", this.filterdDetail(1));
 
     });
 
-  } 
+  }
+
+  filterdDetail(id: number): any {
+    return this.activitySub.filter(detail => detail.ActivityID === id);
+
+
+  }
+
+
+
+
   loadActivities(): void {
 
     if (GlobalService.TempFacultyMember_ID == null) {

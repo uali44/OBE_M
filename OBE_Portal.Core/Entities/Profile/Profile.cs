@@ -14,7 +14,7 @@ namespace OBE_Portal.Core.Entities.Profile
 
         public List<ActivityList> ActivityList { get; set; }
         public List<ActivityDetailsDto> ActivityDetails { get; set; }
-        //public ActivitySubDetail ActivitySubDetail { get; set; }
+        public List<ActivitySubDetail> ActivitySubDetail { get; set; }
     }
 
     public class FacultyDetails
@@ -84,6 +84,11 @@ namespace OBE_Portal.Core.Entities.Profile
         public int ActivityID { get; set; }
         public string subDetail { get; set; }
         public string SubType { get; set; }
+
+        public static implicit operator ActivitySubDetail(List<List<ActivitySubDetail>> v)
+        {
+            throw new NotImplementedException();
+        }
     }
     public class SubDetailRequest
     {

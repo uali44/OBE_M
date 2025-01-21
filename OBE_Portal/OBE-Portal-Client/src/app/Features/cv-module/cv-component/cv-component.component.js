@@ -22,6 +22,12 @@ let CvComponentComponent = class CvComponentComponent {
         this.groupedActivitiest = {}; // Grouped by ActivityType
         this.activityTypes = []; // Unique Activity Types
         this.Is_Permission_Search_Criteria = false;
+        this.education = [];
+        this.experience = [];
+        this.filterYear = null;
+        this.filteredActivities = [];
+        this.Faculty = [];
+        this.activitySub = [];
         this.activityForm = this.formBuilder.group({
             activity: ['', Validators.required]
         });
@@ -37,8 +43,9 @@ let CvComponentComponent = class CvComponentComponent {
             this.facultyID = GlobalService.TempFacultyMember_ID;
         }
         this.name = GlobalService.Name;
-        this.fetchActivities();
-        this.loadActivities(this.facultyID);
+        this.loaddata();
+        // this.fetchActivities();
+        // this.loadActivities();
         this.groupActivitiesByType();
         this.activityTypes = this.getActivityTypes();
     }
@@ -120,15 +127,48 @@ let CvComponentComponent = class CvComponentComponent {
                 this.toastr.success('Activity saved successfully.');
                 this.activityForm.reset();
                 $("#dynamicModal").modal("hide");
-                this.loadActivities(this.facultyID);
+                this.loadActivities();
             }
             else {
                 this.toastr.error('Failed to save activity.');
             }
         });
     }
-    loadActivities(facultyId) {
-        this.ProfileService.GetFacultyActivity(facultyId).subscribe((response) => {
+    loaddata() {
+        if (GlobalService.TempFacultyMember_ID == null) {
+            this.facultyID = GlobalService.FacultyMember_ID;
+        }
+        else {
+            this.facultyID = GlobalService.TempFacultyMember_ID;
+        }
+        this.ProfileService.getAllData(this.facultyID).subscribe((response) => {
+            this.education = response.FacultyEducation;
+            this.groupedActivities = response.ActivityDetails;
+            this.experience = response.facultyExperience;
+            this.activities = response.ActivityList;
+            this.Faculty = response.FacultyDetails;
+            this.activitySub = response.ActivitySubDetail;
+            //   console.log("xp", this.experience);
+            //console.log("grp",this.groupedActivities);
+            //this.selectedTab = this.groupedActivities[0].ActivityType;
+            this.setActiveTab(this.activities[0].ActivityType);
+            $("#" + this.sanitizeType(this.activities[0].ActivityType) + "0").class = 'active';
+            $("#" + this.sanitizeType(this.activities[0].ActivityType) + "0").active = true;
+            console.log("filter", this.filterdDetail(1));
+        });
+    }
+    filterdDetail(id) {
+        return this.activitySub.filter(detail => detail.ActivityID === id);
+    }
+    loadActivities() {
+        if (GlobalService.TempFacultyMember_ID == null) {
+            this.facultyID = GlobalService.FacultyMember_ID;
+        }
+        else {
+            this.facultyID = GlobalService.TempFacultyMember_ID;
+        }
+        console.log(GlobalService.TempFacultyMember_ID);
+        this.ProfileService.GetFacultyActivity(this.facultyID).subscribe((response) => {
             this.groupedActivities = response;
             //console.log(response);
             //console.log(this.groupedActivities);
@@ -147,7 +187,7 @@ let CvComponentComponent = class CvComponentComponent {
             if (result.value) {
                 this.ProfileService.DeleteActivity(detailID).subscribe(() => {
                     Swal.fire('Deleted!', 'Your activity has been deleted.', 'success');
-                    this.loadActivities(this.facultyID);
+                    this.loadActivities();
                 }, error => {
                     Swal.fire('Error!', 'Failed to delete activity.', 'error');
                 });
