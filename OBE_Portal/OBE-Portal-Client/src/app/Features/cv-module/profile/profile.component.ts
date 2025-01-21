@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { GlobalService } from '../../../Shared/Services/Global/global.service';
 import { CoursesSearchService } from '../../../Services/CourseSearch/CourseSearch.service';
 import { ToastrService } from 'ngx-toastr';
@@ -21,6 +21,7 @@ declare const $: any;
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  @Input() facultydata: any;
   username: string;
   email: string;
   faculty: any = {
@@ -38,7 +39,7 @@ export class ProfileComponent implements OnInit {
   //  FacultyType :"",
   //  FacultyRole :"",
   //};
-  facultydata: any=null;
+ 
   data: any;
   FacultyType: string[] = ['Permanent/Participating', 'Visiting/Supporting'];
   FacultyRole: string[] = ['SA', 'PA', 'SP', 'IP', 'Additional'];
@@ -58,9 +59,9 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.getFaculty();
-   
-    this.username = GlobalService.Name;
+  //this.getFaculty();
+
+    this.username = this.facultydata.Name;
     this.faculty.FacultyMemberID = GlobalService.FacultyMember_ID;
     this.faculty.phone = this.facultydata.phone;
 

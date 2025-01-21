@@ -36,7 +36,7 @@ export class CvComponentComponent implements OnInit {
   experience: any[] = [];
   filterYear: number | null = null;
   filteredActivities: any[] = [];
-
+  Faculty: any[] = [];
 
   constructor(
     private _CoursesSearchService: CoursesSearchService,
@@ -243,13 +243,14 @@ export class CvComponentComponent implements OnInit {
       this.groupedActivities = response.ActivityDetails;
       this.experience = response.facultyExperience;
       this.activities = response.ActivityList
+      this.Faculty = response.FacultyDetails
    //   console.log("xp", this.experience);
       console.log("grp",this.groupedActivities);
       //this.selectedTab = this.groupedActivities[0].ActivityType;
 
       this.setActiveTab(this.activities[0].ActivityType);
-      
-    
+      $("#" + this.sanitizeType( this.activities[0].ActivityType) + "0").class = 'active';
+      $("#" + this.sanitizeType(this.activities[0].ActivityType) + "0").active=true;
 
 
     });

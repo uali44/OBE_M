@@ -68,7 +68,7 @@
   <div style="padding:10px">
 
 
-    <app-profile ></app-profile>
+    <app-profile [facultydata]="Faculty"></app-profile>
     <br />
     <app-education [educations]="education"></app-education>
     <br />
@@ -84,12 +84,14 @@
     <div class="section-tabs no-margin">
       <div class="tabs-head">
         <ul class="nav nav-tabs" role="tablist">
-          <li class="" *ngFor="let type of getActivityTypes();let i = index">
-            <a class=""
+          <li class="" *ngFor="let type of getActivityTypes();let i = index"  [attr.id]="'#' + sanitizeType(type)+i" >
+            <a  class=""
                (click)="setActiveTab(type)"
                [class.active]="selectedTab === type"
                data-toggle="tab"
-               [attr.href]="'#' + sanitizeType(type)">
+               [attr.href]="'#' + sanitizeType(type)"
+            
+               >
               <!--Dynamic href based on type-->
               <h4> {{ type }} </h4>
             </a>
