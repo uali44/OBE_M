@@ -13,11 +13,20 @@
           </div>
           <div class="form-group col-sm-3">
             <label class="control-label">Deparment</label>
-            <select class="form-control" (change)="Get_Intakes($event.target.value)" [ngModel]="Temp_Deaprtment_ID" [attr.disabled]="Temp_Deaprtment_ID != 0  ? 'disabled' : null">
+            <select class="form-control" (change)="Get_Programs($event.target.value)" [ngModel]="Temp_Deaprtment_ID" [attr.disabled]="Temp_Deaprtment_ID != 0  ? 'disabled' : null">
               <option value="0">Select Deparment</option>
               <option value="{{i.DepartmentID}}" *ngFor="let i of Department">{{i.DepartmentName}}</option>
             </select>
           </div>
+          <div class="form-group col-sm-3">
+            <label class="control-label">Select Program <span class="text-danger">*</span></label>
+            <select class="form-control" (change)="Get_Intakes($event.target.value)" id="ProgramID">
+              <option value="0">Select Program</option>
+              <option value="{{i.ProgramID}}" *ngFor="let i of Programs">{{i.ProgramName}}</option>
+            </select>
+          </div>
+
+
           <div class="form-group col-sm-3">
             <label class="control-label">Intake</label>
             <select class="form-control" (change)="GetIntakeStudents($event.target.value)">
@@ -33,8 +42,8 @@
             </select>
           </div>
           <!--<div class="col-sm-2 margin-t17">
-            <button class="btn btn-info">Search</button>
-          </div>-->
+    <button class="btn btn-info">Search</button>
+  </div>-->
         </div>
       </fieldset>
     </div>
@@ -47,10 +56,10 @@
         <li role="presentation"> <a aria-expanded="true" href="#ExitSurveyForm" role="tab" data-toggle="tab">Exit Survey Form</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#InternshipForm" role="tab" data-toggle="tab">Internship Form</a> </li>
 
-        <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICEE" role="tab" data-toggle="tab"   *ngIf="dept===4" >Alumni Survey Form EE</a> </li>
-        <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICEE" role="tab" data-toggle="tab" *ngIf="dept===4">Employer Survey Form EE</a> </li>
-        <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICCE" role="tab" data-toggle="tab" *ngIf="dept===2">Alumni Survey Form CE</a> </li>
-        <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICCE" role="tab" data-toggle="tab" *ngIf="dept===2">Employer Survey Form CE</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICEE" role="tab" data-toggle="tab"   *ngIf="dept===4||dept===8" >Alumni Survey Form EE</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICEE" role="tab" data-toggle="tab" *ngIf="dept===4||dept===8">Employer Survey Form EE</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICCE" role="tab" data-toggle="tab" *ngIf="dept===2||dept===8">Alumni Survey Form CE</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICCE" role="tab" data-toggle="tab" *ngIf="dept===2||dept===8">Employer Survey Form CE</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICSE" role="tab" data-toggle="tab" *ngIf="dept===8">Alumni Survey Form SE</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICSE" role="tab" data-toggle="tab" *ngIf="dept===8">Employer Survey Form SE</a> </li>
       </ul>

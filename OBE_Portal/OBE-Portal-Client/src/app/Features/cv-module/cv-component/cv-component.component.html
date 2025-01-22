@@ -182,60 +182,9 @@
             </div>
 
 
-            <!--<div *ngFor="let activity of groupedActivities">
+         
 
-              <div *ngIf="activity.ActivityType === type">-->
-
-                <!--Activity Title-->
-                <!--<fieldset class="margin-b15">
-                  <legend>{{ activity.ActivityName }}</legend>-->
-
-
-                  <!--Activity Details Table-->
-                  <!--<table class="table table-bordered table-hover table-theme margin-b30">
-                    <thead>
-                      <tr>
-                        <th *ngFor="let detailName of getDetailNames(activity)">
-
-                          {{ detailName }}
-
-
-                        </th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let detail of activity.Details">
-                        <td *ngFor="let detailName of getDetailNames(activity)">
-                          <a href="{{ detail.SubDetails[detailName] || '#' }}" target="_blank" *ngIf="detailName==='URL'">Click to visit :  </a>
-                          {{ detail.SubDetails[detailName] || 'N/A' }}
-                        </td>
-                        <td align="center">
-
-                          <button type="button" class="btn btn-default margin-r5" (click)="deleteActivity(detail.DetailID)">
-                            <i class="app-icon-IconSet-1-33 blue"></i>
-
-                          </button>
-
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <div class="pull-right">
-                    <button type="button" class="btn btn-info" (click)="openModal(activity.ActivityName)">
-
-                      Add {{ activity.ActivityName  }}
-                    </button>
-                  </div>
-                </fieldset>
-                <br />
-              </div>
-
-
-
-
-            </div>-->
+           
           </div>
         </div>
       </div>
@@ -258,12 +207,7 @@
         Add Activities
       </button>
 
-      <a class="btn btn-link link_custom" [routerLink]="'search'">
-        Search
-      </a>
-
-    </div>
-
+   
 
 
 

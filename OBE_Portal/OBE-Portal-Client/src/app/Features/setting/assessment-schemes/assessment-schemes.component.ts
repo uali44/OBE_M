@@ -9,6 +9,7 @@ import { HighlightPipe } from '../../../Shared/Pipe/highlight.pipe';
 import { FilterPipe } from '../../../Shared/Pipe/filter';
 import { CoursesCLOSService } from './../../../Services/CourseCLOS/coursesCLO.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -24,7 +25,7 @@ export class AssessmentSchemesComponent implements OnInit {
   Intake: [] = [];
   Temp_Institute_ID: number;
   Temp_Deaprtment_ID: number;
-
+  childData: number;
 
   Is_Permission_Institute: boolean = false;
   Is_Permission_Deaprtment: boolean = false;
@@ -79,9 +80,15 @@ export class AssessmentSchemesComponent implements OnInit {
   
 
   }
-
+  receiveData(data: number) {
+    this.childData = data; // Update the parent component's variable with the data
+  }
  
-  GetAScheme() { }
+  GetAScheme() {
+    console.log(GlobalService.temp_intake);
+    console.log(this.childData);
+    Swal.fire("method called");
+  }
 
   addData() {
     if (this.dataForm.valid) {

@@ -162,7 +162,7 @@
 
 
   <!-- Display shared Component -->
-  <app-searchForm></app-searchForm>
+  <app-searchForm  (dataEmitter)="receiveData($event)" ></app-searchForm>
   <div style="clear:both;"></div>
   <div class="row">
     <div class="col-12">

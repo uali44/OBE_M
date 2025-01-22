@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CoursesSearchService } from '../../../Services/CourseSearch/CourseSearch.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -19,6 +19,10 @@ import { forEach } from 'underscore';
   providers: [PagerService, HighlightPipe, FilterPipe]
 })
 export class SearchFormComponent implements OnInit {
+  @Output() dataEmitter = new EventEmitter<number>();
+
+
+
   All_PLOS: any[] = [];
   Institutes: [] = [];
   Department: [] = [];
@@ -35,7 +39,7 @@ export class SearchFormComponent implements OnInit {
   Is_Have_Special_Permission: boolean = false;
   Add_Permission: boolean = false;
 
-  
+
 
   constructor(
     private _CoursesSearchService: CoursesSearchService,
@@ -46,11 +50,11 @@ export class SearchFormComponent implements OnInit {
     private CoursesCLOSService: CoursesCLOSService,
     private pagerService: PagerService,
   ) {
-    
+
 
     this.Temp_Institute_ID = 0;
     this.Temp_Deaprtment_ID = 0;
-   this.Is_Permission_Institute = GlobalService.Permissions.indexOf("Institute_Dropdown") >= 0 ? true : false;
+    this.Is_Permission_Institute = GlobalService.Permissions.indexOf("Institute_Dropdown") >= 0 ? true : false;
     this.Is_Permission_Deaprtment = GlobalService.Permissions.indexOf("Department_Dropdown") >= 0 ? true : false;
     if (!this.Is_Permission_Institute) {
       this.Temp_Institute_ID = GlobalService.Institute_ID;
@@ -67,11 +71,11 @@ export class SearchFormComponent implements OnInit {
 
     this.Get_Institutes();
 
-  
 
 
-   
-   
+
+
+
 
     if (this.ustatus == 1) {
 
@@ -93,6 +97,8 @@ export class SearchFormComponent implements OnInit {
                   this.ustatus = status.userStatus;
                   console.log("User Status:", this.ustatus);
                 });
+
+
                 this.Get_Institutes();
               }
 
@@ -117,66 +123,130 @@ export class SearchFormComponent implements OnInit {
     this.ngxService.start();
     this.Institutes = [];
     //  this.Temp_Institute_ID = GlobalService.Institute_ID;
-    if (this.ustatus == 2) {
-      console.log(this.ustatus+"abc");
-      this._CoursesSearchService.Get_Institute_dean(GlobalService.FacultyMember_ID).
-        subscribe(
-          response => {
-            try {
-              if (response != null) {
-                this.Temp_Institute_ID = 0;
-                //if (this.Temp_Institute_ID != 0) {
-                //  this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
-                //  this.Get_Department(this.Temp_Institute_ID);
-                //} else {
-                  this.Institutes = response;
-               // }
 
-              }
-              this.ngxService.stop();
-            } catch (e) {
-              this.ngxService.stop();
-              this.toastr.error("Internal server error occured while processing your request", "Error!");
+    this._CoursesSearchService.Get_Institute_dean(GlobalService.FacultyMember_ID).
+      subscribe(
+        response => {
+          try {
+            if (response && response.length > 0) {
+              this.Temp_Institute_ID = 0;
+              //if (this.Temp_Institute_ID != 0) {
+              //  this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
+              //  this.Get_Department(this.Temp_Institute_ID);
+              //} else {
+              this.Institutes = response;
+              // }
+
             }
 
-          },
-          error => {
-            this.ngxService.stop();
-            this.toastr.error("Internal server error occured while processing your request", "Error!");
-          });
+            else {
+
+              this._CoursesSearchService.Get_Institute().
+                subscribe(
+                  response => {
+                    try {
+                      if (response != null) {
+
+                        if (this.Temp_Institute_ID != 0) {
+                          this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
+                          this.Get_Department(this.Temp_Institute_ID);
+                        } else {
+                          this.Institutes = response;
+                        }
+
+                      }
+                      this.ngxService.stop();
+                    } catch (e) {
+                      this.ngxService.stop();
+                      this.toastr.error("Internal server error occured while processing your request", "Error!");
+                    }
+
+                  },
+                  error => {
+                    this.ngxService.stop();
+                    this.toastr.error("Internal server error occured while processing your request", "Error!");
+                  });
 
 
-      console.log("entered");
-
-    }
-    else {
-
-      this._CoursesSearchService.Get_Institute().
-        subscribe(
-          response => {
-            try {
-              if (response != null) {
-
-                if (this.Temp_Institute_ID != 0) {
-                  this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
-                  this.Get_Department(this.Temp_Institute_ID);
-                } else {
-                  this.Institutes = response;
-                }
-
-              }
-              this.ngxService.stop();
-            } catch (e) {
-              this.ngxService.stop();
-              this.toastr.error("Internal server error occured while processing your request", "Error!");
             }
 
-          },
-          error => {
+
+            this.ngxService.stop();
+          } catch (e) {
             this.ngxService.stop();
             this.toastr.error("Internal server error occured while processing your request", "Error!");
-          });
-    }
+          }
+
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Internal server error occured while processing your request", "Error!");
+        });
+
+
+
+
+
+    //if (this.ustatus == 2) {
+    //  console.log(this.ustatus+"abc");
+    //  this._CoursesSearchService.Get_Institute_dean(GlobalService.FacultyMember_ID).
+    //    subscribe(
+    //      response => {
+    //        try {
+    //          if (response != null) {
+    //            this.Temp_Institute_ID = 0;
+    //            //if (this.Temp_Institute_ID != 0) {
+    //            //  this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
+    //            //  this.Get_Department(this.Temp_Institute_ID);
+    //            //} else {
+    //              this.Institutes = response;
+    //           // }
+
+    //          }
+    //          this.ngxService.stop();
+    //        } catch (e) {
+    //          this.ngxService.stop();
+    //          this.toastr.error("Internal server error occured while processing your request", "Error!");
+    //        }
+
+    //      },
+    //      error => {
+    //        this.ngxService.stop();
+    //        this.toastr.error("Internal server error occured while processing your request", "Error!");
+    //      });
+
+
+    //  console.log("entered");
+
+    //}
+    //else {
+
+    //  this._CoursesSearchService.Get_Institute().
+    //    subscribe(
+    //      response => {
+    //        try {
+    //          if (response != null) {
+
+    //            if (this.Temp_Institute_ID != 0) {
+    //              this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
+    //              this.Get_Department(this.Temp_Institute_ID);
+    //            } else {
+    //              this.Institutes = response;
+    //            }
+
+    //          }
+    //          this.ngxService.stop();
+    //        } catch (e) {
+    //          this.ngxService.stop();
+    //          this.toastr.error("Internal server error occured while processing your request", "Error!");
+    //        }
+
+    //      },
+    //      error => {
+    //        this.ngxService.stop();
+    //        this.toastr.error("Internal server error occured while processing your request", "Error!");
+    //      });
+    //}
   }
   Get_Department(val) {
     if (val == undefined || val == null || val == "")
@@ -185,68 +255,144 @@ export class SearchFormComponent implements OnInit {
     this.Department = [];
     //  this.Temp_Deaprtment_ID = GlobalService.Deaprtment_ID;
 
-    if (this.ustatus == 2) {
-      this.Temp_Deaprtment_ID = 0;
-      const payload = {
-        InstituteID: Number(val),
-        FacultyMemberID: GlobalService.FacultyMember_ID
-      };
 
-      this._CoursesSearchService.Get_DepartmentDean(payload).
-        subscribe(
-          response => {
-            try {
-              if (response != null) {
-                //if (this.Temp_Deaprtment_ID != 0) {
-                //  this.Department = response.filter(x => x.DepartmentID == this.Temp_Deaprtment_ID);
-                //  this.Get_Programs(this.Temp_Deaprtment_ID);
-                //} else {
-                  this.Department = response;
+    this.Temp_Deaprtment_ID = 0;
+    const payload = {
+      InstituteID: Number(val),
+      FacultyMemberID: GlobalService.FacultyMember_ID
+    };
+
+    this._CoursesSearchService.Get_DepartmentDean(payload).
+      subscribe(
+        response => {
+          try {
+            if (response && response.length>0) {
+              //if (this.Temp_Deaprtment_ID != 0) {
+              //  this.Department = response.filter(x => x.DepartmentID == this.Temp_Deaprtment_ID);
+              //  this.Get_Programs(this.Temp_Deaprtment_ID);
+              //} else {
+              this.Department = response;
               //  }
-              }
-              this.ngxService.stop();
-            } catch (e) {
-              this.ngxService.stop();
-              this.toastr.error("Internal server error occured while processing your request", "Error!");
+            }
+            else {
+
+              this._CoursesSearchService.Get_Department(Number(val)).
+                subscribe(
+                  response => {
+                    try {
+                      if (response != null) {
+                        if (this.Temp_Deaprtment_ID != 0) {
+                          this.Department = response.filter(x => x.DepartmentID == this.Temp_Deaprtment_ID);
+                          this.Get_Programs(this.Temp_Deaprtment_ID);
+                        } else {
+                          this.Department = response;
+                        }
+                      }
+                      this.ngxService.stop();
+                    } catch (e) {
+                      this.ngxService.stop();
+                      this.toastr.error("Internal server error occured while processing your request", "Error!");
+                    }
+
+
+                  },
+                  error => {
+                    this.ngxService.stop();
+                    this.toastr.error("Internal server error occured while processing your request", "Error!");
+                  });
+
+
+
+
+
             }
 
 
-          },
-          error => {
+
+            this.ngxService.stop();
+          } catch (e) {
             this.ngxService.stop();
             this.toastr.error("Internal server error occured while processing your request", "Error!");
-          });
+          }
 
 
-    }
-    else {
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Internal server error occured while processing your request", "Error!");
+        });
 
 
-      this._CoursesSearchService.Get_Department(Number(val)).
-        subscribe(
-          response => {
-            try {
-              if (response != null) {
-                if (this.Temp_Deaprtment_ID != 0) {
-                  this.Department = response.filter(x => x.DepartmentID == this.Temp_Deaprtment_ID);
-                  this.Get_Programs(this.Temp_Deaprtment_ID);
-                } else {
-                  this.Department = response;
-                }
-              }
-              this.ngxService.stop();
-            } catch (e) {
-              this.ngxService.stop();
-              this.toastr.error("Internal server error occured while processing your request", "Error!");
-            }
+  
 
 
-          },
-          error => {
-            this.ngxService.stop();
-            this.toastr.error("Internal server error occured while processing your request", "Error!");
-          });
-    }
+    
+
+
+
+
+    //if (this.ustatus == 2) {
+    //  this.Temp_Deaprtment_ID = 0;
+    //  const payload = {
+    //    InstituteID: Number(val),
+    //    FacultyMemberID: GlobalService.FacultyMember_ID
+    //  };
+
+    //  this._CoursesSearchService.Get_DepartmentDean(payload).
+    //    subscribe(
+    //      response => {
+    //        try {
+    //          if (response != null) {
+    //            //if (this.Temp_Deaprtment_ID != 0) {
+    //            //  this.Department = response.filter(x => x.DepartmentID == this.Temp_Deaprtment_ID);
+    //            //  this.Get_Programs(this.Temp_Deaprtment_ID);
+    //            //} else {
+    //              this.Department = response;
+    //          //  }
+    //          }
+    //          this.ngxService.stop();
+    //        } catch (e) {
+    //          this.ngxService.stop();
+    //          this.toastr.error("Internal server error occured while processing your request", "Error!");
+    //        }
+
+
+    //      },
+    //      error => {
+    //        this.ngxService.stop();
+    //        this.toastr.error("Internal server error occured while processing your request", "Error!");
+    //      });
+
+
+    //}
+    //else {
+
+
+    //  this._CoursesSearchService.Get_Department(Number(val)).
+    //    subscribe(
+    //      response => {
+    //        try {
+    //          if (response != null) {
+    //            if (this.Temp_Deaprtment_ID != 0) {
+    //              this.Department = response.filter(x => x.DepartmentID == this.Temp_Deaprtment_ID);
+    //              this.Get_Programs(this.Temp_Deaprtment_ID);
+    //            } else {
+    //              this.Department = response;
+    //            }
+    //          }
+    //          this.ngxService.stop();
+    //        } catch (e) {
+    //          this.ngxService.stop();
+    //          this.toastr.error("Internal server error occured while processing your request", "Error!");
+    //        }
+
+
+    //      },
+    //      error => {
+    //        this.ngxService.stop();
+    //        this.toastr.error("Internal server error occured while processing your request", "Error!");
+    //      });
+    //}
   }
   Get_Intakes(val) {
     if (val == undefined || val == null || val == "")
@@ -298,7 +444,15 @@ export class SearchFormComponent implements OnInit {
         });
   }
 
-  GetAScheme() { }
+  GetAScheme(val) {
+
+    GlobalService.temp_intake = val;
+    const data = val;
+    this.dataEmitter.emit(data);
+
+
+    
+  }
 
   
 

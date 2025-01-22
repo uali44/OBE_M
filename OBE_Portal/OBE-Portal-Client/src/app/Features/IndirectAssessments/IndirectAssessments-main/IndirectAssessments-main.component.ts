@@ -19,6 +19,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
   Intake: [] = [];
   IntakeStudent: [] = [];
   IntakeID: number;
+  Programs: [] = [];
   StudentID: number;
   Is_Permission_Institute: boolean = false;
   Is_Permission_Deaprtment: boolean = false;
@@ -91,7 +92,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
 
             if (this.Temp_Deaprtment_ID != 0) {
               this.Department = response.filter(x => x.DepartmentID == this.Temp_Deaprtment_ID);
-              this.Get_Intakes(this.Temp_Deaprtment_ID);
+              this.Get_Programs(this.Temp_Deaprtment_ID);
             } else {
               this.Department = response;
             }
@@ -102,6 +103,33 @@ export class IndirectAssessmentsMainComponent implements OnInit {
         error => {
           this.ngxService.stop();
           this.toastr.error("Internal server error occured while processing your request", "Error!")
+        });
+  }
+  Get_Programs(val) {
+    if (val == undefined || val == null || val == "") {
+      console.log("Invalid val");
+      return;
+    }
+     
+    this.ngxService.start();
+    this.Programs = [];
+    this._CoursesSearchService.Get_Programs(Number(val)).
+      subscribe(
+        response => {
+          try {
+            if (response != null) {
+              this.Programs = response;
+            }
+            this.ngxService.stop();
+          } catch (e) {
+            this.ngxService.stop();
+            this.toastr.error("Internal server error occured while processing your request", "Error!");
+          }
+
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Internal server error occured while processing your request", "Error!");
         });
   }
   Get_Intakes(val) {

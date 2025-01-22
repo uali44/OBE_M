@@ -21,4 +21,5 @@ export abstract class GlobalService {
   public static IsStudent: number;
   public static Name: string;
   public static StudentID: number;
+  public static temp_intake: number;
 }

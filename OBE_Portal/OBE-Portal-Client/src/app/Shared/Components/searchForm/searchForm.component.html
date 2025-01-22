@@ -33,7 +33,7 @@
 
                   <div class="form-group col-sm-3">
                     <label class="control-label">Select Intake <span class="text-danger">*</span></label>
-                    <select class="form-control" id="IntakeID">
+                    <select class="form-control" id="IntakeID"  (change)="GetAScheme($event.target.value)" >
                       <option value="0">Select Intake</option>
                       <option value="{{i.AdmissionOpenProgramID}}" *ngFor="let i of Intake">{{i.semesterAlia}}</option>
                     </select>
