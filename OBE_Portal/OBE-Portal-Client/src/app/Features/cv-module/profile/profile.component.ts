@@ -29,6 +29,7 @@ export class ProfileComponent implements OnInit {
     phone: '',
     FacultyType: '',
     FacultyRole: '',
+    DriveLink:'',
   };
   //facultydata: any = {
  
@@ -71,7 +72,8 @@ export class ProfileComponent implements OnInit {
     this.faculty = {
       phone: this.facultydata[0]?.Phone || '',
       FacultyType: this.facultydata[0]?.FacultyType ||'' ,
-      FacultyRole: this.facultydata[0]?.FacultyRole || '', 
+      FacultyRole: this.facultydata[0]?.FacultyRole || '',
+      DriveLink: this.facultydata[0]?.DriveLink ||'',
     };
 
     // Open the modal (using jQuery for simplicity, you can replace with Angular modal handling)

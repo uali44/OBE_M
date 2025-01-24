@@ -7,9 +7,9 @@
     </div>
   </div>
 
-  <div class="modal" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
+  <div class="modal fade" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="padding:10px;">
         <div class="section-heading">
           <h2 class="pull-left">Add Activities</h2>
           <div class="pull-right">
@@ -149,8 +149,8 @@
                           <tr *ngFor="let detail of gactivity.Details">
 
                             <td *ngFor="let detailName of getDetailNames(gactivity)">
-                              <a href="{{ detail.SubDetails[detailName] || '#' }}" target="_blank" *ngIf="detailName==='URL'">Click to visit :  </a>
-                              {{ detail.SubDetails[detailName] || 'N/A' }}
+                              <a href="{{ detail.SubDetails[detailName] || '#' }}" target="_blank" *ngIf="detailName==='URL'">{{ detail.SubDetails[detailName] || 'N/A' }} </a>
+                              <ng-container *ngIf="detailName!='URL'">{{ detail.SubDetails[detailName] || 'N/A' }} </ng-container>
                             </td>
                             <td align="center">
 
@@ -161,8 +161,15 @@
 
                             </td>
                           </tr>
-                       </ng-container>
+                        </ng-container>
+
+
+
                       </ng-container>
+                      <tr *ngIf="!groupExists(activity.ActivityName)">
+                        <td *ngFor="let detailName of filterdDetail(activity.ActivityID)">NA</td>
+                        <td>NA</td>
+                      </tr>
                     </tbody>
                   </table>
 
@@ -202,10 +209,10 @@
     <div style="clear:both;"></div>
     <br />
     <br />
-    <div class="pull-right">
+    <!--<div class="pull-right">
       <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dynamicModal">
         Add Activities
-      </button>
+      </button>-->
 
    
 

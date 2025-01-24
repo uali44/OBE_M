@@ -25,6 +25,7 @@ namespace OBE_Portal.Core.Entities.Profile
         public string Phone { get; set; }
         public string FacultyType { get; set; }
         public string FacultyRole { get; set; }
+        public string DriveLink {  get; set; }
     }
 
     public class profileData
@@ -33,6 +34,7 @@ namespace OBE_Portal.Core.Entities.Profile
         public string Phone { get; set; }
         public string FacultyType { get; set; }
         public string FacultyRole { get; set; }
+        public string DriveLink { get; set; }
 
     }
     public class education

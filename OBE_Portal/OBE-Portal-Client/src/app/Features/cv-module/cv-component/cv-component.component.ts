@@ -76,7 +76,7 @@ export class CvComponentComponent implements OnInit {
   }
 
   getActivityTypes(): string[] {
-    const activityTypes = this.groupedActivities.map(activity => activity.ActivityType);
+    const activityTypes = this.activities.map(activity => activity.ActivityType);
     const uniqueTypes = [...new Set(activityTypes)]; 
   
    
@@ -198,7 +198,9 @@ export class CvComponentComponent implements OnInit {
 
 
 
-
+  groupExists(gactivity: string): boolean {
+    return this.groupedActivities.some(activity => activity.ActivityName === gactivity);
+  }
 
   loaddata(): void {
     if (GlobalService.TempFacultyMember_ID == null) {

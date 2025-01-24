@@ -44,8 +44,9 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                         var Phone = new SqlParameter("@Phone", Request[i].Phone);
                         var FacultyType = new SqlParameter("@FacultyType", Request[i].FacultyType);
                         var FacultyRole = new SqlParameter("@FacultyRole", Request[i].FacultyRole);
+                        var DriveLink = new SqlParameter("@DriveLink", Request[i].DriveLink);
 
-                        response = await _context.Database.ExecuteSqlRawAsync($"EXEC AddFacultyDetail @FacultyMemberID,@Phone,@FacultyType,@FacultyRole", FacultyMEmberID, Phone, FacultyType, FacultyRole);
+                        response = await _context.Database.ExecuteSqlRawAsync($"EXEC AddFacultyDetail @FacultyMemberID,@Phone,@FacultyType,@FacultyRole,@DriveLink", FacultyMEmberID, Phone, FacultyType, FacultyRole,DriveLink);
                     }
                     if (response == 0 || response == 1)
                         return true;

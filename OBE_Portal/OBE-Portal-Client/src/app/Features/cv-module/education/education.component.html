@@ -73,10 +73,10 @@
       <tbody>
         <tr *ngFor="let edu of educations">
 
-          <td>{{ edu.EduInstitute }}</td>
-          <td>{{ edu.Degree }}</td>
-          <td>{{ edu.Field }}</td>
-          <td>{{ edu.Year }}</td>
+          <td>{{ edu.EduInstitute  }}</td>
+          <td>{{ edu.Degree  }}</td>
+          <td>{{ edu.Field  }}</td>
+          <td>{{ edu.Year  }}</td>
           <td align="center">
             <button (click)="confirmDelete(edu.EduID)" class="btn btn-default margin-r5">
               <i class="app-icon-IconSet-1-33 blue"></i>
@@ -84,6 +84,14 @@
           </td>
 
         </tr>
+        <tr *ngIf="educations.length === 0">
+          <td  align="center">N/A</td>
+          <td  align="center">N/A</td>
+          <td  align="center">N/A</td>
+          <td  align="center">N/A</td>
+          <td  align="center">N/A</td>
+        </tr>
+
       </tbody>
     </table>
     <div class="pull-right">
