@@ -68,9 +68,10 @@ export class EducationComponent implements OnInit {
   }
   addEducation() {
     if (this.educationForm.valid) {
+      
       const educationData = this.educationForm.value;
       console.log('Education Data:', educationData);
-
+      
       this.ngxService.start();
       this.ProfileService.AddFacultyEducation([educationData]).
         subscribe(

@@ -7,7 +7,7 @@
     </div>
   </div>
 
-  <div class="modal fade" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true">
+  <div class="modal fade" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true"   role="dialog" >
     <div class="modal-dialog" role="document">
       <div class="modal-content" style="padding:10px;">
         <div class="section-heading">
@@ -129,7 +129,12 @@
                 <fieldset class="margin-b15">
                   <legend>{{ activity.ActivityName }}</legend>
 
+                  <div class="pull-right">
+                    <button type="button" class="btn btn-info" (click)="openModal(activity.ActivityName)">
 
+                      Add {{ activity.ActivityName  }}
+                    </button>
+                  </div>
                   <!--Activity Details Table-->
                   <table class="table table-bordered table-hover table-theme margin-b30">
                     <thead>
@@ -173,12 +178,7 @@
                     </tbody>
                   </table>
 
-                  <div class="pull-right">
-                    <button type="button" class="btn btn-info" (click)="openModal(activity.ActivityName)">
 
-                      Add {{ activity.ActivityName  }}
-                    </button>
-                  </div>
                 </fieldset>
                 <br />
               </div>
