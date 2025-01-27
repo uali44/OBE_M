@@ -11,6 +11,7 @@ import { ProfileService } from './../../../Services/Profile/profile.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { InterconnectedService } from '../../../Shared/Services/Global/interconnected.service';
+import { forEach } from 'underscore';
 declare const $: any;
 
 @Component({
@@ -20,7 +21,7 @@ declare const $: any;
 })
 export class ExperienceComponent implements OnInit {
    @Input() exper: any[]=[];
-
+  tempData: any[] = [];
   experienceForm: FormGroup;
   experienceData: any[] = this.exper;
   currentlyWorking: boolean = false;
@@ -57,7 +58,7 @@ export class ExperienceComponent implements OnInit {
    
     this.ProfileService.GetExperience(facultyMemberID).subscribe({
       next: (data) => {
-        this.experienceData = data;
+        this.exper = data;
         console.log("Exp data" + this.experienceData);
         
       },
@@ -70,20 +71,32 @@ export class ExperienceComponent implements OnInit {
 
 
   addExperience() {
-    if (this.experienceForm.valid) {
-      const experienceData = this.experienceForm.value;
-      experienceData.FacultyMemberID = GlobalService.FacultyMember_ID;
-      console.log('Experience Data:', experienceData);
-      if (this.currentlyWorking) {
-        experienceData.EndDate = null;
-      }
+
+    const experienceData = this.tempData;
+     // experienceData.FacultyMemberID = GlobalService.FacultyMember_ID;
+    console.log('Experience Data:', experienceData);
+    //foreach(experienceData)
+
+    //{
+    //  if (this.currentlyWorking) {
+    //    experienceData.EndDate = null;
+    //  }
+
+    //}
+   
       this.ngxService.start();
-      this.ProfileService.AddFacultyExperience([experienceData]).
+      this.ProfileService.AddFacultyExperience(experienceData).
         subscribe(
           data => {
             this.ngxService.stop();
 
             this.toastr.success("Experience added successfully", "Success");
+
+            this.experienceForm.reset();
+            this.experienceForm.controls['FacultyMemberID'].setValue(GlobalService.FacultyMember_ID);
+            this.tempData = [];
+
+
             $("#addExperienceModal").modal("hide");
             this.getExperience();
 
@@ -95,12 +108,7 @@ export class ExperienceComponent implements OnInit {
           });
 
 
-      this.experienceForm.reset();
-    }
-    else {
      
-      this.toastr.error("Please Enter All Fields", "Error");
-    }
   }
   onCurrentlyWorkingChange(event: any) {
     this.currentlyWorking = event.target.checked;
@@ -111,6 +119,22 @@ export class ExperienceComponent implements OnInit {
       this.experienceForm.get('EndDate')?.enable(); // Enable EndDate input
     }
   }
+
+  add() {
+    //if (this.educationForm.invalid) {
+    //  return;
+    //}
+
+    this.tempData.push(this.experienceForm.value);
+    console.log(this.tempData);
+    this.experienceForm.reset();
+    this.experienceForm.controls['FacultyMemberID'].setValue(GlobalService.FacultyMember_ID);
+  }
+
+  deleteEntry(index: number) {
+    this.tempData.splice(index, 1);
+  }
+
 
 
   confirmDelete(expID: number) {

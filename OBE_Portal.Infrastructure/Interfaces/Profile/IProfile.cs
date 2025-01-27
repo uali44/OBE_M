@@ -16,7 +16,7 @@ namespace OBE_Portal.Infrastructure.Interfaces.Profile
         Task<bool> AddFacultyExperience(List<experience> Request);
         Task<List<ActivityList>> GetActivities();
         Task<List<ActivitySubDetail>> GetActivitySubDetails(long ActivityID);
-        Task<bool> SaveActivityData(ActivityData activityData);
+        Task<bool> SaveActivityData(List<ActivityData> activityData);
         Task<List<ActivityDetailsDto>> GetFacultyActivity(int FacultyID);
         Task<List<FacultyDetails>> GetFacultyDetails(long FacultyID);
         Task<List<FacultyEducation>> GetEducation(int facultyMemberID);

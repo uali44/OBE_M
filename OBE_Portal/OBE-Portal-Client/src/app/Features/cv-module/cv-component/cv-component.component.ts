@@ -38,6 +38,7 @@ export class CvComponentComponent implements OnInit {
   filteredActivities: any[] = [];
   Faculty: any[] = [];
   activitySub: any[] = [];
+  tempData: any[] = [];
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -164,22 +165,22 @@ export class CvComponentComponent implements OnInit {
 
   onSubmit(): void {
 
-    if (this.activityForm.invalid) {
+    //if (this.activityForm.invalid) {
 
-      this.toastr.error("Please Enter All Fields", "Error");
+    //  this.toastr.error("Please Enter All Fields", "Error");
      
-      return;
-    }
+    //  return;
+    //}
 
-    const activityData = {
-      FacultyID: this.facultyID , 
-      ActivityID: this.selectedActivityId,
-      Details: this.fields.map((field) => ({
-        DetailName: field.subDetail,
-        DetailValue: this.activityForm.value[this.sanitizeType( field.subDetail)],
-      })),
-    };
-
+    //const activityData = {
+    //  FacultyID: this.facultyID , 
+    //  ActivityID: this.selectedActivityId,
+    //  Details: this.fields.map((field) => ({
+    //    DetailName: field.subDetail,
+    //    DetailValue: this.activityForm.value[this.sanitizeType( field.subDetail)],
+    //  })),
+    //};
+    const activityData = this.tempData;
     this.ProfileService.SaveActivity(activityData).subscribe((response) => {
       if (response) {
         this.toastr.success('Activity saved successfully.');
@@ -192,7 +193,29 @@ export class CvComponentComponent implements OnInit {
     });
   }
 
- 
+
+  add() {
+    //if (this.educationForm.invalid) {
+    //  return;
+    //}
+    const activityData = {
+      FacultyID: this.facultyID,
+      ActivityID: this.selectedActivityId,
+      Details: this.fields.map((field) => ({
+        DetailName: field.subDetail,
+        DetailValue: this.activityForm.value[this.sanitizeType(field.subDetail)],
+      })),
+    };
+    this.tempData.push(activityData);
+    console.log(this.tempData);
+    this.activityForm.reset();
+    this.activityForm.controls['activity'].setValue(this.selectedActivityId);
+    //this.activityForm.controls['FacultyMemberID'].setValue(GlobalService.FacultyMember_ID);
+  }
+
+  deleteEntry(index: number) {
+    this.tempData.splice(index, 1);
+  }
 
  
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace OBE_Portal.Core.Entities.Profile
 {
@@ -44,6 +45,7 @@ namespace OBE_Portal.Core.Entities.Profile
         public string degree { get; set; }
         public string Field { get; set; }
         public int year { get; set; }
+        public IFormFile ImageFile { get; set; }
 
 
     }

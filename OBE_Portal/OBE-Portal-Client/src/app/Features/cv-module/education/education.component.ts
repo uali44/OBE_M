@@ -23,6 +23,9 @@ export class EducationComponent implements OnInit {
   educationForm: FormGroup;
   tempData: any[]=[];
 
+  selectedFile: File | null = null;
+  fileError: string = '';
+  compressedImage: string | null = null;
 
   constructor(
     private _CoursesSearchService: CoursesSearchService,
@@ -41,7 +44,8 @@ export class EducationComponent implements OnInit {
       eduInstitute: ['', Validators.required],
       degree: ['', Validators.required],
       field: ['', Validators.required],
-      year: ['', [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear())]]
+      year: ['', [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear())]],
+      imageFile: [null],
     });
 
 
@@ -67,18 +71,25 @@ export class EducationComponent implements OnInit {
     });
   }
   addEducation() {
-    if (this.educationForm.valid) {
+  
       
-      const educationData = this.educationForm.value;
+      /*  const educationData = this.educationForm.value;*/
+      const educationData = this.tempData;
       console.log('Education Data:', educationData);
       
       this.ngxService.start();
-      this.ProfileService.AddFacultyEducation([educationData]).
+      this.ProfileService.AddFacultyEducation(educationData).
         subscribe(
           data => {
             this.ngxService.stop();
 
             this.toastr.success("Education successfully", "Success");
+            this.educationForm.reset();
+            this.educationForm.controls['FacultyMemberID'].setValue(GlobalService.FacultyMember_ID);
+            this.tempData = [];
+
+
+
             $("#addEducationModal").modal("hide");
 
             this.getEduction();
@@ -89,28 +100,102 @@ export class EducationComponent implements OnInit {
           });
 
 
-      this.educationForm.reset(); 
-    }
-    else {
-      
-      this.toastr.error("Please Enter All Fields.The value for year must be greater than 1900", "Error");
-     
-      
-    }
+   
   }
 
 
   add() {
-    if (this.educationForm.invalid) {
-      return;
-    }
+    //if (this.educationForm.invalid) {
+    //  return;
+    //}
 
     this.tempData.push(this.educationForm.value);
+    console.log(this.tempData);
+    this.educationForm.reset();
+    this.educationForm.controls['FacultyMemberID'].setValue( GlobalService.FacultyMember_ID);
   }
 
   deleteEntry(index: number) {
     this.tempData.splice(index, 1);
   }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement; // Cast to HTMLInputElement
+    const file = input.files[0]; // Use optional chaining to check for files
+
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!validTypes.includes(file.type)) {
+      this.fileError = 'Invalid file type. Please upload a JPEG, PNG, or GIF.';
+      return;
+    }
+
+    // Validate file size
+    const maxSize = 2 * 1024 * 1024; // 2 MB
+    if (file.size > maxSize) {
+      this.fileError = 'File size exceeds the 2 MB limit.';
+      return;
+    }
+
+    // Compress the image
+    this.compressImage(file, (compressedFile) => {
+      this.fileError = '';
+      this.educationForm.patchValue({ imageFile: compressedFile });
+    });
+    
+  }
+
+  compressImage(file: File, callback: (compressedFile: File) => void) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = (event: any) => {
+      const img = new Image();
+      img.src = event.target.result;
+
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const maxWidth = 800; // Set max width for compression
+        const maxHeight = 800; // Set max height for compression
+
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        ctx?.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            const compressedFile = new File([blob!], file.name, {
+              type: file.type,
+            });
+            callback(compressedFile);
+          },
+          file.type,
+          0.7 // Set quality level for compression
+        );
+      };
+    };
+  }
+
+
 
   confirmDelete(eduID: number) {
     Swal.fire({

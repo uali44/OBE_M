@@ -56,10 +56,39 @@
               <!--   <div *ngIf="experienceForm.endDate.errors.required" class="text-danger">Position is required </div>-->
 
             </div>
-
+            <button type="button" class="btn btn-primary pull-right" (click)="add()" [disabled]="!experienceForm.valid">Add</button>
+            <table class="table mt-3">
+              <thead>
+                <tr>
+                  <!--<th *ngFor="let field of formFields">{{ field.label }}</th>-->
+                  <th>
+                    Position
+                  </th>
+                  <th>Company</th>
+                  <th>
+                    Field
+                  </th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let entry of tempData; let i = index">
+                  <td>{{ entry.Position }}</td>
+                  <td>{{ entry.Company }}</td>
+                  <td>{{ entry.Field }}</td>
+                  <td>{{ entry.StartDate }}</td>
+                  <td>{{ entry.EndDate || 'Present' }}</td>
+                  <td>
+                    <button type="button" class="btn btn-danger btn-sm" (click)="deleteEntry(i)">Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary pull-right" [disabled]="!experienceForm.valid">Add</button>
+            <button type="submit" class="btn btn-primary pull-right" [disabled]="tempData.length==0">Add</button>
             <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal">Cancel</button>
 
           </div>
@@ -72,6 +101,13 @@
  
   <fieldset class="margin-b15">
     <legend>Experience</legend>
+
+    <div class="pull-right">
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addExperienceModal">
+        Add Experience
+      </button>
+    </div>
+
     <table class="table table-bordered table-hover table-theme margin-b30">
       <thead>
         <tr>
@@ -108,10 +144,6 @@
       </tbody>
     </table>
 
-    <div class="pull-right">
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addExperienceModal">
-        Add Experience
-      </button>
-    </div>
-    </fieldset>
+
+  </fieldset>
 </div>

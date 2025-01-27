@@ -30,7 +30,7 @@
                 </option>
               </select>
               <div *ngIf="activityForm.controls['activity'].invalid && activityForm.controls['activity'].touched">
-                <div class="text-danger" *ngIf="activityForm.controls['activity'].hasError('required')">Username/Enrollment is required.</div>
+                <div class="text-danger" *ngIf="activityForm.controls['activity'].hasError('required')">Activity Type is required.</div>
               </div>
             </div>
 
@@ -50,7 +50,32 @@
 
 
             </div>
+            <button type="button" class="btn btn-primary pull-right" (click)="add()" [disabled]="!activityForm.valid">Add</button>
+            <table class="table mt-3">
+              <thead>
+                <tr>
+                  <!--<th *ngFor="let field of formFields">{{ field.label }}</th>-->
+                  <th *ngFor="let field of fields">
+                    {{field.subDetail}}
+                  </th>
 
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let entry of tempData; let i = index">
+                  <ng-container *ngFor="let detail of entry.Details">
+                    <td>{{detail.DetailValue}}</td>
+
+
+                  </ng-container>
+                  <td>
+                    <button type="button" class="btn btn-danger btn-sm" (click)="deleteEntry(i)">Delete</button>
+                  </td>
+
+                </tr>
+              </tbody>
+            </table>
             <!-- Submit Button -->
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel</button>

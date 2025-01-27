@@ -130,7 +130,7 @@ namespace OBE_Portal.Controllers
         }
 
         [HttpPost("SaveActivityData")]
-        public async Task<IActionResult> SaveActivityData([FromBody] ActivityData activityData)
+        public async Task<IActionResult> SaveActivityData([FromBody] List<ActivityData> activityData)
         {
             try
             {
