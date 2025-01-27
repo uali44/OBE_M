@@ -21,7 +21,7 @@ declare const $: any;
 export class EducationComponent implements OnInit {
   @Input() educations: any[] = [];
   educationForm: FormGroup;
- 
+  tempData: any[]=[];
 
 
   constructor(
@@ -99,6 +99,18 @@ export class EducationComponent implements OnInit {
     }
   }
 
+
+  add() {
+    if (this.educationForm.invalid) {
+      return;
+    }
+
+    this.tempData.push(this.educationForm.value);
+  }
+
+  deleteEntry(index: number) {
+    this.tempData.splice(index, 1);
+  }
 
   confirmDelete(eduID: number) {
     Swal.fire({

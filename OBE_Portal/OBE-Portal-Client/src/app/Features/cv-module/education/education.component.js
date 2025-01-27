@@ -1,5 +1,5 @@
 import { __decorate } from "tslib";
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { GlobalService } from '../../../Shared/Services/Global/global.service';
 import { Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -14,6 +14,7 @@ let EducationComponent = class EducationComponent {
         this.pagerService = pagerService;
         this.msgForDashboard = msgForDashboard;
         this.educations = [];
+        this.tempData = [];
         this.educationForm = this.formBuilder.group({
             FacultyMemberID: GlobalService.FacultyMember_ID,
             eduInstitute: ['', Validators.required],
@@ -23,7 +24,7 @@ let EducationComponent = class EducationComponent {
         });
     }
     ngOnInit() {
-        this.getEduction();
+        // this.getEduction();
     }
     getEduction() {
         const facultyMemberID = GlobalService.FacultyMember_ID;
@@ -59,6 +60,15 @@ let EducationComponent = class EducationComponent {
             this.toastr.error("Please Enter All Fields.The value for year must be greater than 1900", "Error");
         }
     }
+    add() {
+        if (this.educationForm.invalid) {
+            return;
+        }
+        this.tempData.push(this.educationForm.value);
+    }
+    deleteEntry(index) {
+        this.tempData.splice(index, 1);
+    }
     confirmDelete(eduID) {
         Swal.fire({
             title: 'Are you sure?',
@@ -92,6 +102,9 @@ let EducationComponent = class EducationComponent {
         //  }
     }
 };
+__decorate([
+    Input()
+], EducationComponent.prototype, "educations", void 0);
 EducationComponent = __decorate([
     Component({
         selector: 'app-education',

@@ -43,6 +43,36 @@
               <div *ngIf=" educationForm.get('year')?.errors?.required && educationForm.get('year')?.touched" class="text-danger">Year of Completion is required </div>
 
             </div>
+            <button type="button" class="btn btn-primary pull-right" (click)="add()" [disabled]="!educationForm.valid">Add</button>
+            <table class="table mt-3" *ngIf="tempData.length > 0">
+              <thead>
+                <tr>
+                  <!--<th *ngFor="let field of formFields">{{ field.label }}</th>-->
+                  <th>
+                    Insititure
+                  </th>
+                  <th>Degree</th>
+                  <th>
+                    Field
+                  </th>
+                  <th>Year of Completion</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let entry of tempData; let i = index">
+                  <td>{{ entry[0] }}</td>
+                  <td>{{ entry[1] }}</td>
+                  <td>{{ entry[2] }}</td>
+                  <td>{{ entry[3] }}</td>
+                  <td>
+                    <button class="btn btn-danger btn-sm" (click)="deleteEntry(i)">Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary pull-right" [disabled]="!educationForm.valid">Add</button>
