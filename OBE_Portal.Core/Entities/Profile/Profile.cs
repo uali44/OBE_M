@@ -139,6 +139,7 @@ namespace OBE_Portal.Core.Entities.Profile
         public string ActivityName { get; set; }
         public string ActivityType { get; set; }
         public int FacultyID { get; set; }
+        public string Image { get; set; }
         public List<ActivityDetailDto> Details { get; set; }
     }
 

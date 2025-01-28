@@ -342,7 +342,7 @@ export class CvComponentComponent implements OnInit {
       this.Faculty = response.FacultyDetails;
       this.activitySub = response.ActivitySubDetail
    //   console.log("xp", this.experience);
-      //console.log("grp",this.groupedActivities);
+      console.log("grp",this.groupedActivities);
       //this.selectedTab = this.groupedActivities[0].ActivityType;
 
       this.setActiveTab(this.activities[0].ActivityType);
@@ -377,7 +377,7 @@ export class CvComponentComponent implements OnInit {
     this.ProfileService.GetFacultyActivity(this.facultyID).subscribe((response) => {
       this.groupedActivities = response;
       //console.log(response);
-      //console.log(this.groupedActivities);
+      //console.log("gact",this.groupedActivities);
 
       this.selectedTab = this.groupedActivities[0].ActivityType;
      
