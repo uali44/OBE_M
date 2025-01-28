@@ -158,18 +158,30 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                     for (int i = 0; i < Request.Count; i++)
                     {
 
-                        var path="";
-                        if (Request[i].ImageFile != null)
+                        string relativePath = ""; // To store the relative file path
+
+                        // Check if the ImageFile property contains a file
+                        if (Request[i].ImageFile != null && !string.IsNullOrWhiteSpace(Request[i].ImageFile.FileContent))
                         {
-                            // Save the file
-                            var filePath = Path.Combine("wwwroot/uploads", Request[i].ImageFile.FileName);
-                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            // Decode the base64 file content
+                            var fileContentBytes = Convert.FromBase64String(Request[i].ImageFile.FileContent);
+
+                            // Ensure the uploads directory exists
+                            var uploadFolder = Path.Combine("wwwroot", "uploads", "faculty-education");
+                            if (!Directory.Exists(uploadFolder))
                             {
-                                await Request[i].ImageFile.CopyToAsync(stream);
+                                Directory.CreateDirectory(uploadFolder);
                             }
 
-                            // Update the image path in the education object
-                            path = filePath;
+                            // Generate a unique file name
+                            var uniqueFileName = $"{Guid.NewGuid()}_{Request[i].ImageFile.FileName}";
+                            var fullFilePath = Path.Combine(uploadFolder, uniqueFileName);
+
+                            // Save the file to the server
+                            await File.WriteAllBytesAsync(fullFilePath, fileContentBytes);
+
+                            // Save the relative file path to the database
+                            relativePath = Path.Combine("uploads", "faculty-education", uniqueFileName).Replace("\\", "/");
                         }
 
                         var FacultyMemberID = new SqlParameter("@FacultyMemberID", Request[i].FacultyMemberID);
@@ -177,7 +189,7 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                         var EduInstitute = new SqlParameter("@EduInstitute", Request[i].EduInstitute);
                         var Field = new SqlParameter("@Field", Request[i].Field);
                         var Year = new SqlParameter("@year", Request[i].year);
-                        var Image = new SqlParameter("@Image", path);
+                        var Image = new SqlParameter("@Image", relativePath);
 
                         response = await _context.Database.ExecuteSqlRawAsync(
                                "EXEC AddFacultyEducation @FacultyMemberID, @EduInstitute, @degree, @Field, @year,@Image",
@@ -212,16 +224,44 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                     for (int i = 0; i < Request.Count; i++)
                     {
 
+                        string relativePath = ""; // To store the relative file path
+
+                        // Check if the ImageFile property contains a file
+                        if (Request[i].ImageFile != null && !string.IsNullOrWhiteSpace(Request[i].ImageFile.FileContent))
+                        {
+                            // Decode the base64 file content
+                            var fileContentBytes = Convert.FromBase64String(Request[i].ImageFile.FileContent);
+
+                            // Ensure the uploads directory exists
+                            var uploadFolder = Path.Combine("wwwroot", "uploads", "faculty-education");
+                            if (!Directory.Exists(uploadFolder))
+                            {
+                                Directory.CreateDirectory(uploadFolder);
+                            }
+
+                            // Generate a unique file name
+                            var uniqueFileName = $"{Guid.NewGuid()}_{Request[i].ImageFile.FileName}";
+                            var fullFilePath = Path.Combine(uploadFolder, uniqueFileName);
+
+                            // Save the file to the server
+                            await File.WriteAllBytesAsync(fullFilePath, fileContentBytes);
+
+                            // Save the relative file path to the database
+                            relativePath = Path.Combine("uploads", "faculty-education", uniqueFileName).Replace("\\", "/");
+                        }
+
+
+
                         var facultyMemberIdParam = new SqlParameter("@FacultyMemberID", Request[i].FacultyMemberID);
                         var positionParam = new SqlParameter("@Position", Request[i].Position);
                         var companyParam = new SqlParameter("@Company", Request[i].Company);
                         var startDateParam = new SqlParameter("@StartDate", Request[i].StartDate);
                         var endDateParam = new SqlParameter("@EndDate", Request[i].EndDate ?? (object)DBNull.Value);
-
+                        var Image = new SqlParameter("@Image", relativePath);
 
                         await _context.Database.ExecuteSqlRawAsync(
-       "EXEC AddFacultyExperience @FacultyMemberID, @Position, @Company, @StartDate, @EndDate",
-       facultyMemberIdParam, positionParam, companyParam, startDateParam, endDateParam);
+       "EXEC AddFacultyExperience @FacultyMemberID, @Position, @Company, @StartDate, @EndDate,@Image",
+       facultyMemberIdParam, positionParam, companyParam, startDateParam, endDateParam,Image);
 
                     }
                     if (response > 0)
@@ -364,6 +404,38 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                 {
                     for (int i = 0; i < activityData.Count; i++)
                     {
+
+
+                        string relativePath = ""; // To store the relative file path
+
+                        // Check if the ImageFile property contains a file
+                        if (activityData[i].ImageFile != null && !string.IsNullOrWhiteSpace(activityData[i].ImageFile.FileContent))
+                        {
+                            // Decode the base64 file content
+                            var fileContentBytes = Convert.FromBase64String(activityData[i].ImageFile.FileContent);
+
+                            // Ensure the uploads directory exists
+                            var uploadFolder = Path.Combine("wwwroot", "uploads", "faculty-education");
+                            if (!Directory.Exists(uploadFolder))
+                            {
+                                Directory.CreateDirectory(uploadFolder);
+                            }
+
+                            // Generate a unique file name
+                            var uniqueFileName = $"{Guid.NewGuid()}_{activityData[i].ImageFile.FileName}";
+                            var fullFilePath = Path.Combine(uploadFolder, uniqueFileName);
+
+                            // Save the file to the server
+                            await File.WriteAllBytesAsync(fullFilePath, fileContentBytes);
+
+                            // Save the relative file path to the database
+                            relativePath = Path.Combine("uploads", "faculty-education", uniqueFileName).Replace("\\", "/");
+                        }
+
+
+
+
+
                         var detailIDParam = new SqlParameter("@DetailID", SqlDbType.Int)
                         {
                             Direction = ParameterDirection.Output
@@ -372,9 +444,10 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
 
                         // Insert into FacultyActivity
                         var facultyActivityId = await _context.Database.ExecuteSqlRawAsync(
-                            "EXEC AddFacultyActivity @FacultyID, @ActivityID, @DetailID OUT",
+                            "EXEC AddFacultyActivity @FacultyID, @ActivityID,@Image ,@DetailID OUT",
                             new SqlParameter("@FacultyID", activityData[i].FacultyID),
                             new SqlParameter("@ActivityID", activityData[i].ActivityID),
+                             new SqlParameter("@Image", relativePath),
                             detailIDParam
                         );
                         int detailID = (int)detailIDParam.Value;
@@ -432,6 +505,7 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                             {
                                 DetailID = detailGroup.Key,
                                 DetailName = detailGroup.First().DetailName,
+
                                 SubDetails = detailGroup.ToDictionary(d => d.DetailName, d => d.DetailValue)
                             }).ToList()
              }).ToList();

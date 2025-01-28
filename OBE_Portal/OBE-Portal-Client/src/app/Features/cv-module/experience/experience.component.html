@@ -2,7 +2,39 @@
 <!-- Experience -->
 
 <div class="experience-section" style="padding-bottom:30px;">
-
+  <div class="modal fade" id="efileViewerModal" tabindex="-1" aria-labelledby="fileViewerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="section-heading">
+            <h2 class="pull-left">Document</h2>
+            <div class="pull-right">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <!-- Image View -->
+          <div *ngIf="isImage(selectedFileType)">
+            <img [src]="selectedFilePath" class="img-fluid" alt="Image" />
+          </div>
+          <!-- PDF View -->
+          <div *ngIf="isPDF(selectedFileType)">
+            <embed [src]="selectedFilePath" type="application/pdf" height="600" width="500" />
+          </div>
+          <!-- Fallback for unsupported file types -->
+          <div *ngIf="!isImage(selectedFileType) && !isPDF(selectedFileType)">
+            <p>File type is not supported for preview.</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <a *ngIf="isImage(selectedFileType)" class="btn btn-primary" [href]="selectedFilePath" download>Download</a>
+          <a *ngIf="isPDF(selectedFileType)" class="btn btn-primary" [href]="selectedFilePath" download>Download</a>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Modal for Adding Experience -->
   <div class="modal fade" id="addExperienceModal" tabindex="-1" aria-labelledby="addExperienceModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -56,6 +88,16 @@
               <!--   <div *ngIf="experienceForm.endDate.errors.required" class="text-danger">Position is required </div>-->
 
             </div>
+
+            <div class="form-group">
+              <label for="imageFile">Upload Document(Image or PDF)</label>
+              <input type="file" id="imageFile" (change)="onFileSelected($event)" class="form-control" formControlName="Image" />
+              <div *ngIf="fileError" class="text-danger">{{ fileError }}</div>
+            </div>
+
+
+
+
             <button type="button" class="btn btn-primary pull-right" (click)="add()" [disabled]="!experienceForm.valid">Add</button>
             <table class="table mt-3">
               <thead>
@@ -70,6 +112,7 @@
                   </th>
                   <th>Start Date</th>
                   <th>End Date</th>
+                  <th>Document</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -80,6 +123,7 @@
                   <td>{{ entry.Field }}</td>
                   <td>{{ entry.StartDate }}</td>
                   <td>{{ entry.EndDate || 'Present' }}</td>
+                  <td>{{entry.imageFile.fileName}}</td>
                   <td>
                     <button type="button" class="btn btn-danger btn-sm" (click)="deleteEntry(i)">Delete</button>
                   </td>
@@ -98,7 +142,7 @@
   </div>
 
 
- 
+
   <fieldset class="margin-b15">
     <legend>Experience</legend>
 
@@ -115,6 +159,7 @@
           <th>Position</th>
           <th>Start Date</th>
           <th>End Date</th>
+          <th>Document</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -125,6 +170,11 @@
           <td>{{ exp.Company }}</td>
           <td>{{ exp.StartDate | date: 'yyyy-MM-dd' }}</td>
           <td>{{ exp.EndDate ? (exp.EndDate | date: 'yyyy-MM-dd') : 'Present' }}</td>
+          <td>
+            <span (click)="openFileViewer(exp.Image)" *ngIf="exp.Image!=null" style="cursor:pointer">
+              <u>  {{ extractFileName(exp.Image) || 'NA'}}</u>
+            </span>
+          </td>
           <td align="center">
             <button (click)="confirmDelete(exp.ExpID)" class="btn btn-default margin-r5">
               <i class="app-icon-IconSet-1-33 blue"></i>

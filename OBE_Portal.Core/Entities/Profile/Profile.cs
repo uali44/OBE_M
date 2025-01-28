@@ -45,9 +45,15 @@ namespace OBE_Portal.Core.Entities.Profile
         public string degree { get; set; }
         public string Field { get; set; }
         public int year { get; set; }
-        public IFormFile ImageFile { get; set; }
+        public ImageFileDto ImageFile { get; set; }
 
 
+    }
+    public class ImageFileDto
+    {
+        public string FileName { get; set; }
+        public string FileType { get; set; }
+        public string FileContent { get; set; } // Base64 content
     }
     public class FacultyEducation
     {
@@ -57,6 +63,7 @@ namespace OBE_Portal.Core.Entities.Profile
         public string Degree { get; set; }
         public string Field { get; set; }
         public string Year { get; set; }
+        public string Image {  get; set; }
     }
 
     public class experience
@@ -66,6 +73,7 @@ namespace OBE_Portal.Core.Entities.Profile
         public string Company { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public ImageFileDto ImageFile { get; set; }
     }
     public class FacultyExperience
     {
@@ -75,6 +83,7 @@ namespace OBE_Portal.Core.Entities.Profile
         public string Company { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; } // Nullable if end date is not set
+        public string Image { get; set; }
     }
 
     public class ActivityList
@@ -103,6 +112,7 @@ namespace OBE_Portal.Core.Entities.Profile
     {
         public int FacultyID { get; set; }
         public int ActivityID { get; set; }
+        public ImageFileDto ImageFile { get; set; }
         public List<ActivityDetail> Details { get; set; }
     }
 
@@ -121,6 +131,7 @@ namespace OBE_Portal.Core.Entities.Profile
         public string DetailValue { get; set; }
         public int FacultyID { get; set; }
         public string ActivityType { get; set; }
+        public string Image {  get; set; }
     }
 
     public class ActivityDetailsDto

@@ -12,6 +12,8 @@ import { ProfileService } from './../../../Services/Profile/profile.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 import { InterconnectedService } from '../../../Shared/Services/Global/interconnected.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
 declare const $: any;
 
 @Component({
@@ -39,6 +41,19 @@ export class CvComponentComponent implements OnInit {
   Faculty: any[] = [];
   activitySub: any[] = [];
   tempData: any[] = [];
+
+  selectedFile: File | null = null;
+  fileError: string = '';
+  compressedImage: string | null = null;
+  selectedFileData: { fileName: string; fileType: string; fileContent: string } | null = null;
+  selectedFilePath: SafeResourceUrl | null = null;
+  selectedFileType: string;
+
+
+
+
+
+
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -47,7 +62,8 @@ export class CvComponentComponent implements OnInit {
     private formBuilder: FormBuilder,
     private ProfileService: ProfileService,
     private pagerService: PagerService,
-    private msgForDashboard: InterconnectedService
+    private msgForDashboard: InterconnectedService,
+    private sanitizer: DomSanitizer,
 
 
   ) {
@@ -201,6 +217,7 @@ export class CvComponentComponent implements OnInit {
     const activityData = {
       FacultyID: this.facultyID,
       ActivityID: this.selectedActivityId,
+      imageFile: this.selectedFileData ,
       Details: this.fields.map((field) => ({
         DetailName: field.subDetail,
         DetailValue: this.activityForm.value[this.sanitizeType(field.subDetail)],
@@ -217,7 +234,88 @@ export class CvComponentComponent implements OnInit {
     this.tempData.splice(index, 1);
   }
 
- 
+
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement; // Cast to HTMLInputElement
+    const file = input.files[0]; // Use optional chaining to check for files
+
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+
+    if (!validTypes.includes(file.type)) {
+      this.fileError = 'Invalid file type. Please upload a JPEG, PNG, or PDF.';
+      return;
+    }
+
+    // Validate file size
+    const maxSize = 2 * 1024 * 1024; // 2 MB
+    if (file.size > maxSize) {
+      this.fileError = 'File size exceeds the 2 MB limit.';
+      return;
+    }
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        // Clean Base64 string
+        const base64String = (reader.result as string).split(',')[1]; // Remove prefix (e.g., "data:image/jpeg;base64,")
+        this.selectedFileData = {
+          fileName: file.name,
+          fileType: file.type,
+          fileContent: base64String, // Clean Base64 string without prefix
+        };
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    this.selectedFile = file;
+    this.fileError = null;
+    //// Compress the image
+    //this.compressImage(file, (compressedFile) => {
+    //  this.fileError = '';
+    //  this.educationForm.patchValue({ imageFile: compressedFile });
+    //});
+
+  }
+
+  openFileViewer(filePath: string): void {
+    // Set the file path to display in the modal
+    this.selectedFilePath = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
+
+    // Check the file type based on the extension or MIME type
+    if (filePath.endsWith('.jpg') || filePath.endsWith('.jpeg') || filePath.endsWith('.png')) {
+      this.selectedFileType = 'image';
+    } else if (filePath.endsWith('.pdf')) {
+      this.selectedFileType = 'pdf';
+    } else {
+      this.selectedFileType = 'other';  // Handle other file types as needed
+    }
+
+
+    $("#efileViewerModal").modal("show");
+  }
+
+  extractFileName(filePath: string): string {
+    const parts = filePath.split('/');
+    return parts[parts.length - 1]; // Get the last part, which is the file name
+  }
+
+
+  // Helper method to check if the file is an image
+  isImage(fileType: string): boolean {
+    return fileType === 'image';
+  }
+
+  // Helper method to check if the file is a PDF
+  isPDF(fileType: string): boolean {
+    return fileType === 'pdf';
+  }
+
+
+
+
 
 
 

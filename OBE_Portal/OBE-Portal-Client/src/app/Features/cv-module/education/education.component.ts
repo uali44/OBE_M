@@ -11,6 +11,7 @@ import { ProfileService } from './../../../Services/Profile/profile.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { InterconnectedService } from '../../../Shared/Services/Global/interconnected.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 declare const $: any;
 
 @Component({
@@ -26,7 +27,9 @@ export class EducationComponent implements OnInit {
   selectedFile: File | null = null;
   fileError: string = '';
   compressedImage: string | null = null;
-
+  selectedFileData: { fileName: string; fileType: string; fileContent: string } | null = null;
+  selectedFilePath: SafeResourceUrl | null = null;
+  selectedFileType: string;
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -36,7 +39,7 @@ export class EducationComponent implements OnInit {
     private ProfileService: ProfileService,
     private pagerService: PagerService,
     private msgForDashboard: InterconnectedService,
-    
+    private sanitizer: DomSanitizer,
 
   ) {
     this.educationForm = this.formBuilder.group({
@@ -108,10 +111,19 @@ export class EducationComponent implements OnInit {
     //if (this.educationForm.invalid) {
     //  return;
     //}
-
-    this.tempData.push(this.educationForm.value);
+  //  this.educationForm.controls['imageFile'].setValue(this.selectedFile);
+    const payload = {
+      FacultyMemberID: this.educationForm.value.FacultyMemberID,
+      eduInstitute: this.educationForm.value.eduInstitute,
+      degree: this.educationForm.value.degree,
+      field: this.educationForm.value.field,
+      year: this.educationForm.value.year,
+      imageFile: this.selectedFileData, // Include file data
+    };
+    this.tempData.push(payload);
     console.log(this.tempData);
     this.educationForm.reset();
+    this.educationForm.controls['imageFile'].setValue('');
     this.educationForm.controls['FacultyMemberID'].setValue( GlobalService.FacultyMember_ID);
   }
 
@@ -125,9 +137,10 @@ export class EducationComponent implements OnInit {
 
 
     // Validate file type
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    const validTypes = ['image/jpeg', 'image/png',  'application/pdf'];
+
     if (!validTypes.includes(file.type)) {
-      this.fileError = 'Invalid file type. Please upload a JPEG, PNG, or GIF.';
+      this.fileError = 'Invalid file type. Please upload a JPEG, PNG, or PDF.';
       return;
     }
 
@@ -137,63 +150,121 @@ export class EducationComponent implements OnInit {
       this.fileError = 'File size exceeds the 2 MB limit.';
       return;
     }
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        // Clean Base64 string
+        const base64String = (reader.result as string).split(',')[1]; // Remove prefix (e.g., "data:image/jpeg;base64,")
+        this.selectedFileData = {
+          fileName: file.name,
+          fileType: file.type,
+          fileContent: base64String, // Clean Base64 string without prefix
+        };
+      };
 
-    // Compress the image
-    this.compressImage(file, (compressedFile) => {
-      this.fileError = '';
-      this.educationForm.patchValue({ imageFile: compressedFile });
-    });
+      reader.readAsDataURL(file);
+    }
+
+      this.selectedFile = file;
+    this.fileError = null;
+    //// Compress the image
+    //this.compressImage(file, (compressedFile) => {
+    //  this.fileError = '';
+    //  this.educationForm.patchValue({ imageFile: compressedFile });
+    //});
     
   }
 
-  compressImage(file: File, callback: (compressedFile: File) => void) {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
+  openFileViewer(filePath: string): void {
+    // Set the file path to display in the modal
+    this.selectedFilePath = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
 
-    reader.onload = (event: any) => {
-      const img = new Image();
-      img.src = event.target.result;
+    // Check the file type based on the extension or MIME type
+    if (filePath.endsWith('.jpg') || filePath.endsWith('.jpeg') || filePath.endsWith('.png')) {
+      this.selectedFileType = 'image';
+    } else if (filePath.endsWith('.pdf')) {
+      this.selectedFileType = 'pdf';
+    } else {
+      this.selectedFileType = 'other';  // Handle other file types as needed
+    }
 
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-
-        const maxWidth = 800; // Set max width for compression
-        const maxHeight = 800; // Set max height for compression
-
-        let width = img.width;
-        let height = img.height;
-
-        if (width > height) {
-          if (width > maxWidth) {
-            height = (height * maxWidth) / width;
-            width = maxWidth;
-          }
-        } else {
-          if (height > maxHeight) {
-            width = (width * maxHeight) / height;
-            height = maxHeight;
-          }
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-
-        ctx?.drawImage(img, 0, 0, width, height);
-
-        canvas.toBlob(
-          (blob) => {
-            const compressedFile = new File([blob!], file.name, {
-              type: file.type,
-            });
-            callback(compressedFile);
-          },
-          file.type,
-          0.7 // Set quality level for compression
-        );
-      };
-    };
+   
+    $("#fileViewerModal").modal("show");
   }
+
+  extractFileName(filePath: string): string {
+    const parts = filePath.split('/');
+    return parts[parts.length - 1]; // Get the last part, which is the file name
+  }
+
+
+  // Helper method to check if the file is an image
+  isImage(fileType: string): boolean {
+    return fileType === 'image';
+  }
+
+  // Helper method to check if the file is a PDF
+  isPDF(fileType: string): boolean {
+    return fileType === 'pdf';
+  }
+
+
+
+
+
+
+
+
+
+
+  //compressImage(file: File, callback: (compressedFile: File) => void) {
+  //  const reader = new FileReader();
+  //  reader.readAsDataURL(file);
+
+  //  reader.onload = (event: any) => {
+  //    const img = new Image();
+  //    img.src = event.target.result;
+
+  //    img.onload = () => {
+  //      const canvas = document.createElement('canvas');
+  //      const ctx = canvas.getContext('2d');
+
+  //      const maxWidth = 800; // Set max width for compression
+  //      const maxHeight = 800; // Set max height for compression
+
+  //      let width = img.width;
+  //      let height = img.height;
+
+  //      if (width > height) {
+  //        if (width > maxWidth) {
+  //          height = (height * maxWidth) / width;
+  //          width = maxWidth;
+  //        }
+  //      } else {
+  //        if (height > maxHeight) {
+  //          width = (width * maxHeight) / height;
+  //          height = maxHeight;
+  //        }
+  //      }
+
+  //      canvas.width = width;
+  //      canvas.height = height;
+
+  //      ctx?.drawImage(img, 0, 0, width, height);
+
+  //      canvas.toBlob(
+  //        (blob) => {
+  //          const compressedFile = new File([blob!], file.name, {
+  //            type: file.type,
+  //          });
+  //          callback(compressedFile);
+  //        },
+  //        file.type,
+  //        0.7 // Set quality level for compression
+  //      );
+  //    };
+  //  };
+  //}
 
 
 
