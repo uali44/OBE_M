@@ -26,7 +26,7 @@ namespace OBE_Portal.Core.Entities.Profile
         public string Phone { get; set; }
         public string FacultyType { get; set; }
         public string FacultyRole { get; set; }
-        public string DriveLink {  get; set; }
+      
     }
 
     public class profileData
@@ -35,7 +35,7 @@ namespace OBE_Portal.Core.Entities.Profile
         public string Phone { get; set; }
         public string FacultyType { get; set; }
         public string FacultyRole { get; set; }
-        public string DriveLink { get; set; }
+       
 
     }
     public class education
@@ -139,7 +139,7 @@ namespace OBE_Portal.Core.Entities.Profile
         public string ActivityName { get; set; }
         public string ActivityType { get; set; }
         public int FacultyID { get; set; }
-        public string Image { get; set; }
+     
         public List<ActivityDetailDto> Details { get; set; }
     }
 
@@ -147,6 +147,7 @@ namespace OBE_Portal.Core.Entities.Profile
     {
         public int DetailID { get; set; }
         public string DetailName { get; set; }
+        public string Image { get; set; }
         public Dictionary<string, string> SubDetails { get; set; } // DetailName as key, DetailValue as value
     }
 

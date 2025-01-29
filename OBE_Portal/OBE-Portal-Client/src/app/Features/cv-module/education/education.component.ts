@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { GlobalService } from '../../../Shared/Services/Global/global.service';
 import { CoursesSearchService } from '../../../Services/CourseSearch/CourseSearch.service';
 import { ToastrService } from 'ngx-toastr';
@@ -21,6 +21,7 @@ declare const $: any;
 })
 export class EducationComponent implements OnInit {
   @Input() educations: any[] = [];
+  @Output() viewFile = new EventEmitter<{ fileUrl: String }>();
   educationForm: FormGroup;
   tempData: any[]=[];
 
@@ -145,9 +146,9 @@ export class EducationComponent implements OnInit {
     }
 
     // Validate file size
-    const maxSize = 2 * 1024 * 1024; // 2 MB
+    const maxSize =  1024 * 1024; // 1 MB
     if (file.size > maxSize) {
-      this.fileError = 'File size exceeds the 2 MB limit.';
+      this.fileError = 'File size exceeds the 1 MB limit.';
       return;
     }
     if (file) {
@@ -176,20 +177,24 @@ export class EducationComponent implements OnInit {
   }
 
   openFileViewer(filePath: string): void {
-    // Set the file path to display in the modal
-    this.selectedFilePath = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
 
-    // Check the file type based on the extension or MIME type
-    if (filePath.endsWith('.jpg') || filePath.endsWith('.jpeg') || filePath.endsWith('.png')) {
-      this.selectedFileType = 'image';
-    } else if (filePath.endsWith('.pdf')) {
-      this.selectedFileType = 'pdf';
-    } else {
-      this.selectedFileType = 'other';  // Handle other file types as needed
-    }
+    this.viewFile.emit({ fileUrl: filePath });
+
+
+    // Set the file path to display in the modal
+    //this.selectedFilePath = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
+
+    //// Check the file type based on the extension or MIME type
+    //if (filePath.endsWith('.jpg') || filePath.endsWith('.jpeg') || filePath.endsWith('.png')) {
+    //  this.selectedFileType = 'image';
+    //} else if (filePath.endsWith('.pdf')) {
+    //  this.selectedFileType = 'pdf';
+    //} else {
+    //  this.selectedFileType = 'other';  // Handle other file types as needed
+    //}
 
    
-    $("#fileViewerModal").modal("show");
+    //$("#fileViewerModal").modal("show");
   }
 
   extractFileName(filePath: string): string {

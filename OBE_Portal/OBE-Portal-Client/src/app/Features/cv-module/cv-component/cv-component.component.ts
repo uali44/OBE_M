@@ -68,7 +68,8 @@ export class CvComponentComponent implements OnInit {
 
   ) {
     this.activityForm = this.formBuilder.group({
-      activity: ['', Validators.required]
+      activity: ['', Validators.required],
+      imageFile: [null],
     });
     this.initForm();
     this.selectedTab = this.getActivityTypes()[0];
@@ -149,7 +150,7 @@ export class CvComponentComponent implements OnInit {
 
     this.selectedActivityId = val;
     Object.keys(this.activityForm.controls).forEach(key => {
-      if (key !== 'activity') { 
+      if (key !== 'activity' && key!=='imageFile') { 
         this.activityForm.removeControl(key);
       }
     });
@@ -184,18 +185,19 @@ export class CvComponentComponent implements OnInit {
     //if (this.activityForm.invalid) {
 
     //  this.toastr.error("Please Enter All Fields", "Error");
-     
+
     //  return;
     //}
 
     //const activityData = {
-    //  FacultyID: this.facultyID , 
+    //  FacultyID: this.facultyID ,
     //  ActivityID: this.selectedActivityId,
     //  Details: this.fields.map((field) => ({
     //    DetailName: field.subDetail,
     //    DetailValue: this.activityForm.value[this.sanitizeType( field.subDetail)],
     //  })),
     //};
+    console.log('entered');
     const activityData = this.tempData;
     this.ProfileService.SaveActivity(activityData).subscribe((response) => {
       if (response) {
@@ -250,9 +252,9 @@ export class CvComponentComponent implements OnInit {
     }
 
     // Validate file size
-    const maxSize = 2 * 1024 * 1024; // 2 MB
+    const maxSize = 1024 * 1024; // 1 MB
     if (file.size > maxSize) {
-      this.fileError = 'File size exceeds the 2 MB limit.';
+      this.fileError = 'File size exceeds the 1 MB limit.';
       return;
     }
     if (file) {
@@ -294,7 +296,7 @@ export class CvComponentComponent implements OnInit {
     }
 
 
-    $("#efileViewerModal").modal("show");
+    $("#fileViewerModal").modal("show");
   }
 
   extractFileName(filePath: string): string {
@@ -377,7 +379,7 @@ export class CvComponentComponent implements OnInit {
     this.ProfileService.GetFacultyActivity(this.facultyID).subscribe((response) => {
       this.groupedActivities = response;
       //console.log(response);
-      //console.log("gact",this.groupedActivities);
+      console.log("gact",this.groupedActivities);
 
       this.selectedTab = this.groupedActivities[0].ActivityType;
      

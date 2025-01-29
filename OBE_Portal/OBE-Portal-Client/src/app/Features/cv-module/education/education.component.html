@@ -1,41 +1,7 @@
     <!-- Education -->
 <div class="education-section">
 
-  <!-- Modal for viewing the file -->
-  <div class="modal fade" id="fileViewerModal" tabindex="-1" aria-labelledby="fileViewerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <div class="section-heading">
-            <h2 class="pull-left">Document</h2>
-            <div class="pull-right">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
-            </div>
-          </div>
-        </div>
-        <div class="modal-body">
-          <!-- Image View -->
-          <div *ngIf="isImage(selectedFileType)">
-            <img [src]="selectedFilePath" class="img-fluid" alt="Image" />
-          </div>
-          <!-- PDF View -->
-          <div *ngIf="isPDF(selectedFileType)">
-            <embed [src]="selectedFilePath" type="application/pdf" height="700" width="500" />
-          </div>
-          <!-- Fallback for unsupported file types -->
-          <div *ngIf="!isImage(selectedFileType) && !isPDF(selectedFileType)">
-            <p>File type is not supported for preview.</p>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <a *ngIf="isImage(selectedFileType)"  class="btn btn-primary" [href]="selectedFilePath" download>Download</a>
-          <a *ngIf="isPDF(selectedFileType)"  class="btn btn-primary" [href]="selectedFilePath" download>Download</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
+ 
 
 
 
@@ -86,7 +52,7 @@
 
             <div class="form-group">
               <label for="imageFile">Upload Document(Image or PDF)</label>
-              <input type="file" id="imageFile" (change)="onFileSelected($event)" class="form-control" formControlName="Image" />
+              <input type="file" id="imageFile" (change)="onFileSelected($event)" class="form-control" formControlName="imageFile" />
               <div *ngIf="fileError" class="text-danger">{{ fileError }}</div>
             </div>
 

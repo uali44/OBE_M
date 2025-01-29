@@ -45,9 +45,9 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                         var Phone = new SqlParameter("@Phone", Request[i].Phone);
                         var FacultyType = new SqlParameter("@FacultyType", Request[i].FacultyType);
                         var FacultyRole = new SqlParameter("@FacultyRole", Request[i].FacultyRole);
-                        var DriveLink = new SqlParameter("@DriveLink", Request[i].DriveLink);
+                       
 
-                        response = await _context.Database.ExecuteSqlRawAsync($"EXEC AddFacultyDetail @FacultyMemberID,@Phone,@FacultyType,@FacultyRole,@DriveLink", FacultyMEmberID, Phone, FacultyType, FacultyRole,DriveLink);
+                        response = await _context.Database.ExecuteSqlRawAsync($"EXEC AddFacultyDetail @FacultyMemberID,@Phone,@FacultyType,@FacultyRole", FacultyMEmberID, Phone, FacultyType, FacultyRole);
                     }
                     if (response == 0 || response == 1)
                         return true;
@@ -500,13 +500,13 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                  ActivityName = g.Key,
                  FacultyID = g.First().FacultyID,
                  ActivityType = g.First().ActivityType,
-                 Image=g.First().Image,
+                
                  Details = g.GroupBy(d => d.DetailID)
                             .Select(detailGroup => new ActivityDetailDto
                             {
                                 DetailID = detailGroup.Key,
                                 DetailName = detailGroup.First().DetailName,
-
+                                Image = detailGroup.First().Image,
                                 SubDetails = detailGroup.ToDictionary(d => d.DetailName, d => d.DetailValue)
                             }).ToList()
              }).ToList();
@@ -560,6 +560,7 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                             {
                                 DetailID = detailGroup.Key,
                                 DetailName = detailGroup.First().DetailName,
+                                Image = detailGroup.First().Image,
                                 SubDetails = detailGroup.ToDictionary(d => d.DetailName, d => d.DetailValue)
                             }).ToList()
              }).ToList();

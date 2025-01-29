@@ -7,7 +7,51 @@
     </div>
   </div>
 
-  <div class="modal fade" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true"   role="dialog" >
+
+
+  <!-- Modal for viewing the file -->
+  <div class="modal fade" id="fileViewerModal" tabindex="-1" aria-labelledby="fileViewerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="section-heading">
+            <h2 class="pull-left">Document</h2>
+            <div class="pull-right">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <!-- Image View -->
+          <div *ngIf="isImage(selectedFileType)">
+            <img [src]="selectedFilePath" class="img-fluid" alt="Image" />
+          </div>
+          <!-- PDF View -->
+          <div *ngIf="isPDF(selectedFileType)">
+            <embed [src]="selectedFilePath" type="application/pdf" height="550" width="500" />
+          </div>
+          <!-- Fallback for unsupported file types -->
+          <div *ngIf="!isImage(selectedFileType) && !isPDF(selectedFileType)">
+            <p>File type is not supported for preview.</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <a *ngIf="isImage(selectedFileType)" class="btn btn-primary" [href]="selectedFilePath" download>Download</a>
+          <a *ngIf="isPDF(selectedFileType)" class="btn btn-primary" [href]="selectedFilePath" download>Download</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+  <div class="modal fade" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content" style="padding:10px;">
         <div class="section-heading">
@@ -53,7 +97,7 @@
 
             <div class="form-group">
               <label for="imageFile">Upload Document(Image or PDF)</label>
-              <input type="file" id="imageFile" (change)="onFileSelected($event)" class="form-control" formControlName="Image" />
+              <input type="file" id="imageFile" (change)="onFileSelected($event)" class="form-control" formControlName="imageFile" />
               <div *ngIf="fileError" class="text-danger">{{ fileError }}</div>
             </div>
 
@@ -77,6 +121,8 @@
 
 
                   </ng-container>
+
+
                   <td>
                     <button type="button" class="btn btn-danger btn-sm" (click)="deleteEntry(i)">Delete</button>
                   </td>
@@ -103,12 +149,12 @@
 
     <app-profile [facultydata]="Faculty"></app-profile>
     <br />
-    <app-education [educations]="education"></app-education>
+    <app-education [educations]="education" (viewFile)="openFileViewer($event.fileUrl)"></app-education>
     <br />
-    <app-experience [exper]="experience"></app-experience>
+    <app-experience [exper]="experience" (viewFile)="openFileViewer($event.fileUrl)"></app-experience>
     <br />
 
-   
+
 
 
     <!-- cv-builder.component.html -->
@@ -117,16 +163,14 @@
     <div class="section-tabs no-margin">
       <div class="tabs-head">
         <ul class="nav nav-tabs" role="tablist">
-          <li  *ngFor="let type of getActivityTypes();let i = index"
-               [class.active]="i === 0"
-              [attr.id]="'#' + sanitizeType(type)+i" >
-            <a  class=""
+          <li *ngFor="let type of getActivityTypes();let i = index"
+              [class.active]="i === 0"
+              [attr.id]="'#' + sanitizeType(type)+i">
+            <a class=""
                (click)="setActiveTab(type)"
                [class.active]="selectedTab === type"
                data-toggle="tab"
-               [attr.href]="'#' + sanitizeType(type)"
-            
-               >
+               [attr.href]="'#' + sanitizeType(type)">
               <!--Dynamic href based on type-->
               <h4> {{ type }} </h4>
             </a>
@@ -140,19 +184,19 @@
         <div *ngFor="let type of getActivityTypes()">
           <!--<div class="tab-pane "
 
-        [class.show]="i === 0"
-        [class.active]="i === 0"
-        [attr.id]="sanitizeType(type)">-->
+          [class.show]="i === 0"
+          [class.active]="i === 0"
+          [attr.id]="sanitizeType(type)">-->
           <div class="tab-pane "
                *ngIf="selectedTab==type"
                [attr.id]="sanitizeType(type)">
             <!--<br />
-  <br />-->
+            <br />-->
             <!--<div class="section-heading ">
-    <h1>{{ type }}</h1>
-  </div>-->
+              <h1>{{ type }}</h1>
+            </div>-->
             <!--<br />
-  <br />-->
+            <br />-->
 
             <div *ngFor="let activity of activities">
 
@@ -178,6 +222,7 @@
 
 
                         </th>
+                        <th>Document</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -190,6 +235,12 @@
                               <a href="{{ detail.SubDetails[detailName] || '#' }}" target="_blank" *ngIf="detailName==='URL'">{{ detail.SubDetails[detailName] || 'N/A' }} </a>
                               <ng-container *ngIf="detailName!='URL'">{{ detail.SubDetails[detailName] || 'N/A' }} </ng-container>
                             </td>
+                            <td>
+                              <span (click)="openFileViewer(detail.Image)" *ngIf="detail.Image!=null" style="cursor:pointer">
+                                <u>  {{ extractFileName(detail.Image) || 'NA'}}</u>
+                              </span>
+                            </td>
+
                             <td align="center">
 
                               <button type="button" class="btn btn-default margin-r5" (click)="deleteActivity(detail.DetailID)">
@@ -222,9 +273,9 @@
             </div>
 
 
-         
 
-           
+
+
           </div>
         </div>
       </div>
@@ -247,7 +298,7 @@
         Add Activities
       </button>-->
 
-   
+
 
 
 

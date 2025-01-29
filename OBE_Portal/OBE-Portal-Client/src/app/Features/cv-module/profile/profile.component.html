@@ -76,18 +76,7 @@
 
             </div>
 
-            <!-- Phone Number -->
-            <div class="form-group">
-              <label for="DriveLink">Drive Link</label>
-              <input type="text"
-                     class="form-control"
-                     id="DriveLink"
-                     name="DriveLink"
-                     [(ngModel)]="faculty.DriveLink"
-                     required />
-              <div *ngIf="facultyForm.controls.DriveLink?.errors?.required && facultyForm.controls.DriveLink?.touched" class="text-danger">Google Drive Link is required </div>
-
-            </div>
+           
 
 
 
@@ -154,16 +143,7 @@
               <td>{{ facultydata[0]?.FacultyRole }}</td>
 
             </tr>
-            <tr>
-
-
-
-
-
-              <td style="width:30%"><strong>Google Drive Link:</strong></td>
-              <td><a target="_blank" href="{{ facultydata[0]?.DriveLink }}">{{ facultydata[0]?.DriveLink }}</a></td>
-
-            </tr>
+          
 
 
           </tbody>
