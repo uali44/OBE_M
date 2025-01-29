@@ -59,7 +59,7 @@
 
 
             <button type="button" class="btn btn-primary pull-right" (click)="add()" [disabled]="!educationForm.valid">Add</button>
-            <table class="table mt-3">
+            <table class="table table-bordered table-hover table-theme margin-t50">
               <thead>
                 <tr>
                   <!--<th *ngFor="let field of formFields">{{ field.label }}</th>-->
@@ -94,7 +94,7 @@
           </div>
           <div class="modal-footer">
             <!--<button type="submit" class="btn btn-primary pull-right" [disabled]="!educationForm.valid">Add</button>-->
-            <button type="submit" class="btn btn-primary pull-right" [disabled]="tempData.length==0">Add</button>
+            <button type="submit" class="btn btn-primary pull-right" [disabled]="tempData.length==0">Save</button>
             <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal">Cancel</button>
 
           </div>
