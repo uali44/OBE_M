@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,4 +52,29 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public string InternshipSurveyFormRemarks { get; set; }
         public int StudentID { get; set; }
     }
+
+
+    public class SurveyCreateRequest
+    {
+        public SurveyMainDetailDto SurveyMainDetail { get; set; }
+        public List<SurveySubDetailDto> SurveySubDetails { get; set; }
+    }
+
+    public class SurveyMainDetailDto
+    {
+        public string SurveyType { get; set; }
+        public int SurveyDeptID { get; set; }
+    }
+
+    public class SurveySubDetailDto
+    {
+        public string Question { get; set; }
+        public string QType { get; set; }
+        public string Mapping { get; set; }
+        public List<string> Options { get; set; }
+    }
+
+
+
+
 }

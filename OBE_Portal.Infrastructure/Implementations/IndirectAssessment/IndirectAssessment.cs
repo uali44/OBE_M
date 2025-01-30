@@ -5,6 +5,7 @@ using OBE_Portal.Core.Entities.IndirectAssessment;
 using OBE_Portal.Infrastructure.Interfaces.IndirectAssessment;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -127,5 +128,116 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                 throw;
             }
         }
+
+        async Task<bool> IIndirectAssessment.AddSurvey(SurveyCreateRequest request)
+        {
+            try
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    var CSPQuestion1 = new SqlParameter("@CSPQuestion1", request.CSPQuestion1);
+                    var CSPQuestion2 = new SqlParameter("@CSPQuestion2", request.CSPQuestion2);
+                    var CSPQuestion3 = new SqlParameter("@CSPQuestion3", request.CSPQuestion3);
+                    var CSPQuestion4 = new SqlParameter("@CSPQuestion4", request.CSPQuestion4);
+                    var CSPQuestion5 = new SqlParameter("@CSPQuestion5", request.CSPQuestion5);
+                    var CSPQuestion6 = new SqlParameter("@CSPQuestion6", request.CSPQuestion6);
+                    var CSPQuestion7 = new SqlParameter("@CSPQuestion7", request.CSPQuestion7);
+                    var CSPSurveyFormRemarks = new SqlParameter("@CSPSurveyFormRemarks", request.CSPSurveyFormRemarks);
+                    var StudentID = new SqlParameter("@StudentID", request.StudentID);
+
+                    var response = await _context.Database.ExecuteSqlRawAsync($"EXEC SP_Save_CSP_Survey_Student_Details @CSPQuestion1,@CSPQuestion2,@CSPQuestion3,@CSPQuestion4,@CSPQuestion5,@CSPQuestion6,@CSPQuestion7,@CSPSurveyFormRemarks,@StudentID",
+                            CSPQuestion1, CSPQuestion2, CSPQuestion3, CSPQuestion4, CSPQuestion5, CSPQuestion6, CSPQuestion7, CSPSurveyFormRemarks, StudentID);
+                    if (response > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task CreateSurvey(SurveyCreateRequest request)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                // Begin a transaction
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Step 1: Insert SurveyMainDetail
+                        var surveyMainDetailParams = new
+                        {
+                            SurveyType = request.SurveyMainDetail.SurveyType,
+                            SurveyDeptID = request.SurveyMainDetail.SurveyDeptID
+                        };
+                        var surveyID = await connection.ExecuteScalarAsync<int>(
+                            "usp_InsertSurveyMainDetail",
+                            surveyMainDetailParams,
+                            transaction,
+                            commandType: CommandType.StoredProcedure
+                        );
+
+                        // Step 2: Insert SurveySubDetail and SurveySubDetailOption
+                        foreach (var question in request.SurveySubDetails)
+                        {
+                            var surveySubDetailParams = new
+                            {
+                                SurveyID = surveyID,
+                                Question = question.Question,
+                                QType = question.QType,
+                                Mapping = question.Mapping,
+                                CreatedBy = "Admin", // Replace with actual user
+                                CreatedDate = DateTime.UtcNow
+                            };
+                            var qid = await connection.ExecuteScalarAsync<int>(
+                                "usp_InsertSurveySubDetail",
+                                surveySubDetailParams,
+                                transaction,
+                                commandType: CommandType.StoredProcedure
+                            );
+
+                            // Step 3: Insert SurveySubDetailOption (if QType is Multiple Choice)
+                            if (question.QType == "Multiple Choice")
+                            {
+                                foreach (var option in question.Options)
+                                {
+                                    var surveySubDetailOptionParams = new
+                                    {
+                                        QID = qid,
+                                        Options = option
+                                    };
+                                    await connection.ExecuteAsync(
+                                        "usp_InsertSurveySubDetailOption",
+                                        surveySubDetailOptionParams,
+                                        transaction,
+                                        commandType: CommandType.StoredProcedure
+                                    );
+                                }
+                            }
+                        }
+
+                        // Commit the transaction
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        // Rollback the transaction in case of an error
+                        transaction.Rollback();
+                        throw new Exception("Failed to create survey.", ex);
+                    }
+                }
+            }
+        }
+
     }
 }
