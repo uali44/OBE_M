@@ -135,26 +135,76 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
             {
                 using (SqlCommand comm = new SqlCommand())
                 {
-                    var CSPQuestion1 = new SqlParameter("@CSPQuestion1", request.CSPQuestion1);
-                    var CSPQuestion2 = new SqlParameter("@CSPQuestion2", request.CSPQuestion2);
-                    var CSPQuestion3 = new SqlParameter("@CSPQuestion3", request.CSPQuestion3);
-                    var CSPQuestion4 = new SqlParameter("@CSPQuestion4", request.CSPQuestion4);
-                    var CSPQuestion5 = new SqlParameter("@CSPQuestion5", request.CSPQuestion5);
-                    var CSPQuestion6 = new SqlParameter("@CSPQuestion6", request.CSPQuestion6);
-                    var CSPQuestion7 = new SqlParameter("@CSPQuestion7", request.CSPQuestion7);
-                    var CSPSurveyFormRemarks = new SqlParameter("@CSPSurveyFormRemarks", request.CSPSurveyFormRemarks);
-                    var StudentID = new SqlParameter("@StudentID", request.StudentID);
+                    // Step 1: Insert SurveyMainDetail
+                    var surveyType = new SqlParameter("@SurveyType", request.SurveyMainDetail.SurveyType);
+                    var surveyDeptID = new SqlParameter("@SurveyDeptID", request.SurveyMainDetail.SurveyDeptID);
+                    var surveyID = new SqlParameter("@SurveyID", SqlDbType.Int) { Direction = ParameterDirection.Output };
 
-                    var response = await _context.Database.ExecuteSqlRawAsync($"EXEC SP_Save_CSP_Survey_Student_Details @CSPQuestion1,@CSPQuestion2,@CSPQuestion3,@CSPQuestion4,@CSPQuestion5,@CSPQuestion6,@CSPQuestion7,@CSPSurveyFormRemarks,@StudentID",
-                            CSPQuestion1, CSPQuestion2, CSPQuestion3, CSPQuestion4, CSPQuestion5, CSPQuestion6, CSPQuestion7, CSPSurveyFormRemarks, StudentID);
-                    if (response > 0)
+                    // Execute usp_InsertSurveyMainDetail
+                    var responseMain = await _context.Database.ExecuteSqlRawAsync(
+                        "EXEC AddSurveyMainDetail @SurveyType, @SurveyDeptID, @SurveyID OUTPUT",
+                        surveyType, surveyDeptID, surveyID
+                    );
+
+                    if (responseMain <= 0)
                     {
-                        return true;
+                        return false; // Failed to insert SurveyMainDetail
                     }
-                    else
+
+                    int generatedSurveyID = (int)surveyID.Value; // Get the generated SurveyID
+
+                    // Step 2: Insert SurveySubDetail and SurveySubDetailOption
+                    foreach (var question in request.SurveySubDetails)
                     {
-                        return false;
+                        var questionParam = new SqlParameter("@Question", question.Question);
+                        var qTypeParam = new SqlParameter("@QType", question.QType);
+                        var mappingParam = new SqlParameter("@Mapping", question.Mapping);
+                        var createdByParam = new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy); // Replace with actual user
+                        var createdDateParam = new SqlParameter("@CreatedDate", DateTime.UtcNow);
+                        var qid = new SqlParameter("@QID", SqlDbType.Int) { Direction = ParameterDirection.Output };
+
+                        // Execute usp_InsertSurveySubDetail
+                        var responseSub = await _context.Database.ExecuteSqlRawAsync(
+                            "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate, @QID OUTPUT",
+                            new SqlParameter("@SurveyID", generatedSurveyID),
+                            questionParam,
+                            qTypeParam,
+                            mappingParam,
+                            createdByParam,
+                            createdDateParam,
+                            qid
+                        );
+
+                        if (responseSub <= 0)
+                        {
+                            return false; // Failed to insert SurveySubDetail
+                        }
+
+                        int generatedQID = (int)qid.Value; // Get the generated QID
+
+                        // Step 3: Insert SurveySubDetailOption (if QType is Multiple Choice)
+                        if (question.QType == "Multiple Choice")
+                        {
+                            foreach (var option in question.Options)
+                            {
+                                var optionParam = new SqlParameter("@Options", option);
+
+                                // Execute usp_InsertSurveySubDetailOption
+                                var responseOption = await _context.Database.ExecuteSqlRawAsync(
+                                    "EXEC AddSurveySubDetailOption @QID, @Options",
+                                    new SqlParameter("@QID", generatedQID),
+                                    optionParam
+                                );
+
+                                if (responseOption <= 0)
+                                {
+                                    return false; // Failed to insert SurveySubDetailOption
+                                }
+                            }
+                        }
                     }
+
+                    return true; // Successfully saved all data
                 }
             }
             catch (Exception)
@@ -163,79 +213,82 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
             }
         }
 
-        public async Task CreateSurvey(SurveyCreateRequest request)
+         async Task<SurveyResponseDto> IIndirectAssessment.GetSurvey(getSurveyRequest request)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            try
             {
-                await connection.OpenAsync();
-
-                // Begin a transaction
-                using (var transaction = connection.BeginTransaction())
+                using (SqlCommand comm = new SqlCommand())
                 {
-                    try
-                    {
-                        // Step 1: Insert SurveyMainDetail
-                        var surveyMainDetailParams = new
-                        {
-                            SurveyType = request.SurveyMainDetail.SurveyType,
-                            SurveyDeptID = request.SurveyMainDetail.SurveyDeptID
-                        };
-                        var surveyID = await connection.ExecuteScalarAsync<int>(
-                            "usp_InsertSurveyMainDetail",
-                            surveyMainDetailParams,
-                            transaction,
-                            commandType: CommandType.StoredProcedure
-                        );
+                    var survey = new SurveyResponseDto();
+                    var surveyType = request.Surveytype;
+                    var surveyDeptID = request.Deptid;
+                    // Step 1: Get SurveyMainDetail
+                    var surveyMainDetailParams = new SqlParameter("@SurveyType", surveyType);
+                    var surveyDeptIDParam = new SqlParameter("@SurveyDeptID", surveyDeptID);
 
-                        // Step 2: Insert SurveySubDetail and SurveySubDetailOption
-                        foreach (var question in request.SurveySubDetails)
+                    var mainDetail = await _context.Set<SurveyMainDetail>()
+                        .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID}").ToListAsync();
+                    //.AsNoTracking()
+                    //.FirstOrDefaultAsync();
+
+                    if (mainDetail == null ||mainDetail.Count<=0)
+                    {
+                        return null; // No data found
+                    }
+                    else
+                    {
+                        var mainDetailList = mainDetail.FirstOrDefault();
+                        // Map SurveyMainDetail
+                        if (mainDetailList != null)
                         {
-                            var surveySubDetailParams = new
+                            survey.SurveyID = mainDetailList.SurveyID;
+                            survey.SurveyType = mainDetailList.SurveyType;
+                            survey.SurveyDeptID = mainDetailList.SurveyDeptID;
+                        }
+
+                        // Step 2: Get SurveySubDetails
+                        var questions = await _context.Set<SurveySubDetail>()
+                            .FromSqlInterpolated($"EXEC GetSurveySubDetailsA @SurveyType={surveyType}, @SurveyDeptID={ surveyDeptID}")
+                            .ToListAsync();
+
+                        survey.Questions = new List<SurveyQuestionDto>();
+
+                        foreach (var question in questions)
+                        {
+                            var questionDto = new SurveyQuestionDto
                             {
-                                SurveyID = surveyID,
+                                QID = question.QID,
                                 Question = question.Question,
                                 QType = question.QType,
                                 Mapping = question.Mapping,
-                                CreatedBy = "Admin", // Replace with actual user
-                                CreatedDate = DateTime.UtcNow
+                                Options = new List<string>()
                             };
-                            var qid = await connection.ExecuteScalarAsync<int>(
-                                "usp_InsertSurveySubDetail",
-                                surveySubDetailParams,
-                                transaction,
-                                commandType: CommandType.StoredProcedure
-                            );
 
-                            // Step 3: Insert SurveySubDetailOption (if QType is Multiple Choice)
+                            // Step 3: Get SurveySubDetailOptions (if QType is Multiple Choice)
                             if (question.QType == "Multiple Choice")
                             {
-                                foreach (var option in question.Options)
-                                {
-                                    var surveySubDetailOptionParams = new
-                                    {
-                                        QID = qid,
-                                        Options = option
-                                    };
-                                    await connection.ExecuteAsync(
-                                        "usp_InsertSurveySubDetailOption",
-                                        surveySubDetailOptionParams,
-                                        transaction,
-                                        commandType: CommandType.StoredProcedure
-                                    );
-                                }
+                                //.FromSqlRaw("EXEC GetSurveySubDetailOptions @QID", new SqlParameter("@QID", question.QID))
+                                //        .AsNoTracking()
+
+                                var options = await _context.Set<SurveySubDetailOption>().FromSqlInterpolated($"EXEC GetSurveySubDetailOptions @QID={question.QID}").AsEnumerable())  // Forces EF Core to execute on the client side
+    .Select(o => o.Options)
+    .ToList(); ;
+
+
+
+                                questionDto.Options = options;
                             }
+
+                            survey.Questions.Add(questionDto);
                         }
 
-                        // Commit the transaction
-                        transaction.Commit();
-                    }
-                    catch (Exception ex)
-                    {
-                        // Rollback the transaction in case of an error
-                        transaction.Rollback();
-                        throw new Exception("Failed to create survey.", ex);
+                        return survey;
                     }
                 }
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 

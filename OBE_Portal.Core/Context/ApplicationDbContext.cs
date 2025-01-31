@@ -13,6 +13,7 @@ using OBE_Portal.Core.Entities.Profile;
 using OBE_Portal.Core.Entities.Reports;
 using OBE_Portal.Core.Entities.Setting;
 using OBE_Portal.Core.Entities.Student;
+using OBE_Portal.Core.Entities.IndirectAssessment;
 
 namespace OBE_Portal.Core.Context
 {
@@ -96,6 +97,10 @@ namespace OBE_Portal.Core.Context
             modelBuilder.Entity<FacultyDetails>().HasNoKey();
             modelBuilder.Entity<FacultyEducation>().HasNoKey();
             modelBuilder.Entity<FacultyExperience>().HasNoKey();
+            modelBuilder.Entity<SurveyMainDetail>().HasNoKey();
+            modelBuilder.Entity<SurveySubDetail>().HasNoKey();  
+            modelBuilder.Entity<SurveySubDetailOption>().HasNoKey();
+            
         }
         
         //public DbSet<Authentication> user { get; set; }

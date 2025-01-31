@@ -6,6 +6,7 @@ import { IndirectAssessmentsComponent } from '../IndirectAssessments.component';
 import { CoursesSearchService } from '../../../Services/CourseSearch/CourseSearch.service';
 import { ToastrService } from 'ngx-toastr';
 import { IndirectAssessment } from '../../../Services/IndirectAssessment/IndirectAssessment.service';
+import { CoursesCLOSService } from './../../../Services/CourseCLOS/coursesCLO.service';
 declare const $: any;
 
 @Component({
@@ -15,15 +16,16 @@ declare const $: any;
 })
 export class QuestionairesComponent implements OnInit {
   surveyMainDetail: any = {
-    SurveyType: '',
-    SurveyDeptID:0,
+    SurveyType: 'CSP',
+    SurveyDeptID: 0,
+    CreatedBy :0,
   };
 
   surveySubDetails: any[] = [{
-    Question: '',
-    QType: 'Multiple Choice',
-    Mapping: '',
-    Options: ['']
+    Question: null,
+    QType: null,
+    Mapping: null,
+    Options: []
   }];
  
 
@@ -33,16 +35,45 @@ export class QuestionairesComponent implements OnInit {
     Mapping: '',
     Options: ['']
   };
+  plos: any = [];
   constructor(private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
     private ngxService: NgxUiLoaderService,
     private _InterconnectedService: InterconnectedService,
     private IndirectAssessmentsComponent: IndirectAssessmentsComponent,
-    private IndirectAssessment: IndirectAssessment,
+    private IndirectAssessmen: IndirectAssessment,
+    private CoursesCLOSService: CoursesCLOSService,
     private GlobalService: GlobalService,) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
 
+    this.getSurvey(this.surveyMainDetail.SurveyType);
+  }
+  getSurvey(surveyType: string) {
+    const request = {
+      Surveytype: surveyType,
+      Deptid: GlobalService.Deaprtment_ID
+
+    }
+    this.ngxService.start();
+    this.IndirectAssessmen.GetSurvey(request).
+      subscribe(
+        data => {
+          this.ngxService.stop();
+
+          console.log("getdata", data);
+        
+
+
+
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
+        });
+
+
+  }
   addQuestion(): void {
     // Add the new question to the list
     this.surveySubDetails.push({ ...this.newQuestion });
@@ -73,10 +104,34 @@ export class QuestionairesComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.surveyMainDetail.SurveyDeptID = GlobalService.Deaprtment_ID;
+    this.surveyMainDetail.CreatedBy = GlobalService.FacultyMember_ID;
     const payload = {
       SurveyMainDetail: this.surveyMainDetail,
       SurveySubDetails: this.surveySubDetails
     };
+    this.ngxService.start();
+
+    this.IndirectAssessmen.AddSurvey(payload).
+      subscribe(
+        response => {
+          try {
+            if (response) {
+              this.resetForm();
+              this.toastr.success("Information saved successfully", "Success!");
+            
+            }
+            this.ngxService.stop();
+          } catch (e) {
+            this.ngxService.stop();
+            this.toastr.error("Internal server error occured while processing your request", "Error!");
+          }
+
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Internal server error occured while processing your request", "Error!");
+        });
 
     //this.http.post('https://your-api-url/api/survey', payload).subscribe(
     //  response => {

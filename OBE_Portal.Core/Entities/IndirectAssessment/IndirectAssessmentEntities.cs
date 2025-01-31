@@ -64,6 +64,7 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
     {
         public string SurveyType { get; set; }
         public int SurveyDeptID { get; set; }
+        public int CreatedBy { get; set; }
     }
 
     public class SurveySubDetailDto
@@ -74,7 +75,52 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public List<string> Options { get; set; }
     }
 
+    public class SurveyMainDetail
+    {
+        public int SurveyID { get; set; }
+        public string SurveyType { get; set; }
+        public int SurveyDeptID { get; set; }
+        public ICollection<SurveySubDetail> SurveySubDetails { get; set; }
+    }
 
+    public class SurveySubDetail
+    {
+        public int QID { get; set; }
+        public int SurveyID { get; set; }
+        public string Question { get; set; }
+        public string QType { get; set; }
+        public string Mapping { get; set; }
+        public int createdBy { get; set; }
+        public DateTime createdDate { get; set; }
+        public ICollection<SurveySubDetailOption> SurveySubDetailOptions { get; set; }
+    }
 
+    public class SurveySubDetailOption
+    {
+        public int QID { get; set; }
+        public string Options { get; set; }
+    }
 
+    public class SurveyResponseDto
+    {
+        public int SurveyID { get; set; }
+        public string SurveyType { get; set; }
+        public int SurveyDeptID { get; set; }
+        public List<SurveyQuestionDto> Questions { get; set; }
+    }
+
+    public class SurveyQuestionDto
+    {
+        public int QID { get; set; }
+        public string Question { get; set; }
+        public string QType { get; set; }
+        public string Mapping { get; set; }
+        public List<string> Options { get; set; }
+    }
+
+    public class getSurveyRequest
+    {
+        public string Surveytype { get; set; }
+        public int Deptid { get; set; }
+    }
 }

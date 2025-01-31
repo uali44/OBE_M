@@ -21,5 +21,11 @@ export class IndirectAssessment {
   SaveInternshipForm<T>(data: any): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'IndirectAssessment/SaveInternshipForm', data);
   }
-  
+
+  AddSurvey<T>(data: any): Observable < any > {
+  return this.http.post<any>(this.baseUrl + 'IndirectAssessment/AddSurvey', data);
+}
+  GetSurvey<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'IndirectAssessment/GetSurvey', data);
+  }
 }

@@ -18,7 +18,7 @@
       </fieldset>
 
       <!-- Add Question Form -->
-      <fieldset>
+      <fieldset class="">
         <legend>Add Question</legend>
         <div class="form-group col-sm-12">
           <label for="question" class="col-sm-1">Question:</label>
@@ -29,6 +29,7 @@
           <select id="qType" [(ngModel)]="newQuestion.QType" name="qType" class="col-sm-3" required>
             <option value="Multiple Choice">Multiple Choice</option>
             <option value="Text">Text</option>
+            <option value="Likert">Likert</option>
           </select>
         </div>
         <div class="form-group col-sm-12">

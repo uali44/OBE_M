@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OBE_Portal.Core.Entities.IndirectAssessment;
+using OBE_Portal.Infrastructure.Implementations.IndirectAssessment;
+using OBE_Portal.Infrastructure.Implementations.Profile;
 using OBE_Portal.Infrastructure.Interfaces.IndirectAssessment;
 using System;
 using System.Collections.Generic;
@@ -68,5 +70,43 @@ namespace OBE_Portal.Controllers
                 throw;
             }
         }
+
+
+        [HttpPost("AddSurvey")]
+        public async Task<IActionResult> AddSurvey(SurveyCreateRequest request)
+        {
+            try
+            {
+                var respone = await _indirectAssessment.AddSurvey(request).ConfigureAwait(true);
+                if (respone)
+                    return Ok(respone);
+                else
+                    return Ok(respone);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost("GetSurvey")]
+        public async Task<IActionResult> GetSurvey(getSurveyRequest request)
+        {
+            try
+            {
+                var respone = await _indirectAssessment.GetSurvey(request).ConfigureAwait(true);
+                if (respone != null)
+                    return Ok(respone);
+                else
+                    return Ok(respone);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
     }
 }
