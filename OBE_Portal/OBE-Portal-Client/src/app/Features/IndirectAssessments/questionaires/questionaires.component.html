@@ -90,7 +90,37 @@
   </div>
 
 
+  <div class="col-sm-12">
 
+    <div *ngIf="SurveyData">
+      <h2>{{ SurveyData.title }}</h2>
+
+      <form [formGroup]="surveyForm" (ngSubmit)="submitSurvey()">
+        <div *ngFor="let question of SurveyData.Questions">
+          <label>{{ question.Question }}</label>
+
+          <!-- Text Input -->
+          <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
+
+          <!-- Radio Buttons for Multiple Choice -->
+          <div *ngIf="question.QType === 'Multiple Choice'">
+            <div *ngFor="let option of question.Options">
+              <input type="radio" [formControlName]="question.QID" [value]="option.Options" />
+              {{ option.Options }}
+            </div>
+          </div>
+
+         
+
+          <br />
+        </div>
+
+        <button type="submit" [disabled]="surveyForm.invalid">Submit</button>
+      </form>
+    </div>
+
+
+  </div>
 
 
 

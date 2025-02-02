@@ -115,9 +115,13 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public string Question { get; set; }
         public string QType { get; set; }
         public string Mapping { get; set; }
-        public List<string> Options { get; set; }
+        public List<SurveySubDetailOption> Options { get; set; }
     }
-
+    public class OoptionsDto
+    {
+        public int QID { get; set; }
+        public string Options { get; set; }
+    }
     public class getSurveyRequest
     {
         public string Surveytype { get; set; }

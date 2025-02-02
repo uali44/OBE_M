@@ -7,6 +7,7 @@ import { CoursesSearchService } from '../../../Services/CourseSearch/CourseSearc
 import { ToastrService } from 'ngx-toastr';
 import { IndirectAssessment } from '../../../Services/IndirectAssessment/IndirectAssessment.service';
 import { CoursesCLOSService } from './../../../Services/CourseCLOS/coursesCLO.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 declare const $: any;
 
 @Component({
@@ -20,7 +21,7 @@ export class QuestionairesComponent implements OnInit {
     SurveyDeptID: 0,
     CreatedBy :0,
   };
-
+  surveyForm: FormGroup = this.fb.group({});
   surveySubDetails: any[] = [{
     Question: null,
     QType: null,
@@ -28,7 +29,7 @@ export class QuestionairesComponent implements OnInit {
     Options: []
   }];
  
-
+  SurveyData: any = [];
   newQuestion: any = {
     Question: '',
     QType: 'Multiple Choice',
@@ -43,11 +44,13 @@ export class QuestionairesComponent implements OnInit {
     private IndirectAssessmentsComponent: IndirectAssessmentsComponent,
     private IndirectAssessmen: IndirectAssessment,
     private CoursesCLOSService: CoursesCLOSService,
-    private GlobalService: GlobalService,) { }
+    private GlobalService: GlobalService,
+    private fb: FormBuilder,  ) { }
 
   ngOnInit(): void {
 
     this.getSurvey(this.surveyMainDetail.SurveyType);
+    
   }
   getSurvey(surveyType: string) {
     const request = {
@@ -60,9 +63,9 @@ export class QuestionairesComponent implements OnInit {
       subscribe(
         data => {
           this.ngxService.stop();
-
-          console.log("getdata", data);
-        
+          this.SurveyData = data;
+          console.log("getdata", this.SurveyData);
+          this.createForm();
 
 
 
@@ -74,6 +77,26 @@ export class QuestionairesComponent implements OnInit {
 
 
   }
+
+  createForm() {
+    if (!this.SurveyData || !this.SurveyData.Questions) return;
+
+    this.SurveyData.Questions.forEach((question: any) => {
+      if (question.QType === 'Text') {
+        this.surveyForm.addControl(question.QID, new FormControl('', Validators.required));
+      } else if (question.QType === 'Multiple Choice') {
+        this.surveyForm.addControl(question.QID, new FormControl('', Validators.required));
+      }
+    });
+  }
+
+  submitSurvey() {
+    console.log('Survey Responses:', this.surveyForm.value);
+  }
+
+
+
+
   addQuestion(): void {
     // Add the new question to the list
     this.surveySubDetails.push({ ...this.newQuestion });

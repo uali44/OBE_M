@@ -261,7 +261,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                                 Question = question.Question,
                                 QType = question.QType,
                                 Mapping = question.Mapping,
-                                Options = new List<string>()
+                                Options = new List<SurveySubDetailOption>()
                             };
 
                             // Step 3: Get SurveySubDetailOptions (if QType is Multiple Choice)
@@ -270,9 +270,8 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                                 //.FromSqlRaw("EXEC GetSurveySubDetailOptions @QID", new SqlParameter("@QID", question.QID))
                                 //        .AsNoTracking()
 
-                                var options = await _context.Set<SurveySubDetailOption>().FromSqlInterpolated($"EXEC GetSurveySubDetailOptions @QID={question.QID}").AsEnumerable())  // Forces EF Core to execute on the client side
-    .Select(o => o.Options)
-    .ToList(); ;
+                                var options = await _context.Set<SurveySubDetailOption>().FromSqlInterpolated($"EXEC GetSurveySubDetailOptions @QID={question.QID}").ToListAsync();
+    
 
 
 
