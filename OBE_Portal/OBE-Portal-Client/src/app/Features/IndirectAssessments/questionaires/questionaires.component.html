@@ -7,7 +7,7 @@
         <legend>Survey Type</legend>
         <div class="form-group col-sm-12">
           <label for="surveyType" class="col-sm-1">Survey Type:</label>
-          <select id="surveyType" [(ngModel)]="surveyMainDetail.SurveyType" name="surveyType" class="col-sm-3" required>
+          <select id="surveyType" [(ngModel)]="surveyMainDetail.SurveyType" name="surveyType" class="col-sm-3" (change)="getSurvey($event.target.value)" required>
             <option value="CSP">CSP</option>
             <option value="Internship">Internship</option>
             <option value="Exit">Exit</option>
@@ -86,38 +86,69 @@
     </table>
 
     <!-- Submit Button -->
-    <button type="button" (click)="onSubmit()" class="btn btn-primary pull-right">Create Survey</button>
+    <button type="button" (click)="onSubmit()" class="btn btn-primary pull-right">Save Questions</button>
   </div>
 
 
   <div class="col-sm-12">
 
     <div *ngIf="SurveyData">
-      <h2>{{ SurveyData.title }}</h2>
+      <h2>{{ SurveyData.SurveyType }}</h2>
 
       <form [formGroup]="surveyForm" (ngSubmit)="submitSurvey()">
-        <div *ngFor="let question of SurveyData.Questions">
-          <label>{{ question.Question }}</label>
+        <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+          <table class="table table-hover table-theme">
+            <thead>
+              <tr>
+                <th>Statement</th>
+                <th>Mapping</th>
+                <th>Answer</th>
+                <th>Action</th>
+              </tr>
 
-          <!-- Text Input -->
-          <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
+            </thead>
+            <!--<div *ngFor="let question of SurveyData.Questions">-->
 
-          <!-- Radio Buttons for Multiple Choice -->
-          <div *ngIf="question.QType === 'Multiple Choice'">
-            <div *ngFor="let option of question.Options">
-              <input type="radio" [formControlName]="question.QID" [value]="option.Options" />
-              {{ option.Options }}
-            </div>
+            <tr *ngFor="let question of SurveyData.Questions">
+              <td> <label>{{ question.Question }}</label></td>
+              <td class="text-center">{{ question.Mapping }}</td>
+              <td>
+                <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
+
+                <!-- Radio Buttons for Multiple Choice -->
+                <div *ngIf="question.QType === 'Multiple Choice'">
+
+                  <div class="pull-left radio-inline padding-t5" *ngFor="let option of question.Options">
+                    <input type="radio" [formControlName]="question.QID" [value]="option.Options">
+                    <label class="cursor-pointer">{{ option.Options }}</label>
+
+                  </div>
+                </div>
+                <div *ngIf="question.QType === 'Likert'">
+
+                  <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                    <input type="radio" [formControlName]="question.QID" [value]="num">
+                    <label class="cursor-pointer">{{ num }}</label>
+
+                  </div>
+
+                </div>
+              </td>
+              <td>
+                <button type="button" class="btn btn-default margin-r5" (click)="deleteQuestion(question.QID)">
+                  <i class="app-icon-IconSet-1-33 blue"></i>
+
+                </button>
+              </td>
+             
+            </tr>
+          </table>
           </div>
+          <button type="submit" [disabled]="surveyForm.invalid">Submit</button>
+</form>
+</div>
+   
 
-         
-
-          <br />
-        </div>
-
-        <button type="submit" [disabled]="surveyForm.invalid">Submit</button>
-      </form>
-    </div>
 
 
   </div>

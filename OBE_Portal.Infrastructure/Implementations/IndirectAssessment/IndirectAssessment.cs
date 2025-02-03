@@ -135,76 +135,101 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
             {
                 using (SqlCommand comm = new SqlCommand())
                 {
-                    // Step 1: Insert SurveyMainDetail
-                    var surveyType = new SqlParameter("@SurveyType", request.SurveyMainDetail.SurveyType);
-                    var surveyDeptID = new SqlParameter("@SurveyDeptID", request.SurveyMainDetail.SurveyDeptID);
-                    var surveyID = new SqlParameter("@SurveyID", SqlDbType.Int) { Direction = ParameterDirection.Output };
+                    // Step 1: Check if Survey Exists for the given department
+                    var existingSurvey = await _context.Set<SurveyMainDetail>()
+                        .Where(s => s.SurveyDeptID == request.SurveyMainDetail.SurveyDeptID && s.SurveyType == request.SurveyMainDetail.SurveyType)
+                        .FirstOrDefaultAsync();
 
-                    // Execute usp_InsertSurveyMainDetail
-                    var responseMain = await _context.Database.ExecuteSqlRawAsync(
-                        "EXEC AddSurveyMainDetail @SurveyType, @SurveyDeptID, @SurveyID OUTPUT",
-                        surveyType, surveyDeptID, surveyID
-                    );
-
-                    if (responseMain <= 0)
+                    // If survey exists, we are only adding new questions or options
+                    if (existingSurvey != null)
                     {
-                        return false; // Failed to insert SurveyMainDetail
-                    }
-
-                    int generatedSurveyID = (int)surveyID.Value; // Get the generated SurveyID
-
-                    // Step 2: Insert SurveySubDetail and SurveySubDetailOption
-                    foreach (var question in request.SurveySubDetails)
-                    {
-                        var questionParam = new SqlParameter("@Question", question.Question);
-                        var qTypeParam = new SqlParameter("@QType", question.QType);
-                        var mappingParam = new SqlParameter("@Mapping", question.Mapping);
-                        var createdByParam = new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy); // Replace with actual user
-                        var createdDateParam = new SqlParameter("@CreatedDate", DateTime.UtcNow);
-                        var qid = new SqlParameter("@QID", SqlDbType.Int) { Direction = ParameterDirection.Output };
-
-                        // Execute usp_InsertSurveySubDetail
-                        var responseSub = await _context.Database.ExecuteSqlRawAsync(
-                            "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate, @QID OUTPUT",
-                            new SqlParameter("@SurveyID", generatedSurveyID),
-                            questionParam,
-                            qTypeParam,
-                            mappingParam,
-                            createdByParam,
-                            createdDateParam,
-                            qid
-                        );
-
-                        if (responseSub <= 0)
+                        // Step 2: Add New Questions or Options
+                        foreach (var question in request.SurveySubDetails)
                         {
-                            return false; // Failed to insert SurveySubDetail
-                        }
+                            // Add new question to the existing survey
+                            var qid = new SqlParameter("@QID", SqlDbType.Int) { Direction = ParameterDirection.Output };
 
-                        int generatedQID = (int)qid.Value; // Get the generated QID
+                            var responseSub = await _context.Database.ExecuteSqlRawAsync(
+                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate, @QID OUTPUT",
+                                new SqlParameter("@SurveyID", existingSurvey.SurveyID),
+                                new SqlParameter("@Question", question.Question),
+                                new SqlParameter("@QType", question.QType),
+                                new SqlParameter("@Mapping", question.Mapping),
+                                new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy),
+                                new SqlParameter("@CreatedDate", DateTime.UtcNow),
+                                qid
+                            );
 
-                        // Step 3: Insert SurveySubDetailOption (if QType is Multiple Choice)
-                        if (question.QType == "Multiple Choice")
-                        {
-                            foreach (var option in question.Options)
+                            int generatedQID = (int)qid.Value; // Get the generated QID
+
+                            // Add options if the question is "Multiple Choice"
+                            if (question.QType == "Multiple Choice")
                             {
-                                var optionParam = new SqlParameter("@Options", option);
-
-                                // Execute usp_InsertSurveySubDetailOption
-                                var responseOption = await _context.Database.ExecuteSqlRawAsync(
-                                    "EXEC AddSurveySubDetailOption @QID, @Options",
-                                    new SqlParameter("@QID", generatedQID),
-                                    optionParam
-                                );
-
-                                if (responseOption <= 0)
+                                foreach (var option in question.Options)
                                 {
-                                    return false; // Failed to insert SurveySubDetailOption
+                                    await _context.Database.ExecuteSqlRawAsync(
+                                        "EXEC AddSurveySubDetailOption @QID, @Options",
+                                        new SqlParameter("@QID", generatedQID),
+                                        new SqlParameter("@Options", option)
+                                    );
                                 }
                             }
                         }
-                    }
 
-                    return true; // Successfully saved all data
+                        return true; // Successfully added new questions/options
+                    }
+                    else
+                    {
+                        // Step 3: Create a New Survey (if it does not exist)
+                        var surveyType = new SqlParameter("@SurveyType", request.SurveyMainDetail.SurveyType);
+                        var surveyDeptID = new SqlParameter("@SurveyDeptID", request.SurveyMainDetail.SurveyDeptID);
+                        var surveyID = new SqlParameter("@SurveyID", SqlDbType.Int) { Direction = ParameterDirection.Output };
+
+                        var responseMain = await _context.Database.ExecuteSqlRawAsync(
+                            "EXEC AddSurveyMainDetail @SurveyType, @SurveyDeptID, @SurveyID OUTPUT",
+                            surveyType, surveyDeptID, surveyID
+                        );
+
+                        if (responseMain <= 0)
+                        {
+                            return false; // Failed to create new survey
+                        }
+
+                        int generatedSurveyID = (int)surveyID.Value;
+
+                        // Step 4: Insert SurveySubDetails and SurveySubDetailOptions
+                        foreach (var question in request.SurveySubDetails)
+                        {
+                            var qid = new SqlParameter("@QID", SqlDbType.Int) { Direction = ParameterDirection.Output };
+
+                            var responseSub = await _context.Database.ExecuteSqlRawAsync(
+                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate, @QID OUTPUT",
+                                new SqlParameter("@SurveyID", generatedSurveyID),
+                                new SqlParameter("@Question", question.Question),
+                                new SqlParameter("@QType", question.QType),
+                                new SqlParameter("@Mapping", question.Mapping),
+                                new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy),
+                                new SqlParameter("@CreatedDate", DateTime.UtcNow),
+                                qid
+                            );
+
+                            int generatedQID = (int)qid.Value;
+
+                            // Add options for "Multiple Choice"
+                            if (question.QType == "Multiple Choice")
+                            {
+                                foreach (var option in question.Options)
+                                {
+                                    await _context.Database.ExecuteSqlRawAsync(
+                                        "EXEC AddSurveySubDetailOption @QID, @Options",
+                                        new SqlParameter("@QID", generatedQID),
+                                        new SqlParameter("@Options", option)
+                                    );
+                                }
+                            }
+                        }
+                        return true;
+                    }
                 }
             }
             catch (Exception)
@@ -290,6 +315,39 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                 throw;
             }
         }
+
+
+
+        async Task<bool> IIndirectAssessment.DeleteQuestion(int qid)
+        {
+            try
+            {
+               
+
+                // Then delete the question
+                var result = await _context.Database.ExecuteSqlRawAsync(
+                    "EXEC DeleteSurveySubDetail @QID",
+                    new SqlParameter("@QID", qid)
+                );
+
+                return result > 0; // Return true if deletion was successful
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
 
     }
 }

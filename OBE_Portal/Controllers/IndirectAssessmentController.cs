@@ -107,6 +107,21 @@ namespace OBE_Portal.Controllers
         }
 
 
+        [HttpPost("DeleteQuestion")]
+        public async Task<IActionResult> DeleteQuestion([FromBody] int QID)
+        {
+            try
+            {
+                var response = await _indirectAssessment.DeleteQuestion(QID).ConfigureAwait(true);
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
 
     }
 }

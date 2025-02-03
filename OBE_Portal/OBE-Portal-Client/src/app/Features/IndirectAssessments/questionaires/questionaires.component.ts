@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { IndirectAssessment } from '../../../Services/IndirectAssessment/IndirectAssessment.service';
 import { CoursesCLOSService } from './../../../Services/CourseCLOS/coursesCLO.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 declare const $: any;
 
 @Component({
@@ -66,7 +67,7 @@ export class QuestionairesComponent implements OnInit {
           this.SurveyData = data;
           console.log("getdata", this.SurveyData);
           this.createForm();
-
+        
 
 
         },
@@ -156,20 +157,38 @@ export class QuestionairesComponent implements OnInit {
           this.toastr.error("Internal server error occured while processing your request", "Error!");
         });
 
-    //this.http.post('https://your-api-url/api/survey', payload).subscribe(
-    //  response => {
-    //    alert('Survey created successfully!');
-    //    this.resetForm();
-    //  },
-    //  error => {
-    //    console.error('Error creating survey:', error);
-    //  }
-    //);
+   
   }
+  deleteQuestion(QID: number) {
 
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this Question!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
+
+
+
+
+      if (result.value) {
+        this.IndirectAssessmen.DeleteQuestion(QID).subscribe(
+          () => {
+            Swal.fire('Deleted!', 'Question has been deleted.', 'success');
+            this.getSurvey(this.surveyMainDetail.SurveyType);
+          },
+          error => {
+            Swal.fire('Error!', 'Failed to delete Question.', 'error');
+          }
+        );
+      }
+    });
+  }
   resetForm(): void {
     this.surveyMainDetail = {
-      SurveyType: '',
+      SurveyType: this.surveyMainDetail.SurveyType,
       SurveyDeptID: null
     };
     this.newQuestion = {
@@ -181,3 +200,5 @@ export class QuestionairesComponent implements OnInit {
     this.surveySubDetails = [];
   }
 }
+
+
