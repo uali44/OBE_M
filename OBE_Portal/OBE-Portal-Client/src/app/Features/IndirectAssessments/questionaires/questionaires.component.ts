@@ -51,7 +51,7 @@ export class QuestionairesComponent implements OnInit {
   ngOnInit(): void {
 
     this.getSurvey(this.surveyMainDetail.SurveyType);
-    
+    this.removeQuestion(0);
   }
   getSurvey(surveyType: string) {
     const request = {

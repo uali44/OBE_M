@@ -358,6 +358,21 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         value: function SaveInternshipForm(data) {
           return this.http.post(this.baseUrl + 'IndirectAssessment/SaveInternshipForm', data);
         }
+      }, {
+        key: "AddSurvey",
+        value: function AddSurvey(data) {
+          return this.http.post(this.baseUrl + 'IndirectAssessment/AddSurvey', data);
+        }
+      }, {
+        key: "GetSurvey",
+        value: function GetSurvey(data) {
+          return this.http.post(this.baseUrl + 'IndirectAssessment/GetSurvey', data);
+        }
+      }, {
+        key: "DeleteQuestion",
+        value: function DeleteQuestion(data) {
+          return this.http.post(this.baseUrl + 'IndirectAssessment/DeleteQuestion', data);
+        }
       }]);
 
       return IndirectAssessment;

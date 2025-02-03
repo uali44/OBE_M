@@ -166,6 +166,15 @@ class IndirectAssessment {
     SaveInternshipForm(data) {
         return this.http.post(this.baseUrl + 'IndirectAssessment/SaveInternshipForm', data);
     }
+    AddSurvey(data) {
+        return this.http.post(this.baseUrl + 'IndirectAssessment/AddSurvey', data);
+    }
+    GetSurvey(data) {
+        return this.http.post(this.baseUrl + 'IndirectAssessment/GetSurvey', data);
+    }
+    DeleteQuestion(data) {
+        return this.http.post(this.baseUrl + 'IndirectAssessment/DeleteQuestion', data);
+    }
 }
 IndirectAssessment.ɵfac = function IndirectAssessment_Factory(t) { return new (t || IndirectAssessment)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"])); };
 IndirectAssessment.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: IndirectAssessment, factory: IndirectAssessment.ɵfac, providedIn: 'root' });

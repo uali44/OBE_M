@@ -127,7 +127,7 @@
                 <div *ngIf="question.QType === 'Likert'">
 
                   <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
-                    <input type="radio" [formControlName]="question.QID" [value]="num">
+                    <input type="radio" [formControlName]="question.QID" name="question.QID"  [value]="num">
                     <label class="cursor-pointer">{{ num }}</label>
 
                   </div>
