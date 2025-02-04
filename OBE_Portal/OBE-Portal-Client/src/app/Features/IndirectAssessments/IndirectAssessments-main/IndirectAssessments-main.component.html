@@ -1,7 +1,7 @@
 <div role="tabpanel" class="tab-pane active" id="IndirectAssessment-tab">
 
 
-  <a [routerLink]="['Survey']"> Add survey</a>
+  <a class="btn btn-link link_custom pull-right border-grey"  [routerLink]="['Survey']"> Add survey</a>
   <div class="row margin-b15">
     <div class="col-sm-12 col-lg-12">
       <fieldset class="padding-b5">
@@ -59,12 +59,14 @@
         <li role="presentation"> <a aria-expanded="true" href="#ExitSurveyForm" role="tab" data-toggle="tab">Exit Survey Form</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#InternshipForm" role="tab" data-toggle="tab">Internship Form</a> </li>
 
-        <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICEE" role="tab" data-toggle="tab"   *ngIf="dept===4||dept===8" >Alumni Survey Form EE</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICEE" role="tab" data-toggle="tab" *ngIf="dept===4||dept===8">Alumni Survey Form EE</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICEE" role="tab" data-toggle="tab" *ngIf="dept===4||dept===8">Employer Survey Form EE</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICCE" role="tab" data-toggle="tab" *ngIf="dept===2||dept===8">Alumni Survey Form CE</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICCE" role="tab" data-toggle="tab" *ngIf="dept===2||dept===8">Employer Survey Form CE</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICSE" role="tab" data-toggle="tab" *ngIf="dept===8">Alumni Survey Form SE</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICSE" role="tab" data-toggle="tab" *ngIf="dept===8">Employer Survey Form SE</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#CSP" role="tab" data-toggle="tab" *ngIf="dept===8">CSP</a> </li>
+
       </ul>
     </div>
     <div class="tab-content">
@@ -4686,6 +4688,222 @@
           </div>
         </div>
       </div>
+
+      <div role="tabpanel" class="tab-pane active" id="CSP">
+        <div class="col-sm-12">
+
+          <div *ngIf="CSPSurveyData">
+           
+            <form [formGroup]="cSPSurveyForm" (ngSubmit)="submitCSPSurvey()">
+              <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+                <table class="table table-hover table-theme">
+                  <thead>
+                    <tr>
+                      <th>Sr#</th>
+                      <th>Statement</th>
+                      <th>Mapping</th>
+                      <th>Answer</th>
+
+
+                    </tr>
+
+                  </thead>
+                  <!--<div *ngFor="let question of SurveyData.Questions">-->
+
+                  <tr *ngFor="let question of CSPSurveyData.Questions;let i=index;">
+
+                    <ng-container *ngIf="question.Section==='Header'">
+                      <td class="text-center">{{i}}</td>
+                      <td> <label>{{ question.Question }}</label></td>
+                      <td class="text-center">{{ question.Mapping }}</td>
+                      <td>
+                        <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
+                        <textarea rows="6" *ngIf="question.QType === 'Remarks'" type="text" [formControlName]="question.QID"></textarea>
+                        <!-- Radio Buttons for Multiple Choice -->
+                        <div *ngIf="question.QType === 'Multiple Choice'">
+
+                          <div class="pull-left radio-inline padding-t5" *ngFor="let option of question.Options">
+                            <input type="radio" [formControlName]="question.QID" [value]="option.Options">
+                            <label class="cursor-pointer">{{ option.Options }}</label>
+
+                          </div>
+                        </div>
+                        <div *ngIf="question.QType === 'Likert'">
+
+                          <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                            <input type="radio" [formControlName]="question.QID" name="question.QID" [value]="num">
+                            <label class="cursor-pointer">{{ num }}</label>
+
+                          </div>
+
+                        </div>
+                      </td>
+
+
+                    </ng-container>
+                  </tr>
+                </table>
+              </div>
+              <hr />
+              <h4 class="text-center">
+                <b>Please respond to the following by selecting the most appropriate choice for candidate</b>
+                <br />
+                <b>5: Very strong	   4: Strong	3: Moderate	  2: Weak	1: very Weak       0: Not applicable</b>
+              </h4>
+              <hr />
+              <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+                <table class="table table-hover table-theme">
+                  <thead>
+                    <tr>
+                      <th>Sr#</th>
+                      <th>Statement</th>
+                      <th>Mapping</th>
+                      <th>5</th>
+                      <th>4</th>
+                      <th>3</th>
+                      <th>2</th>
+                      <th>1</th>
+
+
+                    </tr>
+
+                  </thead>
+                  <!--<div *ngFor="let question of SurveyData.Questions">-->
+
+                  <tr *ngFor="let question of CSPSurveyData.Questions; let i=index;">
+                    <ng-container *ngIf="question.Section==='Main'">
+                      <td>{{i}}</td>
+                      <td> <label>{{ question.Question }}</label></td>
+                      <td class="text-center">{{ question.Mapping }}</td>
+                      <td *ngIf="question.QType != 'Likert'">
+                        <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
+
+                        <!-- Radio Buttons for Multiple Choice -->
+                        <div *ngIf="question.QType === 'Multiple Choice'">
+
+                          <div class="pull-left radio-inline padding-t5" *ngFor="let option of question.Options">
+                            <input type="radio" [formControlName]="question.QID" [value]="option.Options">
+                            <label class="cursor-pointer">{{ option.Options }}</label>
+
+                          </div>
+                        </div>
+
+                      </td>
+
+
+
+                      <ng-container class="pull-left radio-inline padding-t5" *ngFor="let num of [5,4,3,2,1]">
+
+                        <td>
+                          <div *ngIf="question.QType === 'Likert'" class="text-center">
+                            <input type="radio" [formControlName]="question.QID" [value]="num">
+                            <label class="cursor-pointer"></label>
+
+                          </div>
+                        </td>
+                      </ng-container>
+
+
+                    </ng-container>
+                  </tr>
+                </table>
+              </div>
+           <hr />
+                <div *ngFor="let question of CSPSurveyData.Questions" class="col-sm-12">
+                  <ng-container *ngIf="question.Section==='Footer'">
+                    <div> <label>{{ question.Question }}</label></div>
+                
+                    <div class="col-sm-12">
+                      <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
+
+                      <textarea rows="6"  class="width-100p" *ngIf="question.QType === 'Remarks'" type="text" [formControlName]="question.QID"></textarea>
+                      <!-- Radio Buttons for Multiple Choice -->
+                      <div *ngIf="question.QType === 'Multiple Choice'">
+
+                        <div class="pull-left radio-inline padding-t5" *ngFor="let option of question.Options">
+                          <input type="radio" [formControlName]="question.QID" [value]="option.Options">
+                          <label class="cursor-pointer">{{ option.Options }}</label>
+
+                        </div>
+                      </div>
+                      <div *ngIf="question.QType === 'Likert'">
+
+                        <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                          <input type="radio" [formControlName]="question.QID" name="question.QID" [value]="num">
+                          <label class="cursor-pointer">{{ num }}</label>
+
+                        </div>
+
+                      </div>
+                    </div>
+
+
+                  </ng-container>
+                </div>
+
+
+             
+
+                <!--<div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+                  <table class="table table-hover table-theme">
+                    <thead>
+                      <tr>
+                        <th>Statement</th>
+                        <th>Mapping</th>
+                        <th>Answer</th>
+
+
+                      </tr>
+
+                    </thead>-->
+                    <!--<div *ngFor="let question of SurveyData.Questions">-->
+
+                    <!--<tr *ngFor="let question of SurveyData.Questions">
+                      <ng-container *ngIf="question.Section==='Footer'">
+                        <td> <label>{{ question.Question }}</label></td>
+                        <td class="text-center">{{ question.Mapping }}</td>
+                        <td>
+                          <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
+
+                          <textarea rows="6" *ngIf="question.QType === 'Remarks'" type="text" [formControlName]="question.QID"></textarea>-->
+                          <!-- Radio Buttons for Multiple Choice -->
+                          <!--<div *ngIf="question.QType === 'Multiple Choice'">
+
+                            <div class="pull-left radio-inline padding-t5" *ngFor="let option of question.Options">
+                              <input type="radio" [formControlName]="question.QID" [value]="option.Options">
+                              <label class="cursor-pointer">{{ option.Options }}</label>
+
+                            </div>
+                          </div>
+                          <div *ngIf="question.QType === 'Likert'">
+
+                            <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                              <input type="radio" [formControlName]="question.QID" name="question.QID" [value]="num">
+                              <label class="cursor-pointer">{{ num }}</label>
+
+                            </div>
+
+                          </div>
+                        </td>
+
+
+                      </ng-container>
+                    </tr>
+                  </table>
+                </div>-->
+
+
+
+                <button class="btn btn-primary pull-right margin-t20" type="submit" [disabled]="cSPSurveyForm.invalid">Submit</button>
+            </form>
+          </div>
+
+
+
+
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

@@ -150,13 +150,14 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                             var qid = new SqlParameter("@QID", SqlDbType.Int) { Direction = ParameterDirection.Output };
 
                             var responseSub = await _context.Database.ExecuteSqlRawAsync(
-                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate, @QID OUTPUT",
+                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate,@Section ,@QID OUTPUT",
                                 new SqlParameter("@SurveyID", existingSurvey.SurveyID),
                                 new SqlParameter("@Question", question.Question),
                                 new SqlParameter("@QType", question.QType),
                                 new SqlParameter("@Mapping", question.Mapping),
                                 new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy),
                                 new SqlParameter("@CreatedDate", DateTime.UtcNow),
+                                  new SqlParameter("@Section", question.Section),
                                 qid
                             );
 
@@ -203,13 +204,14 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                             var qid = new SqlParameter("@QID", SqlDbType.Int) { Direction = ParameterDirection.Output };
 
                             var responseSub = await _context.Database.ExecuteSqlRawAsync(
-                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate, @QID OUTPUT",
+                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate,@Section, @QID OUTPUT",
                                 new SqlParameter("@SurveyID", generatedSurveyID),
                                 new SqlParameter("@Question", question.Question),
                                 new SqlParameter("@QType", question.QType),
                                 new SqlParameter("@Mapping", question.Mapping),
                                 new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy),
                                 new SqlParameter("@CreatedDate", DateTime.UtcNow),
+                                  new SqlParameter("@Section", question.Section),
                                 qid
                             );
 
@@ -286,6 +288,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                                 Question = question.Question,
                                 QType = question.QType,
                                 Mapping = question.Mapping,
+                                Section=question.Section,
                                 Options = new List<SurveySubDetailOption>()
                             };
 
@@ -340,10 +343,117 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
 
 
+        async Task<Allsurvey> IIndirectAssessment.GetAllSurvey(int Deptid)
+        {
+            try
+            {
+                var CSP = await GetSurvey("CSP", Deptid);
+                var Internship = await GetSurvey("Internship", Deptid);
+               var Alumni = await GetSurvey("Alumni", Deptid);
+                var Exit = await GetSurvey("Exit", Deptid);
+               var Employer = await GetSurvey("Employer", Deptid);
+                return new Allsurvey
+                {
+                    CSP =CSP,
+                    Internship = Internship,
+                    Alumni = Alumni,
+                    Exit = Exit,
+                    Employer = Employer
+                };
 
 
 
 
+
+
+              
+            
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+        async Task<SurveyResponseDto> GetSurvey(String Surveytype,int Deptid)
+        {
+            try
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    var survey = new SurveyResponseDto();
+                    var surveyType = Surveytype;
+                    var surveyDeptID = Deptid;
+                    // Step 1: Get SurveyMainDetail
+                    var surveyMainDetailParams = new SqlParameter("@SurveyType", surveyType);
+                    var surveyDeptIDParam = new SqlParameter("@SurveyDeptID", surveyDeptID);
+
+                    var mainDetail = await _context.Set<SurveyMainDetail>()
+                        .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID}").ToListAsync();
+                    //.AsNoTracking()
+                    //.FirstOrDefaultAsync();
+
+                    if (mainDetail == null || mainDetail.Count <= 0)
+                    {
+                        return null; // No data found
+                    }
+                    else
+                    {
+                        var mainDetailList = mainDetail.FirstOrDefault();
+                        // Map SurveyMainDetail
+                        if (mainDetailList != null)
+                        {
+                            survey.SurveyID = mainDetailList.SurveyID;
+                            survey.SurveyType = mainDetailList.SurveyType;
+                            survey.SurveyDeptID = mainDetailList.SurveyDeptID;
+                        }
+
+                        // Step 2: Get SurveySubDetails
+                        var questions = await _context.Set<SurveySubDetail>()
+                            .FromSqlInterpolated($"EXEC GetSurveySubDetailsA @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID}")
+                            .ToListAsync();
+
+                        survey.Questions = new List<SurveyQuestionDto>();
+
+                        foreach (var question in questions)
+                        {
+                            var questionDto = new SurveyQuestionDto
+                            {
+                                QID = question.QID,
+                                Question = question.Question,
+                                QType = question.QType,
+                                Mapping = question.Mapping,
+                                Section = question.Section,
+                                Options = new List<SurveySubDetailOption>()
+                            };
+
+                            // Step 3: Get SurveySubDetailOptions (if QType is Multiple Choice)
+                            if (question.QType == "Multiple Choice")
+                            {
+                                //.FromSqlRaw("EXEC GetSurveySubDetailOptions @QID", new SqlParameter("@QID", question.QID))
+                                //        .AsNoTracking()
+
+                                var options = await _context.Set<SurveySubDetailOption>().FromSqlInterpolated($"EXEC GetSurveySubDetailOptions @QID={question.QID}").ToListAsync();
+
+
+
+
+                                questionDto.Options = options;
+                            }
+
+                            survey.Questions.Add(questionDto);
+                        }
+
+                        return survey;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
 
 

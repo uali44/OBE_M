@@ -105,6 +105,22 @@ namespace OBE_Portal.Controllers
                 throw;
             }
         }
+        [HttpPost("GetAllSurvey")]
+        public async Task<IActionResult> GetAllSurvey(int Deptid)
+        {
+            try
+            {
+                var respone = await _indirectAssessment.GetAllSurvey(Deptid).ConfigureAwait(true);
+                if (respone != null)
+                    return Ok(respone);
+                else
+                    return Ok(respone);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
 
         [HttpPost("DeleteQuestion")]

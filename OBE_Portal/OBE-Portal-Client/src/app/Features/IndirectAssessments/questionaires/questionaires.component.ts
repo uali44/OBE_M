@@ -27,6 +27,7 @@ export class QuestionairesComponent implements OnInit {
     Question: null,
     QType: null,
     Mapping: null,
+    Section: null,
     Options: []
   }];
  
@@ -35,6 +36,7 @@ export class QuestionairesComponent implements OnInit {
     Question: '',
     QType: 'Multiple Choice',
     Mapping: '',
+    Section:'Header',
     Options: ['']
   };
   plos: any = [];
@@ -88,6 +90,12 @@ export class QuestionairesComponent implements OnInit {
       } else if (question.QType === 'Multiple Choice') {
         this.surveyForm.addControl(question.QID, new FormControl('', Validators.required));
       }
+      else if (question.QType === 'Likert') {
+        this.surveyForm.addControl(question.QID, new FormControl('', Validators.required));
+      }
+      else if (question.QType === 'Remarks') {
+        this.surveyForm.addControl(question.QID, new FormControl('', Validators.required));
+      }
     });
   }
 
@@ -126,6 +134,9 @@ export class QuestionairesComponent implements OnInit {
       alert('At least one option is required!');
     }
   }
+  trackByFn(index: number, item: any): number {
+    return index;
+  }
 
   onSubmit(): void {
     this.surveyMainDetail.SurveyDeptID = GlobalService.Deaprtment_ID;
@@ -141,7 +152,9 @@ export class QuestionairesComponent implements OnInit {
         response => {
           try {
             if (response) {
+              this.getSurvey(this.surveyMainDetail.SurveyType);
               this.resetForm();
+            
               this.toastr.success("Information saved successfully", "Success!");
             
             }

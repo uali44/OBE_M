@@ -6,6 +6,8 @@ import { IndirectAssessmentsComponent } from '../IndirectAssessments.component';
 import { CoursesSearchService } from '../../../Services/CourseSearch/CourseSearch.service';
 import { ToastrService } from 'ngx-toastr';
 import { IndirectAssessment } from '../../../Services/IndirectAssessment/IndirectAssessment.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 declare const $: any;
 @Component({
   selector: 'app-IndirectAssessments-main',
@@ -27,6 +29,17 @@ export class IndirectAssessmentsMainComponent implements OnInit {
   Temp_Institute_ID: number;
   Temp_Deaprtment_ID: number;
   dept: number;
+
+  CSPSurveyData: any = [];
+  InternshipSurveyData: any = [];
+  ExitSurveyData: any = [];
+  AlumniSurveyData: any = [];
+  EmployerSurveyData: any = [];
+  cSPSurveyForm: FormGroup = this.fb.group({});
+  alumniSurveyForm: FormGroup = this.fb.group({});
+  internshipSurveyForm: FormGroup = this.fb.group({});
+  exitSurveyForm: FormGroup = this.fb.group({});
+  employerSurveyForm: FormGroup = this.fb.group({});
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -34,6 +47,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
     private _InterconnectedService: InterconnectedService,
     private IndirectAssessmentsComponent: IndirectAssessmentsComponent,
     private IndirectAssessment: IndirectAssessment,
+    private fb: FormBuilder,
     
   ) {
     this.Temp_Institute_ID = 0;
@@ -53,7 +67,9 @@ export class IndirectAssessmentsMainComponent implements OnInit {
     this._InterconnectedService.CloseTab.subscribe(search => {
       this.CloseTabContent();
       this.Get_Institutes();
+     // this.getSurvey("CSP")
     });
+    this.getAllSurvey();
     this.dept = GlobalService.Deaprtment_ID;
   }
   Get_Institutes() {
@@ -388,5 +404,90 @@ export class IndirectAssessmentsMainComponent implements OnInit {
     this.resetExitForm();
     this.resetInternshipForm();
   }
+
+  getSurvey(surveyType: string) {
+    const request = {
+      Surveytype: surveyType,
+      Deptid: GlobalService.Deaprtment_ID
+
+    }
+    this.ngxService.start();
+    this.IndirectAssessment.GetSurvey(request).
+      subscribe(
+        data => {
+          this.ngxService.stop();
+          this.CSPSurveyData = data;
+          console.log("getdata", this.CSPSurveyData);
+          this.createForm(this.cSPSurveyForm, this.CSPSurveyData);
+
+
+
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
+        });
+
+
+  }
+  getAllSurvey() {
+    const request = {
+      
+      Deptid: GlobalService.Deaprtment_ID
+
+    }
+    this.ngxService.start();
+    this.IndirectAssessment.GetAllSurvey(GlobalService.Deaprtment_ID).
+      subscribe(
+        data => {
+          this.ngxService.stop();
+          this.CSPSurveyData = data.CSP;
+          console.log("getdata", this.CSPSurveyData);
+          this.createForm(this.cSPSurveyForm, this.CSPSurveyData);
+          this.ExitSurveyData = data.Exit;
+          console.log("getdata", this.ExitSurveyData);
+          this.createForm(this.exitSurveyForm, this.ExitSurveyData);
+          this.EmployerSurveyData = data.Employer;
+          console.log("getdata", this.EmployerSurveyData);
+          this.createForm(this.employerSurveyForm, this.EmployerSurveyData);
+          this.InternshipSurveyData = data.InternShip;
+          console.log("getdata", this.InternshipSurveyData);
+          this.createForm(this.internshipSurveyForm, this.InternshipSurveyData);
+          this.AlumniSurveyData = data.Alumni;
+          console.log("getdata", this.AlumniSurveyData);
+          this.createForm(this.alumniSurveyForm, this.AlumniSurveyData);
+
+
+
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
+        });
+
+
+  }
+  createForm(form: FormGroup, SurveyData:any) {
+    if (!SurveyData || !SurveyData.Questions) return;
+
+    SurveyData.Questions.forEach((question: any) => {
+      if (question.QType === 'Text') {
+        form.addControl(question.QID, new FormControl('', Validators.required));
+      } else if (question.QType === 'Multiple Choice') {
+        form.addControl(question.QID, new FormControl('', Validators.required));
+      }
+      else if (question.QType === 'Likert') {
+        form.addControl(question.QID, new FormControl('', Validators.required));
+      }
+      else if (question.QType === 'Remarks') {
+        form.addControl(question.QID, new FormControl('', Validators.required));
+      }
+    });
+  }
+  submitCSPSurvey() {
+    console.log(this.cSPSurveyForm.value);
+
+  }
+
 
 }

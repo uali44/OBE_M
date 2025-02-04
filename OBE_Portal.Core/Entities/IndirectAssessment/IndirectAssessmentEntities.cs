@@ -72,6 +72,7 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public string Question { get; set; }
         public string QType { get; set; }
         public string Mapping { get; set; }
+        public string Section { get; set; }
         public List<string> Options { get; set; }
     }
 
@@ -92,6 +93,7 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public string Mapping { get; set; }
         public int createdBy { get; set; }
         public DateTime createdDate { get; set; }
+        public string Section { get; set; }
         public ICollection<SurveySubDetailOption> SurveySubDetailOptions { get; set; }
     }
 
@@ -115,6 +117,7 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public string Question { get; set; }
         public string QType { get; set; }
         public string Mapping { get; set; }
+        public string Section { get;set; }
         public List<SurveySubDetailOption> Options { get; set; }
     }
     public class OoptionsDto
@@ -126,5 +129,13 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
     {
         public string Surveytype { get; set; }
         public int Deptid { get; set; }
+    }
+    public class Allsurvey
+    {
+        public SurveyResponseDto CSP { get; set; }
+        public SurveyResponseDto Internship { get; set; }
+        public SurveyResponseDto Exit { get; set; }
+        public SurveyResponseDto Alumni { get; set; }
+        public SurveyResponseDto Employer { get; set; }
     }
 }

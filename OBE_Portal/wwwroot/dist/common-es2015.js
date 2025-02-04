@@ -172,6 +172,9 @@ class IndirectAssessment {
     GetSurvey(data) {
         return this.http.post(this.baseUrl + 'IndirectAssessment/GetSurvey', data);
     }
+    GetAllSurvey(data) {
+        return this.http.post(this.baseUrl + 'IndirectAssessment/GetAllSurvey', data);
+    }
     DeleteQuestion(data) {
         return this.http.post(this.baseUrl + 'IndirectAssessment/DeleteQuestion', data);
     }
