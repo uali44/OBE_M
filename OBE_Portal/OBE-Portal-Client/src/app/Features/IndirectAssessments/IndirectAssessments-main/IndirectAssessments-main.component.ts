@@ -433,9 +433,10 @@ export class IndirectAssessmentsMainComponent implements OnInit {
   getAllSurvey() {
     const request = {
       
-      Deptid: GlobalService.Deaprtment_ID
+      Deptid: GlobalService.Deaprtment_ID,
 
     }
+    console.log(GlobalService.Deaprtment_ID);
     this.ngxService.start();
     this.IndirectAssessment.GetAllSurvey(GlobalService.Deaprtment_ID).
       subscribe(
@@ -450,7 +451,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
           this.EmployerSurveyData = data.Employer;
           console.log("getdata", this.EmployerSurveyData);
           this.createForm(this.employerSurveyForm, this.EmployerSurveyData);
-          this.InternshipSurveyData = data.InternShip;
+          this.InternshipSurveyData = data.Internship;
           console.log("getdata", this.InternshipSurveyData);
           this.createForm(this.internshipSurveyForm, this.InternshipSurveyData);
           this.AlumniSurveyData = data.Alumni;

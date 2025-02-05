@@ -9,6 +9,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 {
@@ -345,9 +346,16 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
         async Task<Allsurvey> IIndirectAssessment.GetAllSurvey(int Deptid)
         {
+            if (Deptid == 0)
+            {
+                return null;
+
+            }
+
             try
             {
-                var CSP = await GetSurvey("CSP", Deptid);
+                var deptID = Deptid;
+                var CSP = await GetSurvey("CSP", deptID);
                 var Internship = await GetSurvey("Internship", Deptid);
                var Alumni = await GetSurvey("Alumni", Deptid);
                 var Exit = await GetSurvey("Exit", Deptid);
@@ -382,9 +390,16 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
             {
                 using (SqlCommand comm = new SqlCommand())
                 {
+                    
+                    Debug.WriteLine($"Fetching survey for: {Surveytype}, Deptid: {Deptid}");
                     var survey = new SurveyResponseDto();
                     var surveyType = Surveytype;
-                    var surveyDeptID = Deptid;
+                    int surveyDeptID = Deptid;
+                    if(surveyDeptID==0)
+                    {
+                        return null;
+
+                    }
                     // Step 1: Get SurveyMainDetail
                     var surveyMainDetailParams = new SqlParameter("@SurveyType", surveyType);
                     var surveyDeptIDParam = new SqlParameter("@SurveyDeptID", surveyDeptID);
@@ -393,10 +408,14 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                         .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID}").ToListAsync();
                     //.AsNoTracking()
                     //.FirstOrDefaultAsync();
+                    //  var mainDetail = await _context.Set<SurveyMainDetail>()
+                    //   .FromSqlInterpolated($"EXEC GetSurveyMainDetail {surveyMainDetailParams}, {surveyDeptIDParam}").ToListAsync();
+                    //var mainDetail = await _context.Set<SurveyMainDetail>()
+                    // .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType='CSP' , {surveyDeptIDParam}").ToListAsync();
 
                     if (mainDetail == null || mainDetail.Count <= 0)
                     {
-                        return null; // No data found
+                        return survey; // No data found
                     }
                     else
                     {

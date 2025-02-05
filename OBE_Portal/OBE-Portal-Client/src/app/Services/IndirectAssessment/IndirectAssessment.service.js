@@ -15,6 +15,18 @@ let IndirectAssessment = class IndirectAssessment {
     SaveInternshipForm(data) {
         return this.http.post(this.baseUrl + 'IndirectAssessment/SaveInternshipForm', data);
     }
+    AddSurvey(data) {
+        return this.http.post(this.baseUrl + 'IndirectAssessment/AddSurvey', data);
+    }
+    GetSurvey(data) {
+        return this.http.post(this.baseUrl + 'IndirectAssessment/GetSurvey', data);
+    }
+    GetAllSurvey(data) {
+        return this.http.post(this.baseUrl + 'IndirectAssessment/GetAllSurvey', data);
+    }
+    DeleteQuestion(data) {
+        return this.http.post(this.baseUrl + 'IndirectAssessment/DeleteQuestion', data);
+    }
 };
 IndirectAssessment = __decorate([
     Injectable({

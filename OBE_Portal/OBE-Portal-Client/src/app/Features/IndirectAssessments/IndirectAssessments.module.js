@@ -14,11 +14,12 @@ import { PipessharedModule } from '../../Shared/Pipe/pipesshared.module';
 import { IndirectAssessmentsRoutingModule } from './IndirectAssessments-routing.module';
 import { IndirectAssessmentsComponent } from './IndirectAssessments.component';
 import { IndirectAssessmentsMainComponent } from './IndirectAssessments-main/IndirectAssessments-main.component';
+import { QuestionairesComponent } from './questionaires/questionaires.component';
 let IndirectAssessmentsModule = class IndirectAssessmentsModule {
 };
 IndirectAssessmentsModule = __decorate([
     NgModule({
-        declarations: [IndirectAssessmentsMainComponent, IndirectAssessmentsComponent],
+        declarations: [IndirectAssessmentsMainComponent, IndirectAssessmentsComponent, QuestionairesComponent],
         imports: [
             CommonModule,
             IndirectAssessmentsRoutingModule,
