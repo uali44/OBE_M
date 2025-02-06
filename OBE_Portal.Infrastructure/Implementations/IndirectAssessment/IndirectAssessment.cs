@@ -205,15 +205,17 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                             var qid = new SqlParameter("@QID", SqlDbType.Int) { Direction = ParameterDirection.Output };
 
                             var responseSub = await _context.Database.ExecuteSqlRawAsync(
-                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate,@Section, @QID OUTPUT",
+                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate,@Section , @QID OUTPUT",
                                 new SqlParameter("@SurveyID", generatedSurveyID),
                                 new SqlParameter("@Question", question.Question),
                                 new SqlParameter("@QType", question.QType),
                                 new SqlParameter("@Mapping", question.Mapping),
                                 new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy),
                                 new SqlParameter("@CreatedDate", DateTime.UtcNow),
-                                  new SqlParameter("@Section", question.Section),
+                                new SqlParameter("@Section", question.Section),
+                               
                                 qid
+                               
                             );
 
                             int generatedQID = (int)qid.Value;
@@ -475,6 +477,68 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
         }
 
 
+         async Task<bool> IIndirectAssessment.SaveSurveyResponses(StdSurveyResponseDto request)
+        {
+            try
+            {
+                using (SqlCommand comm = new SqlCommand())
+                {
+                    // Step 1: Check if Survey Already Exists for the Student
+                    var existingSurvey = await _context.Set<StudentSurveyMainDetail>()
+          .FromSqlRaw("EXEC GetStudentSurveyMain @StudentID, @SurveyID",
+                      new SqlParameter("@StudentID", request.StudentID),
+                      new SqlParameter("@SurveyID", request.SurveyID))
+          .ToListAsync();
+
+                    if (existingSurvey.Count >0 )
+                    {
+                        var existing =existingSurvey.FirstOrDefault();
+                        // Survey exists, update responses in StudentSurveySubDetail
+                        foreach (var response in request.Questions)
+                        {
+                            await _context.Database.ExecuteSqlRawAsync(
+                                "EXEC UpdateStudentSurveyResponse @StudentSurveyID, @QID, @Answer",
+                                new SqlParameter("@StudentSurveyID", existing.StudentSurveyID),
+                                new SqlParameter("@QID", response.QID),
+                                new SqlParameter("@Answer", response.Answer)
+                            );
+                        }
+                    }
+                    else
+                    {
+                        // Step 2: Insert into StudentSurveyMainDetail
+                        var studentSurveyID = new SqlParameter("@StudentSurveyID", SqlDbType.Int) { Direction = ParameterDirection.Output };
+
+                        await _context.Database.ExecuteSqlRawAsync(
+                            "EXEC AddStudentSurveyMainDetail @StudentID, @SurveyID, @SurveyDate, @StudentSurveyID OUTPUT",
+                            new SqlParameter("@StudentID", request.StudentID),
+                            new SqlParameter("@SurveyID", request.SurveyID),
+                            new SqlParameter("@SurveyDate", DateTime.UtcNow),
+                            studentSurveyID
+                        );
+
+                        int generatedSurveyID = (int)studentSurveyID.Value;
+
+                        // Step 3: Insert responses into StudentSurveySubDetail
+                        foreach (var response in request.Questions)
+                        {
+                            await _context.Database.ExecuteSqlRawAsync(
+                                "EXEC AddStudentSurveySubDetail @StudentSurveyID, @QID, @Answer",
+                                new SqlParameter("@StudentSurveyID", generatedSurveyID),
+                                new SqlParameter("@QID", response.QID),
+                                new SqlParameter("@Answer", response.Answer)
+                            );
+                        }
+                    }
+
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
 
 

@@ -35,6 +35,8 @@ export class IndirectAssessment {
   DeleteQuestion<T>(data: number): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'IndirectAssessment/DeleteQuestion', data);
   }
-
+  SaveSurvey<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'IndirectAssessment/SaveSurveyResponses', data);
+  }
 
 }

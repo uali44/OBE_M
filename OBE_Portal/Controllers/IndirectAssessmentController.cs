@@ -142,7 +142,22 @@ namespace OBE_Portal.Controllers
             }
         }
 
-
+        [HttpPost("SaveSurveyResponses")]
+        public async Task<IActionResult> SaveSurveyResponses(StdSurveyResponseDto request)
+        {
+            try
+            {
+                var respone = await _indirectAssessment.SaveSurveyResponses(request).ConfigureAwait(true);
+                if (respone)
+                    return Ok(respone);
+                else
+                    return Ok(respone);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
     }
 }

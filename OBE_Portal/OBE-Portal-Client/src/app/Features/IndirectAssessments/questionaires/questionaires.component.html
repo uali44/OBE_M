@@ -7,48 +7,65 @@
         <legend>Survey Type</legend>
         <div class="form-group col-sm-12">
           <label for="surveyType" class="col-sm-1">Survey Type:</label>
-          <select id="surveyType" [(ngModel)]="surveyMainDetail.SurveyType" name="surveyType" class="col-sm-3" (change)="getSurvey($event.target.value)" required>
+          <select id="surveyType" [(ngModel)]="surveyMainDetail.SurveyType" name="surveyType" class="col-sm-3" (change)="getSurvey($event.target.value)" required #surveyType="ngModel">
+            <option value="">Select Survey Type</option>
             <option value="CSP">CSP</option>
             <option value="Internship">Internship</option>
             <option value="Exit">Exit</option>
             <option value="Alumni">Alumni</option>
             <option value="Employer">Employer</option>
           </select>
+          <div *ngIf="surveyType.errors?.required && surveyType.touched" class="text-danger">
+            Survey Type is required.
+          </div>
         </div>
       </fieldset>
 
       <!-- Add Question Form -->
-      <fieldset class="">
+      <fieldset>
         <legend>Add Question</legend>
+
         <div class="form-group col-sm-12">
           <label for="question" class="col-sm-1">Question:</label>
-          <input type="text" id="question" [(ngModel)]="newQuestion.Question" name="question" class="col-sm-3" required>
+          <input type="text" id="question" [(ngModel)]="newQuestion.Question" name="question" class="col-sm-3" required #question="ngModel">
+          <div *ngIf="question.errors?.required && question.touched" class="text-danger">
+            Question is required.
+          </div>
         </div>
+
         <div class="form-group col-sm-12">
           <label for="qType" class="col-sm-1">Question Type:</label>
-          <select id="qType" [(ngModel)]="newQuestion.QType" name="qType" class="col-sm-3" required>
+          <select id="qType" [(ngModel)]="newQuestion.QType" name="qType" class="col-sm-3" required #qType="ngModel">
+            <option value="">Select Question Type</option>
             <option value="Multiple Choice">Multiple Choice</option>
             <option value="Text">Text</option>
             <option value="Likert">Likert</option>
             <option value="Remarks">Remarks</option>
           </select>
+          <div *ngIf="qType.errors?.required && qType.touched" class="text-danger">
+            Question Type is required.
+          </div>
         </div>
 
         <div class="form-group col-sm-12">
           <label for="Section" class="col-sm-1">Section:</label>
-          <select id="Section" [(ngModel)]="newQuestion.Section" name="Section" class="col-sm-3" required>
+          <select id="Section" [(ngModel)]="newQuestion.Section" name="Section" class="col-sm-3" required #Section="ngModel">
+            <option value="">Select Section</option>
             <option value="Header">Header</option>
             <option value="Main">Main</option>
             <option value="Footer">Footer</option>
-           
           </select>
+          <div *ngIf="Section.errors?.required && Section.touched" class="text-danger">
+            Section is required.
+          </div>
         </div>
-
-
 
         <div class="form-group col-sm-12">
           <label for="mapping" class="col-sm-1">Mapping:</label>
-          <input type="text" id="mapping" [(ngModel)]="newQuestion.Mapping" name="mapping" class="col-sm-3">
+          <input type="text" id="mapping" [(ngModel)]="newQuestion.Mapping" name="mapping" class="col-sm-3" required #mapping="ngModel">
+          <div *ngIf="mapping.errors?.required && mapping.touched" class="text-danger">
+            Mapping is required.
+          </div>
         </div>
 
         <!-- Options for Multiple Choice Questions -->
@@ -57,19 +74,24 @@
             <legend>Options</legend>
             <div *ngFor="let option of newQuestion.Options; let j = index; trackBy: trackByFn" class="col-sm-12">
               <label for="option{{j}}" class="col-sm-2">Option {{ j + 1 }}:</label>
-              <input type="text" id="option{{j}}" [(ngModel)]="newQuestion.Options[j]" name="option{{j}}" class="col-sm-4" required>
-              <button type="button" (click)="removeOption(j)" class="btn btn-danger btn-sm">Remove Option</button>
+              <input type="text" id="option{{j}}" [(ngModel)]="newQuestion.Options[j]" name="option{{j}}" class="col-sm-4" required #optionX="ngModel">
+
+              <button type="button" (click)="removeOption(j)" class="btn btn-default"><i class="app-icon-IconSet-1-33 blue"></i></button>
+              <div *ngIf="optionX.errors?.required && optionX.touched" class="text-danger">
+                Option {{ j + 1 }} is required.
+              </div>
             </div>
             <button type="button" class="btn btn-primary pull-right" (click)="addOption()">Add Option</button>
           </fieldset>
         </div>
-
-        <!-- Add Question Button -->
-
       </fieldset>
+
+      <!-- Add Question Button -->
       <button type="button" (click)="addQuestion()" class="btn btn-primary pull-right margin-t20">Add Question</button>
     </form>
+
     <div class="clearfix"></div>
+
     <!-- Questions Table -->
     <h3>Questions</h3>
     <table class="table table-bordered table-theme table-hover table-theme margin-t30 margin-b20">
@@ -95,7 +117,7 @@
           </td>
           <td>{{ question.Section }}</td>
           <td>
-            <button type="button" (click)="removeQuestion(i)" class="btn btn-danger btn-sm">Remove</button>
+            <button type="button" (click)="removeQuestion(i)" class="btn btn-default"><i class="app-icon-IconSet-1-33 blue"></i></button>
           </td>
         </tr>
       </tbody>

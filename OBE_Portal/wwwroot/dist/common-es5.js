@@ -378,6 +378,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         value: function DeleteQuestion(data) {
           return this.http.post(this.baseUrl + 'IndirectAssessment/DeleteQuestion', data);
         }
+      }, {
+        key: "SaveSurvey",
+        value: function SaveSurvey(data) {
+          return this.http.post(this.baseUrl + 'IndirectAssessment/SaveSurveyResponses', data);
+        }
       }]);
 
       return IndirectAssessment;

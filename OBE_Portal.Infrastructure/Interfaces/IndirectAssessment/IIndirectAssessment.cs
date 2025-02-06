@@ -16,5 +16,6 @@ namespace OBE_Portal.Infrastructure.Interfaces.IndirectAssessment
         Task<bool> SaveCSPForm(SaveCSPFormRequest request);
         Task<bool> SaveExitForm(SaveExitFormRequest request);
         Task<bool> SaveInternshipForm(SaveInternshipFormRequest request);
+        Task<bool> SaveSurveyResponses(StdSurveyResponseDto request);
     }
 }

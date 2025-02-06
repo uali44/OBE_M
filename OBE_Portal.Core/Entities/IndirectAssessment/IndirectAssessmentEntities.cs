@@ -138,4 +138,42 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public SurveyResponseDto Alumni { get; set; }
         public SurveyResponseDto Employer { get; set; }
     }
+
+    public class StdSurveyResponseDto
+    {
+        public int StudentID { get; set; }
+        public int SurveyID { get; set; }
+        public List<StdSurveyQuestionDto> Questions { get; set; }
+    }
+
+    public class StdSurveyQuestionDto
+    {
+        public int QID { get; set; }
+        public string Answer { get; set; }
+    }
+
+
+    public class StudentSurveyMainDetail
+    {
+        public int StudentSurveyID { get; set; } // Primary Key
+        public int StudentID { get; set; }
+        public int SurveyID { get; set; }
+        public DateTime SurveyDate { get; set; }
+
+        // Navigation property to related SubDetails
+        public ICollection<StudentSurveySubDetail> StudentSurveySubDetails { get; set; }
+    }
+    public class StudentSurveySubDetail
+    {
+        public int StudentSurveySubDetailID { get; set; } // Primary Key
+        public int StudentSurveyID { get; set; }
+        public int QID { get; set; }
+        public string Answer { get; set; }
+
+       
+    }
+
+
+
+
 }

@@ -40,6 +40,16 @@ export class IndirectAssessmentsMainComponent implements OnInit {
   internshipSurveyForm: FormGroup = this.fb.group({});
   exitSurveyForm: FormGroup = this.fb.group({});
   employerSurveyForm: FormGroup = this.fb.group({});
+
+  surveyData: any = {
+    studentID: 0,
+    surveyID: 0,
+    responses: []
+  };
+
+
+
+
   constructor(
     private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
@@ -485,8 +495,58 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       }
     });
   }
+  getQuestions(data: any, form: FormGroup) {
+  
+    return data.Questions.map(qid => {
+    
+      const answer =(form.get(qid.QID.toString()).value);
+
+     
+      return {
+        QID: qid.QID,
+        Answer: answer.toString()
+      };
+    });
+
+  }
   submitCSPSurvey() {
     console.log(this.cSPSurveyForm.value);
+    const payload = {
+
+      StudentID: Number(this.StudentID),
+      SurveyID: this.CSPSurveyData.SurveyID,
+      Questions: this.getQuestions(this.CSPSurveyData, this.cSPSurveyForm)
+    }
+    console.log(payload);
+    this.ngxService.start();
+    this.IndirectAssessment.SaveSurvey(payload).
+      subscribe(
+        response => {
+          try {
+            if (response) {
+              this.cSPSurveyForm.reset();
+              this.toastr.success("Information saved successfully", "Success!");
+              $("#ExitSurveyFormRemarks").val('')
+            }
+            this.ngxService.stop();
+          } catch (e) {
+            this.ngxService.stop();
+            this.toastr.error("Internal server error occured while processing your request", "Error!");
+          }
+
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Internal server error occured while processing your request", "Error!");
+        });
+
+  }
+  submitEXitSurvey() {
+    console.log(this.exitSurveyForm.value);
+
+  }
+  submitInernshipSurvey() {
+    console.log(this.internshipSurveyForm.value);
 
   }
 
