@@ -101,6 +101,7 @@ namespace OBE_Portal.Core.Context
             modelBuilder.Entity<SurveySubDetail>().HasNoKey();  
             modelBuilder.Entity<SurveySubDetailOption>().HasNoKey();
             modelBuilder.Entity<StudentSurveyMainDetail>().HasNoKey();
+            modelBuilder.Entity<StudentSurveySubDetail>().HasNoKey();
             
         }
         

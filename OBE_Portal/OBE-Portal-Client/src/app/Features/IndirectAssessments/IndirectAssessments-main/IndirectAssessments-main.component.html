@@ -4742,7 +4742,7 @@
 
                         </div>
                       </td>
-
+                    
 
                     </ng-container>
                   </tr>
@@ -4796,7 +4796,7 @@
 
 
 
-                      <ng-container class="pull-left radio-inline padding-t5" *ngFor="let num of [5,4,3,2,1]">
+                      <ng-container class="pull-left radio-inline padding-t5" *ngFor="let num of ['5','4','3','2','1']">
 
                         <td>
                           <div *ngIf="question.QType === 'Likert'" class="text-center">
@@ -4911,7 +4911,7 @@
 
           <div *ngIf="ExitSurveyData">
 
-            <form [formGroup]="exitSurveyForm" (ngSubmit)="submitCSPSurvey()">
+            <form [formGroup]="exitSurveyForm" (ngSubmit)="submitExitSurvey()">
               <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
                 <table class="table table-hover table-theme">
                   <thead>
@@ -4947,7 +4947,7 @@
                         </div>
                         <div *ngIf="question.QType === 'Likert'">
 
-                          <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                          <div class="pull-left radio-inline padding-t5" *ngFor="let num of ['5','4','3','2','1']">
                             <input type="radio" [formControlName]="question.QID" name="question.QID" [value]="num">
                             <label class="cursor-pointer">{{ num }}</label>
 
@@ -5009,7 +5009,7 @@
 
 
 
-                      <ng-container class="pull-left radio-inline padding-t5" *ngFor="let num of [5,4,3,2,1]">
+                      <ng-container class="pull-left radio-inline padding-t5" *ngFor="let num of ['5','4','3','2','1']">
 
                         <td>
                           <div *ngIf="question.QType === 'Likert'" class="text-center">
@@ -5045,7 +5045,7 @@
                     </div>
                     <div *ngIf="question.QType === 'Likert'">
 
-                      <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                      <div class="pull-left radio-inline padding-t5" *ngFor="let num of ['5','4','3','2','1']">
                         <input type="radio" [formControlName]="question.QID" name="question.QID" [value]="num">
                         <label class="cursor-pointer">{{ num }}</label>
 
@@ -5079,7 +5079,7 @@
 
           <div *ngIf="InternshipSurveyData">
 
-            <form [formGroup]="internshipSurveyForm" (ngSubmit)="submitCSPSurvey()">
+            <form [formGroup]="internshipSurveyForm" (ngSubmit)="submitInternshipSurvey()">
               <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
                 <table class="table table-hover table-theme">
                   <thead>
@@ -5115,7 +5115,7 @@
                         </div>
                         <div *ngIf="question.QType === 'Likert'">
 
-                          <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                          <div class="pull-left radio-inline padding-t5" *ngFor="let num of ['5','4','3','2','1']">
                             <input type="radio" [formControlName]="question.QID" name="question.QID" [value]="num">
                             <label class="cursor-pointer">{{ num }}</label>
 
@@ -5177,7 +5177,7 @@
 
 
 
-                      <ng-container class="pull-left radio-inline padding-t5" *ngFor="let num of [5,4,3,2,1]">
+                      <ng-container class="pull-left radio-inline padding-t5" *ngFor="let num of ['5','4','3','2','1']">
 
                         <td>
                           <div *ngIf="question.QType === 'Likert'" class="text-center">
@@ -5213,7 +5213,7 @@
                     </div>
                     <div *ngIf="question.QType === 'Likert'">
 
-                      <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                      <div class="pull-left radio-inline padding-t5" *ngFor="let num of ['5','4','3','2','1']">
                         <input type="radio" [formControlName]="question.QID" name="question.QID" [value]="num">
                         <label class="cursor-pointer">{{ num }}</label>
 
@@ -5247,7 +5247,7 @@
 
           <div *ngIf="AlumniSurveyData">
 
-            <form [formGroup]="alumniSurveyForm" (ngSubmit)="submitCSPSurvey()">
+            <form [formGroup]="alumniSurveyForm" (ngSubmit)="submitAlumniSurvey()">
               <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
                 <table class="table table-hover table-theme">
                   <thead>
@@ -5283,7 +5283,7 @@
                         </div>
                         <div *ngIf="question.QType === 'Likert'">
 
-                          <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                          <div class="pull-left radio-inline padding-t5" *ngFor="let num of ['5','4','3','2','1']">
                             <input type="radio" [formControlName]="question.QID" name="question.QID" [value]="num">
                             <label class="cursor-pointer">{{ num }}</label>
 
@@ -5345,7 +5345,7 @@
 
 
 
-                      <ng-container class="pull-left radio-inline padding-t5" *ngFor="let num of [5,4,3,2,1]">
+                      <ng-container class="pull-left radio-inline padding-t5" *ngFor="let num of ['5','4','3','2','1']">
 
                         <td>
                           <div *ngIf="question.QType === 'Likert'" class="text-center">
@@ -5381,7 +5381,7 @@
                     </div>
                     <div *ngIf="question.QType === 'Likert'">
 
-                      <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                      <div class="pull-left radio-inline padding-t5" *ngFor="let num of ['5','4','3','2','1']">
                         <input type="radio" [formControlName]="question.QID" name="question.QID" [value]="num">
                         <label class="cursor-pointer">{{ num }}</label>
 
@@ -5415,7 +5415,7 @@
 
           <div *ngIf="EmployerSurveyData">
 
-            <form [formGroup]="employerSurveyForm" (ngSubmit)="submitCSPSurvey()">
+            <form [formGroup]="employerSurveyForm" (ngSubmit)="submitEmployerSurvey()">
               <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
                 <table class="table table-hover table-theme">
                   <thead>
@@ -5451,7 +5451,7 @@
                         </div>
                         <div *ngIf="question.QType === 'Likert'">
 
-                          <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                          <div class="pull-left radio-inline padding-t5" *ngFor="let num of ['5','4','3','2','1']">
                             <input type="radio" [formControlName]="question.QID" name="question.QID" [value]="num">
                             <label class="cursor-pointer">{{ num }}</label>
 
@@ -5512,8 +5512,8 @@
                       </td>
 
 
-
-                      <ng-container class="pull-left radio-inline padding-t5" *ngFor="let num of [5,4,3,2,1]">
+                     
+                      <ng-container class="pull-left radio-inline padding-t5" *ngFor="let num of ['5','4','3','2','1']">
 
                         <td>
                           <div *ngIf="question.QType === 'Likert'" class="text-center">
@@ -5522,11 +5522,14 @@
 
                           </div>
                         </td>
+
                       </ng-container>
+
 
 
                     </ng-container>
                   </tr>
+                  <tr></tr>
                 </table>
               </div>
               <hr />
@@ -5547,15 +5550,20 @@
 
                       </div>
                     </div>
-                    <div *ngIf="question.QType === 'Likert'">
+                  
 
-                      <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
-                        <input type="radio" [formControlName]="question.QID" name="question.QID" [value]="num">
-                        <label class="cursor-pointer">{{ num }}</label>
+                      <ng-container class="pull-left radio-inline padding-t5" *ngFor="let num of ['5','4','3','2','1']">
 
-                      </div>
+                        
+                          <div *ngIf="question.QType === 'Likert'" class="text-center">
+                            <input type="radio" [formControlName]="question.QID" [value]="num">
+                            <label class="cursor-pointer"></label>
 
-                    </div>
+                          </div>
+                        
+                      </ng-container>
+
+                   
                   </div>
 
 

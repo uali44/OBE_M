@@ -159,5 +159,23 @@ namespace OBE_Portal.Controllers
             }
         }
 
+        [HttpPost("GetSurveyRespones")]
+        public async Task<IActionResult> GetSurveyRespones(getstudentSurveyrequest request)
+        {
+            try
+            {
+                var respone = await _indirectAssessment.GetSurveyRespones(request).ConfigureAwait(true);
+                if (respone != null)
+                    return Ok(respone);
+                else
+                    return Ok(respone);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
     }
 }

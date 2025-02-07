@@ -160,20 +160,29 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public int SurveyID { get; set; }
         public DateTime SurveyDate { get; set; }
 
-        // Navigation property to related SubDetails
-        public ICollection<StudentSurveySubDetail> StudentSurveySubDetails { get; set; }
+     
+     
     }
     public class StudentSurveySubDetail
     {
-        public int StudentSurveySubDetailID { get; set; } // Primary Key
+      
         public int StudentSurveyID { get; set; }
         public int QID { get; set; }
         public string Answer { get; set; }
 
        
     }
-
-
-
+    public class StudentSurveyDetail
+    {
+        public StudentSurveyMainDetail StudentSurveyMainDetail { get; set; }
+    public List<StudentSurveySubDetail> StudentSurveySubDetail { get; set; }
+    
+    
+    }
+    public class getstudentSurveyrequest
+    {
+        public int StudentID { get; set; }
+        public int SurveyID { get; set; }
+    }
 
 }
