@@ -11,18 +11,15 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { PipessharedModule } from '../../Shared/Pipe/pipesshared.module';
 
-import { IndirectAssessmentsRoutingModule } from './IndirectAssessments-routing.module';
-import { IndirectAssessmentsComponent } from './IndirectAssessments.component';
-import { IndirectAssessmentsMainComponent } from './IndirectAssessments-main/IndirectAssessments-main.component';
-import { QuestionairesComponent } from './questionaires/questionaires.component';
+import { SharedModuleRoutingModule } from './shared-module-routing.module';
+import { SearchFormComponent } from '../Components/searchForm/searchForm.component';
 
-import { SharedModuleModule } from '../../Shared/shared-module/shared-module.module'
 
 @NgModule({
-  declarations: [IndirectAssessmentsMainComponent, IndirectAssessmentsComponent, QuestionairesComponent],
+  declarations: [SearchFormComponent],
   imports: [
     CommonModule,
-    IndirectAssessmentsRoutingModule,
+   
     ChartModule,
     ToastrModule,
     HttpClientModule,
@@ -33,9 +30,12 @@ import { SharedModuleModule } from '../../Shared/shared-module/shared-module.mod
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     PipessharedModule,
-    SharedModuleModule
-
+    
+    SharedModuleRoutingModule
   ],
   providers: [AuthGuard, { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }],
+  exports: [
+    SearchFormComponent
+  ],
 })
-export class IndirectAssessmentsModule { }
+export class SharedModuleModule { }

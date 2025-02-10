@@ -24,11 +24,11 @@ import { ManagePlosComponent } from './manage-plos/manage-plos.component';
 import { PlosComponent } from './plos/plos.component';
 import { AssessmentSchemesComponent } from './assessment-schemes/assessment-schemes.component';
 import { PeosComponent } from './peos/peos.component';
-import { AddSkillComponent } from'./skills/add-skill.component'
-
+import { AddSkillComponent } from './skills/add-skill.component'
+import { SharedModuleModule } from '../../Shared/shared-module/shared-module.module'
 
 @NgModule({
-  declarations: [SettingMainComponent, SettingComponent, FypSettingsComponent, SendFormComponent, ExitSurveyFormEnableComponent, UpdateRoleAndPasswordComponent, ManagePlosComponent, PlosComponent, AssessmentSchemesComponent, PeosComponent, AddSkillComponent, SearchFormComponent],
+  declarations: [SettingMainComponent, SettingComponent, FypSettingsComponent, SendFormComponent, ExitSurveyFormEnableComponent, UpdateRoleAndPasswordComponent, ManagePlosComponent, PlosComponent, AssessmentSchemesComponent, PeosComponent, AddSkillComponent],
   imports: [
     CommonModule,
     SettingRoutingModule,
@@ -41,8 +41,15 @@ import { AddSkillComponent } from'./skills/add-skill.component'
     SweetAlert2Module,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    PipessharedModule
+    PipessharedModule,
+    SharedModuleModule,
+  ], exports: [
+   
+
   ],
   providers: [AuthGuard, { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }],
 })
-export class SettingModule { }
+export class SettingModule {
+
+  
+}

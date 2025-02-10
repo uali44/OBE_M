@@ -9,6 +9,7 @@ import { IndirectAssessment } from '../../../Services/IndirectAssessment/Indirec
 import { CoursesCLOSService } from './../../../Services/CourseCLOS/coursesCLO.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import Swal, { SweetAlertResult } from 'sweetalert2';
+
 declare const $: any;
 
 @Component({
@@ -40,11 +41,13 @@ export class QuestionairesComponent implements OnInit {
     Options: ['']
   };
   plos: any = [];
+  Intake: any;
   constructor(private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
     private ngxService: NgxUiLoaderService,
     private _InterconnectedService: InterconnectedService,
     private IndirectAssessmentsComponent: IndirectAssessmentsComponent,
+
     private IndirectAssessmen: IndirectAssessment,
     private CoursesCLOSService: CoursesCLOSService,
     private GlobalService: GlobalService,
@@ -54,6 +57,9 @@ export class QuestionairesComponent implements OnInit {
 
     this.getSurvey(this.surveyMainDetail.SurveyType);
     this.removeQuestion(0);
+  }
+  receiveData(data: number) {
+    this.Intake = data; // Update the parent component's variable with the data
   }
   getSurvey(surveyType: string) {
     const request = {

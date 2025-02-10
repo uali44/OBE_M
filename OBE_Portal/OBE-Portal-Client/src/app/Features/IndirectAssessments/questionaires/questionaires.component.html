@@ -1,200 +1,241 @@
 <div role="tabpanel" class="tab-pane active" id="IndirectAssessment-tab">
-  <div class="container">
-    <h2>Create New Survey</h2>
-    <form (ngSubmit)="onSubmit()">
-      <!-- Survey Main Details -->
-      <fieldset>
-        <legend>Survey Type</legend>
-        <div class="form-group col-sm-12">
-          <label for="surveyType" class="col-sm-1">Survey Type:</label>
-          <select id="surveyType" [(ngModel)]="surveyMainDetail.SurveyType" name="surveyType" class="col-sm-3" (change)="getSurvey($event.target.value)" required #surveyType="ngModel">
-            <option value="">Select Survey Type</option>
-            <option value="CSP">CSP</option>
-            <option value="Internship">Internship</option>
-            <option value="Exit">Exit</option>
-            <option value="Alumni">Alumni</option>
-            <option value="Employer">Employer</option>
-          </select>
-          <div *ngIf="surveyType.errors?.required && surveyType.touched" class="text-danger">
-            Survey Type is required.
-          </div>
-        </div>
-      </fieldset>
+ 
 
-      <!-- Add Question Form -->
-      <fieldset>
-        <legend>Add Question</legend>
 
-        <div class="form-group col-sm-12">
-          <label for="question" class="col-sm-1">Question:</label>
-          <input type="text" id="question" [(ngModel)]="newQuestion.Question" name="question" class="col-sm-3" required #question="ngModel">
-          <div *ngIf="question.errors?.required && question.touched" class="text-danger">
-            Question is required.
-          </div>
-        </div>
+    <app-searchForm  (dataEmitter)="receiveData($event)"></app-searchForm>
+    <div class="modal fade" id="addSurveyModal" tabindex="-1" aria-labelledby="addSurveyModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
 
-        <div class="form-group col-sm-12">
-          <label for="qType" class="col-sm-1">Question Type:</label>
-          <select id="qType" [(ngModel)]="newQuestion.QType" name="qType" class="col-sm-3" required #qType="ngModel">
-            <option value="">Select Question Type</option>
-            <option value="Multiple Choice">Multiple Choice</option>
-            <option value="Text">Text</option>
-            <option value="Likert">Likert</option>
-            <option value="Remarks">Remarks</option>
-          </select>
-          <div *ngIf="qType.errors?.required && qType.touched" class="text-danger">
-            Question Type is required.
-          </div>
-        </div>
-
-        <div class="form-group col-sm-12">
-          <label for="Section" class="col-sm-1">Section:</label>
-          <select id="Section" [(ngModel)]="newQuestion.Section" name="Section" class="col-sm-3" required #Section="ngModel">
-            <option value="">Select Section</option>
-            <option value="Header">Header</option>
-            <option value="Main">Main</option>
-            <option value="Footer">Footer</option>
-          </select>
-          <div *ngIf="Section.errors?.required && Section.touched" class="text-danger">
-            Section is required.
-          </div>
-        </div>
-
-        <div class="form-group col-sm-12">
-          <label for="mapping" class="col-sm-1">Mapping:</label>
-          <input type="text" id="mapping" [(ngModel)]="newQuestion.Mapping" name="mapping" class="col-sm-3" required #mapping="ngModel">
-          <div *ngIf="mapping.errors?.required && mapping.touched" class="text-danger">
-            Mapping is required.
-          </div>
-        </div>
-
-        <!-- Options for Multiple Choice Questions -->
-        <div *ngIf="newQuestion.QType === 'Multiple Choice'" class="col-sm-6">
-          <fieldset>
-            <legend>Options</legend>
-            <div *ngFor="let option of newQuestion.Options; let j = index; trackBy: trackByFn" class="col-sm-12">
-              <label for="option{{j}}" class="col-sm-2">Option {{ j + 1 }}:</label>
-              <input type="text" id="option{{j}}" [(ngModel)]="newQuestion.Options[j]" name="option{{j}}" class="col-sm-4" required #optionX="ngModel">
-
-              <button type="button" (click)="removeOption(j)" class="btn btn-default"><i class="app-icon-IconSet-1-33 blue"></i></button>
-              <div *ngIf="optionX.errors?.required && optionX.touched" class="text-danger">
-                Option {{ j + 1 }} is required.
+            <div class="section-heading">
+              <h2 class="pull-left">Create New Survey</h2>
+              <div class="pull-right">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
               </div>
             </div>
-            <button type="button" class="btn btn-primary pull-right" (click)="addOption()">Add Option</button>
-          </fieldset>
+            <div class="clearfix"></div>
+
+
+          </div>
+          <fieldset class="margin-10">
+            <legend>Question Details</legend>
+            <form (ngSubmit)="onSubmit()">
+              <!-- Survey Main Details -->
+
+              <div class="form-group col-sm-12">
+                <label for="surveyType" class="col-sm-1">Survey Type:</label>
+                <select id="surveyType" [(ngModel)]="surveyMainDetail.SurveyType" name="surveyType" class="col-sm-3" (change)="getSurvey($event.target.value)" required #surveyType="ngModel">
+                  <option value="">Select Survey Type</option>
+                  <option value="CSP">CSP</option>
+                  <option value="Internship">Internship</option>
+                  <option value="Exit">Exit</option>
+                  <option value="Alumni">Alumni</option>
+                  <option value="Employer">Employer</option>
+                </select>
+                <div *ngIf="surveyType.errors?.required && surveyType.touched" class="text-danger">
+                  Survey Type is required.
+                </div>
+              </div>
+
+
+
+
+
+              <div class="form-group col-sm-12">
+                <label for="question" class="col-sm-1">Question:</label>
+                <input type="text" id="question" [(ngModel)]="newQuestion.Question" name="question" class="col-sm-3" required #question="ngModel">
+                <div *ngIf="question.errors?.required && question.touched" class="text-danger">
+                  Question is required.
+                </div>
+              </div>
+
+              <div class="form-group col-sm-12">
+                <label for="qType" class="col-sm-1">Question Type:</label>
+                <select id="qType" [(ngModel)]="newQuestion.QType" name="qType" class="col-sm-3" required #qType="ngModel">
+                  <option value="">Select Question Type</option>
+                  <option value="Multiple Choice">Radio Buttons(Options)</option>
+                  <option value="Text">Text</option>
+                  <option value="Likert">Likert</option>
+                  <option value="Remarks">Remarks</option>
+                </select>
+                <div *ngIf="qType.errors?.required && qType.touched" class="text-danger">
+                  Question Type is required.
+                </div>
+              </div>
+
+              <div class="form-group col-sm-12">
+                <label for="Section" class="col-sm-1">Section:</label>
+                <select id="Section" [(ngModel)]="newQuestion.Section" name="Section" class="col-sm-3" required #Section="ngModel">
+                  <option value="">Select Section</option>
+                  <option value="Header">Header</option>
+                  <option value="Main">Main</option>
+                  <option value="Footer">Footer</option>
+                </select>
+                <div *ngIf="Section.errors?.required && Section.touched" class="text-danger">
+                  Section is required.
+                </div>
+              </div>
+
+              <div class="form-group col-sm-12">
+                <label for="mapping" class="col-sm-1">Mapping:</label>
+                <input type="text" id="mapping" [(ngModel)]="newQuestion.Mapping" name="mapping" class="col-sm-3" required #mapping="ngModel">
+                <div *ngIf="mapping.errors?.required && mapping.touched" class="text-danger">
+                  Mapping is required.
+                </div>
+              </div>
+
+              <!-- Options for Multiple Choice Questions -->
+              <div *ngIf="newQuestion.QType === 'Multiple Choice'" class="">
+                <fieldset>
+                  <legend>Options</legend>
+                  <div *ngFor="let option of newQuestion.Options; let j = index; trackBy: trackByFn" class="col-sm-12">
+                    <label for="option{{j}}" class="col-sm-1">Option {{ j + 1 }}:</label>
+                    <input type="text" id="option{{j}}" [(ngModel)]="newQuestion.Options[j]" name="option{{j}}" class="col-sm-3" required #optionX="ngModel">
+
+                    <button type="button" (click)="removeOption(j)" class="btn btn-default"><i class="app-icon-IconSet-1-33 blue"></i></button>
+                    <div *ngIf="optionX.errors?.required && optionX.touched" class="text-danger">
+                      Option {{ j + 1 }} is required.
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-primary pull-right" (click)="addOption()">New Option</button>
+                </fieldset>
+              </div>
+
+
+              <!-- Add Question Button -->
+              <button type="button" (click)="addQuestion()" class="btn btn-primary pull-right margin-t20">Add Question</button>
+            </form>
+            </fieldset>
+            <div class="clearfix"></div>
+
+            <!-- Questions Table -->
+            <fieldset class="margin-10">
+              <legend>
+                Questions
+              </legend>
+
+
+              <table class="table table-bordered table-theme table-hover table-theme margin-t30 margin-b20">
+                <thead>
+                  <tr>
+                    <th>Question</th>
+                    <th>Type</th>
+                    <th>Mapping</th>
+                    <th>Options</th>
+                    <th>Section</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let question of surveySubDetails; let i = index">
+                    <td>{{ question.Question }}</td>
+                    <td>{{ question.QType }}</td>
+                    <td>{{ question.Mapping }}</td>
+                    <td class="padding-l10">
+                      <ul>
+                        <li *ngFor="let option of question.Options">{{ option }}</li>
+                      </ul>
+                    </td>
+                    <td>{{ question.Section }}</td>
+                    <td>
+                      <button type="button" (click)="removeQuestion(i)" class="btn btn-default"><i class="app-icon-IconSet-1-33 blue"></i></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </fieldset>
+            <div class="modal-footer">
+              <!--<button type="submit" class="btn btn-primary pull-right" [disabled]="!educationForm.valid">Add</button>-->
+              <button type="submit" (click)="onSubmit()" class="btn btn-primary pull-right" [disabled]="surveySubDetails.length==0">Save Questions</button>
+              <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal">Cancel</button>
+
+            </div>
+            <!-- Submit Button -->
+            <!--<button type="button" (click)="onSubmit()" class="btn btn-primary pull-right">Save Questions</button>-->
         </div>
-      </fieldset>
 
-      <!-- Add Question Button -->
-      <button type="button" (click)="addQuestion()" class="btn btn-primary pull-right margin-t20">Add Question</button>
-    </form>
+      </div>
+    </div>
 
-    <div class="clearfix"></div>
+  <fieldset>
+    <legend>Survey Questions</legend>
+    <div class="pull-right">
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addSurveyModal">
+        Add Survey Questions  
+      </button>
+    </div>
+    <div class="col-sm-12">
 
-    <!-- Questions Table -->
-    <h3>Questions</h3>
-    <table class="table table-bordered table-theme table-hover table-theme margin-t30 margin-b20">
-      <thead>
-        <tr>
-          <th>Question</th>
-          <th>Type</th>
-          <th>Mapping</th>
-          <th>Options</th>
-          <th>Section</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let question of surveySubDetails; let i = index">
-          <td>{{ question.Question }}</td>
-          <td>{{ question.QType }}</td>
-          <td>{{ question.Mapping }}</td>
-          <td class="padding-l10">
-            <ul>
-              <li *ngFor="let option of question.Options">{{ option }}</li>
-            </ul>
-          </td>
-          <td>{{ question.Section }}</td>
-          <td>
-            <button type="button" (click)="removeQuestion(i)" class="btn btn-default"><i class="app-icon-IconSet-1-33 blue"></i></button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <div *ngIf="SurveyData">
+        <h2>{{ SurveyData.SurveyType }}</h2>
 
-    <!-- Submit Button -->
-    <button type="button" (click)="onSubmit()" class="btn btn-primary pull-right">Save Questions</button>
-  </div>
+        <form [formGroup]="surveyForm" (ngSubmit)="submitSurvey()">
+          <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+            <table class="table table-bordered table-theme table-hover margin-t10">
+              <thead>
+                <tr>
+                  <th>Sr#</th>
+                  <th>Statement</th>
+                  <th>Mapping</th>
+                  <th>Answer</th>
+                  <th>Section</th>
+                  <th>Action</th>
+                </tr>
+
+              </thead>
+              <!--<div *ngFor="let question of SurveyData.Questions">-->
+
+              <tr *ngFor="let question of SurveyData.Questions;let m=index">
+                <td class="text-center">{{m+1}}</td>
+                <td> <label>{{ question.Question }}</label></td>
+                <td class="text-center">{{ question.Mapping }}</td>
+                <td>
+                  <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
+                  <textarea rows="6" *ngIf="question.QType === 'Remarks'" type="text" [formControlName]="question.QID"></textarea>
+
+                  <!-- Radio Buttons for Multiple Choice -->
+                  <div *ngIf="question.QType === 'Multiple Choice'">
+
+                    <div class="pull-left radio-inline padding-t5" *ngFor="let option of question.Options">
+                      <input type="radio" [formControlName]="question.QID" [value]="option.Options">
+                      <label class="cursor-pointer">{{ option.Options }}</label>
+
+                    </div>
+                  </div>
+                  <div *ngIf="question.QType === 'Likert'">
+
+                    <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                      <input type="radio" [formControlName]="question.QID" [value]="num">
+                      <label class="cursor-pointer">{{ num }}</label>
+
+                    </div>
 
 
-  <div class="col-sm-12">
+                  </div>
+                </td>
+                <td class="text-center">{{ question.Section }}</td>
+                <td class="text-center">
+                  <button type="button" class="btn btn-default margin-r5" (click)="deleteQuestion(question.QID)">
+                    <i class="app-icon-IconSet-1-33 blue"></i>
 
-    <div *ngIf="SurveyData">
-      <h2>{{ SurveyData.SurveyType }}</h2>
+                  </button>
+                </td>
 
-      <form [formGroup]="surveyForm" (ngSubmit)="submitSurvey()">
-        <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
-          <table class="table table-hover table-theme">
-            <thead>
-              <tr>
-                <th>Statement</th>
-                <th>Mapping</th>
-                <th>Answer</th>
-                <th>Section</th>
-                <th>Action</th>
               </tr>
-
-            </thead>
-            <!--<div *ngFor="let question of SurveyData.Questions">-->
-
-            <tr *ngFor="let question of SurveyData.Questions">
-              <td> <label>{{ question.Question }}</label></td>
-              <td class="text-center">{{ question.Mapping }}</td>
-              <td>
-                <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
-
-                <!-- Radio Buttons for Multiple Choice -->
-                <div *ngIf="question.QType === 'Multiple Choice'">
-
-                  <div class="pull-left radio-inline padding-t5" *ngFor="let option of question.Options">
-                    <input type="radio" [formControlName]="question.QID" [value]="option.Options">
-                    <label class="cursor-pointer">{{ option.Options }}</label>
-
-                  </div>
-                </div>
-                <div *ngIf="question.QType === 'Likert'">
-
-                  <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
-                    <input type="radio" [formControlName]="question.QID"   [value]="num">
-                    <label class="cursor-pointer">{{ num }}</label>
-
-                  </div>
-
-                </div>
-              </td>
-              <td>{{ question.Section }}</td>
-              <td>
-                <button type="button" class="btn btn-default margin-r5" (click)="deleteQuestion(question.QID)">
-                  <i class="app-icon-IconSet-1-33 blue"></i>
-
-                </button>
-              </td>
-             
-            </tr>
-          </table>
+            </table>
           </div>
           <!--<button type="submit" [disabled]="surveyForm.invalid">Submit</button>-->
-</form>
-</div>
-   
+        </form>
+      </div>
 
 
 
-  </div>
+
+    </div>
 
 
-
+  </fieldset>
 
 
 
