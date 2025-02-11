@@ -64,6 +64,7 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
     {
         public string SurveyType { get; set; }
         public int SurveyDeptID { get; set; }
+        public int SurveyIntakeID { get; set; }
         public int CreatedBy { get; set; }
     }
 
@@ -81,6 +82,7 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public int SurveyID { get; set; }
         public string SurveyType { get; set; }
         public int SurveyDeptID { get; set; }
+        public int SurveyIntakeID { get; set; }
         public ICollection<SurveySubDetail> SurveySubDetails { get; set; }
     }
 
@@ -108,6 +110,7 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public int SurveyID { get; set; }
         public string SurveyType { get; set; }
         public int SurveyDeptID { get; set; }
+        public int SurveyIntakeID { get; set; }
         public List<SurveyQuestionDto> Questions { get; set; }
     }
 
@@ -129,6 +132,7 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
     {
         public string Surveytype { get; set; }
         public int Deptid { get; set; }
+        public int SurveyIntakeID { get; set; }
     }
     public class Allsurvey
     {

@@ -139,7 +139,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                 {
                     // Step 1: Check if Survey Exists for the given department
                     var existingSurvey = await _context.Set<SurveyMainDetail>()
-                        .Where(s => s.SurveyDeptID == request.SurveyMainDetail.SurveyDeptID && s.SurveyType == request.SurveyMainDetail.SurveyType)
+                        .Where(s => s.SurveyDeptID == request.SurveyMainDetail.SurveyDeptID && s.SurveyType == request.SurveyMainDetail.SurveyType && s.SurveyIntakeID==request.SurveyMainDetail.SurveyIntakeID)
                         .FirstOrDefaultAsync();
 
                     // If survey exists, we are only adding new questions or options
@@ -187,10 +187,10 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                         var surveyType = new SqlParameter("@SurveyType", request.SurveyMainDetail.SurveyType);
                         var surveyDeptID = new SqlParameter("@SurveyDeptID", request.SurveyMainDetail.SurveyDeptID);
                         var surveyID = new SqlParameter("@SurveyID", SqlDbType.Int) { Direction = ParameterDirection.Output };
-
+                        var surveyIntakeID = new SqlParameter("@SurveyIntakeID", request.SurveyMainDetail.SurveyIntakeID);
                         var responseMain = await _context.Database.ExecuteSqlRawAsync(
-                            "EXEC AddSurveyMainDetail @SurveyType, @SurveyDeptID, @SurveyID OUTPUT",
-                            surveyType, surveyDeptID, surveyID
+                            "EXEC AddSurveyMainDetail @SurveyType, @SurveyDeptID,@SurveyIntakeID, @SurveyID OUTPUT",
+                            surveyType, surveyDeptID,surveyIntakeID, surveyID
                         );
 
                         if (responseMain <= 0)
@@ -253,12 +253,13 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                     var survey = new SurveyResponseDto();
                     var surveyType = request.Surveytype;
                     var surveyDeptID = request.Deptid;
+                    var surveyIntakeID = request.SurveyIntakeID;
                     // Step 1: Get SurveyMainDetail
                     var surveyMainDetailParams = new SqlParameter("@SurveyType", surveyType);
                     var surveyDeptIDParam = new SqlParameter("@SurveyDeptID", surveyDeptID);
 
                     var mainDetail = await _context.Set<SurveyMainDetail>()
-                        .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID}").ToListAsync();
+                        .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID},@SurveyIntakeID={surveyIntakeID}").ToListAsync();
                     //.AsNoTracking()
                     //.FirstOrDefaultAsync();
 
@@ -279,7 +280,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
                         // Step 2: Get SurveySubDetails
                         var questions = await _context.Set<SurveySubDetail>()
-                            .FromSqlInterpolated($"EXEC GetSurveySubDetailsA @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID}")
+                            .FromSqlInterpolated($"EXEC GetSurveySubDetailsA @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID},@SurveyIntakeID={surveyIntakeID}")
                             .ToListAsync();
 
                         survey.Questions = new List<SurveyQuestionDto>();
