@@ -7,7 +7,7 @@ import { CoursesSearchService } from '../../../Services/CourseSearch/CourseSearc
 import { ToastrService } from 'ngx-toastr';
 import { IndirectAssessment } from '../../../Services/IndirectAssessment/IndirectAssessment.service';
 import { CoursesCLOSService } from './../../../Services/CourseCLOS/coursesCLO.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators,FormArray } from '@angular/forms';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 
 declare const $: any;
@@ -22,6 +22,7 @@ export class QuestionairesComponent implements OnInit {
     SurveyType: 'CSP',
     SurveyDeptID: 0,
     CreatedBy :0,
+    SurveyIntakeID:0,
   };
   surveyForm: FormGroup = this.fb.group({});
   surveySubDetails: any[] = [{
@@ -42,6 +43,11 @@ export class QuestionairesComponent implements OnInit {
   };
   plos: any = [];
   Intake: any;
+  createSurveyForm: FormGroup;
+  surveyTypes = ['CSP', 'Other Type']; // Example survey types
+  questionTypes = ['Text', 'Radio Buttons(Options)', 'Likert'];
+  sections = ['Header', 'Body', 'Footer'];
+  showOptions: boolean;
   constructor(private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
     private ngxService: NgxUiLoaderService,
@@ -51,15 +57,120 @@ export class QuestionairesComponent implements OnInit {
     private IndirectAssessmen: IndirectAssessment,
     private CoursesCLOSService: CoursesCLOSService,
     private GlobalService: GlobalService,
-    private fb: FormBuilder,  ) { }
+    private fb: FormBuilder,  ) {
+  
+    this.createSurveyForm = this.fb.group({
+      surveyType: ['', Validators.required],
+      question: ['', Validators.required],
+      questionType: ['', Validators.required],
+      section: ['', Validators.required],
+      mapping: [''],
+      options: this.fb.array([]) 
+    });
+
+
+  }
 
   ngOnInit(): void {
-
+   
+    
+   
     this.getSurvey(this.surveyMainDetail.SurveyType);
     this.removeQuestion(0);
   }
+  get options(): FormArray {
+    return this.createSurveyForm.get('options') as FormArray;
+  }
+
+  addnOption() {
+    this.options.push(this.fb.control('', Validators.required));
+  }
+
+  removenOption(index: number) {
+    this.options.removeAt(index);
+  }
+
+  submitNewSurvey(): void {
+    if (this.createSurveyForm.valid) {
+      this.surveyMainDetail.SurveyType = this.createSurveyForm.controls["surveyType"].value;
+      this.newQuestion.Question = this.createSurveyForm.controls["surveyType"].value;
+      this.newQuestion.QType = this.createSurveyForm.controls["questionType"].value;
+      this.newQuestion.Mapping = this.createSurveyForm.controls["mapping"].value;
+      this.newQuestion.Section = this.createSurveyForm.controls["section"].value;
+      this.newQuestion.Options = this.createSurveyForm.controls["options"].value;
+
+      this.surveySubDetails.push({ ...this.newQuestion });
+      
+
+      this.createSurveyForm.reset();
+
+
+    } else {
+      this.toastr.error('Please fill all required fields before submitting.', 'Validation Error');
+    }
+  }
+
+
+  getSurveyOptions(questionIndex: number): FormArray {
+    return this.surveyQuestions.at(questionIndex).get('Options') as FormArray;
+  }
+
+  addSurveyOption(questionIndex: number): void {
+    const question = this.surveyQuestions.at(questionIndex);
+    if (question.get('QType')?.value === 'Multiple Choice') {
+      this.getSurveyOptions(questionIndex).push(this.fb.control('', Validators.required));
+    }
+  }
+
+  // Remove an option from a specific question
+  removeSurveyOption(questionIndex: number, optionIndex: number): void {
+    const options = this.getSurveyOptions(questionIndex);
+    if (options.length > 1) {
+      options.removeAt(optionIndex);
+    } else {
+      this.toastr.warning('At least one option is required!');
+    }
+  }
+
+
+  get createSurveyQuestions() {
+    return this.createSurveyForm.get('questions') as FormArray;
+  }
+  get surveyQuestions(): FormArray {
+    return this.createSurveyForm.get('questions') as FormArray;
+  }
+
+  // ✅ Add a new question dynamically
+  addNewSurveyQuestion() {
+    const questionForm = this.fb.group({
+      Question: ['', Validators.required],
+      QType: ['', Validators.required],
+      Mapping: [''],
+      Section: ['', Validators.required],
+      Options: this.fb.array([]), // Default empty options array
+    });
+
+    this.createSurveyQuestions.push(questionForm);
+  }
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
   receiveData(data: number) {
     this.Intake = data; // Update the parent component's variable with the data
+  }
+  receiveMData(data: number) {
+    this.surveyMainDetail.SurveyIntakeID = data; // Update the parent component's variable with the data
   }
   getSurvey(surveyType: string) {
     const request = {
