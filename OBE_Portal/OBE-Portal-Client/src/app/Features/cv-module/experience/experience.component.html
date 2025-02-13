@@ -66,38 +66,47 @@
 
 
 
-            <button type="button" class="btn btn-primary pull-right" (click)="add()" [disabled]="!experienceForm.valid">Add</button>
-            <table class="table table-bordered table-hover table-theme margin-t50">
-              <thead>
-                <tr>
-                  <!--<th *ngFor="let field of formFields">{{ field.label }}</th>-->
-                  <th>
-                    Position
-                  </th>
-                  <th>Company</th>
-                  <th>
-                    Field
-                  </th>
-                  <th>Start Date</th>
-                  <th>End Date</th>
-                  <th>Document</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let entry of tempData; let i = index">
-                  <td>{{ entry.Position }}</td>
-                  <td>{{ entry.Company }}</td>
-                  <td>{{ entry.Field }}</td>
-                  <td>{{ entry.StartDate }}</td>
-                  <td>{{ entry.EndDate || 'Present' }}</td>
-                  <td>{{entry.imageFile.fileName}}</td>
-                  <td>
-                    <button type="button" class="btn btn-danger btn-sm" (click)="deleteEntry(i)">Delete</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+           
+            <div class="section-heading">
+              <h2 class="pull-left">Added Experience</h2>
+              <button type="button" class="btn btn-primary pull-right" (click)="add()" [disabled]="!experienceForm.valid">Add</button>
+            </div>
+            <div class="clearfix"></div>
+            <fieldset class="col-sm-12">
+
+              <table class="table table-bordered table-hover table-theme margin-t50">
+                <thead>
+                  <tr>
+                    <!--<th *ngFor="let field of formFields">{{ field.label }}</th>-->
+                    <th>
+                      Position
+                      th
+                    </th>
+                    <th>Company</th>
+                    <th>
+                      Field
+                    </th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Document</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let entry of tempData; let i = index">
+                    <td>{{ entry.Position }}</td>
+                    <td>{{ entry.Company }}</td>
+                    <td>{{ entry.Field }}</td>
+                    <td>{{ entry.StartDate }}</td>
+                    <td>{{ entry.EndDate || 'Present' }}</td>
+                    <td>{{entry.imageFile.fileName}}</td>
+                    <td>
+                      <button type="button" class="btn btn-danger btn-sm" (click)="deleteEntry(i)">Delete</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </fieldset>
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary pull-right" [disabled]="tempData.length==0">Save</button>
@@ -110,7 +119,11 @@
   </div>
 
 
-
+  <div class="pull-right margin-b10">
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addExperienceModal">
+      Add Experience
+    </button>
+  </div>
   <fieldset class="margin-b15">
     <legend>Experience</legend>
 

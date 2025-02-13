@@ -77,17 +77,11 @@ export class CvComponentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (GlobalService.TempFacultyMember_ID == null) {
-      this.facultyID = GlobalService.FacultyMember_ID
-    }
-    else {
-
-      this.facultyID = GlobalService.TempFacultyMember_ID;
-    }
+    this.facultyID = GlobalService.FacultyMember_ID
+   
     this.name = GlobalService.Name;
     this.loaddata();
-   // this.fetchActivities();
-   // this.loadActivities();
+  
     this.groupActivitiesByType();
     this.activityTypes = this.getActivityTypes();
    
@@ -117,9 +111,7 @@ export class CvComponentComponent implements OnInit {
   setActiveTab(type: string): void {
     this.selectedTab = type;
   }
-  //getActivityTypes(): string[] {
-  //  return Object.keys(this.groupedActivitiest);
-  //}
+ 
 
   getDetailKeys(activity: any): string[] {
     return activity.Details?.[0]?.SubDetails ? Object.keys(activity.Details[0].SubDetails) : [];
@@ -182,22 +174,7 @@ export class CvComponentComponent implements OnInit {
 
   onSubmit(): void {
 
-    //if (this.activityForm.invalid) {
-
-    //  this.toastr.error("Please Enter All Fields", "Error");
-
-    //  return;
-    //}
-
-    //const activityData = {
-    //  FacultyID: this.facultyID ,
-    //  ActivityID: this.selectedActivityId,
-    //  Details: this.fields.map((field) => ({
-    //    DetailName: field.subDetail,
-    //    DetailValue: this.activityForm.value[this.sanitizeType( field.subDetail)],
-    //  })),
-    //};
-    console.log('entered');
+   
     const activityData = this.tempData;
     this.ProfileService.SaveActivity(activityData).subscribe((response) => {
       if (response) {
@@ -213,9 +190,7 @@ export class CvComponentComponent implements OnInit {
 
 
   add() {
-    //if (this.educationForm.invalid) {
-    //  return;
-    //}
+   
     const activityData = {
       FacultyID: this.facultyID,
       ActivityID: this.selectedActivityId,
@@ -226,10 +201,10 @@ export class CvComponentComponent implements OnInit {
       })),
     };
     this.tempData.push(activityData);
-    console.log(this.tempData);
+    
     this.activityForm.reset();
     this.activityForm.controls['activity'].setValue(this.selectedActivityId);
-    //this.activityForm.controls['FacultyMemberID'].setValue(GlobalService.FacultyMember_ID);
+   
   }
 
   deleteEntry(index: number) {
@@ -274,11 +249,7 @@ export class CvComponentComponent implements OnInit {
 
     this.selectedFile = file;
     this.fileError = null;
-    //// Compress the image
-    //this.compressImage(file, (compressedFile) => {
-    //  this.fileError = '';
-    //  this.educationForm.patchValue({ imageFile: compressedFile });
-    //});
+  
 
   }
 
@@ -326,14 +297,8 @@ export class CvComponentComponent implements OnInit {
   }
 
   loaddata(): void {
-    if (GlobalService.TempFacultyMember_ID == null) {
-      this.facultyID = GlobalService.FacultyMember_ID
-    }
-    else {
-
-      this.facultyID = GlobalService.TempFacultyMember_ID;
-    }
-
+  
+    this.facultyID = GlobalService.FacultyMember_ID
     this.ProfileService.getAllData(this.facultyID).subscribe((response) => {
       
       this.education = response.FacultyEducation;
@@ -343,14 +308,12 @@ export class CvComponentComponent implements OnInit {
       this.activities = response.ActivityList
       this.Faculty = response.FacultyDetails;
       this.activitySub = response.ActivitySubDetail
-   //   console.log("xp", this.experience);
-      console.log("grp",this.groupedActivities);
-      //this.selectedTab = this.groupedActivities[0].ActivityType;
+ 
 
       this.setActiveTab(this.activities[0].ActivityType);
       $("#" + this.sanitizeType( this.activities[0].ActivityType) + "0").class = 'active';
       $("#" + this.sanitizeType(this.activities[0].ActivityType) + "0").active = true;
-      console.log("filter", this.filterdDetail(1));
+    
 
     });
 
@@ -367,19 +330,13 @@ export class CvComponentComponent implements OnInit {
 
   loadActivities(): void {
 
-    if (GlobalService.TempFacultyMember_ID == null) {
-      this.facultyID = GlobalService.FacultyMember_ID
-    }
-    else {
-
-      this.facultyID = GlobalService.TempFacultyMember_ID;
-    }
-    console.log(GlobalService.TempFacultyMember_ID);
+   
+    this.facultyID = GlobalService.FacultyMember_ID
+  
 
     this.ProfileService.GetFacultyActivity(this.facultyID).subscribe((response) => {
       this.groupedActivities = response;
-      //console.log(response);
-      console.log("gact",this.groupedActivities);
+     
 
       this.selectedTab = this.groupedActivities[0].ActivityType;
      
@@ -419,22 +376,7 @@ export class CvComponentComponent implements OnInit {
     });
 
 
-    //if (confirm('Are you sure you want to delete this experience?')) {
-    //  this.ProfileService.DeleteActivity(detailID).subscribe({
-    //    next: (response) => {
-    //      console.log('Delete Response:', response);
-    //      this.toastr.success("Acivity deleted successfully.", "Success");
-
-    //      this.loadActivities(GlobalService.FacultyMember_ID);
-    //    },
-    //    error: (err) => {
-    //      console.error('Error deleting experience:', err);
-    //      this.toastr.error("Failed to delete Activity.", "Failed");
-
-    //    },
-    //  });
-
-   // }
+   
   }
   groupDataByActivity(data: any[]): any[] {
     const grouped = data.reduce((result, current) => {
@@ -472,11 +414,7 @@ export class CvComponentComponent implements OnInit {
     return Object.values(grouped);
   }
 
-  /**
-   * Extracts unique sub-detail names (headers) for a given activity.
-   * @param activity Activity object.
-   * @returns Array of unique sub-detail names.
-   */
+  
   getDetailNames(activity: any): string[] {
     if (!activity.Details || activity.Details.length === 0) {
       return [];

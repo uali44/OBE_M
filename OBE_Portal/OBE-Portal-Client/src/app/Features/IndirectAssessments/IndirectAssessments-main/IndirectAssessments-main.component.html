@@ -55,7 +55,7 @@
   <div class="section-tabs no-margin">
     <div class="tabs-head">
       <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"> <a aria-expanded="true" href="#CSPSurveyForm" role="tab" data-toggle="tab">CSP Survey Form</a> </li>
+        <!--<li role="presentation" class="active"> <a aria-expanded="true" href="#CSPSurveyForm" role="tab" data-toggle="tab">CSP Survey Form</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#ExitSurveyForm" role="tab" data-toggle="tab">Exit Survey Form</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#InternshipForm" role="tab" data-toggle="tab">Internship Form</a> </li>
 
@@ -64,9 +64,9 @@
         <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICCE" role="tab" data-toggle="tab" *ngIf="dept===2||dept===8">Alumni Survey Form CE</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICCE" role="tab" data-toggle="tab" *ngIf="dept===2||dept===8">Employer Survey Form CE</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#AlumniSurveyFormBUICSE" role="tab" data-toggle="tab" *ngIf="dept===8">Alumni Survey Form SE</a> </li>
-        <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICSE" role="tab" data-toggle="tab" *ngIf="dept===8">Employer Survey Form SE</a> </li>
-        <li role="presentation"> <a aria-expanded="true" href="#CSP" role="tab" data-toggle="tab">CSP</a> </li>
-        <li role="presentation"> <a aria-expanded="true" href="#Internship" role="tab" data-toggle="tab">Internship Survey Form</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#EmployerSurveyFormBUICSE" role="tab" data-toggle="tab" *ngIf="dept===8">Employer Survey Form SE</a> </li>-->
+        <li role="presentation" class="active"> <a aria-expanded="true" href="#CSP" role="tab" data-toggle="tab">CSP</a> </li>
+        <li role="presentation" > <a aria-expanded="true" href="#Internship" role="tab" data-toggle="tab">Internship Survey Form</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#Exit" role="tab" data-toggle="tab">Exit Survey Form</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#Employer" role="tab" data-toggle="tab">Employer</a> </li>
         <li role="presentation"> <a aria-expanded="true" href="#Alumni" role="tab" data-toggle="tab">Alumni</a> </li>
@@ -74,12 +74,12 @@
       </ul>
     </div>
     <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="CSPSurveyForm">
+      <!--<div role="tabpanel" class="tab-pane active" id="CSPSurveyForm">
         <h4 class="text-center">
           <b>Please respond to the following by selecting the most appropriate choice for candidate</b>
         </h4>
         <h4 class="text-center">
-          <b>5: Very strong	   4: Strong	3: Moderate	  2: Weak	1: very Weak       <!--0: Not applicable--></b>
+          <b>5: Very strong	   4: Strong	3: Moderate	  2: Weak	1: very Weak-->       <!--0: Not applicable--><!--</b>
         </h4>
         <hr />
         <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
@@ -4691,7 +4691,7 @@
             <button class="btn btn-info" (click)="SaveEmployerForm()">Save</button>
           </div>
         </div>
-      </div>
+      </div>-->
 
       <div role="tabpanel" class="tab-pane active" id="CSP">
         <div class="col-sm-12">
@@ -4906,7 +4906,7 @@
 
         </div>
       </div>
-      <div role="tabpanel" class="tab-pane active" id="Exit">
+      <div role="tabpanel" class="tab-pane " id="Exit">
         <div class="col-sm-12">
 
           <div *ngIf="ExitSurveyData">
@@ -5074,7 +5074,7 @@
 
         </div>
       </div>
-      <div role="tabpanel" class="tab-pane active" id="Internship">
+      <div role="tabpanel" class="tab-pane " id="Internship">
         <div class="col-sm-12">
 
           <div *ngIf="InternshipSurveyData">
@@ -5242,7 +5242,7 @@
 
         </div>
       </div>
-      <div role="tabpanel" class="tab-pane active" id="Alumni">
+      <div role="tabpanel" class="tab-pane " id="Alumni">
         <div class="col-sm-12">
 
           <div *ngIf="AlumniSurveyData">
@@ -5410,7 +5410,7 @@
 
         </div>
       </div>
-      <div role="tabpanel" class="tab-pane active" id="Employer">
+      <div role="tabpanel" class="tab-pane " id="Employer">
         <div class="col-sm-12">
 
           <div *ngIf="EmployerSurveyData">

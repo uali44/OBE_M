@@ -11,7 +11,7 @@ namespace OBE_Portal.Infrastructure.Interfaces.IndirectAssessment
     {
         Task<bool> AddSurvey(SurveyCreateRequest request);
         Task<bool> DeleteQuestion(int qid);
-        Task<Allsurvey> GetAllSurvey(int Deptid);
+        Task<Allsurvey> GetAllSurvey(getSurveyRequest request);
         Task<SurveyResponseDto> GetSurvey(getSurveyRequest request);
         Task<StudentSurveyDetail> GetSurveyRespones(getstudentSurveyrequest request);
         Task<bool> SaveCSPForm(SaveCSPFormRequest request);

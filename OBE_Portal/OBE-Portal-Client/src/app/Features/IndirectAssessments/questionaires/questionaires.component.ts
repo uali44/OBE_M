@@ -7,6 +7,7 @@ import { CoursesSearchService } from '../../../Services/CourseSearch/CourseSearc
 import { ToastrService } from 'ngx-toastr';
 import { IndirectAssessment } from '../../../Services/IndirectAssessment/IndirectAssessment.service';
 import { CoursesCLOSService } from './../../../Services/CourseCLOS/coursesCLO.service';
+import { SettingService } from 'src/app/Services/Settings/setting.service';
 import { FormBuilder, FormControl, FormGroup, Validators,FormArray } from '@angular/forms';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 
@@ -42,22 +43,37 @@ export class QuestionairesComponent implements OnInit {
     Options: ['']
   };
   plos: any = [];
-  Intake: any;
+  Intake: number=0;
   createSurveyForm: FormGroup;
   surveyTypes = ['CSP', 'Other Type']; // Example survey types
   questionTypes = ['Text', 'Radio Buttons(Options)', 'Likert'];
   sections = ['Header', 'Body', 'Footer'];
-  showOptions: boolean;
+  CSPSurveyData: any = [];
+  InternshipSurveyData: any = [];
+  ExitSurveyData: any = [];
+  AlumniSurveyData: any = [];
+  EmployerSurveyData: any = [];
+  cSPSurveyForm: FormGroup = this.fb.group({});
+  alumniSurveyForm: FormGroup = this.fb.group({});
+  internshipSurveyForm: FormGroup = this.fb.group({});
+  exitSurveyForm: FormGroup = this.fb.group({});
+  employerSurveyForm: FormGroup = this.fb.group({});
+
+  AddedIntakePLOs: any = [];
+    Added_Intake_PLOs: any[];
+  
+    programId: any;
   constructor(private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
     private ngxService: NgxUiLoaderService,
     private _InterconnectedService: InterconnectedService,
     private IndirectAssessmentsComponent: IndirectAssessmentsComponent,
-
+    private _SettingService: SettingService,
     private IndirectAssessmen: IndirectAssessment,
     private CoursesCLOSService: CoursesCLOSService,
     private GlobalService: GlobalService,
-    private fb: FormBuilder,  ) {
+    private fb: FormBuilder,
+  ) {
   
     this.createSurveyForm = this.fb.group({
       surveyType: ['', Validators.required],
@@ -72,9 +88,9 @@ export class QuestionairesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   
-    
-   
+    this.Added_Intake_PLOs = [{ PLO_ID: 1, PLO_Title: "PLO-1" }, { PLO_ID: 2, PLO_Title: "PLO-2" }, { PLO_ID: 1, PLO_Title: "PLO-3" }]
+
+    this.Intake = 0;
     this.getSurvey(this.surveyMainDetail.SurveyType);
     this.removeQuestion(0);
   }
@@ -93,7 +109,7 @@ export class QuestionairesComponent implements OnInit {
   submitNewSurvey(): void {
     if (this.createSurveyForm.valid) {
       this.surveyMainDetail.SurveyType = this.createSurveyForm.controls["surveyType"].value;
-      this.newQuestion.Question = this.createSurveyForm.controls["surveyType"].value;
+      this.newQuestion.Question = this.createSurveyForm.controls["question"].value;
       this.newQuestion.QType = this.createSurveyForm.controls["questionType"].value;
       this.newQuestion.Mapping = this.createSurveyForm.controls["mapping"].value;
       this.newQuestion.Section = this.createSurveyForm.controls["section"].value;
@@ -140,18 +156,7 @@ export class QuestionairesComponent implements OnInit {
     return this.createSurveyForm.get('questions') as FormArray;
   }
 
-  // ✅ Add a new question dynamically
-  addNewSurveyQuestion() {
-    const questionForm = this.fb.group({
-      Question: ['', Validators.required],
-      QType: ['', Validators.required],
-      Mapping: [''],
-      Section: ['', Validators.required],
-      Options: this.fb.array([]), // Default empty options array
-    });
-
-    this.createSurveyQuestions.push(questionForm);
-  }
+ 
 
 
  
@@ -168,6 +173,8 @@ export class QuestionairesComponent implements OnInit {
 
   receiveData(data: number) {
     this.Intake = data; // Update the parent component's variable with the data
+
+    this.getAllSurvey();
   }
   receiveMData(data: number) {
     this.surveyMainDetail.SurveyIntakeID = data; // Update the parent component's variable with the data
@@ -175,8 +182,8 @@ export class QuestionairesComponent implements OnInit {
   getSurvey(surveyType: string) {
     const request = {
       Surveytype: surveyType,
-      Deptid: GlobalService.Deaprtment_ID
-
+      Deptid: GlobalService.Deaprtment_ID,
+      SurveyIntakeID: this.Intake
     }
     this.ngxService.start();
     this.IndirectAssessmen.GetSurvey(request).
@@ -185,7 +192,7 @@ export class QuestionairesComponent implements OnInit {
           this.ngxService.stop();
           this.SurveyData = data;
           console.log("getdata", this.SurveyData);
-          this.createForm();
+         // this.createForm();
         
 
 
@@ -198,20 +205,59 @@ export class QuestionairesComponent implements OnInit {
 
   }
 
-  createForm() {
-    if (!this.SurveyData || !this.SurveyData.Questions) return;
+  getAllSurvey() {
+    const request = {
+      Surveytype: "",
+      Deptid: GlobalService.Deaprtment_ID,
+      SurveyIntakeID: this.Intake
+    }
+   // console.log(GlobalService.Deaprtment_ID);
+    this.ngxService.start();
+    this.IndirectAssessmen.GetAllSurvey(request).
+      subscribe(
+        data => {
+          this.ngxService.stop();
+          this.CSPSurveyData = data.CSP;
+           console.log("getdata", this.CSPSurveyData);
+          this.createForm(this.cSPSurveyForm, this.CSPSurveyData);
+          this.ExitSurveyData = data.Exit;
+          //console.log("getdata", this.ExitSurveyData);
+          this.createForm(this.exitSurveyForm, this.ExitSurveyData);
+          this.EmployerSurveyData = data.Employer;
+          // console.log("getdata", this.EmployerSurveyData);
+          this.createForm(this.employerSurveyForm, this.EmployerSurveyData);
+          this.InternshipSurveyData = data.Internship;
+          // console.log("getdata", this.InternshipSurveyData);
+          this.createForm(this.internshipSurveyForm, this.InternshipSurveyData);
+          this.AlumniSurveyData = data.Alumni;
+          // console.log("getdata", this.AlumniSurveyData);
+          this.createForm(this.alumniSurveyForm, this.AlumniSurveyData);
 
-    this.SurveyData.Questions.forEach((question: any) => {
+
+
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
+        });
+
+
+  }
+
+  createForm(form: FormGroup, SurveyData: any) {
+    if (!SurveyData || !SurveyData.Questions) return;
+
+    SurveyData.Questions.forEach((question: any) => {
       if (question.QType === 'Text') {
-        this.surveyForm.addControl(question.QID, new FormControl('', Validators.required));
+        form.addControl(question.QID, new FormControl('', Validators.required));
       } else if (question.QType === 'Multiple Choice') {
-        this.surveyForm.addControl(question.QID, new FormControl('', Validators.required));
+        form.addControl(question.QID, new FormControl('', Validators.required));
       }
       else if (question.QType === 'Likert') {
-        this.surveyForm.addControl(question.QID, new FormControl('', Validators.required));
+        form.addControl(question.QID, new FormControl('', Validators.required));
       }
       else if (question.QType === 'Remarks') {
-        this.surveyForm.addControl(question.QID, new FormControl('', Validators.required));
+        form.addControl(question.QID, new FormControl('', Validators.required));
       }
     });
   }
@@ -262,6 +308,10 @@ export class QuestionairesComponent implements OnInit {
       SurveyMainDetail: this.surveyMainDetail,
       SurveySubDetails: this.surveySubDetails
     };
+    if (this.Intake == 0) {
+      this.toastr.error("No Intake Selected", "Error!");
+      return;
+    }
     this.ngxService.start();
 
     this.IndirectAssessmen.AddSurvey(payload).
@@ -329,6 +379,36 @@ export class QuestionairesComponent implements OnInit {
     };
     this.surveySubDetails = [];
   }
+
+
+
+  //GetIntakePLOsInformation(admissionOpenProgramId: any) {
+  //  this.Added_Intake_PLOs = [];
+  //  this.ngxService.start();
+  //  this._SettingService.GetPlosInformation({ programId: this.programId, admissionOpenProgramId: Number(admissionOpenProgramId) }).
+  //    subscribe(
+  //      response => {
+  //        if (response != null) {
+  //          this.Added_Intake_PLOs = response;
+  //        }
+  //        this.ngxService.stop();
+  //      },
+  //      error => {
+  //        this.ngxService.stop();
+  //        this.toastr.error("Internal server error occured while processing your request", "Error!")
+  //      });
+  //}
+
+
+
+
+
+
+
+
+
+
+
 }
 
 

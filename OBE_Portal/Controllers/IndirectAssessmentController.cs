@@ -106,16 +106,16 @@ namespace OBE_Portal.Controllers
             }
         }
         [HttpPost("GetAllSurvey")]
-        public async Task<IActionResult> GetAllSurvey([FromBody]int Deptid)
+        public async Task<IActionResult> GetAllSurvey(getSurveyRequest request)
         {
-            if (Deptid == 0)
+            if (request.Deptid == 0)
             {
                 return BadRequest("Invalid Deptid received.");
 
             }
             try
             {
-                var respone = await _indirectAssessment.GetAllSurvey(Deptid).ConfigureAwait(true);
+                var respone = await _indirectAssessment.GetAllSurvey(request).ConfigureAwait(true);
                 if (respone != null)
                     return Ok(respone);
                 else

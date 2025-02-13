@@ -1,246 +1,610 @@
 <div role="tabpanel" class="tab-pane active" id="IndirectAssessment-tab">
- 
 
 
-    <app-searchForm  (dataEmitter)="receiveData($event)"></app-searchForm>
-    <div class="modal fade width-800" id="addSurveyModal" tabindex="-1" aria-labelledby="addSurveyModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
 
-            <div class="section-heading">
-              <h2 class="pull-left">Create New Survey</h2>
-              <div class="pull-right">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+  <app-searchForm (dataEmitter)="receiveData($event)"></app-searchForm>
+  <div class="modal fade width-70p" id="addSurveyModal" tabindex="-1" aria-labelledby="addSurveyModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+
+          <div class="section-heading">
+            <h2 class="pull-left">Create New Survey</h2>
+            <div class="pull-right">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+
+
+        </div>
+        <app-searchForm (dataEmitter)="receiveMData($event)"></app-searchForm>
+        <fieldset class="margin-10">
+          <legend>Question Details</legend>
+          <form [formGroup]="createSurveyForm" (ngSubmit)="submitNewSurvey()">
+            <div class="form-group row ">
+              <label for="surveyType" class="col-sm-2">Survey Type:</label>
+              <select id="surveyType" formControlName="surveyType" class="col-sm-5">
+                <option value="">Select Survey Type</option>
+                <option value="CSP">CSP</option>
+                <option value="Internship">Internship</option>
+                <option value="Exit">Exit</option>
+                <option value="Alumni">Alumni</option>
+                <option value="Employer">Employer</option>
+              </select>
+              <div *ngIf="createSurveyForm.get('surveyType').invalid && createSurveyForm.get('surveyType').touched" class="text-danger">
+                Survey Type is required.
               </div>
             </div>
-            <div class="clearfix"></div>
 
-
-          </div>
-          <app-searchForm  (dataEmitter)="receiveMData($event)"></app-searchForm>
-          <fieldset class="margin-10">
-            <legend>Question Details</legend>
-            <form [formGroup]="createSurveyForm" (ngSubmit)="submitNewSurvey()">
-              <div class="form-group ">
-                <label for="surveyType" class="">Survey Type:</label>
-                <select id="surveyType" formControlName="surveyType" class="" (change)="getSurvey($event.target.value)">
-                  <option value="">Select Survey Type</option>
-                  <option value="CSP">CSP</option>
-                  <option value="Internship">Internship</option>
-                  <option value="Exit">Exit</option>
-                  <option value="Alumni">Alumni</option>
-                  <option value="Employer">Employer</option>
-                </select>
-                <div *ngIf="createSurveyForm.get('surveyType').invalid && createSurveyForm.get('surveyType').touched" class="text-danger">
-                  Survey Type is required.
-                </div>
+            <div class="form-group row">
+              <label for="question" class="col-sm-2">Question:</label>
+              <input type="text" id="question" formControlName="question" class="col-sm-5">
+              <div *ngIf="createSurveyForm.get('question').invalid && createSurveyForm.get('question').touched" class="text-danger">
+                Question is required .
               </div>
+            </div>
 
-              <div class="form-group ">
-                <label for="question" class="">Question:</label>
-                <input type="text" id="question" formControlName="question" class="">
-                <div *ngIf="createSurveyForm.get('question').invalid && createSurveyForm.get('question').touched" class="text-danger">
-                  Question is required .
-                </div>
+            <div class="form-group row">
+              <label for="qType" class="col-sm-2">Question Type:</label>
+              <select id="qType" formControlName="questionType" class="col-sm-5">
+                <option value="">Select Question Type</option>
+                <option value="Multiple Choice">Radio Buttons (Options)</option>
+                <option value="Text">Text</option>
+                <option value="Likert">Likert</option>
+                <option value="Remarks">Remarks</option>
+              </select>
+              <div *ngIf="createSurveyForm.get('questionType').invalid && createSurveyForm.get('questionType').touched" class="text-danger">
+                Question Type is required.
               </div>
+            </div>
 
-              <div class="form-group ">
-                <label for="qType" class="">Question Type:</label>
-                <select id="qType" formControlName="questionType" class="">
-                  <option value="">Select Question Type</option>
-                  <option value="Multiple Choice">Radio Buttons (Options)</option>
-                  <option value="Text">Text</option>
-                  <option value="Likert">Likert</option>
-                  <option value="Remarks">Remarks</option>
-                </select>
-                <div *ngIf="createSurveyForm.get('questionType').invalid && createSurveyForm.get('questionType').touched" class="text-danger">
-                  Question Type is required.
-                </div>
+            <div class="form-group row">
+              <label for="Section" class="col-sm-2">Section:</label>
+              <select id="Section" formControlName="section" class="col-sm-5">
+                <option value="">Select Section</option>
+                <option value="Header">Header</option>
+                <option value="Main">Main</option>
+                <option value="Footer">Footer</option>
+              </select>
+              <div *ngIf="createSurveyForm.get('section').invalid && createSurveyForm.get('section').touched" class="text-danger">
+                Section is required.
               </div>
+            </div>
 
-              <div class="form-group ">
-                <label for="Section" class="">Section:</label>
-                <select id="Section" formControlName="section" class="">
-                  <option value="">Select Section</option>
-                  <option value="Header">Header</option>
-                  <option value="Main">Main</option>
-                  <option value="Footer">Footer</option>
-                </select>
-                <div *ngIf="createSurveyForm.get('section').invalid && createSurveyForm.get('section').touched" class="text-danger">
-                  Section is required.
-                </div>
+            <div class="form-group row ">
+              <label for="mapping" class="col-sm-2">Mapping:</label>
+              <select id="mapping" formControlName="mapping" class="col-sm-5">
+                <option value="" selected>Select PLO</option>
+                <option value="{{i.PLO_ID}}" *ngFor="let i of Added_Intake_PLOs">{{i.PLO_Title}}</option>
+
+              </select>
+              <div *ngIf="createSurveyForm.get('mapping').invalid && createSurveyForm.get('mapping').touched" class="text-danger">
+                Mapping is required.
               </div>
+            </div>
 
-              <div class="form-group ">
-                <label for="mapping" class="">Mapping:</label>
-                <input type="text" id="mapping" formControlName="mapping" class="">
-                <div *ngIf="createSurveyForm.get('mapping').invalid && createSurveyForm.get('mapping').touched" class="text-danger">
-                  Mapping is required.
-                </div>
-              </div>
+            <!-- Options for Multiple Choice Questions -->
+            <div *ngIf="createSurveyForm.get('questionType').value === 'Multiple Choice'" class="">
+              <fieldset>
+                <legend>Options</legend>
+                <div formArrayName="options" *ngFor="let option of options.controls; let j = index;">
 
-              <!-- Options for Multiple Choice Questions -->
-              <div *ngIf="createSurveyForm.get('questionType').value === 'Multiple Choice'" class="">
-                <fieldset>
-                  <legend>Options</legend>
-                  <div formArrayName="options" *ngFor="let option of options.controls; let j = index;">
-
-                    <div class="form-group ">
-                      <label for="option{{j}}" class="">Option {{ j + 1 }}:</label>
-                      <input type="text" id="option{{j}}" [formControlName]="j" class="">
-                      <button type="button" (click)=" removenOption(j)" class="btn btn-default">remove</button>
-                      <div *ngIf="option.invalid && option.touched" class="text-danger">
-                        Option {{ j + 1 }} is required.
-                      </div>
+                  <div class="form-group row ">
+                    <label for="option{{j}}" class="col-sm-2">Option {{ j + 1 }}:</label>
+                    <input type="text" id="option{{j}}" [formControlName]="j" class="col-sm-6">
+                    <button type="button" (click)=" removenOption(j)" class="btn btn-default">remove</button>
+                    <div *ngIf="option.invalid && option.touched" class="text-danger">
+                      Option {{ j + 1 }} is required.
                     </div>
                   </div>
-                  <button type="button" class="btn btn-primary pull-right" (click)="  addnOption()">Add Option</button>
-                </fieldset>
-              </div>
+                </div>
+                <button type="button" class="btn btn-primary pull-right" (click)="  addnOption()">Add Option</button>
+              </fieldset>
+            </div>
 
-              <!-- Add Question Button -->
-              <button type="submit" class="btn btn-primary pull-right margin-t20" [disabled]="createSurveyForm.invalid">Add Question</button>
-              <!-- Submit & Reset Buttons -->
+            <!-- Add Question Button -->
+            <button type="submit" class="btn btn-primary pull-right margin-t20" [disabled]="createSurveyForm.invalid">Add Question</button>
+            <!-- Submit & Reset Buttons -->
 
-            </form>
-          </fieldset>
-          <div class="clearfix"></div>
-       
-
-        
+          </form>
+        </fieldset>
+        <div class="clearfix"></div>
 
 
-          <!-- Questions Table -->
-          <fieldset class="margin-10">
-            <legend>
-              Questions
-            </legend>
 
 
-            <table class="table table-bordered table-theme table-hover table-theme margin-t30 margin-b20">
-              <thead>
-                <tr>
-                  <th>Question</th>
-                  <th>Type</th>
-                  <th>Mapping</th>
-                  <th>Options</th>
-                  <th>Section</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let question of surveySubDetails; let i = index">
-                  <td>{{ question.Question }}</td>
-                  <td>{{ question.QType }}</td>
-                  <td>{{ question.Mapping }}</td>
-                  <td class="padding-l10">
-                    <ul>
-                      <li *ngFor="let option of question.Options">{{ option }}</li>
-                    </ul>
-                  </td>
-                  <td>{{ question.Section }}</td>
-                  <td>
-                    <button type="button" (click)="removeQuestion(i)" class="btn btn-default"><i class="app-icon-IconSet-1-33 blue"></i></button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </fieldset>
-          <div class="modal-footer">
-            <!--<button type="submit" class="btn btn-primary pull-right" [disabled]="!educationForm.valid">Add</button>-->
-            <button type="submit" (click)="onSubmit()" class="btn btn-primary pull-right" [disabled]="surveySubDetails.length==0">Save Questions</button>
-            <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal">Cancel</button>
 
-          </div>
-          <!-- Submit Button -->
-          <!--<button type="button" (click)="onSubmit()" class="btn btn-primary pull-right">Save Questions</button>-->
-        </div>
-
-      </div>
-    </div>
-
-  <fieldset>
-    <legend>Survey Questions</legend>
-    <div class="pull-right">
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addSurveyModal">
-        Add Survey Questions  
-      </button>
-    </div>
-    <div class="col-sm-12">
-
-      <div *ngIf="SurveyData">
-        <h2>{{ SurveyData.SurveyType }}</h2>
-
-        <form [formGroup]="surveyForm" (ngSubmit)="submitSurvey()">
-          <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
-            <table class="table table-bordered table-theme table-hover margin-t10">
-              <thead>
-                <tr>
-                  <th>Sr#</th>
-                  <th>Statement</th>
-                  <th>Mapping</th>
-                  <th>Answer</th>
-                  <th>Section</th>
-                  <th>Action</th>
-                </tr>
-
-              </thead>
-              <!--<div *ngFor="let question of SurveyData.Questions">-->
-
-              <tr *ngFor="let question of SurveyData.Questions;let m=index">
-                <td class="text-center">{{m+1}}</td>
-                <td> <label>{{ question.Question }}</label></td>
-                <td class="text-center">{{ question.Mapping }}</td>
-                <td>
-                  <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
-                  <textarea rows="6" *ngIf="question.QType === 'Remarks'" type="text" [formControlName]="question.QID"></textarea>
-
-                  <!-- Radio Buttons for Multiple Choice -->
-                  <div *ngIf="question.QType === 'Multiple Choice'">
-
-                    <div class="pull-left radio-inline padding-t5" *ngFor="let option of question.Options">
-                      <input type="radio" [formControlName]="question.QID" [value]="option.Options">
-                      <label class="cursor-pointer">{{ option.Options }}</label>
-
-                    </div>
-                  </div>
-                  <div *ngIf="question.QType === 'Likert'">
-
-                    <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
-                      <input type="radio" [formControlName]="question.QID" [value]="num">
-                      <label class="cursor-pointer">{{ num }}</label>
-
-                    </div>
+        <!-- Questions Table -->
+        <fieldset class="margin-10">
+          <legend>
+            Questions
+          </legend>
 
 
-                  </div>
-                </td>
-                <td class="text-center">{{ question.Section }}</td>
-                <td class="text-center">
-                  <button type="button" class="btn btn-default margin-r5" (click)="deleteQuestion(question.QID)">
-                    <i class="app-icon-IconSet-1-33 blue"></i>
-
-                  </button>
-                </td>
-
+          <table class="table table-bordered table-theme table-hover table-theme margin-t30 margin-b20">
+            <thead>
+              <tr>
+                <th>Question</th>
+                <th>Type</th>
+                <th>Mapping</th>
+                <th>Options</th>
+                <th>Section</th>
+                <th>Action</th>
               </tr>
-            </table>
-          </div>
-          <!--<button type="submit" [disabled]="surveyForm.invalid">Submit</button>-->
-        </form>
+            </thead>
+            <tbody>
+              <tr *ngFor="let question of surveySubDetails; let i = index">
+                <td>{{ question.Question }}</td>
+                <td>{{ question.QType }}</td>
+                <td>{{ question.Mapping }}</td>
+                <td class="padding-l10">
+                  <ul>
+                    <li *ngFor="let option of question.Options">{{ option }}</li>
+                  </ul>
+                </td>
+                <td>{{ question.Section }}</td>
+                <td>
+                  <button type="button" (click)="removeQuestion(i)" class="btn btn-default"><i class="app-icon-IconSet-1-33 blue"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </fieldset>
+        <div class="modal-footer">
+          <!--<button type="submit" class="btn btn-primary pull-right" [disabled]="!educationForm.valid">Add</button>-->
+          <button type="submit" (click)="onSubmit()" class="btn btn-primary pull-right" [disabled]="surveySubDetails.length==0 && Intake==0">Save Questions</button>
+          <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal">Cancel</button>
+
+        </div>
+        <!-- Submit Button -->
+        <!--<button type="button" (click)="onSubmit()" class="btn btn-primary pull-right">Save Questions</button>-->
       </div>
 
+    </div>
+  </div>
+
+ 
+
+  <div class="section-tabs no-margin">
+    <div class="tabs-head">
+      <ul class="nav nav-tabs" role="tablist">
+
+        <li role="presentation" class="active"> <a aria-expanded="true" href="#CSP" role="tab" data-toggle="tab">CSP</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#Internship" role="tab" data-toggle="tab">Internship Survey Form</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#Exit" role="tab" data-toggle="tab">Exit Survey Form</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#Employer" role="tab" data-toggle="tab">Employer</a> </li>
+        <li role="presentation"> <a aria-expanded="true" href="#Alumni" role="tab" data-toggle="tab">Alumni</a> </li>
+
+      </ul>
+    </div>
+    <div class="tab-content">
 
 
+
+
+      <div role="tabpanel" class="tab-pane active" id="CSP">
+
+        <fieldset>
+          <legend>Survey Questions</legend>
+          <div class="pull-right">
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addSurveyModal">
+              Add Survey Questions
+            </button>
+          </div>
+          <div class="col-sm-12">
+
+
+
+
+            <form [formGroup]="cSPSurveyForm">
+              <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+                <table class="table table-bordered table-theme table-hover margin-t10">
+                  <thead>
+                    <tr>
+                      <th>Sr#</th>
+                      <th>Statement</th>
+                      <th>Mapping</th>
+                      <th>Answer</th>
+                      <th>Section</th>
+                      <th>Action</th>
+                    </tr>
+
+                  </thead>
+                  <!--<div *ngFor="let question of SurveyData.Questions">-->
+
+                  <tr *ngFor="let question of CSPSurveyData.Questions;let m=index">
+                    <td class="text-center">{{m+1}}</td>
+                    <td> <label>{{ question.Question }}</label></td>
+                    <td class="text-center">{{ question.Mapping }}</td>
+                    <td>
+                      <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
+                      <textarea rows="6" *ngIf="question.QType === 'Remarks'" type="text" [formControlName]="question.QID"></textarea>
+
+                      <!-- Radio Buttons for Multiple Choice -->
+                      <div *ngIf="question.QType === 'Multiple Choice'">
+
+                        <div class="pull-left radio-inline padding-t5" *ngFor="let option of question.Options">
+                          <input type="radio" [formControlName]="question.QID" [value]="option.Options">
+                          <label class="cursor-pointer">{{ option.Options }}</label>
+
+                        </div>
+                      </div>
+                      <div *ngIf="question.QType === 'Likert'">
+
+                        <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                          <input type="radio" [formControlName]="question.QID" [value]="num">
+                          <label class="cursor-pointer">{{ num }}</label>
+
+                        </div>
+
+
+                      </div>
+                    </td>
+                    <td class="text-center">{{ question.Section }}</td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-default margin-r5" (click)="deleteQuestion(question.QID)">
+                        <i class="app-icon-IconSet-1-33 blue"></i>
+
+                      </button>
+                    </td>
+
+                  </tr>
+                </table>
+              </div>
+              <!--<button type="submit" [disabled]="surveyForm.invalid">Submit</button>-->
+            </form>
+
+
+
+
+
+          </div>
+
+
+
+
+
+        </fieldset>
+      </div>
+      <div role="tabpanel" class="tab-pane " id="Exit">
+        <fieldset>
+          <legend>Survey Questions</legend>
+          <div class="pull-right">
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addSurveyModal">
+              Add Survey Questions
+            </button>
+          </div>
+          <div class="col-sm-12">
+
+
+
+
+            <form [formGroup]="exitSurveyForm">
+              <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+                <table class="table table-bordered table-theme table-hover margin-t10">
+                  <thead>
+                    <tr>
+                      <th>Sr#</th>
+                      <th>Statement</th>
+                      <th>Mapping</th>
+                      <th>Answer</th>
+                      <th>Section</th>
+                      <th>Action</th>
+                    </tr>
+
+                  </thead>
+                  <!--<div *ngFor="let question of SurveyData.Questions">-->
+
+                  <tr *ngFor="let question of ExitSurveyData.Questions;let m=index">
+                    <td class="text-center">{{m+1}}</td>
+                    <td> <label>{{ question.Question }}</label></td>
+                    <td class="text-center">{{ question.Mapping }}</td>
+                    <td>
+                      <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
+                      <textarea rows="6" *ngIf="question.QType === 'Remarks'" type="text" [formControlName]="question.QID"></textarea>
+
+                      <!-- Radio Buttons for Multiple Choice -->
+                      <div *ngIf="question.QType === 'Multiple Choice'">
+
+                        <div class="pull-left radio-inline padding-t5" *ngFor="let option of question.Options">
+                          <input type="radio" [formControlName]="question.QID" [value]="option.Options">
+                          <label class="cursor-pointer">{{ option.Options }}</label>
+
+                        </div>
+                      </div>
+                      <div *ngIf="question.QType === 'Likert'">
+
+                        <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                          <input type="radio" [formControlName]="question.QID" [value]="num">
+                          <label class="cursor-pointer">{{ num }}</label>
+
+                        </div>
+
+
+                      </div>
+                    </td>
+                    <td class="text-center">{{ question.Section }}</td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-default margin-r5" (click)="deleteQuestion(question.QID)">
+                        <i class="app-icon-IconSet-1-33 blue"></i>
+
+                      </button>
+                    </td>
+
+                  </tr>
+                </table>
+              </div>
+              <!--<button type="submit" [disabled]="surveyForm.invalid">Submit</button>-->
+            </form>
+
+
+
+
+
+          </div>
+
+
+
+
+
+        </fieldset>
+      </div>
+      <div role="tabpanel" class="tab-pane " id="Internship">
+        <fieldset>
+          <legend>Survey Questions</legend>
+          <div class="pull-right">
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addSurveyModal">
+              Add Survey Questions
+            </button>
+          </div>
+          <div class="col-sm-12">
+
+
+
+
+            <form [formGroup]="internshipSurveyForm">
+              <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+                <table class="table table-bordered table-theme table-hover margin-t10">
+                  <thead>
+                    <tr>
+                      <th>Sr#</th>
+                      <th>Statement</th>
+                      <th>Mapping</th>
+                      <th>Answer</th>
+                      <th>Section</th>
+                      <th>Action</th>
+                    </tr>
+
+                  </thead>
+                  <!--<div *ngFor="let question of SurveyData.Questions">-->
+
+                  <tr *ngFor="let question of InternshipSurveyData.Questions;let m=index">
+                    <td class="text-center">{{m+1}}</td>
+                    <td> <label>{{ question.Question }}</label></td>
+                    <td class="text-center">{{ question.Mapping }}</td>
+                    <td>
+                      <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
+                      <textarea rows="6" *ngIf="question.QType === 'Remarks'" type="text" [formControlName]="question.QID"></textarea>
+
+                      <!-- Radio Buttons for Multiple Choice -->
+                      <div *ngIf="question.QType === 'Multiple Choice'">
+
+                        <div class="pull-left radio-inline padding-t5" *ngFor="let option of question.Options">
+                          <input type="radio" [formControlName]="question.QID" [value]="option.Options">
+                          <label class="cursor-pointer">{{ option.Options }}</label>
+
+                        </div>
+                      </div>
+                      <div *ngIf="question.QType === 'Likert'">
+
+                        <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                          <input type="radio" [formControlName]="question.QID" [value]="num">
+                          <label class="cursor-pointer">{{ num }}</label>
+
+                        </div>
+
+
+                      </div>
+                    </td>
+                    <td class="text-center">{{ question.Section }}</td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-default margin-r5" (click)="deleteQuestion(question.QID)">
+                        <i class="app-icon-IconSet-1-33 blue"></i>
+
+                      </button>
+                    </td>
+
+                  </tr>
+                </table>
+              </div>
+              <!--<button type="submit" [disabled]="surveyForm.invalid">Submit</button>-->
+            </form>
+
+
+
+
+
+          </div>
+
+
+
+
+
+        </fieldset>
+      </div>
+      <div role="tabpanel" class="tab-pane " id="Alumni">
+        <fieldset>
+          <legend>Survey Questions</legend>
+          <div class="pull-right">
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addSurveyModal">
+              Add Survey Questions
+            </button>
+          </div>
+          <div class="col-sm-12">
+
+
+
+
+            <form [formGroup]="alumniSurveyForm">
+              <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+                <table class="table table-bordered table-theme table-hover margin-t10">
+                  <thead>
+                    <tr>
+                      <th>Sr#</th>
+                      <th>Statement</th>
+                      <th>Mapping</th>
+                      <th>Answer</th>
+                      <th>Section</th>
+                      <th>Action</th>
+                    </tr>
+
+                  </thead>
+                  <!--<div *ngFor="let question of SurveyData.Questions">-->
+
+                  <tr *ngFor="let question of AlumniSurveyData.Questions;let m=index">
+                    <td class="text-center">{{m+1}}</td>
+                    <td> <label>{{ question.Question }}</label></td>
+                    <td class="text-center">{{ question.Mapping }}</td>
+                    <td>
+                      <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
+                      <textarea rows="6" *ngIf="question.QType === 'Remarks'" type="text" [formControlName]="question.QID"></textarea>
+
+                      <!-- Radio Buttons for Multiple Choice -->
+                      <div *ngIf="question.QType === 'Multiple Choice'">
+
+                        <div class="pull-left radio-inline padding-t5" *ngFor="let option of question.Options">
+                          <input type="radio" [formControlName]="question.QID" [value]="option.Options">
+                          <label class="cursor-pointer">{{ option.Options }}</label>
+
+                        </div>
+                      </div>
+                      <div *ngIf="question.QType === 'Likert'">
+
+                        <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                          <input type="radio" [formControlName]="question.QID" [value]="num">
+                          <label class="cursor-pointer">{{ num }}</label>
+
+                        </div>
+
+
+                      </div>
+                    </td>
+                    <td class="text-center">{{ question.Section }}</td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-default margin-r5" (click)="deleteQuestion(question.QID)">
+                        <i class="app-icon-IconSet-1-33 blue"></i>
+
+                      </button>
+                    </td>
+
+                  </tr>
+                </table>
+              </div>
+              <!--<button type="submit" [disabled]="surveyForm.invalid">Submit</button>-->
+            </form>
+
+
+
+
+
+          </div>
+
+
+
+
+
+        </fieldset>
+      </div>
+      <div role="tabpanel" class="tab-pane " id="Employer">
+        <fieldset>
+          <legend>Survey Questions</legend>
+          <div class="pull-right">
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addSurveyModal">
+              Add Survey Questions
+            </button>
+          </div>
+          <div class="col-sm-12">
+
+
+
+
+            <form [formGroup]="employerSurveyForm">
+              <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+                <table class="table table-bordered table-theme table-hover margin-t10">
+                  <thead>
+                    <tr>
+                      <th>Sr#</th>
+                      <th>Statement</th>
+                      <th>Mapping</th>
+                      <th>Answer</th>
+                      <th>Section</th>
+                      <th>Action</th>
+                    </tr>
+
+                  </thead>
+                  <!--<div *ngFor="let question of SurveyData.Questions">-->
+
+                  <tr *ngFor="let question of EmployerSurveyData.Questions;let m=index">
+                    <td class="text-center">{{m+1}}</td>
+                    <td> <label>{{ question.Question }}</label></td>
+                    <td class="text-center">{{ question.Mapping }}</td>
+                    <td>
+                      <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
+                      <textarea rows="6" *ngIf="question.QType === 'Remarks'" type="text" [formControlName]="question.QID"></textarea>
+
+                      <!-- Radio Buttons for Multiple Choice -->
+                      <div *ngIf="question.QType === 'Multiple Choice'">
+
+                        <div class="pull-left radio-inline padding-t5" *ngFor="let option of question.Options">
+                          <input type="radio" [formControlName]="question.QID" [value]="option.Options">
+                          <label class="cursor-pointer">{{ option.Options }}</label>
+
+                        </div>
+                      </div>
+                      <div *ngIf="question.QType === 'Likert'">
+
+                        <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
+                          <input type="radio" [formControlName]="question.QID" [value]="num">
+                          <label class="cursor-pointer">{{ num }}</label>
+
+                        </div>
+
+
+                      </div>
+                    </td>
+                    <td class="text-center">{{ question.Section }}</td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-default margin-r5" (click)="deleteQuestion(question.QID)">
+                        <i class="app-icon-IconSet-1-33 blue"></i>
+
+                      </button>
+                    </td>
+
+                  </tr>
+                </table>
+              </div>
+              <!--<button type="submit" [disabled]="surveyForm.invalid">Submit</button>-->
+            </form>
+
+
+
+
+
+          </div>
+
+
+
+
+
+        </fieldset>
+      </div>
 
     </div>
+  </div>
 
 
 
-
-
-  </fieldset>
 
 
 

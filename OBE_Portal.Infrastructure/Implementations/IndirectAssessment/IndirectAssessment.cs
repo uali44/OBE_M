@@ -348,9 +348,9 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
 
 
-        async Task<Allsurvey> IIndirectAssessment.GetAllSurvey(int Deptid)
+        async Task<Allsurvey> IIndirectAssessment.GetAllSurvey(getSurveyRequest request)
         {
-            if (Deptid == 0)
+            if (request.Deptid == 0)
             {
                 return null;
 
@@ -358,12 +358,12 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
             try
             {
-                var deptID = Deptid;
-                var CSP = await GetSurvey("CSP", deptID);
-                var Internship = await GetSurvey("Internship", Deptid);
-                var Alumni = await GetSurvey("Alumni", Deptid);
-                var Exit = await GetSurvey("Exit", Deptid);
-                var Employer = await GetSurvey("Employer", Deptid);
+                var deptID = request.Deptid;
+                var CSP = await GetSurvey("CSP", deptID,request.SurveyIntakeID);
+                var Internship = await GetSurvey("Internship", request.Deptid,request.SurveyIntakeID);
+                var Alumni = await GetSurvey("Alumni", request.Deptid, request.SurveyIntakeID);
+                var Exit = await GetSurvey("Exit", request.Deptid, request.SurveyIntakeID);
+                var Employer = await GetSurvey("Employer", request.Deptid, request.SurveyIntakeID);
                 return new Allsurvey
                 {
                     CSP = CSP,
@@ -388,14 +388,14 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
         }
 
 
-        async Task<SurveyResponseDto> GetSurvey(String Surveytype, int Deptid)
+        async Task<SurveyResponseDto> GetSurvey(String Surveytype, int Deptid,int intakeID)
         {
             try
             {
                 using (SqlCommand comm = new SqlCommand())
                 {
 
-                    Debug.WriteLine($"Fetching survey for: {Surveytype}, Deptid: {Deptid}");
+                   
                     var survey = new SurveyResponseDto();
                     var surveyType = Surveytype;
                     int surveyDeptID = Deptid;
@@ -409,7 +409,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                     var surveyDeptIDParam = new SqlParameter("@SurveyDeptID", surveyDeptID);
 
                     var mainDetail = await _context.Set<SurveyMainDetail>()
-                        .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID}").ToListAsync();
+                        .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID},@SurveyIntakeID={intakeID}").ToListAsync();
                     //.AsNoTracking()
                     //.FirstOrDefaultAsync();
                     //  var mainDetail = await _context.Set<SurveyMainDetail>()
@@ -434,7 +434,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
                         // Step 2: Get SurveySubDetails
                         var questions = await _context.Set<SurveySubDetail>()
-                            .FromSqlInterpolated($"EXEC GetSurveySubDetailsA @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID}")
+                            .FromSqlInterpolated($"EXEC GetSurveySubDetailsA @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID},@SurveyIntakeID={intakeID}")
                             .ToListAsync();
 
                         survey.Questions = new List<SurveyQuestionDto>();

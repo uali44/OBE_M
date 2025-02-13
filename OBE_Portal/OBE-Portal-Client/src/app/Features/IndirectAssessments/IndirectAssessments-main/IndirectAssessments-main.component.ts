@@ -30,6 +30,9 @@ export class IndirectAssessmentsMainComponent implements OnInit {
   Temp_Deaprtment_ID: number;
   dept: number;
 
+  intakeId: number;
+
+
   CSPSurveyData: any = [];
   InternshipSurveyData: any = [];
   ExitSurveyData: any = [];
@@ -174,6 +177,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
           try {
             if (response != null) {
               this.Intake = response;
+             
             }
             this.ngxService.stop();
           } catch (e) {
@@ -199,6 +203,8 @@ export class IndirectAssessmentsMainComponent implements OnInit {
           try {
             if (response != null) {
               this.IntakeStudent = response;
+              this.intakeId = val;
+              this.getAllSurvey();
             }
             this.ngxService.stop();
           } catch (e) {
@@ -450,13 +456,13 @@ export class IndirectAssessmentsMainComponent implements OnInit {
   }
   getAllSurvey() {
     const request = {
-      
+      Surveytype: "",
       Deptid: GlobalService.Deaprtment_ID,
-
+      SurveyIntakeID: this.intakeId
     }
     console.log(GlobalService.Deaprtment_ID);
     this.ngxService.start();
-    this.IndirectAssessment.GetAllSurvey(GlobalService.Deaprtment_ID).
+    this.IndirectAssessment.GetAllSurvey(request).
       subscribe(
         data => {
           this.ngxService.stop();
