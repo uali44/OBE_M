@@ -1,17 +1,17 @@
     <!-- Education -->
 <div class="education-section">
 
- 
+
 
 
 
   <!-- Modal for Adding Education -->
-  <div class="modal fade" id="addEducationModal" tabindex="-1" aria-labelledby="addEducationModalLabel" aria-hidden="true">
+  <div class="modal fade width-50p" id="addEducationModal" tabindex="-1" aria-labelledby="addEducationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
 
-          <div class="section-heading">
+          <div class="section-heading padding-b20">
             <h2 class="pull-left">Add Education</h2>
             <div class="pull-right">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
@@ -56,44 +56,52 @@
               <div *ngIf="fileError" class="text-danger">{{ fileError }}</div>
             </div>
 
+            <div class="row margin-t10">
+              <div class="section-heading padding-b20">
+                <h2 class="pull-left">View Added Education</h2>
+                <button type="button" class="btn btn-primary pull-right" (click)="add()" [disabled]="!educationForm.valid">Add</button>
+              </div>
+            </div>
 
+            <fieldset>
+              <legend>Added Education</legend>
 
-            <button type="button" class="btn btn-primary pull-right" (click)="add()" [disabled]="!educationForm.valid">Add</button>
-            <table class="table table-bordered table-hover table-theme margin-t50">
-              <thead>
-                <tr>
-                  <!--<th *ngFor="let field of formFields">{{ field.label }}</th>-->
-                  <th>
-                    Insititure
-                  </th>
-                  <th>Degree</th>
-                  <th>
-                    Field
-                  </th>
-                  <th>Year of Completion</th>
-                  <th>Document </th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let entry of tempData; let i = index">
-                  <td>{{ entry.eduInstitute }}</td>
-                  <td>{{ entry.degree }}</td>
-                  <td>{{ entry.field }}</td>
-                  <td>{{ entry.year }}</td>
-                  <td>{{entry.imageFile.fileName}}</td>
+              <table class="table table-bordered table-hover table-theme ">
+                <thead>
+                  <tr>
+                    <!--<th *ngFor="let field of formFields">{{ field.label }}</th>-->
+                    <th>
+                      Insititure
+                    </th>
+                    <th>Degree</th>
+                    <th>
+                      Field
+                    </th>
+                    <th>Year of Completion</th>
+                    <th>Document </th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let entry of tempData; let i = index">
+                    <td>{{ entry.eduInstitute }}</td>
+                    <td>{{ entry.degree }}</td>
+                    <td>{{ entry.field }}</td>
+                    <td>{{ entry.year }}</td>
+                    <td>{{entry.imageFile.fileName}}</td>
 
-                  <td>
-                    <button type="button" class="btn btn-danger btn-sm" (click)="deleteEntry(i)">Delete</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
+                    <td>
+                      <button type="button" class="btn btn-danger btn-sm" (click)="deleteEntry(i)">Delete</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </fieldset>
 
           </div>
-          <div class="modal-footer">
-            <!--<button type="submit" class="btn btn-primary pull-right" [disabled]="!educationForm.valid">Add</button>-->
+
+          <div class="modal-footer row">
+
             <button type="submit" class="btn btn-primary pull-right" [disabled]="tempData.length==0">Save</button>
             <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal">Cancel</button>
 
@@ -104,16 +112,19 @@
   </div>
 
 
-
-
-  <fieldset class="margin-b15">
-    <legend>Education</legend>
-
-    <div class="pull-right">
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addEducationModal">
+  <div class="row">
+    <div class="section-heading padding-b20">
+      <h2 class="pull-left">View Added Education</h2>
+      <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#addEducationModal">
         Add Education
       </button>
     </div>
+   
+  </div>
+  <fieldset class="margin-b15">
+    <legend>Education</legend>
+
+
     <table class="table table-bordered table-hover table-theme margin-b30">
       <thead>
         <tr>

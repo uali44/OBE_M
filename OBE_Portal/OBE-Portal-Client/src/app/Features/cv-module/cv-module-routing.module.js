@@ -4,9 +4,8 @@ import { RouterModule } from '@angular/router';
 import { CvComponentComponent } from './cv-component/cv-component.component';
 const routes = [
     {
-        path: '',
-        component: CvComponentComponent
-    }
+        path: '', component: CvComponentComponent
+    },
 ];
 let CvModuleRoutingModule = class CvModuleRoutingModule {
 };

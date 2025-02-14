@@ -14,6 +14,7 @@ import { PagerService } from '../../Shared/Services/Global/Pager';
 import { SearchComponent } from './search/search.component';
 import { FilterComponent } from './filter/filter.component';
 
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { FilterComponent } from './filter/filter.component';
     CvModuleRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
   ],
  
    exports: [

@@ -31,15 +31,7 @@ export class ProfileComponent implements OnInit {
     FacultyRole: '',
     DriveLink:'',
   };
-  //facultydata: any = {
  
-  //  FacultyMemberID :0,
-  //  Name :"",
-  //  Email :"" ,
-  //  Phone:"",
-  //  FacultyType :"",
-  //  FacultyRole :"",
-  //};
  
   data: any;
   FacultyType: string[] = ['Permanent/Participating', 'Visiting/Supporting'];
@@ -76,12 +68,12 @@ export class ProfileComponent implements OnInit {
      
     };
 
-    // Open the modal (using jQuery for simplicity, you can replace with Angular modal handling)
+    
     $('#addFacultyModal').modal('show');
   }
   addFaculty()
   {
-    console.log(this.faculty);
+   
     this.faculty.FacultyMemberID = GlobalService.FacultyMember_ID;
 
     this.ngxService.start();
@@ -102,14 +94,8 @@ export class ProfileComponent implements OnInit {
   }
 
   getFaculty() {
-    if (GlobalService.TempFacultyMember_ID == null) {
-      this.facultyId = GlobalService.FacultyMember_ID
-    }
-    else {
-
-      this.facultyId = GlobalService.TempFacultyMember_ID
-    }
-   
+    
+    this.facultyId = GlobalService.FacultyMember_ID
     this.ngxService.start();
     this.ProfileService.GetFacultyDetails(this.facultyId).
       subscribe(
@@ -118,8 +104,7 @@ export class ProfileComponent implements OnInit {
          
           this.facultydata = data;
           this.email = data?.Email || '';
-          console.log(this.facultydata);
-          console.log(this.facultydata[0].Email)
+         
         
 
          

@@ -65,8 +65,7 @@ export class EducationComponent implements OnInit {
     this.ProfileService.GetEducation(facultyMemberID).subscribe({
       next: (data) => {
         this.educations = data;
-        console.log( data)
-        console.log("Education data" , this.educations);
+      
 
       },
       error: (err) => {
@@ -79,7 +78,7 @@ export class EducationComponent implements OnInit {
       
       /*  const educationData = this.educationForm.value;*/
       const educationData = this.tempData;
-      console.log('Education Data:', educationData);
+     
       
       this.ngxService.start();
       this.ProfileService.AddFacultyEducation(educationData).
@@ -109,10 +108,7 @@ export class EducationComponent implements OnInit {
 
 
   add() {
-    //if (this.educationForm.invalid) {
-    //  return;
-    //}
-  //  this.educationForm.controls['imageFile'].setValue(this.selectedFile);
+    
     const payload = {
       FacultyMemberID: this.educationForm.value.FacultyMemberID,
       eduInstitute: this.educationForm.value.eduInstitute,
@@ -122,7 +118,7 @@ export class EducationComponent implements OnInit {
       imageFile: this.selectedFileData, // Include file data
     };
     this.tempData.push(payload);
-    console.log(this.tempData);
+   
     this.educationForm.reset();
     this.educationForm.controls['imageFile'].setValue('');
     this.educationForm.controls['FacultyMemberID'].setValue( GlobalService.FacultyMember_ID);
@@ -168,11 +164,7 @@ export class EducationComponent implements OnInit {
 
       this.selectedFile = file;
     this.fileError = null;
-    //// Compress the image
-    //this.compressImage(file, (compressedFile) => {
-    //  this.fileError = '';
-    //  this.educationForm.patchValue({ imageFile: compressedFile });
-    //});
+   
     
   }
 
@@ -181,20 +173,7 @@ export class EducationComponent implements OnInit {
     this.viewFile.emit({ fileUrl: filePath });
 
 
-    // Set the file path to display in the modal
-    //this.selectedFilePath = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
-
-    //// Check the file type based on the extension or MIME type
-    //if (filePath.endsWith('.jpg') || filePath.endsWith('.jpeg') || filePath.endsWith('.png')) {
-    //  this.selectedFileType = 'image';
-    //} else if (filePath.endsWith('.pdf')) {
-    //  this.selectedFileType = 'pdf';
-    //} else {
-    //  this.selectedFileType = 'other';  // Handle other file types as needed
-    //}
-
    
-    //$("#fileViewerModal").modal("show");
   }
 
   extractFileName(filePath: string): string {
@@ -222,54 +201,7 @@ export class EducationComponent implements OnInit {
 
 
 
-  //compressImage(file: File, callback: (compressedFile: File) => void) {
-  //  const reader = new FileReader();
-  //  reader.readAsDataURL(file);
-
-  //  reader.onload = (event: any) => {
-  //    const img = new Image();
-  //    img.src = event.target.result;
-
-  //    img.onload = () => {
-  //      const canvas = document.createElement('canvas');
-  //      const ctx = canvas.getContext('2d');
-
-  //      const maxWidth = 800; // Set max width for compression
-  //      const maxHeight = 800; // Set max height for compression
-
-  //      let width = img.width;
-  //      let height = img.height;
-
-  //      if (width > height) {
-  //        if (width > maxWidth) {
-  //          height = (height * maxWidth) / width;
-  //          width = maxWidth;
-  //        }
-  //      } else {
-  //        if (height > maxHeight) {
-  //          width = (width * maxHeight) / height;
-  //          height = maxHeight;
-  //        }
-  //      }
-
-  //      canvas.width = width;
-  //      canvas.height = height;
-
-  //      ctx?.drawImage(img, 0, 0, width, height);
-
-  //      canvas.toBlob(
-  //        (blob) => {
-  //          const compressedFile = new File([blob!], file.name, {
-  //            type: file.type,
-  //          });
-  //          callback(compressedFile);
-  //        },
-  //        file.type,
-  //        0.7 // Set quality level for compression
-  //      );
-  //    };
-  //  };
-  //}
+ 
 
 
 
@@ -300,21 +232,7 @@ export class EducationComponent implements OnInit {
     });
 
 
-  //  if (confirm('Are you sure you want to delete this Education Data?')) {
-  //    this.ProfileService.DeleteEducation(eduID).subscribe({
-  //      next: (response) => {
-  //        console.log('Delete Response:', response);
-  //        this.toastr.success("Education deleted successfully.", "Success");
-
-  //        this.getEduction();
-  //      },
-  //      error: (err) => {
-  //        console.error('Error deleting experience:', err);
-  //        this.toastr.error("Failed to delete education.", "Failed");
-
-  //      },
-  //    });
-  //  }
+  
   }
 
 

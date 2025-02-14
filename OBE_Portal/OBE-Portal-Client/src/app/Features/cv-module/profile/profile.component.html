@@ -1,7 +1,7 @@
 <div class="user-profile">
 
   <!-- Add Faculty Modal -->
-  <div class="modal fade"
+  <div class="modal fade width-50p"
        id="addFacultyModal"
        tabindex="-1"
        role="dialog"
@@ -11,7 +11,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <div class="clearfix"></div>
-          <div class="section-heading">
+          <div class="section-heading padding-b20">
             <h2 class="pull-left">Update Basic Information</h2>
             <div class="pull-right">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
@@ -100,10 +100,7 @@
   </div>
  
   <div *ngIf="facultydata">
-    <!--<div class="section-heading">
-      <h2 class="">User Profile</h2>
-      </div>
-    <div class="clearfix"></div>-->
+   
       <fieldset class="margin-b15">
         <legend>Basic Information</legend>
         <table class="table table-bordered">
@@ -152,9 +149,7 @@
 
         <div class="pull-right">
 
-          <!--<button type="button" class="btn btn-info" (click)="openFacultyModal()" data-toggle="modal" data-target="#addFacultyModal">
-          Update Data
-        </button>-->
+        
           <button type="button" class="btn btn-info" (click)="openFacultyModal()">
             Update Data
           </button>

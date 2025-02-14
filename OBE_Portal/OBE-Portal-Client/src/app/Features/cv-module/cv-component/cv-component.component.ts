@@ -1,4 +1,4 @@
-// cv-component.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../../Shared/Services/Global/global.service';
 import { CoursesSearchService } from '../../../Services/CourseSearch/CourseSearch.service';
@@ -132,7 +132,7 @@ export class CvComponentComponent implements OnInit {
         this.activities = data;
       },
       (error) => {
-        console.error('Error fetching activities:', error);
+        this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
       }
     );
   }
@@ -157,14 +157,14 @@ export class CvComponentComponent implements OnInit {
       (data) => {
 
         this.fields = data;
-        console.log(this.fields);
+       
         // Dynamically add controls to the form
         this.fields.forEach((field) => {
           this.activityForm.addControl(this.sanitizeType( field.subDetail), this.formBuilder.control('', Validators.required));
         });
       },
       (error) => {
-        console.error('Error fetching fields:', error);
+        this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
       }
     );
   }

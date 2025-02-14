@@ -1,11 +1,10 @@
 import { __decorate } from "tslib";
-// cv-component.component.ts
 import { Component } from '@angular/core';
 import { GlobalService } from '../../../Shared/Services/Global/global.service';
 import { Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 let CvComponentComponent = class CvComponentComponent {
-    constructor(_CoursesSearchService, toastr, ngxService, _ReportsService, formBuilder, ProfileService, pagerService, msgForDashboard) {
+    constructor(_CoursesSearchService, toastr, ngxService, _ReportsService, formBuilder, ProfileService, pagerService, msgForDashboard, sanitizer) {
         this._CoursesSearchService = _CoursesSearchService;
         this.toastr = toastr;
         this.ngxService = ngxService;
@@ -14,6 +13,7 @@ let CvComponentComponent = class CvComponentComponent {
         this.ProfileService = ProfileService;
         this.pagerService = pagerService;
         this.msgForDashboard = msgForDashboard;
+        this.sanitizer = sanitizer;
         this.activities = [];
         this.fields = [];
         this.selectedActivityId = null;
@@ -28,29 +28,29 @@ let CvComponentComponent = class CvComponentComponent {
         this.filteredActivities = [];
         this.Faculty = [];
         this.activitySub = [];
+        this.tempData = [];
+        this.selectedFile = null;
+        this.fileError = '';
+        this.compressedImage = null;
+        this.selectedFileData = null;
+        this.selectedFilePath = null;
         this.activityForm = this.formBuilder.group({
-            activity: ['', Validators.required]
+            activity: ['', Validators.required],
+            imageFile: [null],
         });
         this.initForm();
         this.selectedTab = this.getActivityTypes()[0];
         this.Is_Permission_Search_Criteria = GlobalService.Permissions.indexOf("Search_Criteria_Main") >= 0 ? true : false;
     }
     ngOnInit() {
-        if (GlobalService.TempFacultyMember_ID == null) {
-            this.facultyID = GlobalService.FacultyMember_ID;
-        }
-        else {
-            this.facultyID = GlobalService.TempFacultyMember_ID;
-        }
+        this.facultyID = GlobalService.FacultyMember_ID;
         this.name = GlobalService.Name;
         this.loaddata();
-        // this.fetchActivities();
-        // this.loadActivities();
         this.groupActivitiesByType();
         this.activityTypes = this.getActivityTypes();
     }
     getActivityTypes() {
-        const activityTypes = this.groupedActivities.map(activity => activity.ActivityType);
+        const activityTypes = this.activities.map(activity => activity.ActivityType);
         const uniqueTypes = [...new Set(activityTypes)];
         return uniqueTypes;
     }
@@ -70,9 +70,6 @@ let CvComponentComponent = class CvComponentComponent {
     setActiveTab(type) {
         this.selectedTab = type;
     }
-    //getActivityTypes(): string[] {
-    //  return Object.keys(this.groupedActivitiest);
-    //}
     getDetailKeys(activity) {
         var _a, _b;
         return ((_b = (_a = activity.Details) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.SubDetails) ? Object.keys(activity.Details[0].SubDetails) : [];
@@ -83,13 +80,13 @@ let CvComponentComponent = class CvComponentComponent {
         this.ProfileService.GetActivities().subscribe((data) => {
             this.activities = data;
         }, (error) => {
-            console.error('Error fetching activities:', error);
+            this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
         });
     }
     onActivityChange(val) {
         this.selectedActivityId = val;
         Object.keys(this.activityForm.controls).forEach(key => {
-            if (key !== 'activity') {
+            if (key !== 'activity' && key !== 'imageFile') {
                 this.activityForm.removeControl(key);
             }
         });
@@ -100,28 +97,16 @@ let CvComponentComponent = class CvComponentComponent {
         const requestdata = { ActivityID: val };
         this.ProfileService.GetActivitySubDetails(requestdata).subscribe((data) => {
             this.fields = data;
-            console.log(this.fields);
             // Dynamically add controls to the form
             this.fields.forEach((field) => {
                 this.activityForm.addControl(this.sanitizeType(field.subDetail), this.formBuilder.control('', Validators.required));
             });
         }, (error) => {
-            console.error('Error fetching fields:', error);
+            this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
         });
     }
     onSubmit() {
-        if (this.activityForm.invalid) {
-            this.toastr.error("Please Enter All Fields", "Error");
-            return;
-        }
-        const activityData = {
-            FacultyID: this.facultyID,
-            ActivityID: this.selectedActivityId,
-            Details: this.fields.map((field) => ({
-                DetailName: field.subDetail,
-                DetailValue: this.activityForm.value[this.sanitizeType(field.subDetail)],
-            })),
-        };
+        const activityData = this.tempData;
         this.ProfileService.SaveActivity(activityData).subscribe((response) => {
             if (response) {
                 this.toastr.success('Activity saved successfully.');
@@ -134,13 +119,86 @@ let CvComponentComponent = class CvComponentComponent {
             }
         });
     }
-    loaddata() {
-        if (GlobalService.TempFacultyMember_ID == null) {
-            this.facultyID = GlobalService.FacultyMember_ID;
+    add() {
+        const activityData = {
+            FacultyID: this.facultyID,
+            ActivityID: this.selectedActivityId,
+            imageFile: this.selectedFileData,
+            Details: this.fields.map((field) => ({
+                DetailName: field.subDetail,
+                DetailValue: this.activityForm.value[this.sanitizeType(field.subDetail)],
+            })),
+        };
+        this.tempData.push(activityData);
+        this.activityForm.reset();
+        this.activityForm.controls['activity'].setValue(this.selectedActivityId);
+    }
+    deleteEntry(index) {
+        this.tempData.splice(index, 1);
+    }
+    onFileSelected(event) {
+        const input = event.target; // Cast to HTMLInputElement
+        const file = input.files[0]; // Use optional chaining to check for files
+        // Validate file type
+        const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+        if (!validTypes.includes(file.type)) {
+            this.fileError = 'Invalid file type. Please upload a JPEG, PNG, or PDF.';
+            return;
+        }
+        // Validate file size
+        const maxSize = 1024 * 1024; // 1 MB
+        if (file.size > maxSize) {
+            this.fileError = 'File size exceeds the 1 MB limit.';
+            return;
+        }
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                // Clean Base64 string
+                const base64String = reader.result.split(',')[1]; // Remove prefix (e.g., "data:image/jpeg;base64,")
+                this.selectedFileData = {
+                    fileName: file.name,
+                    fileType: file.type,
+                    fileContent: base64String, // Clean Base64 string without prefix
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+        this.selectedFile = file;
+        this.fileError = null;
+    }
+    openFileViewer(filePath) {
+        // Set the file path to display in the modal
+        this.selectedFilePath = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
+        // Check the file type based on the extension or MIME type
+        if (filePath.endsWith('.jpg') || filePath.endsWith('.jpeg') || filePath.endsWith('.png')) {
+            this.selectedFileType = 'image';
+        }
+        else if (filePath.endsWith('.pdf')) {
+            this.selectedFileType = 'pdf';
         }
         else {
-            this.facultyID = GlobalService.TempFacultyMember_ID;
+            this.selectedFileType = 'other'; // Handle other file types as needed
         }
+        $("#fileViewerModal").modal("show");
+    }
+    extractFileName(filePath) {
+        const parts = filePath.split('/');
+        return parts[parts.length - 1]; // Get the last part, which is the file name
+    }
+    // Helper method to check if the file is an image
+    isImage(fileType) {
+        return fileType === 'image';
+    }
+    // Helper method to check if the file is a PDF
+    isPDF(fileType) {
+        return fileType === 'pdf';
+    }
+    groupExists(gactivity) {
+        return this.groupedActivities.some(activity => activity.ActivityName === gactivity);
+    }
+    loaddata() {
+        this.facultyID = GlobalService.FacultyMember_ID;
         this.ProfileService.getAllData(this.facultyID).subscribe((response) => {
             this.education = response.FacultyEducation;
             this.groupedActivities = response.ActivityDetails;
@@ -148,30 +206,18 @@ let CvComponentComponent = class CvComponentComponent {
             this.activities = response.ActivityList;
             this.Faculty = response.FacultyDetails;
             this.activitySub = response.ActivitySubDetail;
-            //   console.log("xp", this.experience);
-            //console.log("grp",this.groupedActivities);
-            //this.selectedTab = this.groupedActivities[0].ActivityType;
             this.setActiveTab(this.activities[0].ActivityType);
             $("#" + this.sanitizeType(this.activities[0].ActivityType) + "0").class = 'active';
             $("#" + this.sanitizeType(this.activities[0].ActivityType) + "0").active = true;
-            console.log("filter", this.filterdDetail(1));
         });
     }
     filterdDetail(id) {
         return this.activitySub.filter(detail => detail.ActivityID === id);
     }
     loadActivities() {
-        if (GlobalService.TempFacultyMember_ID == null) {
-            this.facultyID = GlobalService.FacultyMember_ID;
-        }
-        else {
-            this.facultyID = GlobalService.TempFacultyMember_ID;
-        }
-        console.log(GlobalService.TempFacultyMember_ID);
+        this.facultyID = GlobalService.FacultyMember_ID;
         this.ProfileService.GetFacultyActivity(this.facultyID).subscribe((response) => {
             this.groupedActivities = response;
-            //console.log(response);
-            //console.log(this.groupedActivities);
             this.selectedTab = this.groupedActivities[0].ActivityType;
         });
     }
@@ -193,19 +239,6 @@ let CvComponentComponent = class CvComponentComponent {
                 });
             }
         });
-        //if (confirm('Are you sure you want to delete this experience?')) {
-        //  this.ProfileService.DeleteActivity(detailID).subscribe({
-        //    next: (response) => {
-        //      console.log('Delete Response:', response);
-        //      this.toastr.success("Acivity deleted successfully.", "Success");
-        //      this.loadActivities(GlobalService.FacultyMember_ID);
-        //    },
-        //    error: (err) => {
-        //      console.error('Error deleting experience:', err);
-        //      this.toastr.error("Failed to delete Activity.", "Failed");
-        //    },
-        //  });
-        // }
     }
     groupDataByActivity(data) {
         const grouped = data.reduce((result, current) => {
@@ -234,11 +267,6 @@ let CvComponentComponent = class CvComponentComponent {
         // Convert the grouped object to an array for iteration
         return Object.values(grouped);
     }
-    /**
-     * Extracts unique sub-detail names (headers) for a given activity.
-     * @param activity Activity object.
-     * @returns Array of unique sub-detail names.
-     */
     getDetailNames(activity) {
         if (!activity.Details || activity.Details.length === 0) {
             return [];

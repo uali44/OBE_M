@@ -14,7 +14,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <div class="section-heading">
+          <div class="section-heading padding-b20">
             <h2 class="pull-left">Document</h2>
             <div class="pull-right">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
@@ -54,7 +54,7 @@
   <div class="modal fade" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content" style="padding:10px;">
-        <div class="section-heading">
+        <div class="section-heading padding-b20">
           <h2 class="pull-left">Add Activities</h2>
           <div class="pull-right">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
@@ -80,13 +80,26 @@
 
             <!-- Dynamic Fields -->
             <div *ngFor="let field of fields" class="form-group">
-              <label [for]="sanitizeType(field.subDetail)">{{ field.subDetail }}</label>
-              <input [type]="field.SubType"
-                     [id]="sanitizeType(field.subDetail)"
-                     class="form-control"
-                     [formControlName]="sanitizeType(field.subDetail)"
-                     [placeholder]="'Enter ' + field.subDetail" />
-
+              <ng-container *ngIf="field.SubType=='date'">
+                <div class="row">
+                  <label [for]="sanitizeType(field.subDetail)" class="col-sm-12">{{ field.subDetail }}</label>
+                  <input [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" placeholder="Date"
+                         [id]="sanitizeType(field.subDetail)"
+                         class="form-control col-sm-9"
+                         [formControlName]="sanitizeType(field.subDetail)"
+                         [placeholder]="'Enter ' + field.subDetail" />
+                  <span class="input-group-addon col-sm-3"><i class="fas fa-calendar-alt"></i></span>
+                  <owl-date-time #dt4 [pickerType]="'calendar'"></owl-date-time>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="field.SubType!='date'">
+                <label [for]="sanitizeType(field.subDetail)">{{ field.subDetail }}</label>
+                <input [type]="field.SubType"
+                       [id]="sanitizeType(field.subDetail)"
+                       class="form-control"
+                       [formControlName]="sanitizeType(field.subDetail)"
+                       [placeholder]="'Enter ' + field.subDetail" />
+              </ng-container>
 
               <div *ngIf="activityForm.controls[sanitizeType(field.subDetail)].invalid && activityForm.controls[sanitizeType(field.subDetail)].touched">
                 <div class="text-danger" *ngIf="activityForm.controls[sanitizeType(field.subDetail)].hasError('required')">{{field.subDetail}} is required.</div>
@@ -102,36 +115,47 @@
             </div>
 
 
-            <button type="button" class="btn btn-primary pull-right" (click)="add()" [disabled]="!activityForm.valid">Add</button>
-            <table class="table table-bordered table-hover table-theme margin-t50">
-              <thead>
-                <tr>
-                  <!--<th *ngFor="let field of formFields">{{ field.label }}</th>-->
-                  <th *ngFor="let field of fields">
-                    {{field.subDetail}}
-                  </th>
 
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let entry of tempData; let i = index">
-                  <ng-container *ngFor="let detail of entry.Details">
-                    <td>{{detail.DetailValue}}</td>
+            <div class="row margin-t10">
+              <div class="section-heading padding-b30">
+                <h2 class="pull-left">View Added Activities</h2>
+                <button type="button" class="btn btn-primary pull-right" (click)="add()" [disabled]="!activityForm.valid">Add</button>
+              </div>
+            </div>
 
 
-                  </ng-container>
+
+            <fieldset>
+              <legend>Added Activities</legend>
+              <table class="table table-bordered table-hover table-theme ">
+                <thead>
+                  <tr>
+                    <!--<th *ngFor="let field of formFields">{{ field.label }}</th>-->
+                    <th *ngFor="let field of fields">
+                      {{field.subDetail}}
+                    </th>
+
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let entry of tempData; let i = index">
+                    <ng-container *ngFor="let detail of entry.Details">
+                      <td>{{detail.DetailValue}}</td>
 
 
-                  <td>
-                    <button type="button" class="btn btn-danger btn-sm" (click)="deleteEntry(i)">Delete</button>
-                  </td>
+                    </ng-container>
 
-                </tr>
-              </tbody>
-            </table>
-            <!-- Submit Button -->
-            <div class="modal-footer">
+
+                    <td>
+                      <button type="button" class="btn btn-danger btn-sm" (click)="deleteEntry(i)">Delete</button>
+                    </td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </fieldset>
+            <div class="modal-footer row">
               <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel</button>
 
               <button type="submit" class="btn btn-primary" [disabled]="tempData.length==0">Save</button>
@@ -182,36 +206,30 @@
       <!-- Tabs Content -->
       <div class="tab-content">
         <div *ngFor="let type of getActivityTypes()">
-          <!--<div class="tab-pane "
-
-          [class.show]="i === 0"
-          [class.active]="i === 0"
-          [attr.id]="sanitizeType(type)">-->
+         
           <div class="tab-pane "
                *ngIf="selectedTab==type"
                [attr.id]="sanitizeType(type)">
-            <!--<br />
-            <br />-->
-            <!--<div class="section-heading ">
-              <h1>{{ type }}</h1>
-            </div>-->
-            <!--<br />
-            <br />-->
+           
 
             <div *ngFor="let activity of activities">
 
               <div *ngIf="activity.ActivityType === type">
-
-                <!--Activity Title-->
-                <fieldset class="margin-b15">
-                  <legend>{{ activity.ActivityName }}</legend>
-
-                  <div class="pull-right">
-                    <button type="button" class="btn btn-info" (click)="openModal(activity.ActivityName)">
+                <div class="row">
+                  <div class="section-heading padding-b20">
+                    <h2 class="pull-left">{{ activity.ActivityName  }}</h2>
+                    <button type="button" class="btn btn-info pull-right" (click)="openModal(activity.ActivityName)">
 
                       Add {{ activity.ActivityName  }}
                     </button>
                   </div>
+                 
+                </div>
+                <!--Activity Title-->
+                <fieldset class="margin-b15">
+                  <legend>{{ activity.ActivityName }}</legend>
+
+
                   <!--Activity Details Table-->
                   <table class="table table-bordered table-hover table-theme margin-b30">
                     <thead>
@@ -291,12 +309,8 @@
 
 
     <div style="clear:both;"></div>
-    <br />
-    <br />
-    <!--<div class="pull-right">
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dynamicModal">
-        Add Activities
-      </button>-->
+   
+    
 
 
 

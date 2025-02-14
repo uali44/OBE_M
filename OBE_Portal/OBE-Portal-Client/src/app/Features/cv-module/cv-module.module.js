@@ -13,6 +13,7 @@ import { AcadamicComponent } from './acadamic/acadamic.component';
 import { PagerService } from '../../Shared/Services/Global/Pager';
 import { SearchComponent } from './search/search.component';
 import { FilterComponent } from './filter/filter.component';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 let CvModuleModule = class CvModuleModule {
 };
 CvModuleModule = __decorate([
@@ -23,6 +24,8 @@ CvModuleModule = __decorate([
             CvModuleRoutingModule,
             ReactiveFormsModule,
             FormsModule,
+            OwlDateTimeModule,
+            OwlNativeDateTimeModule,
         ],
         exports: [
             CommonModule,

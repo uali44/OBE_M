@@ -4,20 +4,22 @@
 <div class="experience-section" style="padding-bottom:30px;">
 
   <!-- Modal for Adding Experience -->
-  <div class="modal fade" id="addExperienceModal" tabindex="-1" aria-labelledby="addExperienceModalLabel" aria-hidden="true">
+  <div class="modal fade width-50p" id="addExperienceModal" tabindex="-1" aria-labelledby="addExperienceModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <div class="section-heading">
+          <div class="section-heading padding-b20">
             <h2 class="pull-left">Add Experience</h2>
             <div class="pull-right">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
             </div>
           </div>
-          <div class="clearfix"></div>
+
         </div>
-        <form [formGroup]="experienceForm" (ngSubmit)="addExperience()">
-          <div class="modal-body">
+        <div class="clearfix"></div>
+        <div class="modal-body">
+          <form [formGroup]="experienceForm" (ngSubmit)="addExperience()">
+
             <div class="mb-3">
               <label for="position" class="form-label">Position</label>
               <input type="text" id="position" class="form-control" formControlName="Position" placeholder="Enter Position" />
@@ -31,9 +33,12 @@
               <div *ngIf="experienceForm.get('Company')?.errors?.required && experienceForm.get('Company')?.touched" class="text-danger">Position is required </div>
 
             </div>
-            <div class="mb-3">
+            <div class="mb-3 row">
               <label for="startDate" class="form-label">Start Date</label>
-              <input type="date" id="startDate" class="form-control" formControlName="StartDate" />
+
+              <input id="startDate" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" placeholder="Start Date" class="form-control col-sm-10" formControlName="StartDate" />
+              <span class="input-group-addon col-sm-2"><i class="fas fa-calendar-alt"></i></span>
+              <owl-date-time #dt4 [pickerType]="'calendar'" ></owl-date-time>
               <div *ngIf="experienceForm.get('StartDate')?.errors?.required && experienceForm.get('StartDate')?.touched" class="text-danger">Position is required </div>
 
             </div>
@@ -46,13 +51,14 @@
               <label for="currentlyWorking" class="form-label">Currently Working</label>
 
             </div>
-            <div class="mb-3">
+            <div class="mb-3 row">
               <label for="endDate" class="form-label">End Date</label>
-              <input type="date"
-                     id="endDate"
-                     class="form-control"
+              <input id="endDate" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" placeholder="End Date"
+                     class="form-control col-sm-10"
                      formControlName="EndDate"
                      [disabled]="currentlyWorking" />
+              <span class="input-group-addon col-sm-2" ><i class="fas fa-calendar-alt"></i></span>
+              <owl-date-time #dt4 [pickerType]="'calendar'"></owl-date-time>
               <!--   <div *ngIf="experienceForm.endDate.errors.required" class="text-danger">Position is required </div>-->
 
             </div>
@@ -66,21 +72,28 @@
 
 
 
-           
-            <div class="section-heading">
-              <h2 class="pull-left">Added Experience</h2>
+
+
+
+
+          </form>
+          <div class="row margin-t10">
+            <div class="section-heading padding-b20">
+              <h2 class="pull-left">View Added Experience</h2>
               <button type="button" class="btn btn-primary pull-right" (click)="add()" [disabled]="!experienceForm.valid">Add</button>
             </div>
-            <div class="clearfix"></div>
-            <fieldset class="col-sm-12">
+          </div>
 
-              <table class="table table-bordered table-hover table-theme margin-t50">
+            <div class="row">
+            <fieldset class="col-sm-12">
+              <legend>Added Experience</legend>
+              <table class="table table-bordered table-hover table-theme ">
                 <thead>
                   <tr>
                     <!--<th *ngFor="let field of formFields">{{ field.label }}</th>-->
                     <th>
                       Position
-                      th
+                    
                     </th>
                     <th>Company</th>
                     <th>
@@ -108,30 +121,30 @@
               </table>
             </fieldset>
           </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary pull-right" [disabled]="tempData.length==0">Save</button>
-            <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal">Cancel</button>
+        </div>
+        <div class="clearfix"></div>
+        <div class="modal-footer margin-t20">
+          <button type="submit" class="btn btn-primary pull-right" (click)="addExperience()" [disabled]="tempData.length==0">Save</button>
+          <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal">Cancel</button>
 
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>
 
-
-  <div class="pull-right margin-b10">
-    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addExperienceModal">
-      Add Experience
-    </button>
+  <div class="row">
+    <div class="section-heading padding-b20">
+      <h2 class="pull-left">Experience</h2>
+      <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#addExperienceModal">
+        Add Experience
+      </button>
+    </div>
+   
   </div>
   <fieldset class="margin-b15">
     <legend>Experience</legend>
 
-    <div class="pull-right">
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addExperienceModal">
-        Add Experience
-      </button>
-    </div>
+    
 
     <table class="table table-bordered table-hover table-theme margin-b30">
       <thead>

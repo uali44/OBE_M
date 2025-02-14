@@ -61,8 +61,7 @@ export class ExperienceComponent implements OnInit {
   ngOnInit(): void {
     // this.getExperience();
     this.experienceData = this.exper;
-    console.log("exp data", this.exper);
-    console.log("exp data", this.experienceData);
+   
   }
 
   getExperience() {
@@ -71,11 +70,11 @@ export class ExperienceComponent implements OnInit {
     this.ProfileService.GetExperience(facultyMemberID).subscribe({
       next: (data) => {
         this.exper = data;
-        console.log("Exp data" + this.experienceData);
+       
         
       },
       error: (err) => {
-        console.error('Error fetching education data:', err);
+        this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
       },
     });
   }
@@ -85,16 +84,7 @@ export class ExperienceComponent implements OnInit {
   addExperience() {
 
     const experienceData = this.tempData;
-     // experienceData.FacultyMemberID = GlobalService.FacultyMember_ID;
-    console.log('Experience Data:', experienceData);
-    //foreach(experienceData)
-
-    //{
-    //  if (this.currentlyWorking) {
-    //    experienceData.EndDate = null;
-    //  }
-
-    //}
+    
    
       this.ngxService.start();
       this.ProfileService.AddFacultyExperience(experienceData).
@@ -133,9 +123,7 @@ export class ExperienceComponent implements OnInit {
   }
 
   add() {
-    //if (this.educationForm.invalid) {
-    //  return;
-    //}
+    
     const payload = {
     
       FacultyMemberID: GlobalService.FacultyMember_ID,
@@ -147,7 +135,7 @@ export class ExperienceComponent implements OnInit {
 
     }
     this.tempData.push(payload);
-    console.log(this.tempData);
+   
     this.experienceForm.reset();
     this.experienceForm.controls['FacultyMemberID'].setValue(GlobalService.FacultyMember_ID);
   }
@@ -192,29 +180,17 @@ export class ExperienceComponent implements OnInit {
 
     this.selectedFile = file;
     this.fileError = null;
-    //// Compress the image
-    //this.compressImage(file, (compressedFile) => {
-    //  this.fileError = '';
-    //  this.educationForm.patchValue({ imageFile: compressedFile });
-    //});
+   
 
   }
 
   openFileViewer(filePath: string): void {
-    // Set the file path to display in the modal
-   /* this.selectedFilePath = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);*/
+    
     this.viewFile.emit({ fileUrl: filePath });
-    // Check the file type based on the extension or MIME type
-    //if (filePath.endsWith('.jpg') || filePath.endsWith('.jpeg') || filePath.endsWith('.png')) {
-    //  this.selectedFileType = 'image';
-    //} else if (filePath.endsWith('.pdf')) {
-    //  this.selectedFileType = 'pdf';
-    //} else {
-    //  this.selectedFileType = 'other';  // Handle other file types as needed
-    //}
+   
   
 
-    //$("#efileViewerModal").modal("show");
+   
   }
 
   extractFileName(filePath: string): string {
@@ -263,21 +239,7 @@ export class ExperienceComponent implements OnInit {
         );
       }
     });
-    //if (confirm('Are you sure you want to delete this experience?')) {
-    //  this.ProfileService.DeleteExperience(expID).subscribe({
-    //    next: (response) => {
-    //      console.log('Delete Response:', response);
-    //      this.toastr.success("Experience deleted successfully.", "Success");
-         
-    //      this.getExperience(); 
-    //    },
-    //    error: (err) => {
-    //      console.error('Error deleting experience:', err);
-    //      this.toastr.error("Failed to delete experience.", "Failed");
-          
-    //    },
-    //  });
-    //}
+   
   }
 
 
