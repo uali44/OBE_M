@@ -30,45 +30,49 @@
             <div class="mb-3">
               <label for="company" class="form-label">Company</label>
               <input type="text" id="company" class="form-control" formControlName="Company" placeholder="Enter Company Name" />
-              <div *ngIf="experienceForm.get('Company')?.errors?.required && experienceForm.get('Company')?.touched" class="text-danger">Position is required </div>
+              <div *ngIf="experienceForm.get('Company')?.errors?.required && experienceForm.get('Company')?.touched" class="text-danger">Company is required </div>
 
             </div>
-            <div class="mb-3 row">
+            <div class="mb-3 ">
               <label for="startDate" class="form-label">Start Date</label>
+              <div class="input-group">
+                <input id="startDate" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" placeholder="Start Date" class="form-control " formControlName="StartDate" (dateChange)="onDateChange($event.value, 'StartDate')"  />
+                <span class="input-group-addon "><i class="fas fa-calendar-alt"></i></span>
+                </div>
+                <owl-date-time #dt4 [pickerType]="'calendar'"></owl-date-time>
+                <div *ngIf="experienceForm.get('StartDate')?.errors?.required && experienceForm.get('StartDate')?.touched" class="text-danger">Start Date is required </div>
 
-              <input id="startDate" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" placeholder="Start Date" class="form-control col-sm-10" formControlName="StartDate" />
-              <span class="input-group-addon col-sm-2"><i class="fas fa-calendar-alt"></i></span>
-              <owl-date-time #dt4 [pickerType]="'calendar'" ></owl-date-time>
-              <div *ngIf="experienceForm.get('StartDate')?.errors?.required && experienceForm.get('StartDate')?.touched" class="text-danger">Position is required </div>
+              </div>
+              <div class="mb-3">
 
-            </div>
-            <div class="mb-3">
+                <input type="checkbox"
+                       id="currentlyWorking"
+                       (change)="onCurrentlyWorkingChange($event)" />
 
-              <input type="checkbox"
-                     id="currentlyWorking"
-                     (change)="onCurrentlyWorkingChange($event)" />
+                <label for="currentlyWorking" class="form-label">Currently Working</label>
 
-              <label for="currentlyWorking" class="form-label">Currently Working</label>
+              </div>
+              <div class="mb-3">
+                <label for="endDate" class="form-label">End Date</label>
+                <div class="input-group">
+                  <input id="endDate" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" placeholder="End Date"
+                         class="form-control "
+                         formControlName="EndDate"
+                         [disabled]="currentlyWorking"
+                         (dateChange)="onDateChange($event.value, 'EndDate')" 
+                         />
+                  <span class="input-group-addon "><i class="fas fa-calendar-alt"></i></span>
+                </div>
+                <owl-date-time #dt1 [pickerType]="'calendar'"></owl-date-time>
+                <!--   <div *ngIf="experienceForm.endDate.errors.required" class="text-danger">Position is required </div>-->
 
-            </div>
-            <div class="mb-3 row">
-              <label for="endDate" class="form-label">End Date</label>
-              <input id="endDate" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" placeholder="End Date"
-                     class="form-control col-sm-10"
-                     formControlName="EndDate"
-                     [disabled]="currentlyWorking" />
-              <span class="input-group-addon col-sm-2" ><i class="fas fa-calendar-alt"></i></span>
-              <owl-date-time #dt4 [pickerType]="'calendar'"></owl-date-time>
-              <!--   <div *ngIf="experienceForm.endDate.errors.required" class="text-danger">Position is required </div>-->
+              </div>
 
-            </div>
-
-            <div class="form-group">
-              <label for="imageFile">Upload Document(Image or PDF)</label>
-              <input type="file" id="imageFile" (change)="onFileSelected($event)" class="form-control" formControlName="imageFile" />
-              <div *ngIf="fileError" class="text-danger">{{ fileError }}</div>
-            </div>
-
+              <div class="form-group">
+                <label for="imageFile">Upload Document(Image or PDF)</label>
+                <input type="file" id="imageFile" (change)="onFileSelected($event)" class="form-control" formControlName="imageFile" />
+                <div *ngIf="fileError" class="text-danger">{{ fileError }}</div>
+              </div>
 
 
 
@@ -76,15 +80,18 @@
 
 
 
-          </form>
+
+</form>
+       
+
           <div class="row margin-t10">
-            <div class="section-heading padding-b20">
+            <div class="section-heading padding-b30">
               <h2 class="pull-left">View Added Experience</h2>
               <button type="button" class="btn btn-primary pull-right" (click)="add()" [disabled]="!experienceForm.valid">Add</button>
             </div>
           </div>
 
-            <div class="row">
+          <div class="row">
             <fieldset class="col-sm-12">
               <legend>Added Experience</legend>
               <table class="table table-bordered table-hover table-theme ">
@@ -93,7 +100,7 @@
                     <!--<th *ngFor="let field of formFields">{{ field.label }}</th>-->
                     <th>
                       Position
-                    
+
                     </th>
                     <th>Company</th>
                     <th>
@@ -133,7 +140,7 @@
   </div>
 
   <div class="row">
-    <div class="section-heading padding-b20">
+    <div class="section-heading padding-b30">
       <h2 class="pull-left">Experience</h2>
       <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#addExperienceModal">
         Add Experience

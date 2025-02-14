@@ -183,7 +183,11 @@ export class ExperienceComponent implements OnInit {
    
 
   }
-
+  onDateChange(event: any, controlName: string) {
+    const date = new Date(event);
+    const formattedDate = date.toISOString().split('T')[0]; // Gets 'YYYY-MM-DD'
+    this.experienceForm.patchValue({ [controlName]: formattedDate });
+  }
   openFileViewer(filePath: string): void {
     
     this.viewFile.emit({ fileUrl: filePath });

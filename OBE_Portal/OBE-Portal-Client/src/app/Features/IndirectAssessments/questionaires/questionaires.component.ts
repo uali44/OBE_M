@@ -31,6 +31,7 @@ export class QuestionairesComponent implements OnInit {
     QType: null,
     Mapping: null,
     Section: null,
+    Marks: 0,
     Options: []
   }];
  
@@ -39,7 +40,8 @@ export class QuestionairesComponent implements OnInit {
     Question: '',
     QType: 'Multiple Choice',
     Mapping: '',
-    Section:'Header',
+    Section: 'Header',
+    Marks: 0,
     Options: ['']
   };
   plos: any = [];
@@ -81,6 +83,7 @@ export class QuestionairesComponent implements OnInit {
       questionType: ['', Validators.required],
       section: ['', Validators.required],
       mapping: [''],
+      marks:['', Validators.required],
       options: this.fb.array([]) 
     });
 
@@ -114,6 +117,7 @@ export class QuestionairesComponent implements OnInit {
       this.newQuestion.Mapping = this.createSurveyForm.controls["mapping"].value;
       this.newQuestion.Section = this.createSurveyForm.controls["section"].value;
       this.newQuestion.Options = this.createSurveyForm.controls["options"].value;
+      this.newQuestion.Marks = this.createSurveyForm.controls["marks"].value;
 
       this.surveySubDetails.push({ ...this.newQuestion });
       
@@ -308,10 +312,7 @@ export class QuestionairesComponent implements OnInit {
       SurveyMainDetail: this.surveyMainDetail,
       SurveySubDetails: this.surveySubDetails
     };
-    if (this.Intake == 0) {
-      this.toastr.error("No Intake Selected", "Error!");
-      return;
-    }
+   
     this.ngxService.start();
 
     this.IndirectAssessmen.AddSurvey(payload).

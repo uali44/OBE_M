@@ -75,6 +75,7 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public string Mapping { get; set; }
         public string Section { get; set; }
         public List<string> Options { get; set; }
+        public int Marks { get; set; }
     }
 
     public class SurveyMainDetail
@@ -97,6 +98,7 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public DateTime createdDate { get; set; }
         public string Section { get; set; }
         public ICollection<SurveySubDetailOption> SurveySubDetailOptions { get; set; }
+        public int Marks { get; set; }
     }
 
     public class SurveySubDetailOption
@@ -122,6 +124,7 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public string Mapping { get; set; }
         public string Section { get;set; }
         public List<SurveySubDetailOption> Options { get; set; }
+        public int Marks { get; set; }
     }
     public class OoptionsDto
     {

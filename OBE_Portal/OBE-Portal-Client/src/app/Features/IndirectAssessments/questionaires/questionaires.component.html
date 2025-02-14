@@ -8,7 +8,7 @@
       <div class="modal-content">
         <div class="modal-header">
 
-          <div class="section-heading">
+          <div class="section-heading padding-b20">
             <h2 class="pull-left">Create New Survey</h2>
             <div class="pull-right">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
@@ -79,8 +79,16 @@
                 <option value="{{i.PLO_ID}}" *ngFor="let i of Added_Intake_PLOs">{{i.PLO_Title}}</option>
 
               </select>
-              <div *ngIf="createSurveyForm.get('mapping').invalid && createSurveyForm.get('mapping').touched" class="text-danger">
-                Mapping is required.
+              <!--<div *ngIf="createSurveyForm.get('mapping').invalid && createSurveyForm.get('mapping').touched" class="text-danger">
+      Mapping is required.
+    </div>-->
+            </div>
+
+            <div class="form-group row">
+              <label for="marks" class="col-sm-2">Marks:</label>
+              <input type="number" id="marks" formControlName="marks" class="col-sm-5">
+              <div *ngIf="createSurveyForm.get('marks').invalid && createSurveyForm.get('marks').touched" class="text-danger">
+               Marks are required .
               </div>
             </div>
 
@@ -104,13 +112,16 @@
             </div>
 
             <!-- Add Question Button -->
-            <button type="submit" class="btn btn-primary pull-right margin-t20" [disabled]="createSurveyForm.invalid">Add Question</button>
-            <!-- Submit & Reset Buttons -->
+
+
 
           </form>
         </fieldset>
         <div class="clearfix"></div>
-
+        <div class="section-heading padding-b30">
+          <h2 class="pull-left">View Added Questions</h2>
+          <button type="submit" class="btn btn-primary pull-right" (click)="submitNewSurvey()" [disabled]="createSurveyForm.invalid">Add Question</button>
+        </div>
 
 
 
@@ -122,7 +133,7 @@
           </legend>
 
 
-          <table class="table table-bordered table-theme table-hover table-theme margin-t30 margin-b20">
+          <table class="table table-bordered table-theme table-hover table-theme  margin-b20">
             <thead>
               <tr>
                 <th>Question</th>
@@ -152,8 +163,9 @@
           </table>
         </fieldset>
         <div class="modal-footer">
-          <!--<button type="submit" class="btn btn-primary pull-right" [disabled]="!educationForm.valid">Add</button>-->
-          <button type="submit" (click)="onSubmit()" class="btn btn-primary pull-right" [disabled]="surveySubDetails.length==0 && Intake==0">Save Questions</button>
+          {{surveyMainDetail.SurveyIntakeID}}
+
+          <button type="submit" (click)="onSubmit()" class="btn btn-primary pull-right" [disabled]=" surveySubDetails?.length === 0 && +surveyMainDetail.SurveyIntakeID===0">Save Questions</button>
           <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal">Cancel</button>
 
         </div>
@@ -184,82 +196,66 @@
 
 
       <div role="tabpanel" class="tab-pane active" id="CSP">
-
+        <div class="section-heading padding-b30">
+          <h2 class="pull-left">CSP Survey Questions</h2>
+          <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#addSurveyModal">
+            Add Survey Questions
+          </button>
+        </div>
+       
         <fieldset>
           <legend>Survey Questions</legend>
-          <div class="pull-right">
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addSurveyModal">
-              Add Survey Questions
-            </button>
-          </div>
-          <div class="col-sm-12">
+
+        
 
 
 
 
-            <form [formGroup]="cSPSurveyForm">
+           
               <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
-                <table class="table table-bordered table-theme table-hover margin-t10">
+                <table class="table table-theme table-hover table-bordered margin-t10">
                   <thead>
                     <tr>
                       <th>Sr#</th>
                       <th>Statement</th>
+                      <th>Question Type</th>
                       <th>Mapping</th>
-                      <th>Answer</th>
+                     <th>Options</th>
                       <th>Section</th>
                       <th>Action</th>
                     </tr>
 
                   </thead>
-                  <!--<div *ngFor="let question of SurveyData.Questions">-->
+                  <tbody>
+                    <tr *ngFor="let question of CSPSurveyData.Questions;let m=index">
+                      <td class="text-center">{{m+1}}</td>
+                      <td class="text-center"> <label>{{ question.Question }}</label></td>
+                      <td class="text-center">{{ question.QType }}</td>
+                      <td class="text-center">{{ question.Mapping }}</td>
+                      <td class="text-center"><ul class="list-unstyled" *ngFor="let option of question.Options">
+                        <li>{{option.Options}}</li>
 
-                  <tr *ngFor="let question of CSPSurveyData.Questions;let m=index">
-                    <td class="text-center">{{m+1}}</td>
-                    <td> <label>{{ question.Question }}</label></td>
-                    <td class="text-center">{{ question.Mapping }}</td>
-                    <td>
-                      <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
-                      <textarea rows="6" *ngIf="question.QType === 'Remarks'" type="text" [formControlName]="question.QID"></textarea>
+                        </ul></td>
+                      <td class="text-center">{{ question.Section }}</td>
+                      <td class="text-center">
+                        <button type="button" class="btn btn-default margin-r5" (click)="deleteQuestion(question.QID)">
+                          <i class="app-icon-IconSet-1-33 blue"></i>
 
-                      <!-- Radio Buttons for Multiple Choice -->
-                      <div *ngIf="question.QType === 'Multiple Choice'">
+                        </button>
+                      </td>
 
-                        <div class="pull-left radio-inline padding-t5" *ngFor="let option of question.Options">
-                          <input type="radio" [formControlName]="question.QID" [value]="option.Options">
-                          <label class="cursor-pointer">{{ option.Options }}</label>
-
-                        </div>
-                      </div>
-                      <div *ngIf="question.QType === 'Likert'">
-
-                        <div class="pull-left radio-inline padding-t5" *ngFor="let num of [1, 2, 3, 4, 5]">
-                          <input type="radio" [formControlName]="question.QID" [value]="num">
-                          <label class="cursor-pointer">{{ num }}</label>
-
-                        </div>
-
-
-                      </div>
-                    </td>
-                    <td class="text-center">{{ question.Section }}</td>
-                    <td class="text-center">
-                      <button type="button" class="btn btn-default margin-r5" (click)="deleteQuestion(question.QID)">
-                        <i class="app-icon-IconSet-1-33 blue"></i>
-
-                      </button>
-                    </td>
-
-                  </tr>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
-              <!--<button type="submit" [disabled]="surveyForm.invalid">Submit</button>-->
-            </form>
+          
+   
 
 
 
 
 
-          </div>
+         
 
 
 
@@ -268,13 +264,15 @@
         </fieldset>
       </div>
       <div role="tabpanel" class="tab-pane " id="Exit">
+        <div class="section-heading padding-b30">
+          <h2 class="pull-left">Exit Survey Questions</h2>
+          <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#addSurveyModal">
+            Add Survey Questions
+          </button>
+        </div>
         <fieldset>
           <legend>Survey Questions</legend>
-          <div class="pull-right">
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addSurveyModal">
-              Add Survey Questions
-            </button>
-          </div>
+          
           <div class="col-sm-12">
 
 
@@ -351,13 +349,16 @@
         </fieldset>
       </div>
       <div role="tabpanel" class="tab-pane " id="Internship">
+        <div class="section-heading padding-b30">
+          <h2 class="pull-left">Internship Survey Questions</h2>
+          <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#addSurveyModal">
+            Add Survey Questions
+          </button>
+        </div>
         <fieldset>
           <legend>Survey Questions</legend>
-          <div class="pull-right">
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addSurveyModal">
-              Add Survey Questions
-            </button>
-          </div>
+          
+          
           <div class="col-sm-12">
 
 
@@ -434,13 +435,17 @@
         </fieldset>
       </div>
       <div role="tabpanel" class="tab-pane " id="Alumni">
+
+        <div class="section-heading padding-b30">
+          <h2 class="pull-left">Alumni Survey Questions</h2>
+          <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#addSurveyModal">
+            Add Survey Questions
+          </button>
+        </div>
+
         <fieldset>
           <legend>Survey Questions</legend>
-          <div class="pull-right">
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addSurveyModal">
-              Add Survey Questions
-            </button>
-          </div>
+
           <div class="col-sm-12">
 
 
@@ -517,13 +522,17 @@
         </fieldset>
       </div>
       <div role="tabpanel" class="tab-pane " id="Employer">
+        <div class="section-heading padding-b30">
+          <h2 class="pull-left">Employer Survey Questions</h2>
+          <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#addSurveyModal">
+            Add Survey Questions
+          </button>
+        </div>
+
         <fieldset>
           <legend>Survey Questions</legend>
-          <div class="pull-right">
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addSurveyModal">
-              Add Survey Questions
-            </button>
-          </div>
+
+
           <div class="col-sm-12">
 
 

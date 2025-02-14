@@ -79,19 +79,24 @@
             </div>
 
             <!-- Dynamic Fields -->
-            <div *ngFor="let field of fields" class="form-group">
+            <div *ngFor="let field of fields;let i=index;" class="form-group">
               <ng-container *ngIf="field.SubType=='date'">
-                <div class="row">
-                  <label [for]="sanitizeType(field.subDetail)" class="col-sm-12">{{ field.subDetail }}</label>
-                  <input [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" placeholder="Date"
+
+                <label [for]="sanitizeType(field.subDetail)" class="">{{ field.subDetail }}</label>
+                <div class="input-group">
+                  <input [owlDateTimeTrigger]="dt" [owlDateTime]="dt"  
                          [id]="sanitizeType(field.subDetail)"
-                         class="form-control col-sm-9"
+                         class="form-control "
                          [formControlName]="sanitizeType(field.subDetail)"
-                         [placeholder]="'Enter ' + field.subDetail" />
-                  <span class="input-group-addon col-sm-3"><i class="fas fa-calendar-alt"></i></span>
-                  <owl-date-time #dt4 [pickerType]="'calendar'"></owl-date-time>
-                </div>
-              </ng-container>
+                         [placeholder]="'Enter ' + field.subDetail"
+                          (Change)="onDateChange($event.value, sanitizeType(field.subDetail))" 
+
+                         />
+                  <span class="input-group-addon "><i class="fas fa-calendar-alt"></i></span>
+                  </div>
+                  <owl-date-time #dt [pickerType]="'calendar'"></owl-date-time>
+                  
+</ng-container>
               <ng-container *ngIf="field.SubType!='date'">
                 <label [for]="sanitizeType(field.subDetail)">{{ field.subDetail }}</label>
                 <input [type]="field.SubType"
@@ -216,7 +221,7 @@
 
               <div *ngIf="activity.ActivityType === type">
                 <div class="row">
-                  <div class="section-heading padding-b20">
+                  <div class="section-heading padding-b30">
                     <h2 class="pull-left">{{ activity.ActivityName  }}</h2>
                     <button type="button" class="btn btn-info pull-right" (click)="openModal(activity.ActivityName)">
 

@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { GlobalService } from '../../../Shared/Services/Global/global.service';
 import { CoursesSearchService } from '../../../Services/CourseSearch/CourseSearch.service';
 import { ToastrService } from 'ngx-toastr';
@@ -13,6 +13,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 import { InterconnectedService } from '../../../Shared/Services/Global/interconnected.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { OwlDateTimeComponent } from 'ng-pick-datetime';
 
 declare const $: any;
 
@@ -49,7 +50,7 @@ export class CvComponentComponent implements OnInit {
   selectedFilePath: SafeResourceUrl | null = null;
   selectedFileType: string;
 
-
+  @ViewChildren('datePicker') datePickers: QueryList<any>;
 
 
 
@@ -150,7 +151,11 @@ export class CvComponentComponent implements OnInit {
     this.fetchFields(val);
     this.activityForm.controls['activity'].setValue(this.selectedActivityId);
   }
-
+  onDateChange(event: any, controlName: string) {
+    const date = new Date(event);
+    const formattedDate = date.toISOString().split('T')[0]; // Gets 'YYYY-MM-DD'
+    this.activityForm.patchValue({ [controlName]: formattedDate });
+  }
   fetchFields(val): void {
     const requestdata = { ActivityID: val }
     this.ProfileService.GetActivitySubDetails(requestdata).subscribe(

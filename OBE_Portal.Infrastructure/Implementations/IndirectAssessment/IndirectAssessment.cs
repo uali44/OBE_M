@@ -152,7 +152,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                             var qid = new SqlParameter("@QID", SqlDbType.Int) { Direction = ParameterDirection.Output };
 
                             var responseSub = await _context.Database.ExecuteSqlRawAsync(
-                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate,@Section ,@QID OUTPUT",
+                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate,@Section,@Marks ,@QID OUTPUT",
                                 new SqlParameter("@SurveyID", existingSurvey.SurveyID),
                                 new SqlParameter("@Question", question.Question),
                                 new SqlParameter("@QType", question.QType),
@@ -160,6 +160,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                                 new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy),
                                 new SqlParameter("@CreatedDate", DateTime.UtcNow),
                                   new SqlParameter("@Section", question.Section),
+                                   new SqlParameter("@Marks", question.Marks),
                                 qid
                             );
 
@@ -206,7 +207,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                             var qid = new SqlParameter("@QID", SqlDbType.Int) { Direction = ParameterDirection.Output };
 
                             var responseSub = await _context.Database.ExecuteSqlRawAsync(
-                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate,@Section , @QID OUTPUT",
+                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate,@Section ,@Marks, @QID OUTPUT",
                                 new SqlParameter("@SurveyID", generatedSurveyID),
                                 new SqlParameter("@Question", question.Question),
                                 new SqlParameter("@QType", question.QType),
@@ -214,6 +215,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                                 new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy),
                                 new SqlParameter("@CreatedDate", DateTime.UtcNow),
                                 new SqlParameter("@Section", question.Section),
+                                  new SqlParameter("@Marks", question.Marks),
 
                                 qid
 
