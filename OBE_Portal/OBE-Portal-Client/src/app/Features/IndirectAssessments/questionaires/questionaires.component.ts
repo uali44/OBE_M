@@ -63,8 +63,9 @@ export class QuestionairesComponent implements OnInit {
 
   AddedIntakePLOs: any = [];
     Added_Intake_PLOs: any[];
-  
-    programId: any;
+
+  enableSave: boolean;
+  programId: any;
   constructor(private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
     private ngxService: NgxUiLoaderService,
@@ -83,7 +84,7 @@ export class QuestionairesComponent implements OnInit {
       questionType: ['', Validators.required],
       section: ['', Validators.required],
       mapping: [''],
-      marks:['', Validators.required],
+      marks:['', ],
       options: this.fb.array([]) 
     });
 
@@ -96,6 +97,8 @@ export class QuestionairesComponent implements OnInit {
     this.Intake = 0;
     this.getSurvey(this.surveyMainDetail.SurveyType);
     this.removeQuestion(0);
+    this.enableSave = false;
+    this.programId = 0;
   }
   get options(): FormArray {
     return this.createSurveyForm.get('options') as FormArray;
@@ -123,8 +126,14 @@ export class QuestionairesComponent implements OnInit {
       
 
       this.createSurveyForm.reset();
+      this.options.clear();
 
-
+      if (this.programId != 0) {
+        this.enableSave = true;
+      }
+      else {
+        this.enableSave = false;
+      }
     } else {
       this.toastr.error('Please fill all required fields before submitting.', 'Validation Error');
     }
@@ -181,7 +190,12 @@ export class QuestionairesComponent implements OnInit {
     this.getAllSurvey();
   }
   receiveMData(data: number) {
-    this.surveyMainDetail.SurveyIntakeID = data; // Update the parent component's variable with the data
+    this.programId = data;
+    if (this.surveySubDetails?.length > 0) {
+      this.enableSave = true;
+    }
+
+   /* this.surveyMainDetail.SurveyIntakeID = data;*/ // Update the parent component's variable with the data
   }
   getSurvey(surveyType: string) {
     const request = {
@@ -288,6 +302,10 @@ export class QuestionairesComponent implements OnInit {
 
   removeQuestion(index: number): void {
     this.surveySubDetails.splice(index, 1);
+    if (this.surveySubDetails.length == 0) {
+      this.enableSave = false;
+
+    }
   }
 
   addOption(): void {
@@ -304,10 +322,24 @@ export class QuestionairesComponent implements OnInit {
   trackByFn(index: number, item: any): number {
     return index;
   }
+  TypeChange(val) {
+    if (val === "Multiple Choice") {
+      this.addnOption();
+    }
+    else {
+      this.options.clear();
+    }
 
+
+  }
   onSubmit(): void {
+    if (this.programId == 0) {
+      this.toastr.error("Please Select a valid intake", "Error!");
+      return;
+    }
     this.surveyMainDetail.SurveyDeptID = GlobalService.Deaprtment_ID;
     this.surveyMainDetail.CreatedBy = GlobalService.FacultyMember_ID;
+    this.surveyMainDetail.SurveyIntakeID = this.programId;
     const payload = {
       SurveyMainDetail: this.surveyMainDetail,
       SurveySubDetails: this.surveySubDetails

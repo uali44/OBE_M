@@ -138,13 +138,16 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                 using (SqlCommand comm = new SqlCommand())
                 {
                     // Step 1: Check if Survey Exists for the given department
-                    var existingSurvey = await _context.Set<SurveyMainDetail>()
-                        .Where(s => s.SurveyDeptID == request.SurveyMainDetail.SurveyDeptID && s.SurveyType == request.SurveyMainDetail.SurveyType && s.SurveyIntakeID==request.SurveyMainDetail.SurveyIntakeID)
-                        .FirstOrDefaultAsync();
-
+                    //var existingSurvey = await _context.Set<SurveyMainDetail>()
+                    //    .Where(s => s.SurveyDeptID == request.SurveyMainDetail.SurveyDeptID && s.SurveyType == request.SurveyMainDetail.SurveyType && s.SurveyIntakeID==request.SurveyMainDetail.SurveyIntakeID)
+                    //    .FirstOrDefaultAsync();
+                    var mainDetail= await _context.Set<SurveyMainDetail>()
+                        .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={request.SurveyMainDetail.SurveyType}, @SurveyDeptID={request.SurveyMainDetail.SurveyDeptID},@SurveyIntakeID={request.SurveyMainDetail.SurveyIntakeID}").ToListAsync();
                     // If survey exists, we are only adding new questions or options
-                    if (existingSurvey != null)
+                    if (mainDetail != null && mainDetail.Count > 0)
+                    //    if (existingSurvey != null)
                     {
+                        var mainDetailList = mainDetail.FirstOrDefault();
                         // Step 2: Add New Questions or Options
                         foreach (var question in request.SurveySubDetails)
                         {
@@ -153,7 +156,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
                             var responseSub = await _context.Database.ExecuteSqlRawAsync(
                                 "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate,@Section,@Marks ,@QID OUTPUT",
-                                new SqlParameter("@SurveyID", existingSurvey.SurveyID),
+                                new SqlParameter("@SurveyID", mainDetailList.SurveyID),
                                 new SqlParameter("@Question", question.Question),
                                 new SqlParameter("@QType", question.QType),
                                 new SqlParameter("@Mapping", question.Mapping),
@@ -489,7 +492,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                 {
                     // Step 1: Check if Survey Already Exists for the Student
                     var existingSurvey = await _context.Set<StudentSurveyMainDetail>()
-          .FromSqlRaw("EXEC GetStudentSurveyMain @StudentID, @SurveyID",
+          .FromSqlRaw("EXEC GetStudentSurveyMainDetail @StudentID, @SurveyID",
                       new SqlParameter("@StudentID", request.StudentID),
                       new SqlParameter("@SurveyID", request.SurveyID))
           .ToListAsync();
@@ -550,7 +553,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
             {
                 // Fetch main survey details
                 var surveyMain = await _context.Set<StudentSurveyMainDetail>()
-                    .FromSqlRaw("EXEC GetStudentSurveyMain @StudentID, @SurveyID",
+                    .FromSqlRaw("EXEC GetStudentSurveyMainDetail @StudentID, @SurveyID",
                         new SqlParameter("@StudentID", request.StudentID),
                         new SqlParameter("@SurveyID", request.SurveyID)).ToListAsync();
 
@@ -570,19 +573,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                     StudentSurveyMainDetail = survey,
                     StudentSurveySubDetail = surveyResponses
                 };
-                // Map to DTO
-                //var surveyResponseDto = new SurveyResponseDto
-                //{
-                //    StudentSurveyID = surveyMain.StudentSurveyID,
-                //    StudentID = surveyMain.StudentID,
-                //    SurveyID = surveyMain.SurveyID,
-                //    CreatedDate = surveyMain.CreatedDate,
-                //    Questions = surveyResponses.Select(q => new SurveyQuestionDto
-                //    {
-                //        QID = q.QID,
-                //        Answer = q.Answer
-                //    }).ToList()
-                //};
+               
 
                 return surveyresponse;
             }

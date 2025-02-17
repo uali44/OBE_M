@@ -204,6 +204,8 @@ export class IndirectAssessmentsMainComponent implements OnInit {
             if (response != null) {
               this.IntakeStudent = response;
               this.intakeId = val;
+
+
               this.getAllSurvey();
             }
             this.ngxService.stop();
@@ -423,9 +425,22 @@ export class IndirectAssessmentsMainComponent implements OnInit {
   ResetAllForms() {
     this.resetCSPForm();
     this.resetExitForm();
+    
     this.resetInternshipForm();
     this.getSurveyResponse(this.CSPSurveyData.SurveyID)
+    this.getSurveyResponse(this.ExitSurveyData.SurveyID)
+    this.getSurveyResponse(this.InternshipSurveyData.SurveyID)
+    this.getSurveyResponse(this.EmployerSurveyData.SurveyID)
+    this.getSurveyResponse(this.AlumniSurveyData.SurveyID)
 
+  }
+
+  ResetControls(form: FormGroup) {
+    Object.keys(form.controls).forEach(key => {
+      
+        form.removeControl(key);
+      
+    });
 
   }
 
@@ -460,6 +475,13 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       Deptid: GlobalService.Deaprtment_ID,
       SurveyIntakeID: this.intakeId
     }
+
+    this.ResetControls(this.cSPSurveyForm);
+    this.ResetControls(this.internshipSurveyForm);
+    this.ResetControls(this.exitSurveyForm);
+    this.ResetControls(this.employerSurveyForm);
+    this.ResetControls(this.alumniSurveyForm);
+
     console.log(GlobalService.Deaprtment_ID);
     this.ngxService.start();
     this.IndirectAssessment.GetAllSurvey(request).
