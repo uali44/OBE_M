@@ -46,7 +46,8 @@ namespace OBE_Portal.Core.Entities.Profile
         public string Field { get; set; }
         public int year { get; set; }
         public ImageFileDto ImageFile { get; set; }
-
+        public int CreatedBy { get;set; }
+        public DateTime CreatedDate { get; set; }
 
     }
     public class ImageFileDto

@@ -50,7 +50,7 @@ export class CvComponentComponent implements OnInit {
   selectedFilePath: SafeResourceUrl | null = null;
   selectedFileType: string;
 
-  @ViewChildren('datePicker') datePickers: QueryList<any>;
+
 
 
 
