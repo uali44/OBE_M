@@ -51,7 +51,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
   };
 
 
-  CSPSurveyResponse: any = [];
+  SurveyResponse: any = [];
 
 
 
@@ -427,6 +427,11 @@ export class IndirectAssessmentsMainComponent implements OnInit {
     this.resetExitForm();
     
     this.resetInternshipForm();
+    this.cSPSurveyForm.reset();
+    this.exitSurveyForm.reset();
+    this.internshipSurveyForm.reset();
+    this.employerSurveyForm.reset();
+    this.alumniSurveyForm.reset();
     this.getSurveyResponse(this.CSPSurveyData.SurveyID)
     this.getSurveyResponse(this.ExitSurveyData.SurveyID)
     this.getSurveyResponse(this.InternshipSurveyData.SurveyID)
@@ -456,7 +461,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
         data => {
           this.ngxService.stop();
           this.CSPSurveyData = data;
-          console.log("getdata", this.CSPSurveyData);
+         
           this.createForm(this.cSPSurveyForm, this.CSPSurveyData);
 
 
@@ -489,19 +494,19 @@ export class IndirectAssessmentsMainComponent implements OnInit {
         data => {
           this.ngxService.stop();
           this.CSPSurveyData = data.CSP;
-         // console.log("getdata", this.CSPSurveyData);
+       
           this.createForm(this.cSPSurveyForm, this.CSPSurveyData);
           this.ExitSurveyData = data.Exit;
-          //console.log("getdata", this.ExitSurveyData);
+        
           this.createForm(this.exitSurveyForm, this.ExitSurveyData);
           this.EmployerSurveyData = data.Employer;
-         // console.log("getdata", this.EmployerSurveyData);
+         
           this.createForm(this.employerSurveyForm, this.EmployerSurveyData);
           this.InternshipSurveyData = data.Internship;
-         // console.log("getdata", this.InternshipSurveyData);
+        
           this.createForm(this.internshipSurveyForm, this.InternshipSurveyData);
           this.AlumniSurveyData = data.Alumni;
-         // console.log("getdata", this.AlumniSurveyData);
+         
           this.createForm(this.alumniSurveyForm, this.AlumniSurveyData);
 
 
@@ -567,7 +572,8 @@ export class IndirectAssessmentsMainComponent implements OnInit {
             if (response) {
               this.cSPSurveyForm.reset();
               this.toastr.success("Information saved successfully", "Success!");
-              $("#ExitSurveyFormRemarks").val('')
+             
+
             }
             this.ngxService.stop();
           } catch (e) {
@@ -738,9 +744,9 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       subscribe(
         data => {
           this.ngxService.stop();
-          this.CSPSurveyResponse = data;
-         // console.log("response", this.CSPSurveyResponse);
-          this.populateForm(this.CSPSurveyResponse.StudentSurveySubDetail);
+          this.SurveyResponse = data;
+       
+          this.populateForm(this.SurveyResponse.StudentSurveySubDetail);
 
 
 

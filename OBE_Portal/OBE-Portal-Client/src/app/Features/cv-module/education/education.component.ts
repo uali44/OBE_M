@@ -178,23 +178,28 @@ export class EducationComponent implements OnInit {
 
   extractFileName(filePath: string): string {
     const parts = filePath.split('/');
-    return parts[parts.length - 1]; // Get the last part, which is the file name
+    return parts[parts.length - 1];
   }
 
 
-  // Helper method to check if the file is an image
+
   isImage(fileType: string): boolean {
     return fileType === 'image';
   }
 
-  // Helper method to check if the file is a PDF
+ 
   isPDF(fileType: string): boolean {
     return fileType === 'pdf';
   }
 
 
 
+  CloseModal() {
 
+    this.tempData = [];
+    this.educationForm.reset();
+    $("#addEducationModal").modal("hide");
+  }
 
 
 

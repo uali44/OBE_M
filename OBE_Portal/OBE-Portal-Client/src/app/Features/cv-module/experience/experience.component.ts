@@ -214,6 +214,14 @@ export class ExperienceComponent implements OnInit {
   }
 
 
+  CloseModal() {
+
+    this.tempData = [];
+    this.experienceForm.reset();
+    $("#addEducationModal").modal("hide");
+  }
+
+
 
 
   confirmDelete(expID: number) {

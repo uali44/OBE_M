@@ -11,7 +11,7 @@
           <div class="section-heading padding-b20">
             <h2 class="pull-left">Add Experience</h2>
             <div class="pull-right">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+              <button type="button" class="close" (click)="CloseModal()"  data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
             </div>
           </div>
 
@@ -121,7 +121,7 @@
                     <td>{{ entry.EndDate || 'Present' }}</td>
                     <td>{{entry.imageFile.fileName}}</td>
                     <td>
-                      <button type="button" class="btn btn-danger btn-sm" (click)="deleteEntry(i)">Delete</button>
+                      <button type="button" class="btn btn-default" (click)="deleteEntry(i)">  <i class="app-icon-IconSet-1-33 blue"></i></button>
                     </td>
                   </tr>
                 </tbody>
@@ -131,8 +131,8 @@
         </div>
         <div class="clearfix"></div>
         <div class="modal-footer margin-t20">
-          <button type="submit" class="btn btn-primary pull-right" (click)="addExperience()" [disabled]="tempData.length==0">Save</button>
-          <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-info pull-right" (click)="addExperience()" [disabled]="tempData.length==0">Save</button>
+          <button type="button" class="btn btn-default pull-right" (click)="CloseModal()"  data-dismiss="modal">Cancel</button>
 
         </div>
       </div>

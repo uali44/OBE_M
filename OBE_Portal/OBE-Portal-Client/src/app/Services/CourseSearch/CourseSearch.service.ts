@@ -57,4 +57,11 @@ export class CoursesSearchService {
     return this.http.post<any>(this.baseUrl + 'CourseSearch/DeleteStudentFromCourse', data);
   }
 
+  GetDepartmentPrograms<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'CourseSearch/GetDepartmentPrograms', data);
+  }
+
+  GetProgramIntakes<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'CourseSearch/GetProgramIntakes', data);
+  }
 }

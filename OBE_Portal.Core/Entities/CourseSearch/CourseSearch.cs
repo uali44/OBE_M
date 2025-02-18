@@ -69,4 +69,20 @@ namespace OBE_Portal.Core.Entities.CourseSearch
         public string username { get; set; }
     }
 
+
+    public class GetIntakeForSelectedProgram
+    {
+        public int ProgramID { get; set; }
+        public string ProgramName { get; set; }
+    }
+    public class GetIntakeForSelectedProgramResponse
+    {
+        public int AdmissionOpenProgramID { get; set; }
+        public string ProgramName { get; set; }
+        public string semesterAlia { get; set; }
+    }
+
+
+
+
 }

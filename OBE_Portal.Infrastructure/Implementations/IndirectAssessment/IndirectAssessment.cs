@@ -265,8 +265,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
                     var mainDetail = await _context.Set<SurveyMainDetail>()
                         .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID},@SurveyIntakeID={surveyIntakeID}").ToListAsync();
-                    //.AsNoTracking()
-                    //.FirstOrDefaultAsync();
+                    
 
                     if (mainDetail == null || mainDetail.Count <= 0)
                     {
@@ -415,12 +414,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
                     var mainDetail = await _context.Set<SurveyMainDetail>()
                         .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID},@SurveyIntakeID={intakeID}").ToListAsync();
-                    //.AsNoTracking()
-                    //.FirstOrDefaultAsync();
-                    //  var mainDetail = await _context.Set<SurveyMainDetail>()
-                    //   .FromSqlInterpolated($"EXEC GetSurveyMainDetail {surveyMainDetailParams}, {surveyDeptIDParam}").ToListAsync();
-                    //var mainDetail = await _context.Set<SurveyMainDetail>()
-                    // .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType='CSP' , {surveyDeptIDParam}").ToListAsync();
+                  
 
                     if (mainDetail == null || mainDetail.Count <= 0)
                     {

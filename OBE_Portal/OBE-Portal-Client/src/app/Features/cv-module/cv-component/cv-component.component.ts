@@ -185,6 +185,7 @@ export class CvComponentComponent implements OnInit {
       if (response) {
         this.toastr.success('Activity saved successfully.');
         this.activityForm.reset();
+        this.tempData = [];
         $("#dynamicModal").modal("hide");
         this.loadActivities();
       } else {
@@ -432,7 +433,7 @@ export class CvComponentComponent implements OnInit {
 
 
   openModal(activityN: any): void {
-    
+    this.tempData = [];
     this.selectedActivity = this.activities.find(activity => activity.ActivityName === activityN);
 
     this.activityForm.get('activity')?.setValue(this.selectedActivity.ActivityID, { emitEvent: true });

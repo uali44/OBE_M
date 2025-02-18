@@ -10,6 +10,7 @@ declare const $: any;
   styleUrls: ['./framework-main.component.css']
 })
 export class FrameworkMainComponent implements OnInit {
+  Intake: number;
   constructor(
     private FrameworkComponent: FrameworkComponent,
     private InterconnectedService: InterconnectedService,
@@ -22,6 +23,13 @@ export class FrameworkMainComponent implements OnInit {
       this.CloseTabContent();
     });
   }
+
+  receiveData(data: number) {
+    this.Intake = data; // Update the parent component's variable with the data
+
+  
+  }
+
   loadTab(Title) {
     $("#Content").removeClass('dashboard-bg');
     this.FrameworkComponent.ShowTab(Title);

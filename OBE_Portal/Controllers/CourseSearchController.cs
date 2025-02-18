@@ -282,5 +282,59 @@ namespace OBE_Portal.Controllers
             }
         }
 
+
+
+
+        [HttpPost("GetDepartmentPrograms")]
+        public async Task<IActionResult> GetDepartmentPrograms([FromBody] long request)
+        {
+            try
+            {
+                if (request > 0)
+                {
+                    var respone = await _courseSearch.GetDepartmentPrograms(request).ConfigureAwait(false);
+                    if (respone != null)
+                        return Ok(respone);
+                    else
+                        return Ok(respone);
+                }
+                else
+                    return Ok(null);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost("GetProgramIntakes")]
+        public async Task<IActionResult> GetProgramIntakes([FromBody] long request)
+        {
+            try
+            {
+                if (request > 0)
+                {
+                    var respone = await _courseSearch.GetProgramIntakes(request).ConfigureAwait(false);
+                    if (respone != null)
+                        return Ok(respone);
+                    else
+                        return Ok(respone);
+                }
+                else
+                    return Ok(null);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
+
+
+
     }
 }

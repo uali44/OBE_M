@@ -169,7 +169,7 @@
                 <td>{{ question.Mapping }}</td>
                 <td class="padding-l10">
                   <ul class="list-unstyled">
-                    <li *ngFor="let option of question.Options">{{ option }}</li>
+                    <li *ngFor="let option of question.Options;let j=index;">{{j+1}}-{{ option }}</li>
                   </ul>
                 </td>
                 <td>{{ question.Section }}</td>
@@ -184,7 +184,7 @@
          
 
           <button type="submit" (click)="onSubmit()" class="btn btn-info pull-right" [disabled]="enableSave === false">Save Questions</button>
-          <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-default pull-right" (click)="CloseModal()" data-dismiss="modal">Cancel</button>
 
         </div>
         
@@ -248,8 +248,9 @@
                       <td class=""> <label>{{ question.Question }}</label></td>
                       <td class="">{{ question.QType }}</td>
                       <td class="">{{ question.Mapping }}</td>
-                      <td class=""><ul class="list-unstyled" *ngFor="let option of question.Options">
-                        <li>{{option.Options}}</li>
+                      <td class="">
+                      <ul class="list-unstyled" *ngFor="let option of question.Options;let n=index;">
+                                     <li><b>{{n+1}}</b>-{{option.Options}}</li>
 
                         </ul></td>
                       <td class="">{{ question.Section }}</td>
@@ -317,8 +318,8 @@
                       <td class="">{{ question.QType }}</td>
                       <td class="">{{ question.Mapping }}</td>
                       <td class="">
-                        <ul class="list-unstyled" *ngFor="let option of question.Options">
-                          <li>{{option.Options}}</li>
+                        <ul class="list-unstyled" *ngFor="let option of question.Options;let n=index;">
+                          <li><b>{{n+1}}</b>-{{option.Options}}</li>
 
                         </ul>
                       </td>
@@ -386,8 +387,8 @@
                       <td class="">{{ question.QType }}</td>
                       <td class="">{{ question.Mapping }}</td>
                       <td class="">
-                        <ul class="list-unstyled" *ngFor="let option of question.Options">
-                          <li>{{option.Options}}</li>
+                        <ul class="list-unstyled" *ngFor="let option of question.Options;let n=index;">
+                          <li><b>{{n+1}}</b>-{{option.Options}}</li>
 
                         </ul>
                       </td>
@@ -455,8 +456,8 @@
                       <td class="">{{ question.QType }}</td>
                       <td class="">{{ question.Mapping }}</td>
                       <td class="">
-                        <ul class="list-unstyled" *ngFor="let option of question.Options">
-                          <li>{{option.Options}}</li>
+                        <ul class="list-unstyled" *ngFor="let option of question.Options;let n=index;">
+                          <li><b>{{n+1}}</b>-{{option.Options}}</li>
 
                         </ul>
                       </td>
@@ -524,8 +525,8 @@
                       <td class="">{{ question.QType }}</td>
                       <td class="">{{ question.Mapping }}</td>
                       <td class="">
-                        <ul class="list-unstyled" *ngFor="let option of question.Options">
-                          <li>{{option.Options}}</li>
+                        <ul class="list-unstyled" *ngFor="let option of question.Options;let n=index;">
+                          <li><b>{{n+1}}</b>-{{option.Options}}</li>
 
                         </ul>
                       </td>

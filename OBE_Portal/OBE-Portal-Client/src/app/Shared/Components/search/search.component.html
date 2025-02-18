@@ -1,0 +1,41 @@
+<fieldset class="padding-b5">
+    <legend>Criteria</legend>
+    <div class="row">
+      <div class="form-group col-sm-2">
+        <label class="control-label">Select Institute <span class="text-danger">*</span></label>
+        <select class="form-control" (change)="Get_Department($event.target.value)" [ngModel]="Temp_Institute_ID" [attr.disabled]="Temp_Institute_ID != 0  ? 'disabled' : null">
+          <option value="0">Select Institute</option>
+          <option value="{{i.InstituteID}}" *ngFor="let i of Institutes">{{i.InstituteShortName}}</option>
+        </select>
+      </div>
+
+      <div class="form-group col-sm-2">
+        <label class="control-label">Select Department <span class="text-danger">*</span></label>
+        <select class="form-control" (change)="Get_Programs($event.target.value)" [ngModel]="Temp_Deaprtment_ID" [attr.disabled]="Temp_Deaprtment_ID != 0  ? 'disabled' : null">
+          <option value="0">Select Deparment</option>
+          <option value="{{i.DepartmentID}}" *ngFor="let i of Department">{{i.DepartmentName}}</option>
+        </select>
+      </div>
+      
+      <div class="form-group col-sm-2">
+        <label class="control-label">Select Program <span class="text-danger">*</span></label>
+        <select class="form-control" (change)="Get_Program_Intakes($event.target.value)">
+          <option value="0">Select Program</option>
+          <option value="{{i?.ProgramID}}" *ngFor="let i of Programs">{{i?.ProgramName}}</option>
+        </select>
+      </div>
+
+      <div class="form-group col-sm-2">
+        <label class="control-label">Select Intake <span class="text-danger">*</span></label>
+        <select class="form-control" id="IntakeID" (change)="Set_Intakes($event.target.value)">
+          <option value="0">Select Intake</option>
+          <option value="{{i?.AdmissionOpenProgramID}}" *ngFor="let i of Intake">{{i?.semesterAlia}}</option>
+        </select>
+      </div>
+      
+      <div class="col-sm-2 margin-t17">
+        <button class="btn btn-info pull-right" (click)="Emit_Data()">Search</button>
+      </div>
+
+    </div>
+  </fieldset>

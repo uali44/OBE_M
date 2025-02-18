@@ -54,122 +54,123 @@
   <div class="modal fade" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content" style="padding:10px;">
-        <div class="section-heading padding-b20">
-          <h2 class="pull-left">Add Activities</h2>
-          <div class="pull-right">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
-          </div>
-        </div>
-        <div class="clearfix"></div>
-
-        <div class="container">
-          <form [formGroup]="activityForm" (ngSubmit)="onSubmit()">
-            <!-- Select Activity -->
-            <div class="form-group">
-              <label for="activity">Select Activity</label>
-              <select id="activity" formControlName="activity" (change)="onActivityChange($event.target.value)" class="form-control">
-                <option value="" disabled>Select an Activity</option>
-                <option *ngFor="let activity of activities" [value]="activity.ActivityID">
-                  {{ activity.ActivityName }}
-                </option>
-              </select>
-              <div *ngIf="activityForm.controls['activity'].invalid && activityForm.controls['activity'].touched">
-                <div class="text-danger" *ngIf="activityForm.controls['activity'].hasError('required')">Activity Type is required.</div>
-              </div>
+        <div class="modal-header">
+          <div class="section-heading padding-b20">
+            <h2 class="pull-left">Add Activities</h2>
+            <div class="pull-right">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
             </div>
+          </div>
+          </div>
+          <div class="clearfix"></div>
 
-            <!-- Dynamic Fields -->
-            <div *ngFor="let field of fields;let i=index;" class="form-group">
-              <ng-container *ngIf="field.SubType=='date'">
+          <div class="container">
+            <form [formGroup]="activityForm" (ngSubmit)="onSubmit()">
+              <!-- Select Activity -->
+              <div class="form-group">
+                <label for="activity">Select Activity</label>
+                <select id="activity" formControlName="activity" (change)="onActivityChange($event.target.value)" class="form-control">
+                  <option value="" disabled>Select an Activity</option>
+                  <option *ngFor="let activity of activities" [value]="activity.ActivityID">
+                    {{ activity.ActivityName }}
+                  </option>
+                </select>
+                <div *ngIf="activityForm.controls['activity'].invalid && activityForm.controls['activity'].touched">
+                  <div class="text-danger" *ngIf="activityForm.controls['activity'].hasError('required')">Activity Type is required.</div>
+                </div>
+              </div>
 
-                <label [for]="sanitizeType(field.subDetail)" class="">{{ field.subDetail }}</label>
-                <div class="input-group">
-                  <input [owlDateTimeTrigger]="dt" [owlDateTime]="dt"  
-                         [id]="sanitizeType(field.subDetail)"
-                         class="form-control "
-                         [formControlName]="sanitizeType(field.subDetail)"
-                         [placeholder]="'Enter ' + field.subDetail"
-                          (Change)="onDateChange($event.value, sanitizeType(field.subDetail))" 
+              <!-- Dynamic Fields -->
+              <div *ngFor="let field of fields;let i=index;" class="form-group">
+                <ng-container *ngIf="field.SubType=='date'">
 
-                         />
-                  <span class="input-group-addon "><i class="fas fa-calendar-alt"></i></span>
+                  <label [for]="sanitizeType(field.subDetail)" class="">{{ field.subDetail }}</label>
+                  <div class="input-group">
+                    <input [owlDateTimeTrigger]="dt" [owlDateTime]="dt"
+                           [id]="sanitizeType(field.subDetail)"
+                           class="form-control "
+                           [formControlName]="sanitizeType(field.subDetail)"
+                           [placeholder]="'Enter ' + field.subDetail"
+                           (Change)="onDateChange($event.value, sanitizeType(field.subDetail))" />
+                    <span class="input-group-addon "><i class="fas fa-calendar-alt"></i></span>
                   </div>
                   <owl-date-time #dt [pickerType]="'calendar'"></owl-date-time>
-                  
-</ng-container>
-              <ng-container *ngIf="field.SubType!='date'">
-                <label [for]="sanitizeType(field.subDetail)">{{ field.subDetail }}</label>
-                <input [type]="field.SubType"
-                       [id]="sanitizeType(field.subDetail)"
-                       class="form-control"
-                       [formControlName]="sanitizeType(field.subDetail)"
-                       [placeholder]="'Enter ' + field.subDetail" />
-              </ng-container>
 
-              <div *ngIf="activityForm.controls[sanitizeType(field.subDetail)].invalid && activityForm.controls[sanitizeType(field.subDetail)].touched">
-                <div class="text-danger" *ngIf="activityForm.controls[sanitizeType(field.subDetail)].hasError('required')">{{field.subDetail}} is required.</div>
+                </ng-container>
+                <ng-container *ngIf="field.SubType!='date'">
+                  <label [for]="sanitizeType(field.subDetail)">{{ field.subDetail }}</label>
+                  <input [type]="field.SubType"
+                         [id]="sanitizeType(field.subDetail)"
+                         class="form-control"
+                         [formControlName]="sanitizeType(field.subDetail)"
+                         [placeholder]="'Enter ' + field.subDetail" />
+                </ng-container>
+
+                <div *ngIf="activityForm.controls[sanitizeType(field.subDetail)].invalid && activityForm.controls[sanitizeType(field.subDetail)].touched">
+                  <div class="text-danger" *ngIf="activityForm.controls[sanitizeType(field.subDetail)].hasError('required')">{{field.subDetail}} is required.</div>
+                </div>
+
+
+              </div>
+
+              <div class="form-group">
+                <label for="imageFile">Upload Document(Image or PDF)</label>
+                <input type="file" id="imageFile" (change)="onFileSelected($event)" class="form-control" formControlName="imageFile" />
+                <div *ngIf="fileError" class="text-danger">{{ fileError }}</div>
               </div>
 
 
-            </div>
 
-            <div class="form-group">
-              <label for="imageFile">Upload Document(Image or PDF)</label>
-              <input type="file" id="imageFile" (change)="onFileSelected($event)" class="form-control" formControlName="imageFile" />
-              <div *ngIf="fileError" class="text-danger">{{ fileError }}</div>
-            </div>
-
-
-
-            <div class="row margin-t10">
-              <div class="section-heading padding-b30">
-                <h2 class="pull-left">View Added Activities</h2>
-                <button type="button" class="btn btn-primary pull-right" (click)="add()" [disabled]="!activityForm.valid">Add</button>
+              <div class="row margin-t10">
+                <div class="section-heading padding-b30">
+                  <h2 class="pull-left">View Added Activities</h2>
+                  <button type="button" class="btn btn-info pull-right" (click)="add()" [disabled]="!activityForm.valid">Add</button>
+                </div>
               </div>
-            </div>
 
 
 
-            <fieldset>
-              <legend>Added Activities</legend>
-              <table class="table table-bordered table-hover table-theme ">
-                <thead>
-                  <tr>
-                    <!--<th *ngFor="let field of formFields">{{ field.label }}</th>-->
-                    <th *ngFor="let field of fields">
-                      {{field.subDetail}}
-                    </th>
+              <fieldset>
+                <legend>Added Activities</legend>
+                <table class="table table-bordered table-hover table-theme ">
+                  <thead>
+                    <tr>
+                   
+                      
+                      <th *ngFor="let field of fields">
+                        {{field.subDetail}}
+                      </th>
 
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let entry of tempData; let i = index">
-                    <ng-container *ngFor="let detail of entry.Details">
-                      <td>{{detail.DetailValue}}</td>
-
-
-                    </ng-container>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let entry of tempData; let i = index">
+                      <ng-container *ngFor="let detail of entry.Details">
+                        <td>{{detail.DetailValue}}</td>
 
 
-                    <td>
-                      <button type="button" class="btn btn-danger btn-sm" (click)="deleteEntry(i)">Delete</button>
-                    </td>
+                      </ng-container>
 
-                  </tr>
-                </tbody>
-              </table>
-            </fieldset>
-            <div class="modal-footer row">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel</button>
 
-              <button type="submit" class="btn btn-primary" [disabled]="tempData.length==0">Save</button>
-            </div>
-          </form>
+                      <td>
+                        <button type="button" class="btn btn-default " (click)="deleteEntry(i)">  <i class="app-icon-IconSet-1-33 blue"></i></button>
+                      </td>
+
+                    </tr>
+                  </tbody>
+                </table>
+              </fieldset>
+              <div class="modal-footer row">
+                <button type="button" class="btn btn-default"  data-dismiss="modal" aria-label="Close">Cancel</button>
+
+                <button type="submit" class="btn btn-info" [disabled]="tempData.length==0">Save</button>
+              </div>
+            </form>
+          </div>
+
         </div>
-
       </div>
-    </div>
   </div>
 
 

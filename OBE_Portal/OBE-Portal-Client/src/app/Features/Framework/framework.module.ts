@@ -14,7 +14,7 @@ import { PipessharedModule } from '../../Shared/Pipe/pipesshared.module';
 import { FrameworkRoutingModule } from './framework-routing.module';
 import { FrameworkComponent } from './framework.component';
 import { FrameworkMainComponent } from './framework-main/framework-main.component';
-
+import { SharedModuleModule } from '../../Shared/shared-module/shared-module.module';
 @NgModule({
   declarations: [FrameworkMainComponent, FrameworkComponent],
   imports: [
@@ -29,7 +29,8 @@ import { FrameworkMainComponent } from './framework-main/framework-main.componen
     SweetAlert2Module,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    PipessharedModule
+    PipessharedModule,
+    SharedModuleModule
   ],
   providers: [AuthGuard, { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }],
 })

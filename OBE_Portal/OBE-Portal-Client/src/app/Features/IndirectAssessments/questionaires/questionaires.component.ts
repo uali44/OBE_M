@@ -171,17 +171,13 @@ export class QuestionairesComponent implements OnInit {
 
  
 
+  CloseModal() {
 
+    this.createSurveyForm.reset();
+    this.surveySubDetails = [];
+    $("#addEducationModal").modal("hide");
+  }
  
-
-
-
-
-
-
-
-
-
 
 
   receiveData(data: number) {
@@ -209,7 +205,7 @@ export class QuestionairesComponent implements OnInit {
         data => {
           this.ngxService.stop();
           this.SurveyData = data;
-          console.log("getdata", this.SurveyData);
+         
          // this.createForm();
         
 
@@ -229,26 +225,26 @@ export class QuestionairesComponent implements OnInit {
       Deptid: GlobalService.Deaprtment_ID,
       SurveyIntakeID: this.Intake
     }
-   // console.log(GlobalService.Deaprtment_ID);
+  
     this.ngxService.start();
     this.IndirectAssessmen.GetAllSurvey(request).
       subscribe(
         data => {
           this.ngxService.stop();
           this.CSPSurveyData = data.CSP;
-           console.log("getdata", this.CSPSurveyData);
+          
           this.createForm(this.cSPSurveyForm, this.CSPSurveyData);
           this.ExitSurveyData = data.Exit;
-          //console.log("getdata", this.ExitSurveyData);
+         
           this.createForm(this.exitSurveyForm, this.ExitSurveyData);
           this.EmployerSurveyData = data.Employer;
-          // console.log("getdata", this.EmployerSurveyData);
+        
           this.createForm(this.employerSurveyForm, this.EmployerSurveyData);
           this.InternshipSurveyData = data.Internship;
-          // console.log("getdata", this.InternshipSurveyData);
+         
           this.createForm(this.internshipSurveyForm, this.InternshipSurveyData);
           this.AlumniSurveyData = data.Alumni;
-          // console.log("getdata", this.AlumniSurveyData);
+        
           this.createForm(this.alumniSurveyForm, this.AlumniSurveyData);
 
 

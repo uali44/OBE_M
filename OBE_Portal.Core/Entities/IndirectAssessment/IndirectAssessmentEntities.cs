@@ -102,7 +102,7 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
     }
 
     public class SurveySubDetailOption
-    {
+    {   public int OptionID { get; set; }
         public int QID { get; set; }
         public string Options { get; set; }
     }

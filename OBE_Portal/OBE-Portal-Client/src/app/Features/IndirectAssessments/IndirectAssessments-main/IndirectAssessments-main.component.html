@@ -106,7 +106,7 @@
                           <div *ngIf="question.QType === 'Multiple Choice'">
 
                             <div class="pull-left radio-inline padding-t5" *ngFor="let option of question.Options">
-                              <input type="radio" [formControlName]="question.QID" [value]="option.Options">
+                              <input type="radio" [formControlName]="question.QID" [value]="option.OptionID">
                               <label class="cursor-pointer">{{ option.Options }}</label>
 
                             </div>
