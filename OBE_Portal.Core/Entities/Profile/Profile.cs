@@ -47,7 +47,7 @@ namespace OBE_Portal.Core.Entities.Profile
         public int year { get; set; }
         public ImageFileDto ImageFile { get; set; }
         public int CreatedBy { get;set; }
-        public DateTime CreatedDate { get; set; }
+     
 
     }
     public class ImageFileDto
@@ -75,6 +75,8 @@ namespace OBE_Portal.Core.Entities.Profile
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public ImageFileDto ImageFile { get; set; }
+        public int CreatedBy { get; set; }
+       
     }
     public class FacultyExperience
     {
@@ -115,6 +117,8 @@ namespace OBE_Portal.Core.Entities.Profile
         public int ActivityID { get; set; }
         public ImageFileDto ImageFile { get; set; }
         public List<ActivityDetail> Details { get; set; }
+        public int CreatedBy { get; set; }
+  
     }
 
     public class ActivityDetail
@@ -152,6 +156,9 @@ namespace OBE_Portal.Core.Entities.Profile
         public Dictionary<string, string> SubDetails { get; set; } // DetailName as key, DetailValue as value
     }
 
-
-
+    public class DeleteRequest
+    {
+        public int ID { get; set; }
+        public int ModifiedBy { get; set; }
+    }
 }

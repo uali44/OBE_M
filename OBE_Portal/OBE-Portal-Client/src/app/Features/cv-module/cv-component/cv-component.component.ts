@@ -205,6 +205,7 @@ export class CvComponentComponent implements OnInit {
         DetailName: field.subDetail,
         DetailValue: this.activityForm.value[this.sanitizeType(field.subDetail)],
       })),
+      CreatedBy: GlobalService.FacultyMember_ID,
     };
     this.tempData.push(activityData);
     
@@ -364,12 +365,15 @@ export class CvComponentComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'No, keep it'
     }).then((result) => {
-
+      const payload = {
+        ID: detailID,
+        ModifiedBy: GlobalService.FacultyMember_ID,
+      }
     
 
 
       if (result.value) {
-        this.ProfileService.DeleteActivity(detailID).subscribe(
+        this.ProfileService.DeleteActivity(payload).subscribe(
           () => {
             Swal.fire('Deleted!', 'Your activity has been deleted.', 'success');
             this.loadActivities();

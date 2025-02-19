@@ -539,31 +539,37 @@ export class IndirectAssessmentsMainComponent implements OnInit {
   getQuestions(data: any, form: FormGroup) {
   
     return data.Questions.map(qid => {
-    
-      const answer =(form.get(qid.QID.toString()).value);
+      var OptionID = null;
+      var answer = null;
+      if (qid.QType == "Multiple Choice") {
+        OptionID = (form.get(qid.QID.toString()).value);
+      }
+      else {
+        answer = (form.get(qid.QID.toString()).value);
 
+      }
      
       return {
+        StudentID: Number(this.StudentID),
         QID: qid.QID,
+        OptionID: OptionID,
         Answer: answer.toString()
       };
     });
 
   }
   submitCSPSurvey() {
-   // console.log(this.cSPSurveyForm.value);
+  
     if (this.StudentID == 0) {
       this.toastr.error("No student is selected", "Error!");
       return;
 
     }
-    const payload = {
+    const payload = [
 
-      StudentID: Number(this.StudentID),
-      SurveyID: this.CSPSurveyData.SurveyID,
-      Questions: this.getQuestions(this.CSPSurveyData, this.cSPSurveyForm)
-    }
-   // console.log(payload);
+       this.getQuestions(this.CSPSurveyData, this.cSPSurveyForm)
+    ]
+  
     this.ngxService.start();
     this.IndirectAssessment.SaveSurvey(payload).
       subscribe(
@@ -758,6 +764,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
 
 
   }
+
 
   populateForm(questions: any[]) {
     questions.forEach(question => {

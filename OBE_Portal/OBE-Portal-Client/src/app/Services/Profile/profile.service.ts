@@ -49,14 +49,14 @@ export class ProfileService {
   GetExperience<T>(data: number): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'Profile/GetExperience', data);
   }
-  
-  DeleteExperience<T>(data: number): Observable<any> {
+
+  DeleteExperience<T>(data: any): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'Profile/DeleteExperience', data);
   }
-  DeleteEducation<T>(data: number): Observable<any> {
+  DeleteEducation<T>(data: any): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'Profile/DeleteEducation', data);
   }
-  DeleteActivity<T>(data: number): Observable<any> {
+  DeleteActivity<T>(data: any): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'Profile/DeleteActivity', data);
   }
 

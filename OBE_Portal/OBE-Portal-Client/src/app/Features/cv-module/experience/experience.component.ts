@@ -132,7 +132,7 @@ export class ExperienceComponent implements OnInit {
       StartDate: this.experienceForm.value.StartDate,
       EndDate: this.experienceForm.value.EndDate,
       ImageFile: this.selectedFileData,
-
+      CreatedBy: GlobalService.FacultyMember_ID,
     }
     this.tempData.push(payload);
    
@@ -236,11 +236,14 @@ export class ExperienceComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
 
-
+      const payload = {
+        ID: expID,
+        ModifiedBy: GlobalService.FacultyMember_ID,
+      }
 
 
       if (result.value) {
-        this.ProfileService.DeleteExperience(expID).subscribe(
+        this.ProfileService.DeleteExperience(payload).subscribe(
           () => {
             Swal.fire('Deleted!', 'Your Experience Data has been deleted.', 'success');
             this.getExperience(); 

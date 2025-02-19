@@ -209,11 +209,11 @@ namespace OBE_Portal.Controllers
         }
 
         [HttpPost("DeleteExperience")]
-        public async Task<IActionResult> DeleteExperience([FromBody] int ExpID)
+        public async Task<IActionResult> DeleteExperience(DeleteRequest request)
         {
             try
             {
-                var response = await profile.DeleteExperience(ExpID).ConfigureAwait(true);
+                var response = await profile.DeleteExperience(request).ConfigureAwait(true);
                 return Ok(response);
             }
             catch (Exception)
@@ -223,11 +223,11 @@ namespace OBE_Portal.Controllers
         }
 
         [HttpPost("DeleteEducation")]
-        public async Task<IActionResult> DeleteEducation([FromBody] int EduID)
+        public async Task<IActionResult> DeleteEducation(DeleteRequest request)
         {
             try
             {
-                var response = await profile.DeleteEducation(EduID).ConfigureAwait(true);
+                var response = await profile.DeleteEducation(request).ConfigureAwait(true);
                 return Ok(response);
             }
             catch (Exception)
@@ -239,11 +239,11 @@ namespace OBE_Portal.Controllers
 
 
         [HttpPost("DeleteActivity")]
-        public async Task<IActionResult> DeleteActivity([FromBody] int detailID)
+        public async Task<IActionResult> DeleteActivity(DeleteRequest request)
         {
             try
             {
-                var response = await profile.DeleteActivity(detailID).ConfigureAwait(true);
+                var response = await profile.DeleteActivity(request).ConfigureAwait(true);
                 return Ok(response);
             }
             catch (Exception)

@@ -102,7 +102,7 @@ namespace OBE_Portal.Core.Context
             modelBuilder.Entity<SurveySubDetailOption>().HasNoKey();
             modelBuilder.Entity<StudentSurveyMainDetail>().HasNoKey();
             modelBuilder.Entity<StudentSurveySubDetail>().HasNoKey();
-            
+            modelBuilder.Entity<SurveyResponse>().HasNoKey();
         }
         
         //public DbSet<Authentication> user { get; set; }

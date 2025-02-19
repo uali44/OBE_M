@@ -116,6 +116,7 @@ export class EducationComponent implements OnInit {
       field: this.educationForm.value.field,
       year: this.educationForm.value.year,
       imageFile: this.selectedFileData, // Include file data
+      CreatedBy: GlobalService.FacultyMember_ID,
     };
     this.tempData.push(payload);
    
@@ -220,11 +221,14 @@ export class EducationComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
 
-
+      const payload = {
+        ID: eduID,
+        ModifiedBy: GlobalService.FacultyMember_ID,
+      }
 
 
       if (result.value) {
-        this.ProfileService.DeleteEducation(eduID).subscribe(
+        this.ProfileService.DeleteEducation(payload).subscribe(
           () => {
             Swal.fire('Deleted!', 'Your Education Data has been deleted.', 'success');
             this.getEduction();

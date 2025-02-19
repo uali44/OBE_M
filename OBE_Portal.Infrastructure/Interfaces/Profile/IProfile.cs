@@ -21,9 +21,9 @@ namespace OBE_Portal.Infrastructure.Interfaces.Profile
         Task<List<FacultyDetails>> GetFacultyDetails(long FacultyID);
         Task<List<FacultyEducation>> GetEducation(int facultyMemberID);
         Task<List<FacultyExperience>> GetExperience(int facultyMemberID);
-        Task<bool> DeleteExperience(int expID);
-        Task<bool> DeleteEducation(int eduID);
-        Task<bool> DeleteActivity(int eduID);
+        Task<bool> DeleteExperience(DeleteRequest request);
+        Task<bool> DeleteEducation(DeleteRequest request);
+        Task<bool> DeleteActivity(DeleteRequest request);
         Task<RequestData> getAllData(long facultyID);
     }
 }

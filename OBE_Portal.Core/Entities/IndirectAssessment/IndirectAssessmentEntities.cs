@@ -191,5 +191,20 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public int StudentID { get; set; }
         public int SurveyID { get; set; }
     }
+    public class SurveyResponseRequest
+    {
+        public int StudentID { get; set; }
+        public int QID { get; set; }
+        public string Answer { get; set; }
+        public int OptionID { get; set; }
+    }
+    public class SurveyResponse
+    {
+        public int StudentResponseID { get; set; }
+        public int StudentID { get; set; }
+        public int QID { get; set; }
+        public string Answer { get; set; }
+        public int OptionID { get; set; }
+    }
 
 }
