@@ -262,7 +262,7 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                         var CreatedBy = new SqlParameter("@CreatedBy", Request[i].CreatedBy);
                         var CreatedDate = new SqlParameter("@CreatedDate", DateTime.UtcNow);
                         await _context.Database.ExecuteSqlRawAsync(
-       "EXEC AddFacultyExperience @FacultyMemberID, @Position, @Company, @StartDate, @EndDate,@Image,,@CreatedBy,@CreatedDate",
+       "EXEC AddFacultyExperience @FacultyMemberID, @Position, @Company, @StartDate, @EndDate,@Image,@CreatedBy,@CreatedDate",
        facultyMemberIdParam, positionParam, companyParam, startDateParam, endDateParam,Image, CreatedBy, CreatedDate);
 
                     }
