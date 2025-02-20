@@ -223,8 +223,8 @@ export class ExperienceComponent implements OnInit {
     if (!event) {
       return '';
     }
-    else { 
-        const formattedDate = date.toISOString().split('T')[0]; // Gets 'YYYY-MM-DD'
+    else {
+      const formattedDate = date.toLocaleDateString('en-CA'); // Gets 'YYYY-MM-DD'
       return formattedDate;
     }
     }

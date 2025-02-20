@@ -98,7 +98,7 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
 
 
         }
-      private  async Task<List<FacultyDetails>> GetFacultyDetails(long FacultyID)
+      public  async Task<List<FacultyDetails>> GetFacultyDetails(long FacultyID)
         {
             try
             {
@@ -121,29 +121,7 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                 throw;
             }
         }
-        async Task<List<FacultyDetails>> IProfile.GetFacultyDetails(long FacultyID)
-        {
-            try
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    var FacultyMemberID = new SqlParameter("@FacultyMemberID", FacultyID);
-                    List<FacultyDetails> response = await _context.Set<FacultyDetails>().FromSqlInterpolated($"EXEC GetFacultyDetailsByID {FacultyMemberID}").ToListAsync();
-                    if (response != null)
-                    {
-                        return response;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+       
 
 
         async Task<bool> IProfile.AddFacultyEducation(List<education> Request)
@@ -286,53 +264,7 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
 
 
 
-        async Task<List<ActivityList>> IProfile.GetActivities()
-        {
-            try
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    List<ActivityList> response = await _context.Set<ActivityList>().FromSqlInterpolated($"EXEC GetAllActivities").ToListAsync();
-                    if (response != null)
-                    {
-                        return response;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-
-        async Task<List<ActivitySubDetail>> GetActivitySubDetails(long ActivityID)
-        {
-            try
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    var Activity = new SqlParameter("@ActivityID", ActivityID);
-                    List<ActivitySubDetail> response = await _context.Set<ActivitySubDetail>().FromSqlInterpolated($"EXEC GetActivitySubDetails {Activity}").ToListAsync();
-                    if (response != null)
-                    {
-                        return response;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+     
 
 
 
@@ -347,7 +279,7 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
 
 
 
-        async Task<List<ActivityList>> GetActivities()
+    public async Task<List<ActivityList>> GetActivities()
         {
             try
             {
@@ -487,7 +419,7 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
 
 
 
-        async Task<List<ActivityDetailsDto>> GetFacultyActivity(int FacultyID)
+     public   async Task<List<ActivityDetailsDto>> GetFacultyActivity(int FacultyID)
         {
             try
             {
@@ -542,50 +474,10 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
 
 
 
-        async Task<List<ActivityDetailsDto>> IProfile.GetFacultyActivity(int FacultyID)
-        {
-            try
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    var faculty = new SqlParameter("@FacultyID", FacultyID);
-                    var response = await _context.Set<ActivityDetailResult>().FromSqlInterpolated($"EXEC GetFacultyActivity {faculty}").ToListAsync();
-                    if (response != null)
-                    {
-                        var groupedActivities = response
-             .GroupBy(d => d.ActivityName)
-             .Select(g => new ActivityDetailsDto
-             {
-                 ActivityName = g.Key,
-                 FacultyID = g.First().FacultyID,
-                 ActivityType = g.First().ActivityType,
-                 Details = g.GroupBy(d => d.DetailID)
-                            .Select(detailGroup => new ActivityDetailDto
-                            {
-                                DetailID = detailGroup.Key,
-                                DetailName = detailGroup.First().DetailName,
-                                Image = detailGroup.First().Image,
-                                SubDetails = detailGroup.ToDictionary(d => d.DetailName, d => d.DetailValue)
-                            }).ToList()
-             }).ToList();
-
-                        return groupedActivities;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+      
 
 
-
-        async Task<List<FacultyEducation>> GetEducation(int facultyMemberID)
+    public  async Task<List<FacultyEducation>> GetEducation(int facultyMemberID)
         {
             try
             {
@@ -613,35 +505,10 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
         }
 
 
-        async Task<List<FacultyEducation>> IProfile.GetEducation(int facultyMemberID)
-        {
-            try
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-
-                    var facultyMemberIDParam = new SqlParameter("@FacultyMemberID", facultyMemberID);
-                    List<FacultyEducation> response = await _context.Set<FacultyEducation>().FromSqlInterpolated($"EXEC GetFacultyEducation {facultyMemberIDParam}")
-                    .ToListAsync();
-                    if (response != null)
-                    {
-                        return response;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error fetching education data", ex);
-            }
-        }
 
 
-        async Task<List<FacultyExperience>> GetExperience(int facultyMemberID)
+
+     public  async Task<List<FacultyExperience>> GetExperience(int facultyMemberID)
         {
             try
             {
@@ -668,31 +535,7 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
 
 
 
-        async Task<List<FacultyExperience>> IProfile.GetExperience(int facultyMemberID)
-        {
-            try
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-
-                    var facultyMemberIDParam = new SqlParameter("@FacultyMemberID", facultyMemberID);
-                    var response = await _context.Set<FacultyExperience>().FromSqlInterpolated($"EXEC GetFacultyExperience  {facultyMemberIDParam}")
-                    .ToListAsync();
-                    if (response != null)
-                    {
-                        return response;
-                    }
-                    else
-                    { return null; }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error fetching education data", ex);
-            }
-        }
-
+     
 
         async Task<bool> IProfile.DeleteExperience(DeleteRequest request)
         {

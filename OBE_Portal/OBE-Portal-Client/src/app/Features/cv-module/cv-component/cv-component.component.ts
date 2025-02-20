@@ -159,7 +159,8 @@ export class CvComponentComponent implements OnInit {
 
   private FormateDate(event: any) {
     const date = new Date(event);
-    const formattedDate = date.toISOString().split('T')[0]; // Gets 'YYYY-MM-DD'
+    
+    const formattedDate = date.toLocaleDateString('en-CA') // Gets 'YYYY-MM-DD'
     return formattedDate;
   }
   fetchFields(val): void {
@@ -214,7 +215,7 @@ export class CvComponentComponent implements OnInit {
         // Check if value is a valid date
         if (value && !isNaN(Date.parse(value))) {
           const date = new Date(value);
-          value = date.toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
+          value = date.toLocaleDateString('en-CA'); // Format as 'YYYY-MM-DD'
         }
 
         return {
