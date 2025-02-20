@@ -97,7 +97,7 @@ export class ExperienceComponent implements OnInit {
             this.experienceForm.reset();
             this.experienceForm.controls['FacultyMemberID'].setValue(GlobalService.FacultyMember_ID);
             this.tempData = [];
-
+            this.selectedFileData = null;
 
             $("#addExperienceModal").modal("hide");
             this.getExperience();
@@ -113,12 +113,20 @@ export class ExperienceComponent implements OnInit {
      
   }
   onCurrentlyWorkingChange(event: any) {
+
     this.currentlyWorking = event.target.checked;
+    
     if (this.currentlyWorking) {
       this.experienceForm.get('EndDate')?.setValue(null); // Clear EndDate
       this.experienceForm.get('EndDate')?.disable(); // Disable EndDate input
+
+      $("#EndDate").prop("disabled", true);
+
     } else {
+      $("#EndDate").prop("disabled", false);
       this.experienceForm.get('EndDate')?.enable(); // Enable EndDate input
+      this.experienceForm.get('EndDate')?.updateValueAndValidity();
+
     }
   }
 
@@ -131,19 +139,41 @@ export class ExperienceComponent implements OnInit {
       Company: this.experienceForm.value.Company,
       StartDate: this.experienceForm.value.StartDate,
       EndDate: this.experienceForm.value.EndDate,
-      ImageFile: this.selectedFileData,
+      imageFile: this.selectedFileData,
       CreatedBy: GlobalService.FacultyMember_ID,
     }
-    this.tempData.push(payload);
+
+
    
-    this.experienceForm.reset();
+
+    this.tempData.push(payload);
+
+
+
+    this.experienceForm.reset(); 
+
+    this.selectedFileData = null;
+
+    this.currentlyWorking = false;
+
+   
+    $("#currentlyWorking").prop("checked", false);
+
+   
+  
+    $("#EndDate").prop("disabled", false);
+    this.experienceForm.get('EndDate')?.enable(); 
+    this.experienceForm.get('EndDate')?.updateValueAndValidity();
     this.experienceForm.controls['FacultyMemberID'].setValue(GlobalService.FacultyMember_ID);
+   
   }
 
   deleteEntry(index: number) {
     this.tempData.splice(index, 1);
   }
-
+  ClearImage() {
+    this.selectedFileData = null;
+  }
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement; // Cast to HTMLInputElement
     const file = input.files[0]; // Use optional chaining to check for files
@@ -177,17 +207,28 @@ export class ExperienceComponent implements OnInit {
 
       reader.readAsDataURL(file);
     }
-
+   
     this.selectedFile = file;
     this.fileError = null;
    
 
   }
   onDateChange(event: any, controlName: string) {
-    const date = new Date(event);
-    const formattedDate = date.toISOString().split('T')[0]; // Gets 'YYYY-MM-DD'
+    const formattedDate = this.FormateDate(event); // Gets 'YYYY-MM-DD'
     this.experienceForm.patchValue({ [controlName]: formattedDate });
   }
+  FormateDate(event: any) {
+       
+    const date = new Date(event);
+    if (!event) {
+      return '';
+    }
+    else { 
+        const formattedDate = date.toISOString().split('T')[0]; // Gets 'YYYY-MM-DD'
+      return formattedDate;
+    }
+    }
+
   openFileViewer(filePath: string): void {
     
     this.viewFile.emit({ fileUrl: filePath });
@@ -218,6 +259,7 @@ export class ExperienceComponent implements OnInit {
 
     this.tempData = [];
     this.experienceForm.reset();
+    this.selectedFileData = null;
     $("#addEducationModal").modal("hide");
   }
 
