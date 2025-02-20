@@ -3,6 +3,7 @@ import { GlobalService } from '../../../Shared/Services/Global/global.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { InterconnectedService } from '../../../Shared/Services/Global/interconnected.service';
 import { FrameworkComponent } from '../framework.component';
+
 declare const $: any;
 @Component({
   selector: 'app-framework-main',

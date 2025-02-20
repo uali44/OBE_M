@@ -152,9 +152,15 @@ export class CvComponentComponent implements OnInit {
     this.activityForm.controls['activity'].setValue(this.selectedActivityId);
   }
   onDateChange(event: any, controlName: string) {
+    const formattedDate = this.FormateDate(event);
+    this.activityForm.patchValue({ [controlName]: formattedDate });
+  }
+
+
+  private FormateDate(event: any) {
     const date = new Date(event);
     const formattedDate = date.toISOString().split('T')[0]; // Gets 'YYYY-MM-DD'
-    this.activityForm.patchValue({ [controlName]: formattedDate });
+    return formattedDate;
   }
   fetchFields(val): void {
     const requestdata = { ActivityID: val }
@@ -186,6 +192,7 @@ export class CvComponentComponent implements OnInit {
         this.toastr.success('Activity saved successfully.');
         this.activityForm.reset();
         this.tempData = [];
+        this.selectedFileData = null;
         $("#dynamicModal").modal("hide");
         this.loadActivities();
       } else {
@@ -201,14 +208,28 @@ export class CvComponentComponent implements OnInit {
       FacultyID: this.facultyID,
       ActivityID: this.selectedActivityId,
       imageFile: this.selectedFileData ,
-      Details: this.fields.map((field) => ({
-        DetailName: field.subDetail,
-        DetailValue: this.activityForm.value[this.sanitizeType(field.subDetail)],
-      })),
+      Details: this.fields.map((field) => {
+        let value = this.activityForm.value[this.sanitizeType(field.subDetail)];
+
+        // Check if value is a valid date
+        if (value && !isNaN(Date.parse(value))) {
+          const date = new Date(value);
+          value = date.toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
+        }
+
+        return {
+          DetailName: field.subDetail,
+          DetailValue: value,
+        };
+
+
+
+        
+      }),
       CreatedBy: GlobalService.FacultyMember_ID,
     };
     this.tempData.push(activityData);
-    
+    this.selectedFileData = null;
     this.activityForm.reset();
     this.activityForm.controls['activity'].setValue(this.selectedActivityId);
    
@@ -218,7 +239,9 @@ export class CvComponentComponent implements OnInit {
     this.tempData.splice(index, 1);
   }
 
-
+  ClearImage() {
+    this.selectedFileData = null;
+  }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement; // Cast to HTMLInputElement
@@ -442,7 +465,7 @@ export class CvComponentComponent implements OnInit {
 
     this.activityForm.get('activity')?.setValue(this.selectedActivity.ActivityID, { emitEvent: true });
     this.onActivityChange(this.selectedActivity.ActivityID);
-   
+    this.selectedFileData = null;
     $('#dynamicModal').modal('show');  
   }
 

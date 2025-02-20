@@ -90,7 +90,7 @@ export class EducationComponent implements OnInit {
             this.educationForm.reset();
             this.educationForm.controls['FacultyMemberID'].setValue(GlobalService.FacultyMember_ID);
             this.tempData = [];
-
+            this.selectedFileData = null;
 
 
             $("#addEducationModal").modal("hide");
@@ -119,7 +119,7 @@ export class EducationComponent implements OnInit {
       CreatedBy: GlobalService.FacultyMember_ID,
     };
     this.tempData.push(payload);
-   
+    this.selectedFileData = null;
     this.educationForm.reset();
     this.educationForm.controls['imageFile'].setValue('');
     this.educationForm.controls['FacultyMemberID'].setValue( GlobalService.FacultyMember_ID);
@@ -127,6 +127,10 @@ export class EducationComponent implements OnInit {
 
   deleteEntry(index: number) {
     this.tempData.splice(index, 1);
+  }
+
+  ClearImage() {
+    this.selectedFileData = null;
   }
 
   onFileSelected(event: Event) {
@@ -199,6 +203,7 @@ export class EducationComponent implements OnInit {
 
     this.tempData = [];
     this.educationForm.reset();
+    this.selectedFileData = null;
     $("#addEducationModal").modal("hide");
   }
 

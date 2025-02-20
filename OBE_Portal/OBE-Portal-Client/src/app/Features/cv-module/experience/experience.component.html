@@ -36,7 +36,7 @@
             <div class="mb-3 ">
               <label for="startDate" class="form-label">Start Date</label>
               <div class="input-group">
-                <input id="startDate" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" placeholder="Start Date" class="form-control " formControlName="StartDate" (dateChange)="onDateChange($event.value, 'StartDate')"  />
+                <input id="startDate" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" placeholder="Start Date" class="form-control " formControlName="StartDate" (Change)="onDateChange($event.value, 'StartDate')"  />
                 <span class="input-group-addon "><i class="fas fa-calendar-alt"></i></span>
                 </div>
                 <owl-date-time #dt4 [pickerType]="'calendar'"></owl-date-time>
@@ -53,13 +53,13 @@
 
               </div>
               <div class="mb-3">
-                <label for="endDate" class="form-label">End Date</label>
+                <label for="EndDate" class="form-label">End Date</label>
                 <div class="input-group">
-                  <input id="endDate" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" placeholder="End Date"
+                  <input id="EndDate" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" placeholder="End Date"
                          class="form-control "
                          formControlName="EndDate"
-                         [disabled]="currentlyWorking"
-                         (dateChange)="onDateChange($event.value, 'EndDate')" 
+                    
+                         (Change)="onDateChange($event.value, 'EndDate')" 
                          />
                   <span class="input-group-addon "><i class="fas fa-calendar-alt"></i></span>
                 </div>
@@ -70,7 +70,7 @@
 
               <div class="form-group">
                 <label for="imageFile">Upload Document(Image or PDF)</label>
-                <input type="file" id="imageFile" (change)="onFileSelected($event)" class="form-control" formControlName="imageFile" />
+                <input type="file" id="imageFile" (change)="onFileSelected($event)" (click)="ClearImage()" class="form-control" formControlName="imageFile" />
                 <div *ngIf="fileError" class="text-danger">{{ fileError }}</div>
               </div>
 
@@ -114,12 +114,12 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let entry of tempData; let i = index">
-                    <td>{{ entry.Position }}</td>
-                    <td>{{ entry.Company }}</td>
-                    <td>{{ entry.Field }}</td>
-                    <td>{{ entry.StartDate }}</td>
-                    <td>{{ entry.EndDate || 'Present' }}</td>
-                    <td>{{entry.imageFile.fileName}}</td>
+                    <td>{{ entry?.Position }}</td>
+                    <td>{{ entry?.Company }}</td>
+                    <td>{{ entry?.Field }}</td>
+                    <td>{{ FormateDate(entry?.StartDate) }}</td>
+                    <td>{{ FormateDate(entry?.EndDate) || 'Present' }}</td>
+                    <td>{{entry?.imageFile?.fileName || 'NA'}}</td>
                     <td>
                       <button type="button" class="btn btn-default" (click)="deleteEntry(i)">  <i class="app-icon-IconSet-1-33 blue"></i></button>
                     </td>

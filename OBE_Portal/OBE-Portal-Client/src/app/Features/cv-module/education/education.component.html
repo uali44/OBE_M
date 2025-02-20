@@ -52,7 +52,7 @@
 
             <div class="form-group">
               <label for="imageFile">Upload Document(Image or PDF)</label>
-              <input type="file" id="imageFile" (change)="onFileSelected($event)" class="form-control" formControlName="imageFile" />
+              <input type="file" id="imageFile" (change)="onFileSelected($event)"   (click)="ClearImage()" class="form-control" formControlName="imageFile" />
               <div *ngIf="fileError" class="text-danger">{{ fileError }}</div>
             </div>
 
@@ -88,7 +88,7 @@
                     <td>{{ entry.degree }}</td>
                     <td>{{ entry.field }}</td>
                     <td>{{ entry.year }}</td>
-                    <td>{{entry.imageFile.fileName}}</td>
+                    <td>{{entry?.imageFile?.fileName || 'NA'}}</td>
 
                     <td>
                       <button type="button" class="btn btn-default " (click)="deleteEntry(i)">  <i class="app-icon-IconSet-1-33 blue"></i></button>

@@ -51,7 +51,7 @@
 
 
 
-  <div class="modal fade" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true" role="dialog">
+  <div class="modal fade width-50p" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content" style="padding:10px;">
         <div class="modal-header">
@@ -64,7 +64,7 @@
           </div>
           <div class="clearfix"></div>
 
-          <div class="container">
+          <div class="modal-body">
             <form [formGroup]="activityForm" (ngSubmit)="onSubmit()">
               <!-- Select Activity -->
               <div class="form-group">
@@ -115,7 +115,7 @@
 
               <div class="form-group">
                 <label for="imageFile">Upload Document(Image or PDF)</label>
-                <input type="file" id="imageFile" (change)="onFileSelected($event)" class="form-control" formControlName="imageFile" />
+                <input type="file" id="imageFile" (change)="onFileSelected($event)"    (click)="ClearImage()" class="form-control" formControlName="imageFile" />
                 <div *ngIf="fileError" class="text-danger">{{ fileError }}</div>
               </div>
 
@@ -140,53 +140,41 @@
                       <th *ngFor="let field of fields">
                         {{field.subDetail}}
                       </th>
-
+                      <th>Document</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let entry of tempData; let i = index">
                       <ng-container *ngFor="let detail of entry.Details">
+
                         <td>{{detail.DetailValue}}</td>
 
-
                       </ng-container>
-
-
+                      <td>{{entry?.imageFile?.fileName || 'NA'}}</td>
                       <td>
                         <button type="button" class="btn btn-default " (click)="deleteEntry(i)">  <i class="app-icon-IconSet-1-33 blue"></i></button>
                       </td>
-
                     </tr>
                   </tbody>
                 </table>
               </fieldset>
               <div class="modal-footer row">
                 <button type="button" class="btn btn-default"  data-dismiss="modal" aria-label="Close">Cancel</button>
-
                 <button type="submit" class="btn btn-info" [disabled]="tempData.length==0">Save</button>
               </div>
             </form>
           </div>
-
         </div>
       </div>
   </div>
-
-
   <div style="padding:10px">
-
-
     <app-profile [facultydata]="Faculty"></app-profile>
     <br />
     <app-education [educations]="education" (viewFile)="openFileViewer($event.fileUrl)"></app-education>
     <br />
     <app-experience [exper]="experience" (viewFile)="openFileViewer($event.fileUrl)"></app-experience>
     <br />
-
-
-
-
     <!-- cv-builder.component.html -->
     <!--cv-component.component.html-->
     <!--<div class="tab-cont">-->
@@ -202,11 +190,12 @@
                data-toggle="tab"
                [attr.href]="'#' + sanitizeType(type)">
               <!--Dynamic href based on type-->
-              <h4> {{ type }} </h4>
-            </a>
-          </li>
-        </ul>
-      </div>
+              <h4> {{ type
+                          }} </h4>
+                          </a>
+                          </li>
+                          </ul>
+</div>
 
 
       <!-- Tabs Content -->

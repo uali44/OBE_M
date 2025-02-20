@@ -11,6 +11,6 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     FormsModule
   ],
-  exports: [HighlightPipe, FilterPipe]
+  exports: [HighlightPipe, FilterPipe, SearchComponent]
 })
 export class PipessharedModule { }

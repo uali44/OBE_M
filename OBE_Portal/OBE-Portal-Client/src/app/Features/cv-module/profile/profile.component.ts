@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit {
     phone: '',
     FacultyType: '',
     FacultyRole: '',
-    DriveLink:'',
+    CreatedBy:'',
   };
  
  
@@ -75,7 +75,7 @@ export class ProfileComponent implements OnInit {
   {
    
     this.faculty.FacultyMemberID = GlobalService.FacultyMember_ID;
-
+    this.faculty.CreatedBy = GlobalService.FacultyMember_ID;
     this.ngxService.start();
     this.ProfileService.AddFacultyData([this.faculty]).
       subscribe(
