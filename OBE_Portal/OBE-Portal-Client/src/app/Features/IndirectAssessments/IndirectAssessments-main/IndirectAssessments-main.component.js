@@ -1,22 +1,41 @@
 import { __decorate } from "tslib";
 import { Component } from '@angular/core';
 import { GlobalService } from '../../../Shared/Services/Global/global.service';
+import { FormControl, Validators } from '@angular/forms';
 let IndirectAssessmentsMainComponent = class IndirectAssessmentsMainComponent {
-    constructor(_CoursesSearchService, toastr, ngxService, _InterconnectedService, IndirectAssessmentsComponent, IndirectAssessment) {
+    constructor(_CoursesSearchService, toastr, ngxService, _InterconnectedService, IndirectAssessmentsComponent, IndirectAssessment, fb) {
         this._CoursesSearchService = _CoursesSearchService;
         this.toastr = toastr;
         this.ngxService = ngxService;
         this._InterconnectedService = _InterconnectedService;
         this.IndirectAssessmentsComponent = IndirectAssessmentsComponent;
         this.IndirectAssessment = IndirectAssessment;
+        this.fb = fb;
         this.Institutes = [];
         this.Department = [];
         this.Faculty = [];
         this.Intake = [];
         this.IntakeStudent = [];
+        this.Programs = [];
         this.Is_Permission_Institute = false;
         this.Is_Permission_Deaprtment = false;
         this.Is_Permission_Faculty = false;
+        this.CSPSurveyData = [];
+        this.InternshipSurveyData = [];
+        this.ExitSurveyData = [];
+        this.AlumniSurveyData = [];
+        this.EmployerSurveyData = [];
+        this.cSPSurveyForm = this.fb.group({});
+        this.alumniSurveyForm = this.fb.group({});
+        this.internshipSurveyForm = this.fb.group({});
+        this.exitSurveyForm = this.fb.group({});
+        this.employerSurveyForm = this.fb.group({});
+        this.surveyData = {
+            studentID: 0,
+            surveyID: 0,
+            responses: []
+        };
+        this.SurveyResponse = [];
         this.Temp_Institute_ID = 0;
         this.Temp_Deaprtment_ID = 0;
         this.Is_Permission_Institute = GlobalService.Permissions.indexOf("Institute_Dropdown") >= 0 ? true : false;
@@ -33,7 +52,10 @@ let IndirectAssessmentsMainComponent = class IndirectAssessmentsMainComponent {
         this._InterconnectedService.CloseTab.subscribe(search => {
             this.CloseTabContent();
             this.Get_Institutes();
+            // this.getSurvey("CSP")
         });
+        this.getAllSurvey();
+        this.dept = GlobalService.Deaprtment_ID;
     }
     Get_Institutes() {
         this.IntakeID = 0;
@@ -67,13 +89,37 @@ let IndirectAssessmentsMainComponent = class IndirectAssessmentsMainComponent {
             if (response != null) {
                 if (this.Temp_Deaprtment_ID != 0) {
                     this.Department = response.filter(x => x.DepartmentID == this.Temp_Deaprtment_ID);
-                    this.Get_Intakes(this.Temp_Deaprtment_ID);
+                    this.Get_Programs(this.Temp_Deaprtment_ID);
                 }
                 else {
                     this.Department = response;
                 }
             }
             this.ngxService.stop();
+        }, error => {
+            this.ngxService.stop();
+            this.toastr.error("Internal server error occured while processing your request", "Error!");
+        });
+    }
+    Get_Programs(val) {
+        if (val == undefined || val == null || val == "") {
+            console.log("Invalid val");
+            return;
+        }
+        this.ngxService.start();
+        this.Programs = [];
+        this._CoursesSearchService.GetDepartmentPrograms(Number(val)).
+            subscribe(response => {
+            try {
+                if (response != null) {
+                    this.Programs = response;
+                }
+                this.ngxService.stop();
+            }
+            catch (e) {
+                this.ngxService.stop();
+                this.toastr.error("Internal server error occured while processing your request", "Error!");
+            }
         }, error => {
             this.ngxService.stop();
             this.toastr.error("Internal server error occured while processing your request", "Error!");
@@ -111,6 +157,8 @@ let IndirectAssessmentsMainComponent = class IndirectAssessmentsMainComponent {
             try {
                 if (response != null) {
                     this.IntakeStudent = response;
+                    this.intakeId = val;
+                    this.getAllSurvey();
                 }
                 this.ngxService.stop();
             }
@@ -315,6 +363,286 @@ let IndirectAssessmentsMainComponent = class IndirectAssessmentsMainComponent {
         this.resetCSPForm();
         this.resetExitForm();
         this.resetInternshipForm();
+        this.cSPSurveyForm.reset();
+        this.exitSurveyForm.reset();
+        this.internshipSurveyForm.reset();
+        this.employerSurveyForm.reset();
+        this.alumniSurveyForm.reset();
+        this.getSurveyResponse(this.CSPSurveyData.SurveyID);
+        this.getSurveyResponse(this.ExitSurveyData.SurveyID);
+        this.getSurveyResponse(this.InternshipSurveyData.SurveyID);
+        this.getSurveyResponse(this.EmployerSurveyData.SurveyID);
+        this.getSurveyResponse(this.AlumniSurveyData.SurveyID);
+    }
+    ResetControls(form) {
+        Object.keys(form.controls).forEach(key => {
+            form.removeControl(key);
+        });
+    }
+    getSurvey(surveyType) {
+        const request = {
+            Surveytype: surveyType,
+            Deptid: GlobalService.Deaprtment_ID
+        };
+        this.ngxService.start();
+        this.IndirectAssessment.GetSurvey(request).
+            subscribe(data => {
+            this.ngxService.stop();
+            this.CSPSurveyData = data;
+            this.createForm(this.cSPSurveyForm, this.CSPSurveyData);
+        }, error => {
+            this.ngxService.stop();
+            this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
+        });
+    }
+    getAllSurvey() {
+        const request = {
+            Surveytype: "",
+            Deptid: GlobalService.Deaprtment_ID,
+            SurveyIntakeID: this.intakeId
+        };
+        this.ResetControls(this.cSPSurveyForm);
+        this.ResetControls(this.internshipSurveyForm);
+        this.ResetControls(this.exitSurveyForm);
+        this.ResetControls(this.employerSurveyForm);
+        this.ResetControls(this.alumniSurveyForm);
+        console.log(GlobalService.Deaprtment_ID);
+        this.ngxService.start();
+        this.IndirectAssessment.GetAllSurvey(request).
+            subscribe(data => {
+            this.ngxService.stop();
+            this.CSPSurveyData = data.CSP;
+            this.createForm(this.cSPSurveyForm, this.CSPSurveyData);
+            this.ExitSurveyData = data.Exit;
+            this.createForm(this.exitSurveyForm, this.ExitSurveyData);
+            this.EmployerSurveyData = data.Employer;
+            this.createForm(this.employerSurveyForm, this.EmployerSurveyData);
+            this.InternshipSurveyData = data.Internship;
+            this.createForm(this.internshipSurveyForm, this.InternshipSurveyData);
+            this.AlumniSurveyData = data.Alumni;
+            this.createForm(this.alumniSurveyForm, this.AlumniSurveyData);
+        }, error => {
+            this.ngxService.stop();
+            this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
+        });
+    }
+    createForm(form, SurveyData) {
+        if (!SurveyData || !SurveyData.Questions)
+            return;
+        SurveyData.Questions.forEach((question) => {
+            if (question.QType === 'Text') {
+                form.addControl(question.QID, new FormControl('', Validators.required));
+            }
+            else if (question.QType === 'Multiple Choice') {
+                form.addControl(question.QID, new FormControl('', Validators.required));
+            }
+            else if (question.QType === 'Likert') {
+                form.addControl(question.QID, new FormControl('', Validators.required));
+            }
+            else if (question.QType === 'Remarks') {
+                form.addControl(question.QID, new FormControl('', Validators.required));
+            }
+        });
+    }
+    getQuestions(data, form) {
+        return data.Questions.map(qid => {
+            var OptionID = null;
+            var answer = null;
+            if (qid.QType == "Multiple Choice") {
+                OptionID = (form.get(qid.QID.toString()).value);
+            }
+            else {
+                answer = (form.get(qid.QID.toString()).value);
+            }
+            return {
+                StudentID: Number(this.StudentID),
+                QID: qid.QID,
+                OptionID: OptionID,
+                Answer: answer.toString()
+            };
+        });
+    }
+    submitCSPSurvey() {
+        if (this.StudentID == 0) {
+            this.toastr.error("No student is selected", "Error!");
+            return;
+        }
+        const payload = [
+            this.getQuestions(this.CSPSurveyData, this.cSPSurveyForm)
+        ];
+        this.ngxService.start();
+        this.IndirectAssessment.SaveSurvey(payload).
+            subscribe(response => {
+            try {
+                if (response) {
+                    this.cSPSurveyForm.reset();
+                    this.toastr.success("Information saved successfully", "Success!");
+                }
+                this.ngxService.stop();
+            }
+            catch (e) {
+                this.ngxService.stop();
+                this.toastr.error("Internal server error occured while processing your request", "Error!");
+            }
+        }, error => {
+            this.ngxService.stop();
+            this.toastr.error("Internal server error occured while processing your request", "Error!");
+        });
+    }
+    submitExitSurvey() {
+        // console.log(this.exitSurveyForm.value);
+        if (this.StudentID == 0) {
+            this.toastr.error("No student is selected", "Error!");
+            return;
+        }
+        const payload = {
+            StudentID: Number(this.StudentID),
+            SurveyID: this.ExitSurveyData.SurveyID,
+            Questions: this.getQuestions(this.ExitSurveyData, this.exitSurveyForm)
+        };
+        this.ngxService.start();
+        this.IndirectAssessment.SaveSurvey(payload).
+            subscribe(response => {
+            try {
+                if (response) {
+                    this.exitSurveyForm.reset();
+                    this.toastr.success("Information saved successfully", "Success!");
+                }
+                this.ngxService.stop();
+            }
+            catch (e) {
+                this.ngxService.stop();
+                this.toastr.error("Internal server error occured while processing your request", "Error!");
+            }
+        }, error => {
+            this.ngxService.stop();
+            this.toastr.error("Internal server error occured while processing your request", "Error!");
+        });
+    }
+    submitInternshipSurvey() {
+        // console.log(this.internshipSurveyForm.value);
+        if (this.StudentID == 0) {
+            this.toastr.error("No student is selected", "Error!");
+            return;
+        }
+        const payload = {
+            StudentID: Number(this.StudentID),
+            SurveyID: this.InternshipSurveyData.SurveyID,
+            Questions: this.getQuestions(this.InternshipSurveyData, this.internshipSurveyForm)
+        };
+        this.ngxService.start();
+        this.IndirectAssessment.SaveSurvey(payload).
+            subscribe(response => {
+            try {
+                if (response) {
+                    this.internshipSurveyForm.reset();
+                    this.toastr.success("Information saved successfully", "Success!");
+                }
+                this.ngxService.stop();
+            }
+            catch (e) {
+                this.ngxService.stop();
+                this.toastr.error("Internal server error occured while processing your request", "Error!");
+            }
+        }, error => {
+            this.ngxService.stop();
+            this.toastr.error("Internal server error occured while processing your request", "Error!");
+        });
+    }
+    submitEmployerSurvey() {
+        //console.log(this.internshipSurveyForm.value);
+        if (this.StudentID == 0) {
+            this.toastr.error("No student is selected", "Error!");
+            return;
+        }
+        const payload = {
+            StudentID: Number(this.StudentID),
+            SurveyID: this.EmployerSurveyData.SurveyID,
+            Questions: this.getQuestions(this.EmployerSurveyData, this.employerSurveyForm)
+        };
+        this.ngxService.start();
+        this.IndirectAssessment.SaveSurvey(payload).
+            subscribe(response => {
+            try {
+                if (response) {
+                    this.employerSurveyForm.reset();
+                    this.toastr.success("Information saved successfully", "Success!");
+                }
+                this.ngxService.stop();
+            }
+            catch (e) {
+                this.ngxService.stop();
+                this.toastr.error("Internal server error occured while processing your request", "Error!");
+            }
+        }, error => {
+            this.ngxService.stop();
+            this.toastr.error("Internal server error occured while processing your request", "Error!");
+        });
+    }
+    submitAlumniSurvey() {
+        //  console.log(this.alumniSurveyForm.value);
+        if (this.StudentID == 0) {
+            this.toastr.error("No student is selected", "Error!");
+            return;
+        }
+        const payload = {
+            StudentID: Number(this.StudentID),
+            SurveyID: this.AlumniSurveyData.SurveyID,
+            Questions: this.getQuestions(this.AlumniSurveyData, this.alumniSurveyForm)
+        };
+        this.ngxService.start();
+        this.IndirectAssessment.SaveSurvey(payload).
+            subscribe(response => {
+            try {
+                if (response) {
+                    this.alumniSurveyForm.reset();
+                    this.toastr.success("Information saved successfully", "Success!");
+                }
+                this.ngxService.stop();
+            }
+            catch (e) {
+                this.ngxService.stop();
+                this.toastr.error("Internal server error occured while processing your request", "Error!");
+            }
+        }, error => {
+            this.ngxService.stop();
+            this.toastr.error("Internal server error occured while processing your request", "Error!");
+        });
+    }
+    getSurveyResponse(surveyID) {
+        const request = {
+            SurveyID: surveyID,
+            StudentID: this.StudentID
+        };
+        this.ngxService.start();
+        this.IndirectAssessment.GetStudentSurvey(request).
+            subscribe(data => {
+            this.ngxService.stop();
+            this.SurveyResponse = data;
+            this.populateForm(this.SurveyResponse.StudentSurveySubDetail);
+        }, error => {
+            this.ngxService.stop();
+            this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
+        });
+    }
+    populateForm(questions) {
+        questions.forEach(question => {
+            if (this.cSPSurveyForm.controls[question.QID]) {
+                this.cSPSurveyForm.controls[question.QID].setValue(question.Answer);
+            }
+            if (this.exitSurveyForm.controls[question.QID]) {
+                this.exitSurveyForm.controls[question.QID].setValue(question.Answer);
+            }
+            if (this.internshipSurveyForm.controls[question.QID]) {
+                this.internshipSurveyForm.controls[question.QID].setValue(question.Answer);
+            }
+            if (this.employerSurveyForm.controls[question.QID]) {
+                this.employerSurveyForm.controls[question.QID].setValue(question.Answer);
+            }
+            if (this.alumniSurveyForm.controls[question.QID]) {
+                this.alumniSurveyForm.controls[question.QID].setValue(question.Answer);
+            }
+        });
     }
 };
 IndirectAssessmentsMainComponent = __decorate([

@@ -27,6 +27,12 @@ let IndirectAssessment = class IndirectAssessment {
     DeleteQuestion(data) {
         return this.http.post(this.baseUrl + 'IndirectAssessment/DeleteQuestion', data);
     }
+    SaveSurvey(data) {
+        return this.http.post(this.baseUrl + 'IndirectAssessment/SaveSurveyResponse', data);
+    }
+    GetStudentSurvey(data) {
+        return this.http.post(this.baseUrl + 'IndirectAssessment/GetSurveyRespones', data);
+    }
 };
 IndirectAssessment = __decorate([
     Injectable({

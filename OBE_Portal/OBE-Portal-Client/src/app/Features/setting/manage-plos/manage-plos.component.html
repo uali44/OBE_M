@@ -1,137 +1,460 @@
 <div role="tabpanel" class="tab-pane active">
-    <div class="section-heading padding-b5">
-      <h2>Manage PLOs</h2>
-    </div>
-    <div class="margin-b15">
-      <div class="row">
-        <div class="col-sm-12">
-          <fieldset class="padding-b5">
-            <legend>Criteria</legend>
-            <div class="row">
-              <div class="form-group col-sm-2">
-                <label class="control-label">Select Institute <span class="text-danger">*</span></label>
-                <select class="form-control" (change)="Get_Department($event.target.value)" [ngModel]="Temp_Institute_ID" [attr.disabled]="Temp_Institute_ID != 0  ? 'disabled' : null">
-                  <option value="0">Select Institute</option>
-                  <option value="{{i.InstituteID}}" *ngFor="let i of Institutes">{{i.InstituteShortName}}</option>
-                </select>
-              </div>
-              <div class="form-group col-sm-2">
-                <label class="control-label">Select Department <span class="text-danger">*</span></label>
-                <select class="form-control" (change)="Get_Intakes($event.target.value)" [ngModel]="Temp_Deaprtment_ID" [attr.disabled]="Temp_Deaprtment_ID != 0  ? 'disabled' : null">
-                  <option value="0">Select Deparment</option>
-                  <option value="{{i.DepartmentID}}" *ngFor="let i of Department">{{i.DepartmentName}}</option>
-                </select>
-              </div>
-              <div class="form-group col-sm-2">
-                <label class="control-label">Select Intake <span class="text-danger">*</span></label>
-                <select class="form-control" id="IntakeID">
-                  <option value="0">Select Intake</option>
-                  <option value="{{i.AdmissionOpenProgramID}}" *ngFor="let i of Intake">{{i.semesterAlia}}</option>
-                </select>
-              </div>
-              
-              <div class="col-sm-2 margin-t17">
-                <button class="btn btn-info pull-right" >Search</button>
-              </div>
-  
-            </div>
-          </fieldset>
-        </div>
+  <div class="section-heading padding-b5">
+    <h2>Manage PLOs</h2>
+  </div>
+  <div class="margin-b15">
+    <div class="row">
+      <div class="col-sm-12">
+        <app-search (searchEmit)="searchData($event)"></app-search>
       </div>
     </div>
-    <div class="section-heading">
-      <h2>Added PLOs</h2>
+  </div>
+  <div class="section-heading">
+    <h2>Added PLOs</h2>
+    <div class="pull-right">
+      <button class="btn btn-default btn-sm" style="margin-top: -5px;" type="button" (click)="openCopyPLOsShowModal()"> Import PLOs 
+        <i class="fa fa-files-o"></i></button>
+      <button class="btn btn-info margin-l10" style="margin-top: -5px;" (click)="addPLOsShowModal()">Add PLOs</button>
     </div>
-    <div class="margin-b5">
-      <div class="pull-left">
-        <div class="has-feedback pull-left">
-          <input type="text" class="form-control width-200" placeholder="Search Records" [(ngModel)]="query">
-          <span class="form-control-feedback"><i class="app-icon-IconSet-1-92"></i></span>
-        </div>
-        <div class="pull-left margin-l5">
-          <div class="form-inline">
-            <div class="form-group margin-r10" style="width:110%">
-              <label class="control-label margin-r10">Show</label>
-              <select class="form-control input-xs margin-r5" (change)="setPage(1,pagesize)" [(ngModel)]="pagesize" style="width: 30%;">
-                <option>10</option>
-                <option>20</option>
-                <option>30</option>
-                <option>50</option>
-                <option>100</option>
-              </select>
-              <label class="control-label">Per Page</label>
-            </div>
+  </div>
+  <div class="margin-b5">
+    <div class="pull-left">
+      <div class="has-feedback pull-left">
+        <input type="text" class="form-control width-200" placeholder="Search Records" [(ngModel)]="query">
+        <span class="form-control-feedback"><i class="app-icon-IconSet-1-92"></i></span>
+      </div>
+      <div class="pull-left margin-l5">
+        <div class="form-inline">
+          <div class="form-group margin-r10" style="width:110%">
+            <label class="control-label margin-r10">Show</label>
+            <select class="form-control input-xs margin-r5" (change)="setPage(1,pagesize)" [(ngModel)]="pagesize" style="width: 30%;">
+              <option>10</option>
+              <option>20</option>
+              <option>30</option>
+              <option>50</option>
+              <option>100</option>
+            </select>
+            <label class="control-label">Per Page</label>
           </div>
         </div>
-        <!-- <div class="pull-left margin-t5 margin-l10">
-          <label class="text-success"><i class="fa fa-stop"></i><span class="color-black">    Above Average</span> </label>
-        </div>
-        <div class="pull-left margin-t5 margin-l10">
-          <label class="text-warning"><i class="fa fa-stop"></i><span class="color-black">    Need Attention</span> </label>
-        </div>
-        <div class="pull-left margin-t5 margin-l10">
-          <label class="text-danger"><i class="fa fa-stop"></i><span class="color-black">    Below Average</span> </label>
-        </div> -->
-  
       </div>
-      <!-- <div class="pull-right">
-        <div class="btn-group left-dropdown">
-          <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Export <span class="caret"></span> </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <li><a (click)="DownloadExcel()">Excel</a></li>
-          </ul>
-        </div>
+      <!-- <div class="pull-left margin-t5 margin-l10">
+        <label class="text-success"><i class="fa fa-stop"></i><span class="color-black">    Above Average</span> </label>
+      </div>
+      <div class="pull-left margin-t5 margin-l10">
+        <label class="text-warning"><i class="fa fa-stop"></i><span class="color-black">    Need Attention</span> </label>
+      </div>
+      <div class="pull-left margin-t5 margin-l10">
+        <label class="text-danger"><i class="fa fa-stop"></i><span class="color-black">    Below Average</span> </label>
       </div> -->
-      <div class="clearfix"></div>
+
     </div>
-    <hr>
-  </div>
-  <div class="table-responsive" style="max-height: 34vh;overflow-y:auto">
-    <table class="table table-hover table-theme margin-b30">
-      <thead>
-        <tr>
-          <th align="center">Sr.#</th>
-          <th align="center">Name</th>
-          <th align="center">PLO1</th>
-          <th align="center">PLO2</th>
-          <th align="center">PLO3</th>
-          <th align="center">PLO4</th>
-          <th align="center">PLO5</th>
-          <th align="center">PLO6</th>
-          <th align="center">PLO7</th>
-          <th align="center">PLO8</th>
-          <th align="center">PLO9</th>
-          <th align="center">PLO10</th>
-          <th align="center">PLO11</th>
-          <th align="center">PLO12</th>
-          <!--<th align="center" style="z-index: 1;">Action</th>-->
-        </tr>
-      </thead>
-      <tbody>
-      
-      </tbody>
-    </table>
-  </div>
-  <div class="pagination-bottom">   
-    <div class="pull-left">
-      <div class="form-inline">
-        <div class="form-group">
-          <label class="control-label padding-t5">Showing 0 to 0 of 0 entries</label>
-        </div>
-        <div class="form-group" *ngIf="departmentPLOs?.length >=1">
-          <label class="control-label padding-t5">Showing {{pager?.startIndex+1}} to {{pager?.endIndex+1}} of {{pager?.totalItems}} entries</label>
-        </div>
+    <!-- <div class="pull-right">
+      <div class="btn-group left-dropdown">
+        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Export <span class="caret"></span> </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <li><a (click)="DownloadExcel()">Excel</a></li>
+        </ul>
       </div>
-    </div>
-    <div class="form-inline pull-right margin-b5">
-      <div class="table-pagination pull-right" *ngIf="pager?.pages && pager?.pages.length">
-        <button data-original-title="First Page" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === 1}" (click)="setPage(1,pagesize)" [disabled]="pager?.currentPage === 1"><i class="fa fa-backward"></i></button>
-        <button data-original-title="Previous" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === 1}" (click)="setPage(pager?.currentPage - 1,pagesize)" [disabled]="pager?.currentPage === 1"><i class="fa fa-caret-left"></i></button>
-        <input type="text" style="width:50px;" value="1" class="form-control" [(ngModel)]="page" (keyup)="setPage(page)" (keypress)="keyRestrict($event,'0123456789')" disabled>
-        <label class="control-label">of  {{pager?.totalPages}}</label>
-        <button data-original-title="Next" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === pager?.totalPages}" (click)="setPage(pager?.currentPage + 1,pagesize)" [disabled]="pager?.currentPage == pager?.totalPages"><i class="fa fa-caret-right"></i></button>
-        <button data-original-title="Last" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === pager?.totalPages}" (click)="setPage(pager?.totalPages,pagesize)" [disabled]="pager?.currentPage == pager?.totalPages"><i class="fa fa-forward"></i></button>
-      </div>
-    </div>
+    </div> -->
     <div class="clearfix"></div>
   </div>
+  <hr>
+</div>
+<div class="table-responsive" style="max-height: 34vh;overflow-y:auto">
+<table class="table table-hover table-theme margin-b30">
+  <thead>
+    <tr>
+      <th align="center">Sr.#</th>
+      <th align="center">PLO Title</th>
+      <th align="center">PLO Description</th>
+      <th align="center" style="z-index: 1;">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let i of PLOsInformationLst | filter:query">
+      <tr>
+        <td align="center">{{i.srNumber}}</td>
+        <td align="center">
+          <b class="blue">
+            <span [innerHTML]="i.PLO_Title | highlight:query"></span>
+          </b>
+        </td>
+        <td><span [innerHTML]="i.ploDescription | highlight:query"></span></td>
+        <td align="center">
+          <div class="btn-group">
+            <button (click)="deletePLO(i.PLO_ID)" type="button" class="btn btn-default margin-r5 cr-pointer" title="Delete CLO"><i class="app-icon-IconSet-1-33 blue"></i> </button>
+          </div>
+        </td>
+
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
+</div>
+<div class="pagination-bottom">   
+<div class="pull-left">
+  <div class="form-inline">
+    <div class="form-group">
+      <label class="control-label padding-t5">Showing 0 to 0 of 0 entries</label>
+    </div>
+    <div class="form-group" *ngIf="departmentPLOs?.length >=1">
+      <label class="control-label padding-t5">Showing {{pager?.startIndex+1}} to {{pager?.endIndex+1}} of {{pager?.totalItems}} entries</label>
+    </div>
+  </div>
+</div>
+<div class="form-inline pull-right margin-b5">
+  <div class="table-pagination pull-right" *ngIf="pager?.pages && pager?.pages.length">
+    <button data-original-title="First Page" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === 1}" (click)="setPage(1,pagesize)" [disabled]="pager?.currentPage === 1"><i class="fa fa-backward"></i></button>
+    <button data-original-title="Previous" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === 1}" (click)="setPage(pager?.currentPage - 1,pagesize)" [disabled]="pager?.currentPage === 1"><i class="fa fa-caret-left"></i></button>
+    <input type="text" style="width:50px;" value="1" class="form-control" [(ngModel)]="page" (keyup)="setPage(page)" (keypress)="keyRestrict($event,'0123456789')" disabled>
+    <label class="control-label">of  {{pager?.totalPages}}</label>
+    <button data-original-title="Next" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === pager?.totalPages}" (click)="setPage(pager?.currentPage + 1,pagesize)" [disabled]="pager?.currentPage == pager?.totalPages"><i class="fa fa-caret-right"></i></button>
+    <button data-original-title="Last" title="" class="btn btn-default" [ngClass]="{disabled:pager?.currentPage === pager?.totalPages}" (click)="setPage(pager?.totalPages,pagesize)" [disabled]="pager?.currentPage == pager?.totalPages"><i class="fa fa-forward"></i></button>
+  </div>
+</div>
+<div class="clearfix"></div>
+</div>
+<div class="modal-section" style="position: initial;">
+<div class="modal fade modal-wide margin-t41" id="Add-PLOS-Modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="section-heading">
+          <h2 class="pull-left">Add PLOS</h2>
+          <div class="pull-right">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="PLOSForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="form-group col-sm-12">
+              <div class="radio-inline">
+                <input id="single" value="0" formControlName="intakeOption" checked="checked" type="radio">
+                <label for="single">Single Intake</label>
+              </div>
+              <div class="radio-inline">
+                <input id="multiple" value="1" formControlName="intakeOption" type="radio">
+                <label for="multiple">Multiple Intake</label>
+              </div>
+            </div>
+
+            <div class="form-group {{PLOSForm.value.intakeOption === '1'? 'col-sm-4':'col-sm-3'}}" [ngClass]="{ 'has-error': (PLOSForm.get('instituteId')?.invalid && PLOSForm.get('instituteId')?.touched) || (PLOSForm.get('instituteId')?.invalid && this.submitted ) }">
+              <label class="control-label">Select Institute <span class="text-danger">*</span></label>
+              <select class="form-control" formControlName="instituteId" (change)="Get_Department($event.target.value)">
+                <option value="" selected>Select Institute</option>
+                <option value="{{i.InstituteID}}" *ngFor="let i of Institutes">{{i.InstituteShortName}}</option>
+              </select>
+              <div *ngIf="(PLOSForm.get('instituteId')?.invalid && PLOSForm.get('instituteId')?.touched) || this.submitted " class="invalid-feedback">
+                <div *ngIf="PLOSForm.get('instituteId')?.hasError('required')" class="text-danger">Select Institute</div>
+              </div>
+            </div>
+
+            <div class="form-group {{PLOSForm.value.intakeOption === '1'? 'col-sm-4':'col-sm-3'}}" [ngClass]="{ 'has-error': (PLOSForm.get('departmentId')?.invalid && PLOSForm.get('departmentId')?.touched) || (PLOSForm.get('departmentId')?.invalid && this.submitted ) }">
+              <label class="control-label">Select Department <span class="text-danger">*</span></label>
+              <select class="form-control" formControlName="departmentId" (change)="Get_Programs($event.target.value)">
+                <option value="">Select Deparment</option>
+                <option value="{{i.DepartmentID}}" *ngFor="let i of Department">{{i.DepartmentName}}</option>
+              </select>
+              <div *ngIf="(PLOSForm.get('departmentId')?.invalid && PLOSForm.get('departmentId')?.touched) || this.submitted" class="invalid-feedback">
+                <div *ngIf="PLOSForm.get('departmentId')?.hasError('required')" class="text-danger">Select Deparment</div>
+              </div>
+            </div>
+            
+            <div class="form-group {{PLOSForm.value.intakeOption === '1'? 'col-sm-4':'col-sm-3'}}" [ngClass]="{ 'has-error': (PLOSForm.get('programId')?.invalid && PLOSForm.get('programId')?.touched) || (PLOSForm.get('programId')?.invalid && this.submitted ) }">
+              <label class="control-label">Select Program <span class="text-danger">*</span></label>
+              <select class="form-control" formControlName="programId" (change)="GetProgramIntakes($event.target.value)">
+                <option value="">Select Program</option>
+                <option value="{{i?.ProgramID}}" *ngFor="let i of Programs">{{i?.ProgramName}}</option>
+              </select>
+              <div *ngIf="(PLOSForm.get('programId')?.invalid && PLOSForm.get('programId')?.touched) || this.submitted " class="invalid-feedback">
+                <div *ngIf="PLOSForm.get('programId')?.hasError('required')" class="text-danger">Select Program</div>
+              </div>
+            </div>
+
+            <div class="form-group {{PLOSForm.value.intakeOption === '1'? 'col-sm-4':'col-sm-3'}}" [ngClass]="{ 'has-error': (PLOSForm.get('admissionOpenProgramIdFrom')?.invalid && PLOSForm.get('admissionOpenProgramIdFrom')?.touched) || (PLOSForm.get('admissionOpenProgramIdFrom')?.invalid && this.submitted ) }">
+              <label class="control-label">Select Intake <ng-container *ngIf="PLOSForm.value.intakeOption === '1'">(From)</ng-container>  <span class="text-danger">*</span></label>
+              <select class="form-control" formControlName="admissionOpenProgramIdFrom" (change)="Set_Intakes($event.target.value)">
+                <option value="">Select Intake</option>
+                <option value="{{i?.AdmissionOpenProgramID}}" *ngFor="let i of Intake">{{i?.semesterAlia}}</option>
+              </select>
+              <div *ngIf="(PLOSForm.get('admissionOpenProgramIdFrom')?.invalid && PLOSForm.get('admissionOpenProgramIdFrom')?.touched) || this.submitted" class="invalid-feedback">
+                <div *ngIf="PLOSForm.get('admissionOpenProgramIdFrom')?.hasError('required')" class="text-danger">Select Intake</div>
+              </div>
+            </div>
+            <ng-container *ngIf="PLOSForm.value.intakeOption === '1'">
+              <div class="form-group {{PLOSForm.value.intakeOption === '1'? 'col-sm-4':'col-sm-3'}}" [ngClass]="{ 'has-error': (PLOSForm.get('admissionOpenProgramIdTo')?.invalid && PLOSForm.get('admissionOpenProgramIdTo')?.touched) || (PLOSForm.get('admissionOpenProgramIdTo')?.invalid && this.submitted ) }">
+                <label class="control-label">Select Intake <ng-container *ngIf="PLOSForm.value.intakeOption === '1'">(From)</ng-container>  <span class="text-danger">*</span></label>
+                <select class="form-control" formControlName="admissionOpenProgramIdTo" (change)="Set_Intakes($event.target.value)">
+                  <option value="">Select Intake</option>
+                  <option value="{{i?.AdmissionOpenProgramID}}" *ngFor="let i of Intake">{{i?.semesterAlia}}</option>
+                </select>
+                <div *ngIf="(PLOSForm.get('admissionOpenProgramIdTo')?.invalid && PLOSForm.get('admissionOpenProgramIdTo')?.touched) || this.submitted" class="invalid-feedback">
+                  <div *ngIf="PLOSForm.get('admissionOpenProgramIdTo')?.hasError('required')" class="text-danger">Select Intake</div>
+                </div>
+              </div>
+            </ng-container>
+            
+
+          </div>
+          <div class="form-group" [ngClass]="{ 'has-error': (PLOSForm.get('PLOTitle')?.invalid && PLOSForm.get('PLOTitle')?.touched) || (PLOSForm.get('PLOTitle')?.invalid && this.submitted ) }">
+            <label class="control-label">PLO Title <span class="text-danger">*</span></label>
+            <input id="PLOTitle" formControlName="PLOTitle" class="form-control"/>
+            <div *ngIf="(PLOSForm.get('PLOTitle')?.invalid && PLOSForm.get('PLOTitle')?.touched) || this.submitted" class="invalid-feedback">
+              <div *ngIf="PLOSForm.get('PLOTitle')?.hasError('required')" class="text-danger">PLO Title is required</div>
+            </div>
+          </div>
+          <div class="form-group" [ngClass]="{ 'has-error': (PLOSForm.get('description')?.invalid && PLOSForm.get('description')?.touched) || (PLOSForm.get('description')?.invalid && this.submitted ) }">
+            <label class="control-label">Description <span class="text-danger">*</span></label>
+            <textarea formControlName="description" class="form-control" rows="6" draggable="false" autofocus style="resize:none"> </textarea>
+            <div *ngIf="(PLOSForm.get('description')?.invalid && PLOSForm.get('description')?.touched) || this.submitted" class="invalid-feedback">
+              <div *ngIf="PLOSForm.get('description')?.hasError('required')" class="text-danger">PLO Description is required</div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-info pull-right">Add</button>
+        </form>
+
+        <div class="tab-pane margin-t20">
+          <div class="section-heading"><h2>PLOS Details</h2></div>
+          <div class="margin-b5">
+            <div class="clearfix"></div>
+          </div>
+          <fieldset class="margin-b15">
+            <legend>Added PLOS</legend>
+            <div class="dashboard-scroller setups-widget mCustomScrollbar">
+              <div class="table-responsive">
+                <table class="table table-hover table-theme">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Desciption</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="cursor: pointer;" *ngFor="let i of All_Added_PLOS; let ind = index">
+                      <td align="center"><b><span class="blue">{{i.PLOTitle}}</span></b></td>
+                      <td>{{i.description}}</td>
+                      <td align="center">
+                        <div class="btn-group">
+                          <button (click)="deleteTempAddedPLOs(ind)" type="button" class="btn btn-default margin-r5" title="Delete"><i class="app-icon-IconSet-1-33 blue"></i> </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="p-5"  *ngIf="All_Added_PLOS?.length === 0">
+                      <td colspan="3" align="center">No Record Found!</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+              
+          </fieldset>
+
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="hide('Add-PLOS-Modal')">Cancel</button>
+        <button type="button" class="btn btn-info" (click)="SaveAddedPLOs()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade modal-wide margin-t41" id="Copy-PLOS-Modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="section-heading">
+          <h2 class="pull-left">Copy PLOS</h2>
+          <div class="pull-right">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="CopyForm" (ngSubmit)="onSubmit()">
+          <fieldset class="padding-b5">
+            <legend>Import From</legend>
+              <div class="row">
+                <div class="form-group col-sm-3" [ngClass]="{ 'has-error': (CopyForm.get('instituteIdFrom')?.invalid && CopyForm.get('instituteIdFrom')?.touched) || (CopyForm.get('instituteIdFrom')?.invalid && this.submitted ) }">
+                  <label class="control-label">Select Institute <span class="text-danger">*</span></label>
+                  <select class="form-control" formControlName="instituteIdFrom" (change)="Get_Department($event.target.value)">
+                    <option value="" selected>Select Institute</option>
+                    <option value="{{i.InstituteID}}" *ngFor="let i of Institutes">{{i.InstituteShortName}}</option>
+                  </select>
+                  <div *ngIf="(CopyForm.get('instituteIdFrom')?.invalid && CopyForm.get('instituteIdFrom')?.touched) || this.submitted " class="invalid-feedback">
+                    <div *ngIf="CopyForm.get('instituteIdFrom')?.hasError('required')" class="text-danger">Select Institute</div>
+                  </div>
+                </div>
+  
+                <div class="form-group col-sm-3" [ngClass]="{ 'has-error': (CopyForm.get('departmentIdFrom')?.invalid && CopyForm.get('departmentIdFrom')?.touched) || (CopyForm.get('departmentIdFrom')?.invalid && this.submitted ) }">
+                  <label class="control-label">Select Department <span class="text-danger">*</span></label>
+                  <select class="form-control" formControlName="departmentIdFrom" (change)="Get_Programs($event.target.value)">
+                    <option value="">Select Deparment</option>
+                    <option value="{{i.DepartmentID}}" *ngFor="let i of Department">{{i.DepartmentName}}</option>
+                  </select>
+                  <div *ngIf="(CopyForm.get('departmentIdFrom')?.invalid && CopyForm.get('departmentIdFrom')?.touched) || this.submitted" class="invalid-feedback">
+                    <div *ngIf="CopyForm.get('departmentIdFrom')?.hasError('required')" class="text-danger">Select Deparment</div>
+                  </div>
+                </div>
+                
+                <div class="form-group col-sm-3" [ngClass]="{ 'has-error': (CopyForm.get('programIdFrom')?.invalid && CopyForm.get('programIdFrom')?.touched) || (CopyForm.get('programIdFrom')?.invalid && this.submitted ) }">
+                  <label class="control-label">Select Program <span class="text-danger">*</span></label>
+                  <select class="form-control" formControlName="programIdFrom" (change)="GetProgramIntakes($event.target.value)">
+                    <option value="">Select Program</option>
+                    <option value="{{i?.ProgramID}}" *ngFor="let i of Programs">{{i?.ProgramName}}</option>
+                  </select>
+                  <div *ngIf="(CopyForm.get('programIdFrom')?.invalid && CopyForm.get('programIdFrom')?.touched) || this.submitted " class="invalid-feedback">
+                    <div *ngIf="CopyForm.get('programIdFrom')?.hasError('required')" class="text-danger">Select Program</div>
+                  </div>
+                </div>
+  
+                <div class="form-group col-sm-3" [ngClass]="{ 'has-error': (CopyForm.get('admissionOpenProgramId')?.invalid && CopyForm.get('admissionOpenProgramId')?.touched) || (CopyForm.get('admissionOpenProgramId')?.invalid && this.submitted ) }">
+                  <label class="control-label">Select Intake <span class="text-danger">*</span></label>
+                  <select class="form-control" formControlName="admissionOpenProgramId" (change)="GetIntakePLOsInformation($event.target.value)">
+                    <option value="">Select Intake</option>
+                    <option value="{{i?.AdmissionOpenProgramID}}" *ngFor="let i of Intake">{{i?.semesterAlia}}</option>
+                  </select>
+                  <div *ngIf="(CopyForm.get('admissionOpenProgramId')?.invalid && CopyForm.get('admissionOpenProgramId')?.touched) || this.submitted" class="invalid-feedback">
+                    <div *ngIf="CopyForm.get('admissionOpenProgramId')?.hasError('required')" class="text-danger">Select Intake</div>
+                  </div>
+                </div>
+              </div>
+          </fieldset>
+
+          <fieldset class="padding-b5">
+            <legend>Import To</legend>
+            <div class="row">
+              <div class="form-group col-sm-12">
+                <div class="radio-inline">
+                  <input id="single" value="0" formControlName="intakeOption" checked="checked" type="radio">
+                  <label for="single">Single Intake</label>
+                </div>
+                <div class="radio-inline">
+                  <input id="multiple" value="1" formControlName="intakeOption" type="radio">
+                  <label for="multiple">Multiple Intake</label>
+                </div>
+              </div>
+
+              <div class="form-group {{CopyForm.value.intakeOption === '1'? 'col-sm-4':'col-sm-3'}}" [ngClass]="{ 'has-error': (CopyForm.get('instituteIdTo')?.invalid && CopyForm.get('instituteIdTo')?.touched) || (CopyForm.get('instituteIdTo')?.invalid && this.submitted ) }">
+                <label class="control-label">Select Institute <span class="text-danger">*</span></label>
+                <select class="form-control" formControlName="instituteIdTo" (change)="Get_Department_To($event.target.value)">
+                  <option value="" selected>Select Institute</option>
+                  <option value="{{i.InstituteID}}" *ngFor="let i of Institutes">{{i.InstituteShortName}}</option>
+                </select>
+                <div *ngIf="(CopyForm.get('instituteIdTo')?.invalid && CopyForm.get('instituteIdTo')?.touched) || this.submitted " class="invalid-feedback">
+                  <div *ngIf="CopyForm.get('instituteIdTo')?.hasError('required')" class="text-danger">Select Institute</div>
+                </div>
+              </div>
+
+              <div class="form-group {{CopyForm.value.intakeOption === '1'? 'col-sm-4':'col-sm-3'}}" [ngClass]="{ 'has-error': (CopyForm.get('departmentIdTo')?.invalid && CopyForm.get('departmentIdTo')?.touched) || (CopyForm.get('departmentIdTo')?.invalid && this.submitted ) }">
+                <label class="control-label">Select Department <span class="text-danger">*</span></label>
+                <select class="form-control" formControlName="departmentIdTo" (change)="Get_Programs_To($event.target.value)">
+                  <option value="">Select Deparment</option>
+                  <option value="{{i.DepartmentID}}" *ngFor="let i of DepartmentTo">{{i.DepartmentName}}</option>
+                </select>
+                <div *ngIf="(CopyForm.get('departmentIdTo')?.invalid && CopyForm.get('departmentIdTo')?.touched) || this.submitted" class="invalid-feedback">
+                  <div *ngIf="CopyForm.get('departmentIdTo')?.hasError('required')" class="text-danger">Select Deparment</div>
+                </div>
+              </div>
+              
+              <div class="form-group {{CopyForm.value.intakeOption === '1'? 'col-sm-4':'col-sm-3'}}" [ngClass]="{ 'has-error': (CopyForm.get('programIdTo')?.invalid && CopyForm.get('programIdTo')?.touched) || (CopyForm.get('programIdTo')?.invalid && this.submitted ) }">
+                <label class="control-label">Select Program <span class="text-danger">*</span></label>
+                <select class="form-control" formControlName="programIdTo" (change)="GetProgramIntakesTo($event.target.value)">
+                  <option value="">Select Program</option>
+                  <option value="{{i?.ProgramID}}" *ngFor="let i of ProgramsTo">{{i?.ProgramName}}</option>
+                </select>
+                <div *ngIf="(CopyForm.get('programIdTo')?.invalid && CopyForm.get('programIdTo')?.touched) || this.submitted " class="invalid-feedback">
+                  <div *ngIf="CopyForm.get('programIdTo')?.hasError('required')" class="text-danger">Select Program</div>
+                </div>
+              </div>
+
+              <div class="form-group {{CopyForm.value.intakeOption === '1'? 'col-sm-4':'col-sm-3'}}" [ngClass]="{ 'has-error': (CopyForm.get('admissionOpenProgramIdFrom')?.invalid && CopyForm.get('admissionOpenProgramIdFrom')?.touched) || (CopyForm.get('admissionOpenProgramIdFrom')?.invalid && this.submitted ) }">
+                <label class="control-label">Select Intake <ng-container *ngIf="CopyForm.value.intakeOption === '1'">(From)</ng-container>  <span class="text-danger">*</span></label>
+                <select class="form-control" formControlName="admissionOpenProgramIdFrom">
+                  <option value="">Select Intake</option>
+                  <option value="{{i?.AdmissionOpenProgramID}}" *ngFor="let i of IntakeTo">{{i?.semesterAlia}}</option>
+                </select>
+                <div *ngIf="(CopyForm.get('admissionOpenProgramIdFrom')?.invalid && CopyForm.get('admissionOpenProgramIdFrom')?.touched) || this.submitted" class="invalid-feedback">
+                  <div *ngIf="CopyForm.get('admissionOpenProgramIdFrom')?.hasError('required')" class="text-danger">Select Intake</div>
+                </div>
+              </div>
+              <ng-container *ngIf="CopyForm.value.intakeOption === '1'">
+                <div class="form-group {{CopyForm.value.intakeOption === '1'? 'col-sm-4':'col-sm-3'}}" [ngClass]="{ 'has-error': (CopyForm.get('admissionOpenProgramIdTo')?.invalid && CopyForm.get('admissionOpenProgramIdTo')?.touched) || (CopyForm.get('admissionOpenProgramIdTo')?.invalid && this.submitted ) }">
+                  <label class="control-label">Select Intake (To)  <span class="text-danger">*</span></label>
+                  <select class="form-control" formControlName="admissionOpenProgramIdTo">
+                    <option value="">Select Intake</option>
+                    <option value="{{i?.AdmissionOpenProgramID}}" *ngFor="let i of IntakeTo">{{i?.semesterAlia}}</option>
+                  </select>
+                  <div *ngIf="(CopyForm.get('admissionOpenProgramIdTo')?.invalid && CopyForm.get('admissionOpenProgramIdTo')?.touched) || this.submitted" class="invalid-feedback">
+                    <div *ngIf="CopyForm.get('admissionOpenProgramIdTo')?.hasError('required')" class="text-danger">Select Intake</div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </fieldset>
+        </form>
+
+        <div class="tab-pane margin-t20">
+          <div class="section-heading"><h2>Imporing PLOs Details</h2></div>
+          <div class="margin-b5">
+            <div class="clearfix"></div>
+          </div>
+          <fieldset class="margin-b15">
+            <legend>Added PLOS</legend>
+            <div class="dashboard-scroller setups-widget mCustomScrollbar">
+              <div class="table-responsive">
+                <table class="table table-hover table-theme">
+                  <thead>
+                    <tr>
+                      <th>Sr.#</th>
+                      <th>Title</th>
+                      <th>Desciption</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let i of Added_Intake_PLOs | filter:query">
+                      <tr>
+                        <td align="center">{{i.srNumber}}</td>
+                        <td align="center">
+                          <b class="blue">
+                            <span [innerHTML]="i.PLO_Title | highlight:query"></span>
+                          </b>
+                        </td>
+                        <td><span [innerHTML]="i.ploDescription | highlight:query"></span></td>
+                        <td align="center">
+                          <div class="btn-group">
+                            <button (click)="deletePLO(i.PLOId)" type="button" class="btn btn-default margin-r5 cr-pointer" title="Delete CLO"><i class="app-icon-IconSet-1-33 blue"></i> </button>
+                          </div>
+                        </td>
+              
+                      </tr>
+                    </ng-container>
+                    <tr class="p-5"  *ngIf="Added_Intake_PLOs?.length === 0">
+                      <td colspan="4" align="center">No Record Found!</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+              
+          </fieldset>
+
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="hide('Copy-PLOS-Modal')">Cancel</button>
+        <button type="button" class="btn btn-info" [disabled]="Added_Intake_PLOs?.length === 0" (click)="copyPLOs()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

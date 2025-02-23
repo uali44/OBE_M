@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SearchFormComponent } from './searchForm.component';
+import { ManagePeosComponent } from './manage-peos.component';
 
-describe('SearchFormComponent', () => {
-  let component: SearchFormComponent;
-  let fixture: ComponentFixture<SearchFormComponent>;
+describe('ManagePeosComponent', () => {
+  let component: ManagePeosComponent;
+  let fixture: ComponentFixture<ManagePeosComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SearchFormComponent]
+      declarations: [ ManagePeosComponent ]
     })
-      .compileComponents();
+    .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SearchFormComponent);
+    fixture = TestBed.createComponent(ManagePeosComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

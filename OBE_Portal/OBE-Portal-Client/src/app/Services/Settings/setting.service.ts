@@ -27,4 +27,35 @@ export class SettingService {
   updateRole<T>(data: any): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'Settings/updateRole', data);
   }
+  SaveAddedPEOS<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Settings/SaveAddedPEOS', data);
+  }
+
+  GetPeosInformation<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Settings/getPeosInformation', data);
+  }
+
+  DeletePeo<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Settings/DeletePeo', data);
+  }
+
+  GetPlosInformation<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Settings/GetPlosInformation', data);
+  }
+
+  SaveAddedPLOS<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Settings/SaveAddedPLOS', data);
+  }
+
+  AddNewPeos<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Settings/AddNewPeos', data);
+  }
+
+  AddNewPlos<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Settings/AddNewPlos', data);
+  }
+
+  DeletePlo<T>(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'Settings/DeletePlo', data);
+  }
 }

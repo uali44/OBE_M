@@ -12,6 +12,9 @@ let FrameworkMainComponent = class FrameworkMainComponent {
             this.CloseTabContent();
         });
     }
+    receiveData(data) {
+        this.Intake = data; // Update the parent component's variable with the data
+    }
     loadTab(Title) {
         $("#Content").removeClass('dashboard-bg');
         this.FrameworkComponent.ShowTab(Title);

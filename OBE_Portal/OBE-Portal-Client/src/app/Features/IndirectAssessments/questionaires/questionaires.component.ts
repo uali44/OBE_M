@@ -92,7 +92,7 @@ export class QuestionairesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.Added_Intake_PLOs = [{ PLO_ID: 1, PLO_Title: "PLO-1" }, { PLO_ID: 2, PLO_Title: "PLO-2" }, { PLO_ID: 1, PLO_Title: "PLO-3" }]
+   // this.Added_Intake_PLOs = [{ PLO_ID: 1, PLO_Title: "PLO-1" }, { PLO_ID: 2, PLO_Title: "PLO-2" }, { PLO_ID: 1, PLO_Title: "PLO-3" }]
 
     this.Intake = 0;
     this.getSurvey(this.surveyMainDetail.SurveyType);
@@ -180,13 +180,22 @@ export class QuestionairesComponent implements OnInit {
  
 
 
-  receiveData(data: number) {
-    this.Intake = data; // Update the parent component's variable with the data
+  receiveData(data: any) {
+    let searchData = JSON.parse(data);
+    this.Intake = searchData?.admissionOpenProgramId;
+  
 
     this.getAllSurvey();
   }
-  receiveMData(data: number) {
-    this.programId = data;
+  receiveMData(data: any) {
+    let searchData = JSON.parse(data);
+    this.programId = searchData?.admissionOpenProgramId;
+   /* this.programId = data;*/
+    console.log(this.programId);
+
+
+    this.GetIntakePLOsInformation(this.programId);
+
     if (this.surveySubDetails?.length > 0) {
       this.enableSave = true;
     }
@@ -411,22 +420,22 @@ export class QuestionairesComponent implements OnInit {
 
 
 
-  //GetIntakePLOsInformation(admissionOpenProgramId: any) {
-  //  this.Added_Intake_PLOs = [];
-  //  this.ngxService.start();
-  //  this._SettingService.GetPlosInformation({ programId: this.programId, admissionOpenProgramId: Number(admissionOpenProgramId) }).
-  //    subscribe(
-  //      response => {
-  //        if (response != null) {
-  //          this.Added_Intake_PLOs = response;
-  //        }
-  //        this.ngxService.stop();
-  //      },
-  //      error => {
-  //        this.ngxService.stop();
-  //        this.toastr.error("Internal server error occured while processing your request", "Error!")
-  //      });
-  //}
+  GetIntakePLOsInformation(admissionOpenProgramId: any) {
+    this.Added_Intake_PLOs = [];
+    this.ngxService.start();
+    this._SettingService.GetPlosInformation({ programId: this.programId, admissionOpenProgramId: Number(admissionOpenProgramId) }).
+      subscribe(
+        response => {
+          if (response != null) {
+            this.Added_Intake_PLOs = response;
+          }
+          this.ngxService.stop();
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Internal server error occured while processing your request", "Error!")
+        });
+  }
 
 
 

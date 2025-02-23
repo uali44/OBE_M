@@ -21,6 +21,30 @@ let SettingService = class SettingService {
     updateRole(data) {
         return this.http.post(this.baseUrl + 'Settings/updateRole', data);
     }
+    SaveAddedPEOS(data) {
+        return this.http.post(this.baseUrl + 'Settings/SaveAddedPEOS', data);
+    }
+    GetPeosInformation(data) {
+        return this.http.post(this.baseUrl + 'Settings/getPeosInformation', data);
+    }
+    DeletePeo(data) {
+        return this.http.post(this.baseUrl + 'Settings/DeletePeo', data);
+    }
+    GetPlosInformation(data) {
+        return this.http.post(this.baseUrl + 'Settings/GetPlosInformation', data);
+    }
+    SaveAddedPLOS(data) {
+        return this.http.post(this.baseUrl + 'Settings/SaveAddedPLOS', data);
+    }
+    AddNewPeos(data) {
+        return this.http.post(this.baseUrl + 'Settings/AddNewPeos', data);
+    }
+    AddNewPlos(data) {
+        return this.http.post(this.baseUrl + 'Settings/AddNewPlos', data);
+    }
+    DeletePlo(data) {
+        return this.http.post(this.baseUrl + 'Settings/DeletePlo', data);
+    }
 };
 SettingService = __decorate([
     Injectable({

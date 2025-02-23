@@ -6,7 +6,7 @@ import { HighlightPipe } from 'src/app/Shared/Pipe/highlight.pipe';
 import { GlobalService } from 'src/app/Shared/Services/Global/global.service';
 import { PagerService } from 'src/app/Shared/Services/Global/Pager';
 import Swal from 'sweetalert2';
-let ManagePlosComponent = class ManagePlosComponent {
+let ManagePeosComponent = class ManagePeosComponent {
     constructor(_CoursesSearchService, toastr, ngxService, _SettingService, formBuilder, pagerService) {
         this._CoursesSearchService = _CoursesSearchService;
         this.toastr = toastr;
@@ -21,7 +21,7 @@ let ManagePlosComponent = class ManagePlosComponent {
         this.IntakeTo = [];
         this.Programs = [];
         this.ProgramsTo = [];
-        this.PLOsInformationLst = [];
+        this.PEOsInformationLst = [];
         this.Is_Permission_Institute = false;
         this.Is_Permission_Deaprtment = false;
         this.Is_Permission_Faculty = false;
@@ -31,13 +31,12 @@ let ManagePlosComponent = class ManagePlosComponent {
         this.dataset = [];
         this.departmentPLOs = [];
         this.submitted = false;
-        this.addedPLOsTemp = [];
+        this.addedPEOsTemp = [];
         this.admissionOpenProgramId = 0;
         this.programId = 0;
-        this.PLO_Added_Count = 1;
-        this.All_Added_PLOS = [];
-        this.searchSelection = {};
-        this.Added_Intake_PLOs = [];
+        this.All_Added_PEOS = [];
+        this.PEO_Added_Count = 1;
+        this.Added_Intake_PEOs = [];
         this.Temp_Institute_ID = 0;
         this.Temp_Deaprtment_ID = 0;
         this.Is_Permission_Institute = GlobalService.Permissions.indexOf("Institute_Dropdown") >= 0 ? true : false;
@@ -52,25 +51,25 @@ let ManagePlosComponent = class ManagePlosComponent {
     }
     ngOnInit() {
         var _a;
-        this.PLOSForm = this.formBuilder.group({
+        this.PEOSForm = this.formBuilder.group({
             intakeOption: ['0'],
             instituteId: ['', [Validators.required]],
             departmentId: ['', [Validators.required]],
             programId: ['', [Validators.required]],
             admissionOpenProgramIdFrom: ['', [Validators.required]],
             admissionOpenProgramIdTo: [''],
-            PLOTitle: ['', [Validators.required]],
+            peoTitle: ['', [Validators.required]],
             description: ['', [Validators.required]]
         });
-        (_a = this.PLOSForm.get('intakeOption')) === null || _a === void 0 ? void 0 : _a.valueChanges.subscribe((checked) => {
+        (_a = this.PEOSForm.get('intakeOption')) === null || _a === void 0 ? void 0 : _a.valueChanges.subscribe((checked) => {
             var _a, _b, _c;
             if (checked === '1') {
-                (_a = this.PLOSForm.get('admissionOpenProgramIdTo')) === null || _a === void 0 ? void 0 : _a.setValidators([Validators.required]);
+                (_a = this.PEOSForm.get('admissionOpenProgramIdTo')) === null || _a === void 0 ? void 0 : _a.setValidators([Validators.required]);
             }
             else {
-                (_b = this.PLOSForm.get('admissionOpenProgramIdTo')) === null || _b === void 0 ? void 0 : _b.clearValidators();
+                (_b = this.PEOSForm.get('admissionOpenProgramIdTo')) === null || _b === void 0 ? void 0 : _b.clearValidators();
             }
-            (_c = this.PLOSForm.get('admissionOpenProgramIdTo')) === null || _c === void 0 ? void 0 : _c.updateValueAndValidity();
+            (_c = this.PEOSForm.get('admissionOpenProgramIdTo')) === null || _c === void 0 ? void 0 : _c.updateValueAndValidity();
         });
         this.CopyForm = this.formBuilder.group({
             instituteIdTo: ['', [Validators.required]],
@@ -93,7 +92,13 @@ let ManagePlosComponent = class ManagePlosComponent {
             subscribe(response => {
             try {
                 if (response != null) {
-                    this.Institutes = response;
+                    if (this.Temp_Institute_ID != 0) {
+                        this.Institutes = response.filter(x => x.InstituteID == this.Temp_Institute_ID);
+                        this.Get_Department(this.Temp_Institute_ID);
+                    }
+                    else {
+                        this.Institutes = response;
+                    }
                 }
                 this.ngxService.stop();
             }
@@ -105,10 +110,6 @@ let ManagePlosComponent = class ManagePlosComponent {
             this.ngxService.stop();
             this.toastr.error("Internal server error occured while processing your request", "Error!");
         });
-    }
-    searchData(data) {
-        this.searchSelection = JSON.parse(data);
-        this.GetPlosInformation();
     }
     Get_Department(val) {
         if (val == undefined || val == null || val == "")
@@ -119,29 +120,12 @@ let ManagePlosComponent = class ManagePlosComponent {
             subscribe(response => {
             try {
                 if (response != null) {
-                    this.Department = response;
-                }
-                this.ngxService.stop();
-            }
-            catch (e) {
-                this.ngxService.stop();
-                this.toastr.error("Internal server error occured while processing your request", "Error!");
-            }
-        }, error => {
-            this.ngxService.stop();
-            this.toastr.error("Internal server error occured while processing your request", "Error!");
-        });
-    }
-    Get_Programs_To(val) {
-        if (val == undefined || val == null || val == "")
-            return;
-        this.ngxService.start();
-        this.ProgramsTo = [];
-        this._CoursesSearchService.GetDepartmentPrograms(Number(val)).
-            subscribe(response => {
-            try {
-                if (response != null) {
-                    this.ProgramsTo = response;
+                    if (this.Temp_Deaprtment_ID != 0) {
+                        this.Department = response.filter(x => x.DepartmentID == this.Temp_Deaprtment_ID);
+                    }
+                    else {
+                        this.Department = response;
+                    }
                 }
                 this.ngxService.stop();
             }
@@ -176,9 +160,6 @@ let ManagePlosComponent = class ManagePlosComponent {
             this.toastr.error("Internal server error occured while processing your request", "Error!");
         });
     }
-    Set_Intakes(val) {
-        this.admissionOpenProgramId = Number(val);
-    }
     Get_Programs(val) {
         if (val == undefined || val == null || val == "")
             return;
@@ -200,6 +181,37 @@ let ManagePlosComponent = class ManagePlosComponent {
             this.ngxService.stop();
             this.toastr.error("Internal server error occured while processing your request", "Error!");
         });
+    }
+    Get_Programs_To(val) {
+        if (val == undefined || val == null || val == "")
+            return;
+        this.ngxService.start();
+        this.ProgramsTo = [];
+        this._CoursesSearchService.GetDepartmentPrograms(Number(val)).
+            subscribe(response => {
+            try {
+                if (response != null) {
+                    this.ProgramsTo = response;
+                }
+                this.ngxService.stop();
+            }
+            catch (e) {
+                this.ngxService.stop();
+                this.toastr.error("Internal server error occured while processing your request", "Error!");
+            }
+        }, error => {
+            this.ngxService.stop();
+            this.toastr.error("Internal server error occured while processing your request", "Error!");
+        });
+    }
+    Set_Intakes(val) {
+        this.admissionOpenProgramId = Number(val);
+    }
+    searchData(data) {
+        let searchData = JSON.parse(data);
+        this.programId = searchData === null || searchData === void 0 ? void 0 : searchData.programId;
+        this.admissionOpenProgramId = searchData === null || searchData === void 0 ? void 0 : searchData.admissionOpenProgramId;
+        this.GetPeosInformation();
     }
     GetProgramIntakes(programId) {
         this.ngxService.start();
@@ -251,7 +263,7 @@ let ManagePlosComponent = class ManagePlosComponent {
         this.page = page;
         this.pager = this.pagerService.getPager(this.dataset.length, page, pagesize);
         this.serialNumber = ((this.pager.currentPage * this.pagesize) - this.pagesize) + (this.serialNumber);
-        this.PLOsInformationLst = this.dataset.slice(this.pager.startIndex, this.pager.endIndex + 1);
+        this.PEOsInformationLst = this.dataset.slice(this.pager.startIndex, this.pager.endIndex + 1);
     }
     keyRestrict(e, validchars, casesensitives, onceevery, onceoneof) {
         onceevery = onceevery ? onceevery : "";
@@ -287,21 +299,21 @@ let ManagePlosComponent = class ManagePlosComponent {
             return true;
         return false;
     }
-    addPLOsShowModal() {
-        this.addedPLOsTemp = [];
-        this.PLOSForm.reset();
+    addPEOsShowModal() {
+        this.addedPEOsTemp = [];
+        this.PEOSForm.reset();
         this.submitted = false;
-        this.All_Added_PLOS = [];
-        this.PLOSForm.get('intakeOption').setValue("0");
-        this.PLOSForm.get('instituteId').setValue("");
-        this.PLOSForm.get('departmentId').setValue("");
-        this.PLOSForm.get('programId').setValue("");
-        this.PLOSForm.get('admissionOpenProgramIdFrom').setValue("");
-        this.PLOSForm.get('admissionOpenProgramIdTo').setValue("");
-        $("#Add-PLOS-Modal").modal("show");
+        this.All_Added_PEOS = [];
+        this.PEOSForm.get('intakeOption').setValue("0");
+        this.PEOSForm.get('instituteId').setValue("");
+        this.PEOSForm.get('departmentId').setValue("");
+        this.PEOSForm.get('programId').setValue("");
+        this.PEOSForm.get('admissionOpenProgramIdFrom').setValue("");
+        this.PEOSForm.get('admissionOpenProgramIdTo').setValue("");
+        $("#Add-PEOS-Modal").modal("show");
     }
-    openCopyPLOsShowModal() {
-        this.Added_Intake_PLOs = [];
+    openCopyPEOsShowModal() {
+        this.Added_Intake_PEOs = [];
         this.CopyForm.reset();
         this.submitted = false;
         this.CopyForm.get('instituteIdTo').setValue("");
@@ -314,52 +326,51 @@ let ManagePlosComponent = class ManagePlosComponent {
         this.CopyForm.get('departmentIdFrom').setValue("");
         this.CopyForm.get('programIdFrom').setValue("");
         this.CopyForm.get('admissionOpenProgramId').setValue("");
-        $("#Copy-PLOS-Modal").modal("show");
+        $("#Copy-PEOS-Modal").modal("show");
     }
     onSubmit() {
         this.submitted = true;
-        if (this.PLOSForm.invalid) {
+        if (this.PEOSForm.invalid) {
             return;
         }
-        this.All_Added_PLOS.push({
-            "instituteId": Number(this.PLOSForm.get('instituteId').value),
-            "departmentId": Number(this.PLOSForm.get('departmentId').value),
-            "programId": Number(this.PLOSForm.get('programId').value),
-            "admissionOpenProgramIdFrom": Number(this.PLOSForm.get('admissionOpenProgramIdFrom').value),
-            "admissionOpenProgramIdTo": Number(Number(this.PLOSForm.get('intakeOption').value)) === 0 ? Number(this.PLOSForm.get('admissionOpenProgramIdFrom').value) : Number(this.PLOSForm.get('admissionOpenProgramIdTo').value),
-            "PLOTitle": this.PLOSForm.get('PLOTitle').value,
-            "description": this.PLOSForm.get('description').value,
+        this.All_Added_PEOS.push({
+            "instituteId": Number(this.PEOSForm.get('instituteId').value),
+            "departmentId": Number(this.PEOSForm.get('departmentId').value),
+            "programId": Number(this.PEOSForm.get('programId').value),
+            "admissionOpenProgramIdFrom": Number(this.PEOSForm.get('admissionOpenProgramIdFrom').value),
+            "admissionOpenProgramIdTo": Number(Number(this.PEOSForm.get('intakeOption').value)) === 0 ? Number(this.PEOSForm.get('admissionOpenProgramIdFrom').value) : Number(this.PEOSForm.get('admissionOpenProgramIdTo').value),
+            "peoTitle": this.PEOSForm.get('peoTitle').value,
+            "description": this.PEOSForm.get('description').value,
             "Created_By": Number(GlobalService.FacultyMember_ID)
         });
         this.submitted = false;
-        this.PLOSForm.get('PLOTitle').setValue("");
-        this.PLOSForm.get('PLOTitle').markAsUntouched();
-        this.PLOSForm.get('description').setValue("");
-        this.PLOSForm.get('description').markAsUntouched();
+        this.PEOSForm.get('peoTitle').setValue("");
+        this.PEOSForm.get('peoTitle').markAsUntouched();
+        this.PEOSForm.get('description').setValue("");
+        this.PEOSForm.get('description').markAsUntouched();
     }
-    copyPLOs() {
+    copyPeos() {
         let payload = [];
-        this.Added_Intake_PLOs.forEach(item => {
+        this.Added_Intake_PEOs.forEach(item => {
             payload.push({
                 "instituteId": Number(this.CopyForm.get('instituteIdTo').value),
                 "departmentId": Number(this.CopyForm.get('departmentIdTo').value),
                 "programId": Number(this.CopyForm.get('programIdTo').value),
                 "admissionOpenProgramIdFrom": Number(this.CopyForm.get('admissionOpenProgramIdFrom').value),
                 "admissionOpenProgramIdTo": Number(Number(this.CopyForm.get('intakeOption').value)) === 0 ? Number(this.CopyForm.get('admissionOpenProgramIdFrom').value) : Number(this.CopyForm.get('admissionOpenProgramIdTo').value),
-                "PLO_ID": Number(item.PLO_ID),
-                "PLOTitle": item.PLO_Title,
-                "description": item.ploDescription,
+                "peoTitle": item.peoTitle,
+                "description": item.peoDescription,
                 "Created_By": Number(GlobalService.FacultyMember_ID)
             });
         });
         this.ngxService.start();
-        this._SettingService.SaveAddedPLOS(payload).
+        this._SettingService.SaveAddedPEOS(payload).
             subscribe(data => {
             this.ngxService.stop();
             if (data) {
-                this.toastr.success("PLOs copied successfully", "Success");
-                $("#Add-PLOS-Modal").modal("hide");
-                $("#Copy-PLOS-Modal").modal("hide");
+                this.toastr.success("PEOs added successfully", "Success");
+                $("#Add-PEOS-Modal").modal("hide");
+                $("#Copy-PEOS-Modal").modal("hide");
                 //this.Get_Selected_Course_CLOS();
             }
             else {
@@ -370,17 +381,17 @@ let ManagePlosComponent = class ManagePlosComponent {
             this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
         });
     }
-    deleteTempAddedPLOs(value) {
-        this.All_Added_PLOS.splice(value, 1);
+    deleteTempAddedPEOs(value) {
+        this.All_Added_PEOS.splice(value, 1);
     }
-    SaveAddedPLOs() {
+    SaveAddedPEOs() {
         this.ngxService.start();
-        this._SettingService.AddNewPlos(this.All_Added_PLOS).
+        this._SettingService.AddNewPeos(this.All_Added_PEOS).
             subscribe(data => {
             this.ngxService.stop();
             if (data) {
-                this.toastr.success("PLOs added successfully", "Success");
-                $("#Add-PLOS-Modal").modal("hide");
+                this.toastr.success("PEOs added successfully", "Success");
+                $("#Add-PEOS-Modal").modal("hide");
                 //this.Get_Selected_Course_CLOS();
             }
             else {
@@ -391,15 +402,12 @@ let ManagePlosComponent = class ManagePlosComponent {
             this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
         });
     }
-    GetPlosInformation() {
+    GetPeosInformation() {
         this.pagesize = 50;
         this.dataset = [];
-        this.PLOsInformationLst = [];
+        this.PEOsInformationLst = [];
         this.ngxService.start();
-        this._SettingService.GetPlosInformation({
-            programId: Number(this.searchSelection.programId),
-            admissionOpenProgramId: Number(this.searchSelection.admissionOpenProgramId)
-        }).
+        this._SettingService.GetPeosInformation({ programId: this.programId, admissionOpenProgramId: this.admissionOpenProgramId }).
             subscribe(response => {
             if (response != null) {
                 this.dataset = response;
@@ -411,13 +419,13 @@ let ManagePlosComponent = class ManagePlosComponent {
             this.toastr.error("Internal server error occured while processing your request", "Error!");
         });
     }
-    GetIntakePLOsInformation(admissionOpenProgramId) {
-        this.Added_Intake_PLOs = [];
+    GetIntakePeosInformation(admissionOpenProgramId) {
+        this.Added_Intake_PEOs = [];
         this.ngxService.start();
-        this._SettingService.GetPlosInformation({ programId: this.programId, admissionOpenProgramId: Number(admissionOpenProgramId) }).
+        this._SettingService.GetPeosInformation({ programId: this.programId, admissionOpenProgramId: Number(admissionOpenProgramId) }).
             subscribe(response => {
             if (response != null) {
-                this.Added_Intake_PLOs = response;
+                this.Added_Intake_PEOs = response;
             }
             this.ngxService.stop();
         }, error => {
@@ -425,7 +433,7 @@ let ManagePlosComponent = class ManagePlosComponent {
             this.toastr.error("Internal server error occured while processing your request", "Error!");
         });
     }
-    deletePLO(value) {
+    deletePeo(value) {
         Swal.fire({
             title: 'Are you sure?',
             text: 'You will not be able to recover this again!',
@@ -439,12 +447,12 @@ let ManagePlosComponent = class ManagePlosComponent {
         }).then((result) => {
             if (result.value) {
                 this.ngxService.start();
-                this._SettingService.DeletePlo({ "ploId": value, "Modified_By": GlobalService.FacultyMember_ID }).
+                this._SettingService.DeletePeo({ "peoId": value, "Modified_By": GlobalService.FacultyMember_ID }).
                     subscribe(data => {
                     this.ngxService.stop();
                     if (data) {
-                        Swal.fire('Deleted!', 'PLO deleted successfully.', 'success');
-                        this.GetPlosInformation();
+                        Swal.fire('Deleted!', 'PEO deleted successfully.', 'success');
+                        this.GetPeosInformation();
                     }
                     else {
                         Swal.fire('Cancelled', 'Your data is safe', 'error');
@@ -463,13 +471,13 @@ let ManagePlosComponent = class ManagePlosComponent {
         $(`#${modal}`).modal('hide');
     }
 };
-ManagePlosComponent = __decorate([
+ManagePeosComponent = __decorate([
     Component({
-        selector: 'app-manage-plos',
-        templateUrl: './manage-plos.component.html',
-        styleUrls: ['./manage-plos.component.css'],
+        selector: 'app-manage-peos',
+        templateUrl: './manage-peos.component.html',
+        styleUrls: ['./manage-peos.component.css'],
         providers: [PagerService, HighlightPipe, FilterPipe]
     })
-], ManagePlosComponent);
-export { ManagePlosComponent };
-//# sourceMappingURL=manage-plos.component.js.map
+], ManagePeosComponent);
+export { ManagePeosComponent };
+//# sourceMappingURL=manage-peos.component.js.map

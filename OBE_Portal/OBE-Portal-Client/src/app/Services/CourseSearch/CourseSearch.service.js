@@ -11,10 +11,7 @@ let CoursesSearchService = class CoursesSearchService {
     }
     Get_Department(data) {
         return this.http.post(this.baseUrl + 'CourseSearch/GetDepartment', data);
-  }
-  Get_DepartmentDean(data) {
-    return this.http.post(this.baseUrl + 'CourseSearch/GetDepartmentDean', data);
-  }
+    }
     getFacultyMember(data) {
         return this.http.get(this.baseUrl + 'CourseSearch/getFacultyMember?username=' + data);
     }
@@ -24,16 +21,6 @@ let CoursesSearchService = class CoursesSearchService {
     Get_Intakes(data) {
         return this.http.post(this.baseUrl + 'CourseSearch/GetIntakes', data);
     }
-  Get_Programs(data) {
-    return this.http.post(this.baseUrl + 'CourseSearch/GetPrograms', data);
-  }
-
-  Get_Status(data) {
-    return this.http.post(this.baseUrl + 'CourseSearch/GetStatus', data);
-  }
-  Get_Institute_dean(data) {
-    return this.http.post(this.baseUrl + 'CourseSearch/GetInstitutedean', data);
-  }
     Get_All_Semester() {
         return this.http.get(this.baseUrl + 'CourseSearch/GetAllSemester');
     }
@@ -48,6 +35,12 @@ let CoursesSearchService = class CoursesSearchService {
     }
     DeleteStudentFromCourse(data) {
         return this.http.post(this.baseUrl + 'CourseSearch/DeleteStudentFromCourse', data);
+    }
+    GetDepartmentPrograms(data) {
+        return this.http.post(this.baseUrl + 'CourseSearch/GetDepartmentPrograms', data);
+    }
+    GetProgramIntakes(data) {
+        return this.http.post(this.baseUrl + 'CourseSearch/GetProgramIntakes', data);
     }
 };
 CoursesSearchService = __decorate([

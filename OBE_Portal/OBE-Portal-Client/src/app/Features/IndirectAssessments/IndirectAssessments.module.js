@@ -32,7 +32,7 @@ IndirectAssessmentsModule = __decorate([
             SweetAlert2Module,
             OwlDateTimeModule,
             OwlNativeDateTimeModule,
-            PipessharedModule
+            PipessharedModule,
         ],
         providers: [AuthGuard, { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }],
     })

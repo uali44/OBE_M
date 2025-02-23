@@ -16,7 +16,7 @@ import { IndirectAssessmentsComponent } from './IndirectAssessments.component';
 import { IndirectAssessmentsMainComponent } from './IndirectAssessments-main/IndirectAssessments-main.component';
 import { QuestionairesComponent } from './questionaires/questionaires.component';
 
-import { SharedModuleModule } from '../../Shared/shared-module/shared-module.module'
+
 
 @NgModule({
   declarations: [IndirectAssessmentsMainComponent, IndirectAssessmentsComponent, QuestionairesComponent],
@@ -33,7 +33,7 @@ import { SharedModuleModule } from '../../Shared/shared-module/shared-module.mod
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     PipessharedModule,
-    SharedModuleModule
+    
 
   ],
   providers: [AuthGuard, { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }],

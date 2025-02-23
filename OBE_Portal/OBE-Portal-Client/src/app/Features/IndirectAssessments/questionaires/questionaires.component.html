@@ -2,7 +2,7 @@
 
 
 
-  <app-searchForm (dataEmitter)="receiveData($event)"></app-searchForm>
+  <app-search (searchEmit)="receiveData($event)"></app-search>
   <div class="modal fade width-70p " id="addSurveyModal" tabindex="-1" aria-labelledby="addSurveyModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content padding-10">
@@ -18,7 +18,7 @@
 
 
         </div>
-        <app-searchForm (dataEmitter)="receiveMData($event)"></app-searchForm>
+        <app-search (searchEmit)="receiveMData($event)"></app-search>
         <fieldset class="">
           <legend>Question Details</legend>
           <form [formGroup]="createSurveyForm" (ngSubmit)="submitNewSurvey()">

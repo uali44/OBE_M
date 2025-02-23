@@ -19,10 +19,6 @@ export class CoursesSearchService {
     return this.http.post<any>(this.baseUrl + 'CourseSearch/GetDepartment', data);
   }
 
-  Get_DepartmentDean<T>(data: any): Observable<any> {
-    return this.http.post<any>(this.baseUrl + 'CourseSearch/GetDepartmentDean', data);
-  }
-
   getFacultyMember<T>(data: any): Observable<any> {
     return this.http.get<any>(this.baseUrl + 'CourseSearch/getFacultyMember?username='+data);
   }
@@ -31,15 +27,6 @@ export class CoursesSearchService {
   }
   Get_Intakes<T>(data: any): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'CourseSearch/GetIntakes', data);
-  }
-  Get_Programs<T>(data: any): Observable<any> {
-    return this.http.post<any>(this.baseUrl + 'CourseSearch/GetPrograms', data);
-  }
-  Get_Status<T>(data: any): Observable<any> {
-    return this.http.post<any>(this.baseUrl + 'CourseSearch/GetStatus', data);
-  }
-  Get_Institute_dean<T>(data: any): Observable<any> {
-    return this.http.post<any>(this.baseUrl + 'CourseSearch/GetInstitutedean', data);
   }
   Get_All_Semester<T>(): Observable<any> {
     return this.http.get<any>(this.baseUrl + 'CourseSearch/GetAllSemester');
@@ -56,7 +43,6 @@ export class CoursesSearchService {
   DeleteStudentFromCourse<T>(data: any): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'CourseSearch/DeleteStudentFromCourse', data);
   }
-
   GetDepartmentPrograms<T>(data: any): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'CourseSearch/GetDepartmentPrograms', data);
   }

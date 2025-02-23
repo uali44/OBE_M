@@ -147,7 +147,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
      
     this.ngxService.start();
     this.Programs = [];
-    this._CoursesSearchService.Get_Programs(Number(val)).
+    this._CoursesSearchService.GetDepartmentPrograms(Number(val)).
       subscribe(
         response => {
           try {

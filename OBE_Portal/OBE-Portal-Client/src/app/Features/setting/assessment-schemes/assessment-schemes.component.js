@@ -5,6 +5,7 @@ import { GlobalService } from '../../../Shared/Services/Global/global.service';
 import { HighlightPipe } from '../../../Shared/Pipe/highlight.pipe';
 import { FilterPipe } from '../../../Shared/Pipe/filter';
 import { Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
 let AssessmentSchemesComponent = class AssessmentSchemesComponent {
     constructor(_CoursesSearchService, toastr, ngxService, _ReportsService, formBuilder, CoursesCLOSService, pagerService) {
         this._CoursesSearchService = _CoursesSearchService;
@@ -51,7 +52,14 @@ let AssessmentSchemesComponent = class AssessmentSchemesComponent {
     ngOnInit() {
         this.All_PLOS = [];
     }
-    GetAScheme() { }
+    receiveData(data) {
+        this.childData = data; // Update the parent component's variable with the data
+    }
+    GetAScheme() {
+        console.log(GlobalService.temp_intake);
+        console.log(this.childData);
+        Swal.fire("method called");
+    }
     addData() {
         var _a, _b;
         if (this.dataForm.valid) {

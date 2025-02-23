@@ -40,8 +40,8 @@ SettingModule = __decorate([
             SweetAlert2Module,
             OwlDateTimeModule,
             OwlNativeDateTimeModule,
-            PipessharedModule
-        ],
+            PipessharedModule,
+        ], exports: [],
         providers: [AuthGuard, { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }],
     })
 ], SettingModule);
