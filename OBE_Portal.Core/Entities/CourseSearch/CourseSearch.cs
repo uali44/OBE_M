@@ -21,14 +21,10 @@ namespace OBE_Portal.Core.Entities.CourseSearch
         public int FacultyMemberID { get; set; }
         public string Name { get; set; }
     }
-    public class DepartmentDeanRequest
-    {
-        public long InstituteID { get; set; }
-        public long FacultyMemberID { get; set; }
-    }
     public class GetFacultyMembersRequest
     {
         public long Department_ID { get; set; }
+        public long IntakeId { get; set; }
         public long Semester_ID { get; set; }
     }
     public class GetIntakeForSelectedDepartment
@@ -36,15 +32,19 @@ namespace OBE_Portal.Core.Entities.CourseSearch
         public int AdmissionOpenProgramID { get; set; }
         public string semesterAlia { get; set; }
     }
-    public class GetProgramsForSelectedDepartment
+
+    public class GetIntakeForSelectedProgram
     {
         public int ProgramID { get; set; }
         public string ProgramName { get; set; }
     }
-    public class getstatus
+    public class GetIntakeForSelectedProgramResponse
     {
-        public int userStatus { get; set; }
+        public int AdmissionOpenProgramID { get; set; }
+        public string ProgramName { get; set; }
+        public string semesterAlia { get; set; }
     }
+
     public class GetAllSemester
     {
         public int SemesterID { get; set; }
@@ -68,21 +68,5 @@ namespace OBE_Portal.Core.Entities.CourseSearch
         public string Name { get; set; }
         public string username { get; set; }
     }
-
-
-    public class GetIntakeForSelectedProgram
-    {
-        public int ProgramID { get; set; }
-        public string ProgramName { get; set; }
-    }
-    public class GetIntakeForSelectedProgramResponse
-    {
-        public int AdmissionOpenProgramID { get; set; }
-        public string ProgramName { get; set; }
-        public string semesterAlia { get; set; }
-    }
-
-
-
 
 }

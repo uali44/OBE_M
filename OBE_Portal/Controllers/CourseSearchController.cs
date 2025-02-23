@@ -27,7 +27,7 @@ namespace OBE_Portal.Controllers
         {
             try
             {
-                var respone = await _courseSearch.GetInstitute().ConfigureAwait(true);
+                var respone = await _courseSearch.GetInstitute().ConfigureAwait(false);
                 if (respone != null)
                     return Ok(respone);
                 else
@@ -43,7 +43,7 @@ namespace OBE_Portal.Controllers
         {
             try
             {
-                var respone = await _courseSearch.GetAllSemester().ConfigureAwait(true);
+                var respone = await _courseSearch.GetAllSemester().ConfigureAwait(false);
                 if (respone != null)
                     return Ok(respone);
                 else
@@ -59,23 +59,7 @@ namespace OBE_Portal.Controllers
         {
             try
             {
-                var respone = await _courseSearch.GetDepartment(InstitueID).ConfigureAwait(true);
-                if (respone != null)
-                    return Ok(respone);
-                else
-                    return Ok(respone);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-        [HttpPost("GetDepartmentDean")]
-        public async Task<IActionResult> GetDepartmentDean([FromBody] DepartmentDeanRequest request)
-        {
-            try
-            {
-                var respone = await _courseSearch.GetDepartmentDean(request.InstituteID,request.FacultyMemberID).ConfigureAwait(true);
+                var respone = await _courseSearch.GetDepartment(InstitueID).ConfigureAwait(false);
                 if (respone != null)
                     return Ok(respone);
                 else
@@ -92,7 +76,7 @@ namespace OBE_Portal.Controllers
             try
             {
                 if (request != null) {
-                    var respone = await _courseSearch.GetFacultyMembersForSelectedDepartmentAndSemester(request.Department_ID, request.Semester_ID).ConfigureAwait(true);
+                    var respone = await _courseSearch.GetFacultyMembersForSelectedDepartmentAndSemester(request.Department_ID, request.Semester_ID).ConfigureAwait(false);
                     if (respone != null)
                         return Ok(respone);
                     else
@@ -114,7 +98,7 @@ namespace OBE_Portal.Controllers
             {
                 if (request > 0)
                 {
-                    var respone = await _courseSearch.GetIntakes(request).ConfigureAwait(true);
+                    var respone = await _courseSearch.GetIntakes(request).ConfigureAwait(false);
                     if (respone != null)
                         return Ok(respone);
                     else
@@ -129,76 +113,6 @@ namespace OBE_Portal.Controllers
                 throw;
             }
         }
-        [HttpPost("GetPrograms")]
-        public async Task<IActionResult> GetPrograms([FromBody] long request)
-        {
-            try
-            {
-                if (request > 0)
-                {
-                    var respone = await _courseSearch.GetPrograms(request).ConfigureAwait(true);
-                    if (respone != null)
-                        return Ok(respone);
-                    else
-                        return Ok(respone);
-                }
-                else
-                    return Ok(null);
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-        [HttpPost("GetStatus")]
-        public async Task<IActionResult> GetStatus([FromBody] long request)
-        {
-            try
-            {
-                if (request > 0)
-                {
-                    var respone = await _courseSearch.GetStatus(request).ConfigureAwait(true);
-                    if (respone != null)
-                        return Ok(respone);
-                    else
-                        return Ok(respone);
-                }
-                else
-                    return Ok(null);
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message); 
-                throw;
-            }
-        }
-
-        [HttpPost("GetInstituteDean")]
-        public async Task<IActionResult> GetInsitutedean([FromBody] long request)
-        {
-            try
-            {
-                if (request > 0)
-                {
-                    var respone = await _courseSearch.GetInstitutedean(request).ConfigureAwait(true);
-                    if (respone != null)
-                        return Ok(respone);
-                    else
-                        return Ok(respone);
-                }
-                else
-                    return Ok(null);
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-        }
-
         [HttpPost("GetIntakeStudents")]
         public async Task<IActionResult> GetIntakeStudents([FromBody] long request)
         {
@@ -206,7 +120,7 @@ namespace OBE_Portal.Controllers
             {
                 if (request > 0)
                 {
-                    var respone = await _courseSearch.GetIntakeStudents(request).ConfigureAwait(true);
+                    var respone = await _courseSearch.GetIntakeStudents(request).ConfigureAwait(false);
                     if (respone != null)
                         return Ok(respone);
                     else
@@ -229,7 +143,7 @@ namespace OBE_Portal.Controllers
             {
                 if (request != null)
                 {
-                    var respone = await _courseSearch.GetCQILevelCourses(request).ConfigureAwait(true);
+                    var respone = await _courseSearch.GetCQILevelCourses(request).ConfigureAwait(false);
                     if (respone != null)
                         return Ok(respone);
                     else
@@ -252,7 +166,7 @@ namespace OBE_Portal.Controllers
             {
                 if (request != 0)
                 {
-                    var respone = await _courseSearch.DeleteStudentFromCourse(request).ConfigureAwait(true);
+                    var respone = await _courseSearch.DeleteStudentFromCourse(request).ConfigureAwait(false);
                     if (respone)
                         return Ok(respone);
                     else
@@ -273,7 +187,7 @@ namespace OBE_Portal.Controllers
             {
             try
             {
-                var respone = await _courseSearch.getFacultyMember(username).ConfigureAwait(true);
+                var respone = await _courseSearch.getFacultyMember(username).ConfigureAwait(false);
                 return Ok(respone);
             }
             catch (Exception)
@@ -281,9 +195,6 @@ namespace OBE_Portal.Controllers
                 throw;
             }
         }
-
-
-
 
         [HttpPost("GetDepartmentPrograms")]
         public async Task<IActionResult> GetDepartmentPrograms([FromBody] long request)
@@ -330,11 +241,6 @@ namespace OBE_Portal.Controllers
                 throw;
             }
         }
-
-
-
-
-
 
     }
 }

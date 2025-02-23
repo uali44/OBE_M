@@ -14,6 +14,8 @@ using OBE_Portal.Core.Entities.Reports;
 using OBE_Portal.Core.Entities.Setting;
 using OBE_Portal.Core.Entities.Student;
 using OBE_Portal.Core.Entities.IndirectAssessment;
+using OBE_Portal.Core.Entities.DBEntities;
+
 
 namespace OBE_Portal.Core.Context
 {
@@ -89,8 +91,16 @@ namespace OBE_Portal.Core.Context
             modelBuilder.Entity<FacultyMembersResponse>().HasNoKey();
             modelBuilder.Entity<GetUserResponse>().HasNoKey();
             modelBuilder.Entity<Roles>().HasNoKey();
-            modelBuilder.Entity<GetProgramsForSelectedDepartment>().HasNoKey();
-            modelBuilder.Entity<getstatus>().HasNoKey();
+            //modelBuilder.Entity<GetProgramsForSelectedDepartment>().HasNoKey();
+
+            modelBuilder.Entity<GetIntakeForSelectedProgram>().HasNoKey();
+            modelBuilder.Entity<GetIntakeForSelectedProgramResponse>().HasNoKey();
+            modelBuilder.Entity<PeosInformationResponse>().HasNoKey();
+            modelBuilder.Entity<GetIntakeResponse>().HasNoKey();
+            modelBuilder.Entity<PlosInformationResponse>().HasNoKey();
+
+
+            //modelBuilder.Entity<getstatus>().HasNoKey();
             modelBuilder.Entity<ActivityList>().HasNoKey();
             modelBuilder.Entity<ActivitySubDetail>().HasNoKey();
             modelBuilder.Entity<ActivityDetailResult>().HasNoKey();
@@ -104,9 +114,13 @@ namespace OBE_Portal.Core.Context
             modelBuilder.Entity<StudentSurveySubDetail>().HasNoKey();
             modelBuilder.Entity<SurveyResponse>().HasNoKey();
         }
-        
+
         //public DbSet<Authentication> user { get; set; }
         //public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
-
+        public DbSet<AdmissionOpenPrograms> AdmissionOpenPrograms { get; set; }
+        public DbSet<PEOsMain> PEOsMain { get; set; }
+        public DbSet<PEOsDetails> PEOsDetails { get; set; }
+        public DbSet<PLOs_Information> PLOs_Information { get; set; }
+        public DbSet<PLOS_Main_Details> PLOS_Main_Details { get; set; }
     }
 }

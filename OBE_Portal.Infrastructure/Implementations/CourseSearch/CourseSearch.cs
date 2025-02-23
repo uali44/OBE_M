@@ -38,30 +38,6 @@ namespace OBE_Portal.Infrastructure.Implementations.CourseSearch
                 throw;
             }
         }
-
-        async Task<List<CourseSearchModels>> ICourseSearch.GetInstitutedean(long FacultyMemberID)
-        {
-            try
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    var FacultyMember = new SqlParameter("@FacultyMemberID", FacultyMemberID);
-                    List<CourseSearchModels> response = await _context.Set<CourseSearchModels>().FromSqlInterpolated($"EXEC sp_get_institute_dean {FacultyMember}").ToListAsync();
-                    if (response != null)
-                    {
-                        return response;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
         async Task<List<GetAllSemester>> ICourseSearch.GetAllSemester()
         {
             try
@@ -92,30 +68,6 @@ namespace OBE_Portal.Infrastructure.Implementations.CourseSearch
                 {
                     var Institue_ID = new SqlParameter("@InstituteID", InstitueID);
                     List<Deparments> response = await _context.Set<Deparments>().FromSqlInterpolated($"EXEC Sp_Get_Institute_Department {Institue_ID}").ToListAsync();
-                    if (response != null)
-                    {
-                        return response;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-        async Task<List<Deparments>> ICourseSearch.GetDepartmentDean(long InstitueID,long FacultyMemberID)
-        {
-            try
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    var FacultyMember = new SqlParameter("@FacultyMemberID", FacultyMemberID);
-                    var Institue_ID = new SqlParameter("@InstituteID", InstitueID);
-                    List<Deparments> response = await _context.Set<Deparments>().FromSqlInterpolated($"EXEC sp_get_department_dean {FacultyMember},{Institue_ID}").ToListAsync();
                     if (response != null)
                     {
                         return response;
@@ -178,70 +130,6 @@ namespace OBE_Portal.Infrastructure.Implementations.CourseSearch
                 throw;
             }
         }
-
-        async Task<List<getstatus>> ICourseSearch.GetStatus(long FacultyMemberID)
-        {
-            try
-            {
-
-
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    var FacultyMember = new SqlParameter("@FacultyMemberID", FacultyMemberID);
-                    List<getstatus> response = await _context.Set<getstatus>().FromSqlInterpolated($"EXEC sp_get_status {FacultyMember}").ToListAsync();
-                    if (response != null)
-                    {
-                        return response;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-            
-                //                return new List<getstatus>
-                //{
-                //    new getstatus { statusID =1}
-                //};
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        async Task<List<GetProgramsForSelectedDepartment>> ICourseSearch.GetPrograms(long Department_ID)
-        {
-            try
-            {
-               
-
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    var DepartmentID = new SqlParameter("@DEPARTMENT_ID", Department_ID);
-                    List<GetProgramsForSelectedDepartment> response = await _context.Set<GetProgramsForSelectedDepartment>().FromSqlInterpolated($"EXEC sp_Get_Programs {DepartmentID}").ToListAsync();
-                    if (response != null)
-                    {
-                        return response;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-               
-
-            }
-            catch (Exception )
-            {
-              
-                throw;
-            }
-        }
-
-
         async Task<List<GetIntakeStudentsResponse>> ICourseSearch.GetIntakeStudents(long AdmissionOpenProgramID)
         {
             try
@@ -271,9 +159,8 @@ namespace OBE_Portal.Infrastructure.Implementations.CourseSearch
             {
                 using (SqlCommand comm = new SqlCommand())
                 {
-                    var Semester_ID = new SqlParameter("@Semester_ID", Request.Semester_ID);
-                    var Department_ID = new SqlParameter("@Department_ID", Request.Department_ID);
-                    List<GetCourseResponse> response = await _context.Set<GetCourseResponse>().FromSqlInterpolated($"EXEC SP_Get_All_CQI_Courses {Semester_ID},{Department_ID}").ToListAsync();
+                    var AdmissionOpenProgramID = new SqlParameter("@AdmissionOpenProgramID", Request.IntakeId);
+                    List<GetCourseResponse> response = await _context.Set<GetCourseResponse>().FromSqlInterpolated($"EXEC SP_Get_All_CQI_Courses {AdmissionOpenProgramID}").ToListAsync();
                     if (response != null)
                     {
                         return response;
@@ -328,10 +215,6 @@ namespace OBE_Portal.Infrastructure.Implementations.CourseSearch
                 throw;
             }
         }
-
-
-
-
         async Task<List<GetIntakeForSelectedProgram>> ICourseSearch.GetDepartmentPrograms(long DepartmentID)
         {
             try
@@ -379,20 +262,6 @@ namespace OBE_Portal.Infrastructure.Implementations.CourseSearch
                 throw;
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }
