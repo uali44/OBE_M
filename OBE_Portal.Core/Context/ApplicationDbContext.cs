@@ -122,5 +122,6 @@ namespace OBE_Portal.Core.Context
         public DbSet<PEOsDetails> PEOsDetails { get; set; }
         public DbSet<PLOs_Information> PLOs_Information { get; set; }
         public DbSet<PLOS_Main_Details> PLOS_Main_Details { get; set; }
+        public DbSet<MappedPLO> MappedPLO { get; set; }
     }
 }
