@@ -29,7 +29,8 @@ export class QuestionairesComponent implements OnInit {
   surveySubDetails: any[] = [{
     Question: null,
     QType: null,
-    Mapping: null,
+    PLOID: null,
+    PEOID: null,
     Section: null,
     Marks: 0,
     Options: []
@@ -39,7 +40,8 @@ export class QuestionairesComponent implements OnInit {
   newQuestion: any = {
     Question: '',
     QType: 'Multiple Choice',
-    Mapping: '',
+    PLOID: 0,
+    PEOID: 0,
     Section: 'Header',
     Marks: 0,
     Options: ['']
@@ -61,11 +63,17 @@ export class QuestionairesComponent implements OnInit {
   exitSurveyForm: FormGroup = this.fb.group({});
   employerSurveyForm: FormGroup = this.fb.group({});
 
-  AddedIntakePLOs: any = [];
+  
     Added_Intake_PLOs: any[];
-
+  Added_Intake_PEOs: any[] = [];
   enableSave: boolean;
   programId: any;
+
+
+  SelectedType: any;
+
+
+
   constructor(private _CoursesSearchService: CoursesSearchService,
     private toastr: ToastrService,
     private ngxService: NgxUiLoaderService,
@@ -83,7 +91,9 @@ export class QuestionairesComponent implements OnInit {
       question: ['', Validators.required],
       questionType: ['', Validators.required],
       section: ['', Validators.required],
-      mapping: [''],
+      
+      plo: [''],
+      peo:[''],
       marks:['', ],
       options: this.fb.array([]) 
     });
@@ -92,7 +102,7 @@ export class QuestionairesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   // this.Added_Intake_PLOs = [{ PLO_ID: 1, PLO_Title: "PLO-1" }, { PLO_ID: 2, PLO_Title: "PLO-2" }, { PLO_ID: 1, PLO_Title: "PLO-3" }]
+  
 
     this.Intake = 0;
     this.getSurvey(this.surveyMainDetail.SurveyType);
@@ -117,17 +127,18 @@ export class QuestionairesComponent implements OnInit {
       this.surveyMainDetail.SurveyType = this.createSurveyForm.controls["surveyType"].value;
       this.newQuestion.Question = this.createSurveyForm.controls["question"].value;
       this.newQuestion.QType = this.createSurveyForm.controls["questionType"].value;
-      this.newQuestion.Mapping = this.createSurveyForm.controls["mapping"].value;
+      this.newQuestion.PLOID = Number(this.createSurveyForm.controls["plo"].value);
+      this.newQuestion.PEOID = Number(this.createSurveyForm.controls["peo"].value);
       this.newQuestion.Section = this.createSurveyForm.controls["section"].value;
       this.newQuestion.Options = this.createSurveyForm.controls["options"].value;
       this.newQuestion.Marks = this.createSurveyForm.controls["marks"].value;
 
       this.surveySubDetails.push({ ...this.newQuestion });
-      
 
+      this.SelectedType = this.createSurveyForm.controls["surveyType"].value;
       this.createSurveyForm.reset();
       this.options.clear();
-
+      this.createSurveyForm.controls["surveyType"].patchValue(this.SelectedType);
       if (this.programId != 0) {
         this.enableSave = true;
       }
@@ -139,7 +150,14 @@ export class QuestionairesComponent implements OnInit {
     }
   }
 
-
+  FilterPLO(id: number) {
+    const filtered = this.Added_Intake_PLOs.find((data: any) => data.PLO_ID == id);
+    return filtered?.PLO_Title || null;
+  }
+  FilterPEO(id: number) {
+    const filtered = this.Added_Intake_PEOs.find((data: any) => data.peoId == id);
+    return filtered?.peoTitle ||  null;
+  }
   getSurveyOptions(questionIndex: number): FormArray {
     return this.surveyQuestions.at(questionIndex).get('Options') as FormArray;
   }
@@ -175,7 +193,7 @@ export class QuestionairesComponent implements OnInit {
 
     this.createSurveyForm.reset();
     this.surveySubDetails = [];
-    $("#addEducationModal").modal("hide");
+    $("#addSurveyModal").modal("hide");
   }
  
 
@@ -195,6 +213,7 @@ export class QuestionairesComponent implements OnInit {
 
 
     this.GetIntakePLOsInformation(this.programId);
+    this.GetIntakePeosInformation(this.programId);
 
     if (this.surveySubDetails?.length > 0) {
       this.enableSave = true;
@@ -359,7 +378,7 @@ export class QuestionairesComponent implements OnInit {
             if (response) {
               this.getSurvey(this.surveyMainDetail.SurveyType);
               this.resetForm();
-            
+              this.CloseModal();
               this.toastr.success("Information saved successfully", "Success!");
             
             }
@@ -437,7 +456,22 @@ export class QuestionairesComponent implements OnInit {
         });
   }
 
-
+  GetIntakePeosInformation(admissionOpenProgramId: any) {
+    this.Added_Intake_PEOs = [];
+    this.ngxService.start();
+    this._SettingService.GetPeosInformation({ programId: this.programId, admissionOpenProgramId: Number(admissionOpenProgramId) }).
+      subscribe(
+        response => {
+          if (response != null) {
+            this.Added_Intake_PEOs = response;
+          }
+          this.ngxService.stop();
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Internal server error occured while processing your request", "Error!")
+        });
+  }
 
 
 

@@ -76,6 +76,8 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public string Section { get; set; }
         public List<string> Options { get; set; }
         public int Marks { get; set; }
+        public int PLOID { get; set; }
+        public int PEOID { get; set; }
     }
 
     public class SurveyMainDetail
@@ -99,6 +101,8 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public string Section { get; set; }
         public ICollection<SurveySubDetailOption> SurveySubDetailOptions { get; set; }
         public int Marks { get; set; }
+        public int PLOID { get; set; }
+        public int PEOID { get; set; }
     }
 
     public class SurveySubDetailOption
@@ -125,6 +129,8 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public string Section { get;set; }
         public List<SurveySubDetailOption> Options { get; set; }
         public int Marks { get; set; }
+        public int PLOID { get; set; }
+        public int PEOID { get; set; }
     }
     public class OoptionsDto
     {
@@ -203,8 +209,26 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public int StudentResponseID { get; set; }
         public int StudentID { get; set; }
         public int QID { get; set; }
-        public string Answer { get; set; }
-        public int OptionID { get; set; }
+        public string? Answer { get; set; }
+        public int? OptionID { get; set; }
+
     }
+
+    public class SaveStudentResponseDTO
+    {
+        public int StudentID { get; set; }  
+        public int QID { get; set; }  
+        public int? OptionID { get; set; }  
+        public string? Answer { get; set; }  
+        public int CreatedBy { get; set; }  
+    }
+
+
+
+
+
+
+
+
 
 }

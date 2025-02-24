@@ -98,7 +98,7 @@
                       <ng-container *ngIf="question.Section==='Header'">
                         <td class="text-center">{{i+1}}</td>
                         <td> <label>{{ question.Question }}</label></td>
-                        <td class="text-center">{{ question.Mapping }}</td>
+                        <td class="text-center">{{ FilterPLO(question?.PLOID) }}  {{FilterPEO(question?.PEOID) }}</td>
                         <td>
                           <input *ngIf="question.QType === 'Text'" type="text" [formControlName]="question.QID" />
                           <textarea rows="6" *ngIf="question.QType === 'Remarks'" type="text" [formControlName]="question.QID"></textarea>

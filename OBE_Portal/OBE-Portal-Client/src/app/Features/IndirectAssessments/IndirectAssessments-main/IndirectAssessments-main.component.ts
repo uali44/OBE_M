@@ -4,6 +4,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { InterconnectedService } from '../../../Shared/Services/Global/interconnected.service';
 import { IndirectAssessmentsComponent } from '../IndirectAssessments.component';
 import { CoursesSearchService } from '../../../Services/CourseSearch/CourseSearch.service';
+import { SettingService } from 'src/app/Services/Settings/setting.service';
 import { ToastrService } from 'ngx-toastr';
 import { IndirectAssessment } from '../../../Services/IndirectAssessment/IndirectAssessment.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -29,6 +30,10 @@ export class IndirectAssessmentsMainComponent implements OnInit {
   Temp_Institute_ID: number;
   Temp_Deaprtment_ID: number;
   dept: number;
+
+  Added_Intake_PLOs: any[];
+  Added_Intake_PEOs: any[] = [];
+
 
   intakeId: number;
 
@@ -59,6 +64,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
 
   constructor(
     private _CoursesSearchService: CoursesSearchService,
+    private _SettingService: SettingService,
     private toastr: ToastrService,
     private ngxService: NgxUiLoaderService,
     private _InterconnectedService: InterconnectedService,
@@ -171,7 +177,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       return;
     this.ngxService.start();
     this.Intake = [];
-    this._CoursesSearchService.Get_Intakes(Number(val)).
+    this._CoursesSearchService.GetProgramIntakes(Number(val)).
       subscribe(
         response => {
           try {
@@ -204,8 +210,8 @@ export class IndirectAssessmentsMainComponent implements OnInit {
             if (response != null) {
               this.IntakeStudent = response;
               this.intakeId = val;
-
-
+              this.GetIntakePLOsInformation(this.intakeId);
+              this.GetIntakePeosInformation(this.intakeId);
               this.getAllSurvey();
             }
             this.ngxService.stop();
@@ -432,11 +438,8 @@ export class IndirectAssessmentsMainComponent implements OnInit {
     this.internshipSurveyForm.reset();
     this.employerSurveyForm.reset();
     this.alumniSurveyForm.reset();
-    this.getSurveyResponse(this.CSPSurveyData.SurveyID)
-    this.getSurveyResponse(this.ExitSurveyData.SurveyID)
-    this.getSurveyResponse(this.InternshipSurveyData.SurveyID)
-    this.getSurveyResponse(this.EmployerSurveyData.SurveyID)
-    this.getSurveyResponse(this.AlumniSurveyData.SurveyID)
+    this.getSurveyResponse();
+   
 
   }
 
@@ -487,7 +490,6 @@ export class IndirectAssessmentsMainComponent implements OnInit {
     this.ResetControls(this.employerSurveyForm);
     this.ResetControls(this.alumniSurveyForm);
 
-    console.log(GlobalService.Deaprtment_ID);
     this.ngxService.start();
     this.IndirectAssessment.GetAllSurvey(request).
       subscribe(
@@ -542,6 +544,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       var OptionID = null;
       var answer = null;
       if (qid.QType == "Multiple Choice") {
+        console.log(qid.QID);
         OptionID = (form.get(qid.QID.toString()).value);
       }
       else {
@@ -553,7 +556,8 @@ export class IndirectAssessmentsMainComponent implements OnInit {
         StudentID: Number(this.StudentID),
         QID: qid.QID,
         OptionID: OptionID,
-        Answer: answer.toString()
+        Answer: answer?.toString() || null,
+        CreatedBy: GlobalService.FacultyMember_ID,
       };
     });
 
@@ -565,10 +569,8 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       return;
 
     }
-    const payload = [
-
-       this.getQuestions(this.CSPSurveyData, this.cSPSurveyForm)
-    ]
+    const payload = this.getQuestions(this.CSPSurveyData, this.cSPSurveyForm)
+    
   
     this.ngxService.start();
     this.IndirectAssessment.SaveSurvey(payload).
@@ -601,12 +603,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       return;
 
     }
-    const payload = {
-
-      StudentID: Number(this.StudentID),
-      SurveyID: this.ExitSurveyData.SurveyID,
-      Questions: this.getQuestions(this.ExitSurveyData, this.exitSurveyForm)
-    }
+    const payload = this.getQuestions(this.ExitSurveyData, this.exitSurveyForm);
    
     this.ngxService.start();
     this.IndirectAssessment.SaveSurvey(payload).
@@ -638,12 +635,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       return;
 
     }
-    const payload = {
-
-      StudentID: Number(this.StudentID),
-      SurveyID: this.InternshipSurveyData.SurveyID,
-      Questions: this.getQuestions(this.InternshipSurveyData, this.internshipSurveyForm)
-    }
+    const payload = this.getQuestions(this.InternshipSurveyData, this.internshipSurveyForm);
    
     this.ngxService.start();
     this.IndirectAssessment.SaveSurvey(payload).
@@ -674,12 +666,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       return;
 
     }
-    const payload = {
-
-      StudentID: Number(this.StudentID),
-      SurveyID: this.EmployerSurveyData.SurveyID,
-      Questions: this.getQuestions(this.EmployerSurveyData, this.employerSurveyForm)
-    }
+    const payload = this.getQuestions(this.EmployerSurveyData, this.employerSurveyForm)
   
     this.ngxService.start();
     this.IndirectAssessment.SaveSurvey(payload).
@@ -710,12 +697,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       return;
 
     }
-    const payload = {
-
-      StudentID: Number(this.StudentID),
-      SurveyID: this.AlumniSurveyData.SurveyID,
-      Questions: this.getQuestions(this.AlumniSurveyData, this.alumniSurveyForm)
-    }
+    const payload = this.getQuestions(this.AlumniSurveyData, this.alumniSurveyForm);
     
     this.ngxService.start();
     this.IndirectAssessment.SaveSurvey(payload).
@@ -739,20 +721,16 @@ export class IndirectAssessmentsMainComponent implements OnInit {
           this.toastr.error("Internal server error occured while processing your request", "Error!");
         });
   }
-  getSurveyResponse(surveyID: number) {
-    const request = {
-      SurveyID: surveyID,
-      StudentID: this.StudentID
-
-    }
+  getSurveyResponse() {
+   
     this.ngxService.start();
-    this.IndirectAssessment.GetStudentSurvey(request).
+    this.IndirectAssessment.GetStudentSurvey(Number(this.StudentID)).
       subscribe(
         data => {
           this.ngxService.stop();
           this.SurveyResponse = data;
        
-          this.populateForm(this.SurveyResponse.StudentSurveySubDetail);
+          this.populateForm(this.SurveyResponse);
 
 
 
@@ -768,23 +746,83 @@ export class IndirectAssessmentsMainComponent implements OnInit {
 
   populateForm(questions: any[]) {
     questions.forEach(question => {
+
+      const value = question.OptionID !== null ? question.OptionID : question.Answer;
+
       if (this.cSPSurveyForm.controls[question.QID]) {
       
-        this.cSPSurveyForm.controls[question.QID].setValue(question.Answer);
+        this.cSPSurveyForm.controls[question.QID].setValue(value);
       }
       if (this.exitSurveyForm.controls[question.QID]) {
-        this.exitSurveyForm.controls[question.QID].setValue(question.Answer);
+        this.exitSurveyForm.controls[question.QID].setValue(value);
       }
       if (this.internshipSurveyForm.controls[question.QID]) {
-        this.internshipSurveyForm.controls[question.QID].setValue(question.Answer);
+        this.internshipSurveyForm.controls[question.QID].setValue(value);
       }
       if (this.employerSurveyForm.controls[question.QID]) {
-        this.employerSurveyForm.controls[question.QID].setValue(question.Answer);
+        this.employerSurveyForm.controls[question.QID].setValue(value);
       }
       if (this.alumniSurveyForm.controls[question.QID]) {
-        this.alumniSurveyForm.controls[question.QID].setValue(question.Answer);
+        this.alumniSurveyForm.controls[question.QID].setValue(value);
       }
     });
   }
+
+
+
+
+  FilterPLO(id: number) {
+    const filtered = this.Added_Intake_PLOs.find((data: any) => data.PLO_ID == id);
+    return filtered?.PLO_Title || null;
+  }
+  FilterPEO(id: number) {
+    const filtered = this.Added_Intake_PEOs.find((data: any) => data.peoId == id);
+    return filtered?.peoTitle || null;
+  }
+
+
+  GetIntakePLOsInformation(admissionOpenProgramId: any) {
+    this.Added_Intake_PLOs = [];
+    this.ngxService.start();
+    this._SettingService.GetPlosInformation({ programId: admissionOpenProgramId, admissionOpenProgramId: Number(admissionOpenProgramId) }).
+      subscribe(
+        response => {
+          if (response != null) {
+            this.Added_Intake_PLOs = response;
+          }
+          this.ngxService.stop();
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Internal server error occured while processing your request", "Error!")
+        });
+  }
+
+  GetIntakePeosInformation(admissionOpenProgramId: any) {
+    this.Added_Intake_PEOs = [];
+    this.ngxService.start();
+    this._SettingService.GetPeosInformation({ programId: admissionOpenProgramId, admissionOpenProgramId: Number(admissionOpenProgramId) }).
+      subscribe(
+        response => {
+          if (response != null) {
+            this.Added_Intake_PEOs = response;
+          }
+          this.ngxService.stop();
+        },
+        error => {
+          this.ngxService.stop();
+          this.toastr.error("Internal server error occured while processing your request", "Error!")
+        });
+  }
+
+
+
+
+
+
+
+
+
+
 
 }

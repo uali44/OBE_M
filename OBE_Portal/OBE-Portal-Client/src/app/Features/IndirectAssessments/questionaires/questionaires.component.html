@@ -44,7 +44,7 @@
                   <option value="">Select Question Type</option>
                   <option value="Multiple Choice">Radio Buttons (Options)</option>
                   <option value="Text">Text</option>
-                  <option value="Likert">Likert</option>
+                  <!--<option value="Likert">Likert</option>-->
                   <option value="Remarks">Remarks</option>
                 </select>
                 <div *ngIf="createSurveyForm.get('questionType').invalid && createSurveyForm.get('questionType').touched" class="text-danger">
@@ -63,7 +63,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="form-group col-sm-5">
+              <div class="form-group col-sm-4">
                 <label for="Section" class="col-sm-2">Section:</label>
                 <select id="Section" formControlName="section" class="form-control">
                   <option value="">Select Section</option>
@@ -76,9 +76,9 @@
                 </div>
               </div>
 
-              <div class="form-group col-sm-5 ">
-                <label for="mapping" class="col-sm-2">Mapping:</label>
-                <select id="mapping" formControlName="mapping" class="form-control">
+              <div class="form-group col-sm-3 ">
+                <label for="plo" class="col-sm-2">PLOs:</label>
+                <select id="plo" formControlName="plo" class="form-control">
                   <option value="" selected>Select PLO</option>
                   <option value="{{i.PLO_ID}}" *ngFor="let i of Added_Intake_PLOs">{{i.PLO_Title}}</option>
 
@@ -87,6 +87,20 @@
       Mapping is required.
     </div>-->
               </div>
+
+              <div class="form-group col-sm-3 ">
+                <label for="peo" class="col-sm-2">PEOs:</label>
+                <select id="peo" formControlName="peo" class="form-control">
+                  <option value="" selected>Select PEO</option>
+                  <option value="{{i.peoId}}" *ngFor="let i of Added_Intake_PEOs">{{i.peoTitle}}</option>
+
+                </select>
+                <!--<div *ngIf="createSurveyForm.get('mapping').invalid && createSurveyForm.get('mapping').touched" class="text-danger">
+      Mapping is required.
+    </div>-->
+              </div>
+
+
             </div>
             <div class="row">
               <div class="form-group col-sm-5">
@@ -166,7 +180,7 @@
               <tr *ngFor="let question of surveySubDetails; let i = index">
                 <td>{{ question.Question }}</td>
                 <td>{{ question.QType }}</td>
-                <td>{{ question.Mapping }}</td>
+                <td>{{ FilterPLO(question.PLOID) }} {{ FilterPEO(question.PEOID) }}</td>
                 <td class="padding-l10">
                   <ul class="list-unstyled">
                     <li *ngFor="let option of question.Options;let j=index;">{{j+1}}-{{ option }}</li>

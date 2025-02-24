@@ -143,7 +143,7 @@ namespace OBE_Portal.Controllers
         }
 
         [HttpPost("SaveSurveyResponses")]
-        public async Task<IActionResult> SaveSurveyResponses(StdSurveyResponseDto request)
+        public async Task<IActionResult> SaveSurveyResponses(List<SaveStudentResponseDTO> request)
         {
             try
             {
@@ -158,28 +158,13 @@ namespace OBE_Portal.Controllers
                 throw;
             }
         }
-        [HttpPost("SaveSurveyResponse")]
-        public async Task<IActionResult> SaveSurveyResponse(List<SurveyResponseRequest> request)
+       
+        [HttpPost("GetSurveyResponse")]
+        public async Task<IActionResult> GetSurveyRespones([FromBody] int studentId)
         {
             try
             {
-                var respone = await _indirectAssessment.SaveSurveyResponse(request).ConfigureAwait(true);
-                if (respone)
-                    return Ok(respone);
-                else
-                    return Ok(respone);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-        [HttpPost("GetSurveyRespones")]
-        public async Task<IActionResult> GetSurveyRespones(getstudentSurveyrequest request)
-        {
-            try
-            {
-                var respone = await _indirectAssessment.GetSurveyResponse(request).ConfigureAwait(true);
+                var respone = await _indirectAssessment.GetSurveyResponse(studentId).ConfigureAwait(true);
                 if (respone != null)
                     return Ok(respone);
                 else

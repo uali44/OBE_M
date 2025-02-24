@@ -155,15 +155,17 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                             var qid = new SqlParameter("@QID", SqlDbType.Int) { Direction = ParameterDirection.Output };
 
                             var responseSub = await _context.Database.ExecuteSqlRawAsync(
-                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate,@Section,@Marks ,@QID OUTPUT",
+                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @CreatedBy, @CreatedDate,@Section,@Marks,@PLOID,@PEOID ,@QID OUTPUT",
                                 new SqlParameter("@SurveyID", mainDetailList.SurveyID),
                                 new SqlParameter("@Question", question.Question),
                                 new SqlParameter("@QType", question.QType),
-                                new SqlParameter("@Mapping", question.Mapping),
+                              
                                 new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy),
                                 new SqlParameter("@CreatedDate", DateTime.UtcNow),
                                   new SqlParameter("@Section", question.Section),
                                    new SqlParameter("@Marks", question.Marks),
+                                     new SqlParameter("@PLOID", question.PLOID),
+                                       new SqlParameter("@PEOID", question.PEOID),
                                 qid
                             );
 
@@ -447,7 +449,9 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                                 QType = question.QType,
                                 Mapping = question.Mapping,
                                 Section = question.Section,
-                                Options = new List<SurveySubDetailOption>()
+                                Options = new List<SurveySubDetailOption>(),
+                                PLOID=question.PLOID,
+                                PEOID = question.PEOID,
                             };
 
                             // Step 3: Get SurveySubDetailOptions (if QType is Multiple Choice)
@@ -478,62 +482,26 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
         }
 
 
-        async Task<bool> IIndirectAssessment.SaveSurveyResponses(StdSurveyResponseDto request)
+        async Task<bool> IIndirectAssessment.SaveSurveyResponses(List<SaveStudentResponseDTO> request)
         {
             try
             {
-                using (SqlCommand comm = new SqlCommand())
+                int rowsAffected = 0;
+
+                foreach (var response in request)
                 {
-                    // Step 1: Check if Survey Already Exists for the Student
-                    var existingSurvey = await _context.Set<StudentSurveyMainDetail>()
-          .FromSqlRaw("EXEC GetStudentSurveyMainDetail @StudentID, @SurveyID",
-                      new SqlParameter("@StudentID", request.StudentID),
-                      new SqlParameter("@SurveyID", request.SurveyID))
-          .ToListAsync();
-
-                    if (existingSurvey.Count > 0)
-                    {
-                        var existing = existingSurvey.FirstOrDefault();
-                        // Survey exists, update responses in StudentSurveySubDetail
-                        foreach (var response in request.Questions)
-                        {
-                            await _context.Database.ExecuteSqlRawAsync(
-                                "EXEC UpdateStudentSurveyResponse @StudentSurveyID, @QID, @Answer",
-                                new SqlParameter("@StudentSurveyID", existing.StudentSurveyID),
-                                new SqlParameter("@QID", response.QID),
-                                new SqlParameter("@Answer", response.Answer)
-                            );
-                        }
-                    }
-                    else
-                    {
-                        // Step 2: Insert into StudentSurveyMainDetail
-                        var studentSurveyID = new SqlParameter("@StudentSurveyID", SqlDbType.Int) { Direction = ParameterDirection.Output };
-
-                        await _context.Database.ExecuteSqlRawAsync(
-                            "EXEC AddStudentSurveyMainDetail @StudentID, @SurveyID, @SurveyDate, @StudentSurveyID OUTPUT",
-                            new SqlParameter("@StudentID", request.StudentID),
-                            new SqlParameter("@SurveyID", request.SurveyID),
-                            new SqlParameter("@SurveyDate", DateTime.UtcNow),
-                            studentSurveyID
-                        );
-
-                        int generatedSurveyID = (int)studentSurveyID.Value;
-
-                        // Step 3: Insert responses into StudentSurveySubDetail
-                        foreach (var response in request.Questions)
-                        {
-                            await _context.Database.ExecuteSqlRawAsync(
-                                "EXEC AddStudentSurveySubDetail @StudentSurveyID, @QID, @Answer",
-                                new SqlParameter("@StudentSurveyID", generatedSurveyID),
-                                new SqlParameter("@QID", response.QID),
-                                new SqlParameter("@Answer", response.Answer)
-                            );
-                        }
-                    }
-
-                    return true;
+                    rowsAffected += await _context.Database.ExecuteSqlRawAsync(
+                        "EXEC AddStudentResponse @StudentID, @QID, @OptionID, @Answer, @CreatedBy",
+                        new SqlParameter("@StudentID", response.StudentID),
+                        new SqlParameter("@QID", response.QID),
+                        new SqlParameter("@OptionID", response.OptionID ?? (object)DBNull.Value),
+                        new SqlParameter("@Answer", response.Answer ?? (object)DBNull.Value),
+                        new SqlParameter("@CreatedBy", response.CreatedBy)
+                    );
                 }
+
+                return rowsAffected > 0; 
+
             }
             catch (Exception)
             {
@@ -541,35 +509,18 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
             }
         }
 
-        async Task<StudentSurveyDetail> IIndirectAssessment.GetSurveyResponse(getstudentSurveyrequest request)
+        async Task<List<SurveyResponse>> IIndirectAssessment.GetSurveyResponse(int studentId)
         {
             try
             {
-                // Fetch main survey details
-                var surveyMain = await _context.Set<StudentSurveyMainDetail>()
-                    .FromSqlRaw("EXEC GetStudentSurveyMainDetail @StudentID, @SurveyID",
-                        new SqlParameter("@StudentID", request.StudentID),
-                        new SqlParameter("@SurveyID", request.SurveyID)).ToListAsync();
+              
+                var response = await _context.Set<SurveyResponse>()
+             .FromSqlRaw("EXEC GetStudentResponses @StudentID",
+                 new SqlParameter("@StudentID", studentId)).ToListAsync();
+            
 
-                if (surveyMain.Count ==0)
-                {
-                    return null;
-                }
-                var survey=surveyMain.FirstOrDefault();
-                // Fetch survey responses
-                var surveyResponses = await _context.Set<StudentSurveySubDetail>()
-                    .FromSqlRaw("EXEC GetStudentSurveySubDetail @StudentID",
-                        new SqlParameter("@StudentID", request.StudentID))
-                    .ToListAsync();
 
-                var surveyresponse = new StudentSurveyDetail
-                {
-                    StudentSurveyMainDetail = survey,
-                    StudentSurveySubDetail = surveyResponses
-                };
-               
-
-                return surveyresponse;
+                return response;
             }
             catch (Exception)
             {
@@ -578,64 +529,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
         
     }
 
-        async Task<bool> IIndirectAssessment.SaveSurveyResponse(List<SurveyResponseRequest> request)
-        {
-            try
-            {
-                foreach(var response in request)
-                {
-                    using (SqlCommand comm = new SqlCommand())
-                    {
-                        // Step 1: Check if Survey Already Exists for the Student
-                        var existingSurvey = await _context.Set<SurveyResponse>()
-              .FromSqlRaw("EXEC GetStudentSurveyMainDetail @StudentID",
-                          new SqlParameter("@StudentID", response.StudentID)
-                          )
-              .ToListAsync();
-
-                        if (existingSurvey.Count > 0)
-                        {
-                            var existing = existingSurvey.FirstOrDefault();
-                            // Survey exists, update responses in StudentSurveySubDetail
-                          
-                                await _context.Database.ExecuteSqlRawAsync(
-                                    "EXEC UpdateStudentSurveyResponse @StudentSurveyID, @QID, @Answer",
-                                    new SqlParameter("@StudentSurveyID", existing.StudentResponseID),
-                                    new SqlParameter("@QID", response.QID),
-                                     new SqlParameter("@OptionID", response.OptionID),
-                                    new SqlParameter("@Answer", response.Answer)
-                                );
-                            return true;
-                        }
-                        else
-                        {
-                            
-
-                            // Step 3: Insert responses into StudentSurveySubDetail
-                          
-                            
-                                await _context.Database.ExecuteSqlRawAsync(
-                                    "EXEC AddStudentSurveySubDetail @OptionID, @QID, @Answer",
-                                     new SqlParameter("@StudentID", response.StudentID),
-                                    new SqlParameter("@OptionID", response.OptionID),
-                                    new SqlParameter("@QID", response.QID),
-                                    new SqlParameter("@Answer", response.Answer)
-                                );
-                            return true ;
-                        }
-
-                       
-                    }
-
-
-                }
-              return true ;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+      
 
 
 
