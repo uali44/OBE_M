@@ -137,32 +137,29 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
             {
                 using (SqlCommand comm = new SqlCommand())
                 {
-                    // Step 1: Check if Survey Exists for the given department
-                    //var existingSurvey = await _context.Set<SurveyMainDetail>()
-                    //    .Where(s => s.SurveyDeptID == request.SurveyMainDetail.SurveyDeptID && s.SurveyType == request.SurveyMainDetail.SurveyType && s.SurveyIntakeID==request.SurveyMainDetail.SurveyIntakeID)
-                    //    .FirstOrDefaultAsync();
+                   
                     var mainDetail= await _context.Set<SurveyMainDetail>()
                         .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={request.SurveyMainDetail.SurveyType}, @SurveyDeptID={request.SurveyMainDetail.SurveyDeptID},@SurveyIntakeID={request.SurveyMainDetail.SurveyIntakeID}").ToListAsync();
-                    // If survey exists, we are only adding new questions or options
+                 
                     if (mainDetail != null && mainDetail.Count > 0)
-                    //    if (existingSurvey != null)
+                  
                     {
                         var mainDetailList = mainDetail.FirstOrDefault();
-                        // Step 2: Add New Questions or Options
+                      
                         foreach (var question in request.SurveySubDetails)
                         {
                             // Add new question to the existing survey
                             var qid = new SqlParameter("@QID", SqlDbType.Int) { Direction = ParameterDirection.Output };
 
                             var responseSub = await _context.Database.ExecuteSqlRawAsync(
-                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @CreatedBy, @CreatedDate,@Section,@Marks,@PLOID,@PEOID ,@QID OUTPUT",
+                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @CreatedBy, @CreatedDate,@Marks,@PLOID,@PEOID ,@QID OUTPUT",
                                 new SqlParameter("@SurveyID", mainDetailList.SurveyID),
                                 new SqlParameter("@Question", question.Question),
                                 new SqlParameter("@QType", question.QType),
                               
                                 new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy),
                                 new SqlParameter("@CreatedDate", DateTime.UtcNow),
-                                  new SqlParameter("@Section", question.Section),
+                                
                                    new SqlParameter("@Marks", question.Marks),
                                      new SqlParameter("@PLOID", question.PLOID),
                                        new SqlParameter("@PEOID", question.PEOID),
@@ -212,14 +209,14 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                             var qid = new SqlParameter("@QID", SqlDbType.Int) { Direction = ParameterDirection.Output };
 
                             var responseSub = await _context.Database.ExecuteSqlRawAsync(
-                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate,@Section ,@Marks, @QID OUTPUT",
+                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate,@Marks, @QID OUTPUT",
                                 new SqlParameter("@SurveyID", generatedSurveyID),
                                 new SqlParameter("@Question", question.Question),
                                 new SqlParameter("@QType", question.QType),
                                 new SqlParameter("@Mapping", question.Mapping),
                                 new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy),
                                 new SqlParameter("@CreatedDate", DateTime.UtcNow),
-                                new SqlParameter("@Section", question.Section),
+                         
                                   new SqlParameter("@Marks", question.Marks),
 
                                 qid

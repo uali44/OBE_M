@@ -46,8 +46,8 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                         var FacultyType = new SqlParameter("@FacultyType", Request[i].FacultyType);
                         var FacultyRole = new SqlParameter("@FacultyRole", Request[i].FacultyRole);
                        var CreatedBy=new SqlParameter("@CreatedBy",Request[i].CreatedBy);
-                        var CreatedDate = new SqlParameter("@CreatedDate", DateTime.Now.ToShortDateString());
-                        response = await _context.Database.ExecuteSqlRawAsync($"EXEC AddFacultyDetail @FacultyMemberID,@Phone,@FacultyType,@FacultyRole,@CreatedBy,@CreatedDate", FacultyMEmberID, Phone, FacultyType, FacultyRole,CreatedBy,CreatedDate);
+                    
+                        response = await _context.Database.ExecuteSqlRawAsync($"EXEC AddFacultyDetail @FacultyMemberID,@Phone,@FacultyType,@FacultyRole,@CreatedBy", FacultyMEmberID, Phone, FacultyType, FacultyRole,CreatedBy);
                     }
                     if (response == 0 || response == 1)
                         return true;
@@ -169,10 +169,10 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                         var Year = new SqlParameter("@year", Request[i].year);
                         var Image = new SqlParameter("@Image", relativePath);
                         var CreatedBy = new SqlParameter("@CreatedBy", Request[i].CreatedBy);
-                        var CreatedDate=new SqlParameter("@CreatedDate",DateTime.UtcNow);
+                     
                         response = await _context.Database.ExecuteSqlRawAsync(
-                               "EXEC AddFacultyEducation @FacultyMemberID, @EduInstitute, @degree, @Field, @year,@Image,@CreatedBy,@CreatedDate",
-                               FacultyMemberID, EduInstitute, Degree, Field, Year,Image,CreatedBy,CreatedDate);
+                               "EXEC AddFacultyEducation @FacultyMemberID, @EduInstitute, @degree, @Field, @year,@Image,@CreatedBy",
+                               FacultyMemberID, EduInstitute, Degree, Field, Year,Image,CreatedBy);
                     }
                     if (response > 0)
                         return true;
@@ -238,10 +238,10 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
                         var endDateParam = new SqlParameter("@EndDate", Request[i].EndDate ?? (object)DBNull.Value);
                         var Image = new SqlParameter("@Image", relativePath);
                         var CreatedBy = new SqlParameter("@CreatedBy", Request[i].CreatedBy);
-                        var CreatedDate = new SqlParameter("@CreatedDate", DateTime.UtcNow);
+                      
                         await _context.Database.ExecuteSqlRawAsync(
-       "EXEC AddFacultyExperience @FacultyMemberID, @Position, @Company, @StartDate, @EndDate,@Image,@CreatedBy,@CreatedDate",
-       facultyMemberIdParam, positionParam, companyParam, startDateParam, endDateParam,Image, CreatedBy, CreatedDate);
+       "EXEC AddFacultyExperience @FacultyMemberID, @Position, @Company, @StartDate, @EndDate,@Image,@CreatedBy",
+       facultyMemberIdParam, positionParam, companyParam, startDateParam, endDateParam,Image, CreatedBy);
 
                     }
                     if (response > 0)
@@ -259,23 +259,6 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
             }
 
         }
-
-
-
-
-
-     
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -378,13 +361,12 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
 
                         // Insert into FacultyActivity
                         var facultyActivityId = await _context.Database.ExecuteSqlRawAsync(
-                            "EXEC AddFacultyActivity @FacultyID, @ActivityID,@Image,@CreatedBy,@CreatedDate,@DetailID OUT",
+                            "EXEC AddFacultyActivity @FacultyID, @ActivityID,@Image,@CreatedBy,@DetailID OUT",
                             new SqlParameter("@FacultyID", activityData[i].FacultyID),
                             new SqlParameter("@ActivityID", activityData[i].ActivityID),
                              new SqlParameter("@Image", relativePath),
                                new SqlParameter("@CreatedBy", activityData[i].CreatedBy),
-                       new SqlParameter("@CreatedDate", DateTime.UtcNow),
-                            detailIDParam
+                                 detailIDParam
                         );
                         int detailID = (int)detailIDParam.Value;
                         // Insert into FacultyActivityDetail
@@ -407,17 +389,14 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
             }
             catch
             {
-                return false;
+               
                 throw;
             }
           
             }
         
 
-        
-
-
-
+       
 
      public   async Task<List<ActivityDetailsDto>> GetFacultyActivity(int FacultyID)
         {
@@ -463,18 +442,6 @@ namespace OBE_Portal.Infrastructure.Implementations.Profile
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-      
 
 
     public  async Task<List<FacultyEducation>> GetEducation(int facultyMemberID)

@@ -19,10 +19,10 @@
 
         </div>
         <app-search (searchEmit)="receiveMData($event)"></app-search>
-        <fieldset class="">
-          <legend>Question Details</legend>
-          <form [formGroup]="createSurveyForm" (ngSubmit)="submitNewSurvey()">
-
+       
+        <form [formGroup]="createSurveyForm" (ngSubmit)="submitNewSurvey()">
+          <fieldset class="">
+            <legend>Question Details</legend>
             <div class="row">
               <div class="form-group col-sm-5  ">
                 <label for="surveyType" class="col-sm-2">Survey Type:</label>
@@ -40,7 +40,7 @@
               </div>
               <div class="form-group col-sm-5 ">
                 <label for="qType" class="col-sm-2">Question Type:</label>
-                <select id="qType" formControlName="questionType"   (change)=" TypeChange($event.target.value)"  class="form-control">
+                <select id="qType" formControlName="questionType" (change)=" TypeChange($event.target.value)" class="form-control">
                   <option value="">Select Question Type</option>
                   <option value="Multiple Choice">Radio Buttons (Options)</option>
                   <option value="Text">Text</option>
@@ -62,21 +62,56 @@
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="form-group col-sm-4">
-                <label for="Section" class="col-sm-2">Section:</label>
-                <select id="Section" formControlName="section" class="form-control">
-                  <option value="">Select Section</option>
-                  <option value="Header">Header</option>
-                  <option value="Main">Main</option>
-                  <option value="Footer">Footer</option>
-                </select>
-                <div *ngIf="createSurveyForm.get('section').invalid && createSurveyForm.get('section').touched" class="text-danger">
-                  Section is required.
-                </div>
-              </div>
 
-              <div class="form-group col-sm-3 ">
+            <div class="row">
+              <div class="form-group col-sm-5">
+                <label for="marks" class="col-sm-2">Marks/Weightage:</label>
+                <input type="number" id="marks" formControlName="marks" class="form-control">
+                <!--<div *ngIf="createSurveyForm.get('marks').invalid && createSurveyForm.get('marks').touched" class="text-danger">
+        Marks are required .
+      </div>-->
+              </div>
+            </div>
+
+            <!-- Options for Multiple Choice Questions -->
+            <div class="row" *ngIf="createSurveyForm.get('questionType').value === 'Multiple Choice'">
+              <div class="section-heading padding-b30">
+                <h2 class="pull-left">Options Details</h2>
+                <button type="button" class="btn btn-primary pull-right" (click)="  addnOption()">Add New Option</button>
+              </div>
+              <fieldset>
+                <legend>Options</legend>
+                <div formArrayName="options" *ngFor="let option of options.controls; let j = index;">
+
+                  <div class="form-group col-sm-4 ">
+                    <label for="option{{j}}" class="">Option {{ j + 1 }}:</label>
+                    <input type="text" id="option{{j}}" [formControlName]="j" class="form-control">
+
+
+
+                    <div *ngIf="option.invalid && option.touched" class="text-danger">
+                      Option {{ j + 1 }} is required.
+
+                    </div>
+
+                  </div>
+                  <div class="col-sm-1" style="padding-top:16px;">
+
+                    <button type="button" (click)=" removenOption(j)" class="btn btn-default "><i class="app-icon-IconSet-1-33 blue"></i></button>
+                  </div>
+                </div>
+
+              </fieldset>
+            </div>
+
+
+          </fieldset>
+          <fieldset>
+            <legend>Mappings</legend>
+            <div class="row">
+            
+
+              <div class="form-group col-sm-5 ">
                 <label for="plo" class="col-sm-2">PLOs:</label>
                 <select id="plo" formControlName="plo" class="form-control">
                   <option value="" selected>Select PLO</option>
@@ -84,11 +119,11 @@
 
                 </select>
                 <!--<div *ngIf="createSurveyForm.get('mapping').invalid && createSurveyForm.get('mapping').touched" class="text-danger">
-      Mapping is required.
-    </div>-->
+        Mapping is required.
+      </div>-->
               </div>
 
-              <div class="form-group col-sm-3 ">
+              <div class="form-group col-sm-5 ">
                 <label for="peo" class="col-sm-2">PEOs:</label>
                 <select id="peo" formControlName="peo" class="form-control">
                   <option value="" selected>Select PEO</option>
@@ -96,60 +131,31 @@
 
                 </select>
                 <!--<div *ngIf="createSurveyForm.get('mapping').invalid && createSurveyForm.get('mapping').touched" class="text-danger">
-      Mapping is required.
-    </div>-->
+        Mapping is required.
+      </div>-->
               </div>
 
 
             </div>
-            <div class="row">
-              <div class="form-group col-sm-5">
-                <label for="marks" class="col-sm-2">Marks/Weightage:</label>
-                <input type="number" id="marks" formControlName="marks" class="form-control">
-                <!--<div *ngIf="createSurveyForm.get('marks').invalid && createSurveyForm.get('marks').touched" class="text-danger">
-                  Marks are required .
-                </div>-->
-              </div>
-            </div>
+
+
+          </fieldset>
+          
            
-            <!-- Options for Multiple Choice Questions -->
-            <div class="row" *ngIf="createSurveyForm.get('questionType').value === 'Multiple Choice'">
-              <div class="section-heading padding-b30">
-                <h2 class="pull-left">Options Details</h2>
-                <button type="button" class="btn btn-primary pull-right" (click)="  addnOption()">Add New Option</button>
-                </div>
-                <fieldset>
-                  <legend>Options</legend>
-                  <div formArrayName="options" *ngFor="let option of options.controls; let j = index;">
-                  
-                    <div class="form-group col-sm-4 ">
-                      <label for="option{{j}}" class="">Option {{ j + 1 }}:</label>
-                      <input type="text" id="option{{j}}" [formControlName]="j" class="form-control">
+
+         
+
+            <!-- Add Question Button -->
 
 
 
-                      <div *ngIf="option.invalid && option.touched" class="text-danger">
-                        Option {{ j + 1 }} is required.
-
-                      </div>
-
-                    </div>
-                    <div class="col-sm-1" style="padding-top:16px;">
-                     
-                      <button type="button" (click)=" removenOption(j)" class="btn btn-default "><i class="app-icon-IconSet-1-33 blue"></i></button>
-                    </div>
-                  </div>
-
-                </fieldset>
-              </div>
-
-              <!-- Add Question Button -->
-
-
-
-</form>
-        </fieldset>
+        </form>
+       
         <div class="clearfix"></div>
+      
+
+
+
         <div class="section-heading padding-b30">
           <h2 class="pull-left">View Added Questions</h2>
           <button type="submit" class="btn btn-info pull-right" (click)="submitNewSurvey()" [disabled]="createSurveyForm.invalid">Add Question</button>
@@ -172,7 +178,7 @@
                 <th>Type</th>
                 <th>Mapping</th>
                 <th>Options</th>
-                <th>Section</th>
+           
                 <th>Action</th>
               </tr>
             </thead>
@@ -180,13 +186,13 @@
               <tr *ngFor="let question of surveySubDetails; let i = index">
                 <td>{{ question.Question }}</td>
                 <td>{{ question.QType }}</td>
-                <td>{{ FilterPLO(question.PLOID) }} {{ FilterPEO(question.PEOID) }}</td>
+                <td>{{ FilterPLO(question.PLOID) || ' ' }} {{ FilterPEO(question.PEOID) || ' ' }}</td>
                 <td class="padding-l10">
                   <ul class="list-unstyled">
                     <li *ngFor="let option of question.Options;let j=index;">{{j+1}}-{{ option }}</li>
                   </ul>
                 </td>
-                <td>{{ question.Section }}</td>
+          
                 <td>
                   <button type="button" (click)="removeQuestion(i)" class="btn btn-default"><i class="app-icon-IconSet-1-33 blue"></i></button>
                 </td>
@@ -242,7 +248,7 @@
 
 
            
-              <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+              <div class="table-responsive" style="max-height: 70vh;overflow-y:scroll">
                 <table class="table table-theme table-hover  margin-t10">
                   <thead>
                     <tr>
@@ -261,7 +267,7 @@
                       <td class="text-center">{{m+1}}</td>
                       <td class=""> <label>{{ question.Question }}</label></td>
                       <td class="">{{ question.QType }}</td>
-                      <td class="">{{ question.Mapping }}</td>
+                      <td class="">{{ FilterPLO(question?.PLOID) }}  {{FilterPEO(question?.PEOID) }}</td>
                       <td class="">
                       <ul class="list-unstyled" *ngFor="let option of question.Options;let n=index;">
                                      <li><b>{{n+1}}</b>-{{option.Options}}</li>
@@ -309,7 +315,7 @@
 
 
          
-              <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+              <div class="table-responsive" style="max-height: 70vh;overflow-y:scroll">
                 <table class="table  table-theme table-hover margin-t10">
                   <thead>
                     <tr>
@@ -330,7 +336,7 @@
                       <td class="text-center">{{m+1}}</td>
                       <td class=""> <label>{{ question.Question }}</label></td>
                       <td class="">{{ question.QType }}</td>
-                      <td class="">{{ question.Mapping }}</td>
+                      <td class="">{{ FilterPLO(question?.PLOID) }}  {{FilterPEO(question?.PEOID) }}</td>
                       <td class="">
                         <ul class="list-unstyled" *ngFor="let option of question.Options;let n=index;">
                           <li><b>{{n+1}}</b>-{{option.Options}}</li>
@@ -379,7 +385,7 @@
 
 
             <form [formGroup]="internshipSurveyForm">
-              <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+              <div class="table-responsive" style="max-height: 70vh;overflow-y:scroll">
                 <table class="table  table-theme table-hover margin-t10">
                   <thead>
                     <tr>
@@ -399,7 +405,7 @@
                       <td class="text-center">{{m+1}}</td>
                       <td class=""> <label>{{ question.Question }}</label></td>
                       <td class="">{{ question.QType }}</td>
-                      <td class="">{{ question.Mapping }}</td>
+                      <td class="">{{ FilterPLO(question?.PLOID) }}  {{FilterPEO(question?.PEOID) }}</td>
                       <td class="">
                         <ul class="list-unstyled" *ngFor="let option of question.Options;let n=index;">
                           <li><b>{{n+1}}</b>-{{option.Options}}</li>
@@ -449,7 +455,7 @@
 
 
             <form [formGroup]="alumniSurveyForm">
-              <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+              <div class="table-responsive" style="max-height: 70vh;overflow-y:scroll">
                 <table class="table  table-theme table-hover margin-t10">
                   <thead>
                     <tr>
@@ -468,7 +474,7 @@
                       <td class="text-center">{{m+1}}</td>
                       <td class=""> <label>{{ question.Question }}</label></td>
                       <td class="">{{ question.QType }}</td>
-                      <td class="">{{ question.Mapping }}</td>
+                      <td class="">{{ FilterPLO(question?.PLOID) }}  {{FilterPEO(question?.PEOID) }}</td>
                       <td class="">
                         <ul class="list-unstyled" *ngFor="let option of question.Options;let n=index;">
                           <li><b>{{n+1}}</b>-{{option.Options}}</li>
@@ -517,7 +523,7 @@
 
 
             <form [formGroup]="employerSurveyForm">
-              <div class="table-responsive" style="max-height: 40vh;overflow-y:scroll">
+              <div class="table-responsive" style="max-height: 70vh;overflow-y:scroll">
                 <table class="table  table-theme table-hover margin-t10">
                   <thead>
                     <tr>
@@ -537,7 +543,7 @@
                       <td class="text-center">{{m+1}}</td>
                       <td class=""> <label>{{ question.Question }}</label></td>
                       <td class="">{{ question.QType }}</td>
-                      <td class="">{{ question.Mapping }}</td>
+                      <td class="">{{ FilterPLO(question?.PLOID) }}  {{FilterPEO(question?.PEOID) }}</td>
                       <td class="">
                         <ul class="list-unstyled" *ngFor="let option of question.Options;let n=index;">
                           <li><b>{{n+1}}</b>-{{option.Options}}</li>

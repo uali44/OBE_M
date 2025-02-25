@@ -545,10 +545,10 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       var answer = null;
       if (qid.QType == "Multiple Choice") {
         console.log(qid.QID);
-        OptionID = (form.get(qid.QID.toString()).value);
+        OptionID = form.get(qid.QID.toString()).value;
       }
       else {
-        answer = (form.get(qid.QID.toString()).value);
+        answer = form.get(qid.QID.toString()).value;
 
       }
      
@@ -629,7 +629,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
 
   }
   submitInternshipSurvey() {
-   // console.log(this.internshipSurveyForm.value);
+  
     if (this.StudentID == 0) {
       this.toastr.error("No student is selected", "Error!");
       return;
@@ -757,6 +757,8 @@ export class IndirectAssessmentsMainComponent implements OnInit {
         this.exitSurveyForm.controls[question.QID].setValue(value);
       }
       if (this.internshipSurveyForm.controls[question.QID]) {
+        console.log("qid", question.QID);
+        console.log("val", value);
         this.internshipSurveyForm.controls[question.QID].setValue(value);
       }
       if (this.employerSurveyForm.controls[question.QID]) {

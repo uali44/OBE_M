@@ -29,8 +29,8 @@ export class QuestionairesComponent implements OnInit {
   surveySubDetails: any[] = [{
     Question: null,
     QType: null,
-    PLOID: null,
-    PEOID: null,
+    PLOID: 0,
+    PEOID: 0,
     Section: null,
     Marks: 0,
     Options: []
@@ -66,6 +66,11 @@ export class QuestionairesComponent implements OnInit {
   
     Added_Intake_PLOs: any[];
   Added_Intake_PEOs: any[] = [];
+
+  Survey_Intake_PLO: any[];
+  Survey_Intake_PEO: any[];
+
+
   enableSave: boolean;
   programId: any;
 
@@ -90,7 +95,7 @@ export class QuestionairesComponent implements OnInit {
       surveyType: ['', Validators.required],
       question: ['', Validators.required],
       questionType: ['', Validators.required],
-      section: ['', Validators.required],
+      section: ['', ],
       
       plo: [''],
       peo:[''],
@@ -123,6 +128,7 @@ export class QuestionairesComponent implements OnInit {
   }
 
   submitNewSurvey(): void {
+    console.log(this.createSurveyForm.value);
     if (this.createSurveyForm.valid) {
       this.surveyMainDetail.SurveyType = this.createSurveyForm.controls["surveyType"].value;
       this.newQuestion.Question = this.createSurveyForm.controls["question"].value;
@@ -131,7 +137,7 @@ export class QuestionairesComponent implements OnInit {
       this.newQuestion.PEOID = Number(this.createSurveyForm.controls["peo"].value);
       this.newQuestion.Section = this.createSurveyForm.controls["section"].value;
       this.newQuestion.Options = this.createSurveyForm.controls["options"].value;
-      this.newQuestion.Marks = this.createSurveyForm.controls["marks"].value;
+      this.newQuestion.Marks = Number(this.createSurveyForm.controls["marks"].value);
 
       this.surveySubDetails.push({ ...this.newQuestion });
 
@@ -201,15 +207,16 @@ export class QuestionairesComponent implements OnInit {
   receiveData(data: any) {
     let searchData = JSON.parse(data);
     this.Intake = searchData?.admissionOpenProgramId;
-  
+    this.GetIntakePLOsInformation(this.Intake);
+    this.GetIntakePeosInformation(this.Intake);
+
 
     this.getAllSurvey();
   }
   receiveMData(data: any) {
     let searchData = JSON.parse(data);
     this.programId = searchData?.admissionOpenProgramId;
-   /* this.programId = data;*/
-    console.log(this.programId);
+   
 
 
     this.GetIntakePLOsInformation(this.programId);
@@ -219,7 +226,7 @@ export class QuestionairesComponent implements OnInit {
       this.enableSave = true;
     }
 
-   /* this.surveyMainDetail.SurveyIntakeID = data;*/ // Update the parent component's variable with the data
+ 
   }
   getSurvey(surveyType: string) {
     const request = {
@@ -260,20 +267,25 @@ export class QuestionairesComponent implements OnInit {
         data => {
           this.ngxService.stop();
           this.CSPSurveyData = data.CSP;
-          
-          this.createForm(this.cSPSurveyForm, this.CSPSurveyData);
           this.ExitSurveyData = data.Exit;
-         
-          this.createForm(this.exitSurveyForm, this.ExitSurveyData);
           this.EmployerSurveyData = data.Employer;
-        
-          this.createForm(this.employerSurveyForm, this.EmployerSurveyData);
           this.InternshipSurveyData = data.Internship;
-         
-          this.createForm(this.internshipSurveyForm, this.InternshipSurveyData);
           this.AlumniSurveyData = data.Alumni;
+
+
+          //this.createForm(this.cSPSurveyForm, this.CSPSurveyData);
+       
+         
+          //this.createForm(this.exitSurveyForm, this.ExitSurveyData);
+       
         
-          this.createForm(this.alumniSurveyForm, this.AlumniSurveyData);
+          //this.createForm(this.employerSurveyForm, this.EmployerSurveyData);
+        
+         
+          //this.createForm(this.internshipSurveyForm, this.InternshipSurveyData);
+         
+        
+          //this.createForm(this.alumniSurveyForm, this.AlumniSurveyData);
 
 
 
@@ -311,18 +323,18 @@ export class QuestionairesComponent implements OnInit {
 
 
 
-  addQuestion(): void {
-    // Add the new question to the list
-    this.surveySubDetails.push({ ...this.newQuestion });
+  //addQuestion(): void {
+  //  // Add the new question to the list
+  //  this.surveySubDetails.push({ ...this.newQuestion });
 
-    // Reset the new question form
-    this.newQuestion = {
-      Question: '',
-      QType: 'Multiple Choice',
-      Mapping: '',
-      Options: ['']
-    };
-  }
+  //  // Reset the new question form
+  //  this.newQuestion = {
+  //    Question: '',
+  //    QType: 'Multiple Choice',
+  //    Mapping: '',
+  //    Options: ['']
+  //  };
+  //}
 
   removeQuestion(index: number): void {
     this.surveySubDetails.splice(index, 1);
@@ -447,6 +459,7 @@ export class QuestionairesComponent implements OnInit {
         response => {
           if (response != null) {
             this.Added_Intake_PLOs = response;
+    
           }
           this.ngxService.stop();
         },
@@ -464,6 +477,7 @@ export class QuestionairesComponent implements OnInit {
         response => {
           if (response != null) {
             this.Added_Intake_PEOs = response;
+           
           }
           this.ngxService.stop();
         },
