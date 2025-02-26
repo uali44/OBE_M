@@ -430,14 +430,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                     }
                     else
                     {
-                        //var mainDetailList = mainDetail.FirstOrDefault();
-                        //// Map SurveyMainDetail
-                        //if (mainDetailList != null)
-                        //{
-                        //    survey.SurveyID = mainDetailList.SurveyID;
-                        //    survey.SurveyType = mainDetailList.SurveyType;
-                        
-                        //}
+                       
 
                         // Step 2: Get SurveySubDetails
                         var questions = await _context.Set<SurveySubDetail>()
