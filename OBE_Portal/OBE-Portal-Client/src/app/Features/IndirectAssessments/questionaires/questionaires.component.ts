@@ -10,6 +10,7 @@ import { CoursesCLOSService } from './../../../Services/CourseCLOS/coursesCLO.se
 import { SettingService } from 'src/app/Services/Settings/setting.service';
 import { FormBuilder, FormControl, FormGroup, Validators,FormArray } from '@angular/forms';
 import Swal, { SweetAlertResult } from 'sweetalert2';
+import { disableDebugTools } from '@angular/platform-browser';
 
 declare const $: any;
 
@@ -31,7 +32,7 @@ export class QuestionairesComponent implements OnInit {
     QType: null,
     PLOID: 0,
     PEOID: 0,
-    Section: null,
+
     Marks: 0,
     Options: []
   }];
@@ -42,16 +43,14 @@ export class QuestionairesComponent implements OnInit {
     QType: 'Multiple Choice',
     PLOID: 0,
     PEOID: 0,
-    Section: 'Header',
+
     Marks: 0,
     Options: ['']
   };
   plos: any = [];
   Intake: number=0;
   createSurveyForm: FormGroup;
-  surveyTypes = ['CSP', 'Other Type']; // Example survey types
-  questionTypes = ['Text', 'Radio Buttons(Options)', 'Likert'];
-  sections = ['Header', 'Body', 'Footer'];
+ 
   CSPSurveyData: any = [];
   InternshipSurveyData: any = [];
   ExitSurveyData: any = [];
@@ -95,10 +94,10 @@ export class QuestionairesComponent implements OnInit {
       surveyType: ['', Validators.required],
       question: ['', Validators.required],
       questionType: ['', Validators.required],
-      section: ['', ],
-      
-      plo: [''],
-      peo:[''],
+ 
+
+      plo: [{ value: '', disabled: true }],
+      peo:[{value: '', disabled: true }],
       marks:['', ],
       options: this.fb.array([]) 
     });
@@ -110,7 +109,7 @@ export class QuestionairesComponent implements OnInit {
   
 
     this.Intake = 0;
-    this.getSurvey(this.surveyMainDetail.SurveyType);
+  /*  this.getSurvey(this.surveyMainDetail.SurveyType);*/
     this.removeQuestion(0);
     this.enableSave = false;
     this.programId = 0;
@@ -135,7 +134,7 @@ export class QuestionairesComponent implements OnInit {
       this.newQuestion.QType = this.createSurveyForm.controls["questionType"].value;
       this.newQuestion.PLOID = Number(this.createSurveyForm.controls["plo"].value);
       this.newQuestion.PEOID = Number(this.createSurveyForm.controls["peo"].value);
-      this.newQuestion.Section = this.createSurveyForm.controls["section"].value;
+      
       this.newQuestion.Options = this.createSurveyForm.controls["options"].value;
       this.newQuestion.Marks = Number(this.createSurveyForm.controls["marks"].value);
 
@@ -193,7 +192,14 @@ export class QuestionairesComponent implements OnInit {
     return this.createSurveyForm.get('questions') as FormArray;
   }
 
- 
+  OpenModal(val) {
+    this.createSurveyForm.controls['surveyType'].patchValue(val);
+    this.Added_Intake_PLOs = [];
+    this.Added_Intake_PEOs = [];
+    this.createSurveyForm.controls['plo'].disable()
+    this.createSurveyForm.controls['peo'].disable()
+    $("#addSurveyModal").modal("Show");
+  }
 
   CloseModal() {
 
@@ -221,6 +227,8 @@ export class QuestionairesComponent implements OnInit {
 
     this.GetIntakePLOsInformation(this.programId);
     this.GetIntakePeosInformation(this.programId);
+    this.createSurveyForm.controls['plo'].enable()
+    this.createSurveyForm.controls['peo'].enable()
 
     if (this.surveySubDetails?.length > 0) {
       this.enableSave = true;
@@ -231,7 +239,7 @@ export class QuestionairesComponent implements OnInit {
   getSurvey(surveyType: string) {
     const request = {
       Surveytype: surveyType,
-      Deptid: GlobalService.Deaprtment_ID,
+    
       SurveyIntakeID: this.Intake
     }
     this.ngxService.start();
@@ -257,7 +265,7 @@ export class QuestionairesComponent implements OnInit {
   getAllSurvey() {
     const request = {
       Surveytype: "",
-      Deptid: GlobalService.Deaprtment_ID,
+    
       SurveyIntakeID: this.Intake
     }
   
@@ -419,11 +427,16 @@ export class QuestionairesComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
 
+      const payload={
 
+        QID: QID,
+        ModifiedBy: GlobalService.FacultyMember_ID
 
+      }
+     
 
       if (result.value) {
-        this.IndirectAssessmen.DeleteQuestion(QID).subscribe(
+        this.IndirectAssessmen.DeleteQuestion(payload).subscribe(
           () => {
             Swal.fire('Deleted!', 'Question has been deleted.', 'success');
             this.getSurvey(this.surveyMainDetail.SurveyType);

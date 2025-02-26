@@ -3,6 +3,7 @@
 
 
   <app-search (searchEmit)="receiveData($event)"></app-search>
+
   <div class="modal fade width-70p " id="addSurveyModal" tabindex="-1" aria-labelledby="addSurveyModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content padding-10">
@@ -113,7 +114,7 @@
 
               <div class="form-group col-sm-5 ">
                 <label for="plo" class="col-sm-2">PLOs:</label>
-                <select id="plo" formControlName="plo" class="form-control">
+                <select id="plo" formControlName="plo" class="form-control" >
                   <option value="" selected>Select PLO</option>
                   <option value="{{i.PLO_ID}}" *ngFor="let i of Added_Intake_PLOs">{{i.PLO_Title}}</option>
 
@@ -125,7 +126,7 @@
 
               <div class="form-group col-sm-5 ">
                 <label for="peo" class="col-sm-2">PEOs:</label>
-                <select id="peo" formControlName="peo" class="form-control">
+                <select id="peo" formControlName="peo" class="form-control" >
                   <option value="" selected>Select PEO</option>
                   <option value="{{i.peoId}}" *ngFor="let i of Added_Intake_PEOs">{{i.peoTitle}}</option>
 
@@ -235,8 +236,8 @@
       <div role="tabpanel" class="tab-pane active" id="CSP">
         <div class="section-heading padding-b30">
           <h2 class="pull-left">CSP Survey Questions</h2>
-          <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#addSurveyModal">
-            Add Survey Questions
+          <button type="button" class="btn btn-info pull-right" data-toggle="modal" (click)="OpenModal('CSP')" data-target="#addSurveyModal">
+            Add New Questions
           </button>
         </div>
        
@@ -300,11 +301,12 @@
 
   
       </div>
+
       <div role="tabpanel" class="tab-pane " id="Exit">
         <div class="section-heading padding-b30">
           <h2 class="pull-left">Exit Survey Questions</h2>
-          <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#addSurveyModal">
-            Add Survey Questions
+          <button type="button" class="btn btn-info pull-right" data-toggle="modal" (click)="OpenModal('Exit')" data-target="#addSurveyModal">
+            Add New Questions
           </button>
         </div>
       
@@ -369,11 +371,12 @@
 
      
       </div>
+
       <div role="tabpanel" class="tab-pane " id="Internship">
         <div class="section-heading padding-b30">
           <h2 class="pull-left">Internship Survey Questions</h2>
-          <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#addSurveyModal">
-            Add Survey Questions
+          <button type="button" class="btn btn-info pull-right" data-toggle="modal" (click)="OpenModal('Internship')" data-target="#addSurveyModal">
+            Add New Questions
           </button>
         </div>
        
@@ -439,12 +442,13 @@
 
        
       </div>
+
       <div role="tabpanel" class="tab-pane " id="Alumni">
 
         <div class="section-heading padding-b30">
           <h2 class="pull-left">Alumni Survey Questions</h2>
-          <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#addSurveyModal">
-            Add Survey Questions
+          <button type="button" class="btn btn-info pull-right" data-toggle="modal" (click)="OpenModal('Alumni')" data-target="#addSurveyModal">
+            Add New Questions
           </button>
         </div>
 
@@ -506,11 +510,12 @@
 
     
       </div>
+
       <div role="tabpanel" class="tab-pane " id="Employer">
         <div class="section-heading padding-b30">
           <h2 class="pull-left">Employer Survey Questions</h2>
-          <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#addSurveyModal">
-            Add Survey Questions
+          <button type="button" class="btn btn-info pull-right" data-toggle="modal" (click)="OpenModal('Employer')" data-target="#addSurveyModal">
+            Add New Questions
           </button>
         </div>
 

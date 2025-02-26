@@ -108,9 +108,9 @@ namespace OBE_Portal.Controllers
         [HttpPost("GetAllSurvey")]
         public async Task<IActionResult> GetAllSurvey(getSurveyRequest request)
         {
-            if (request.Deptid == 0)
+            if (request.SurveyIntakeID == 0)
             {
-                return BadRequest("Invalid Deptid received.");
+                return BadRequest("Invalid data received.");
 
             }
             try
@@ -129,11 +129,11 @@ namespace OBE_Portal.Controllers
 
 
         [HttpPost("DeleteQuestion")]
-        public async Task<IActionResult> DeleteQuestion([FromBody] int QID)
+        public async Task<IActionResult> DeleteQuestion(DeleteRequest request)
         {
             try
             {
-                var response = await _indirectAssessment.DeleteQuestion(QID).ConfigureAwait(true);
+                var response = await _indirectAssessment.DeleteQuestion(request).ConfigureAwait(true);
                 return Ok(response);
             }
             catch (Exception)

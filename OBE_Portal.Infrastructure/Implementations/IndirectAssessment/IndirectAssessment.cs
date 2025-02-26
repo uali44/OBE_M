@@ -139,7 +139,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                 {
                    
                     var mainDetail= await _context.Set<SurveyMainDetail>()
-                        .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={request.SurveyMainDetail.SurveyType}, @SurveyDeptID={request.SurveyMainDetail.SurveyDeptID},@SurveyIntakeID={request.SurveyMainDetail.SurveyIntakeID}").ToListAsync();
+                        .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={request.SurveyMainDetail.SurveyType},@SurveyIntakeID={request.SurveyMainDetail.SurveyIntakeID}").ToListAsync();
                  
                     if (mainDetail != null && mainDetail.Count > 0)
                   
@@ -152,13 +152,13 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                             var qid = new SqlParameter("@QID", SqlDbType.Int) { Direction = ParameterDirection.Output };
 
                             var responseSub = await _context.Database.ExecuteSqlRawAsync(
-                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @CreatedBy, @CreatedDate,@Marks,@PLOID,@PEOID ,@QID OUTPUT",
+                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @CreatedBy,@Marks,@PLOID,@PEOID ,@QID OUTPUT",
                                 new SqlParameter("@SurveyID", mainDetailList.SurveyID),
                                 new SqlParameter("@Question", question.Question),
                                 new SqlParameter("@QType", question.QType),
                               
                                 new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy),
-                                new SqlParameter("@CreatedDate", DateTime.UtcNow),
+                          
                                 
                                    new SqlParameter("@Marks", question.Marks),
                                      new SqlParameter("@PLOID", question.PLOID),
@@ -174,10 +174,11 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                                 foreach (var option in question.Options)
                                 {
                                     await _context.Database.ExecuteSqlRawAsync(
-                                        "EXEC AddSurveySubDetailOption @QID, @Options",
-                                        new SqlParameter("@QID", generatedQID),
-                                        new SqlParameter("@Options", option)
-                                    );
+                                       "EXEC AddSurveySubDetailOption @QID, @Options,@CreatedBy",
+                                       new SqlParameter("@QID", generatedQID),
+                                       new SqlParameter("@Options", option),
+                                       new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy)
+                                       );
                                 }
                             }
                         }
@@ -188,19 +189,23 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                     {
                         // Step 3: Create a New Survey (if it does not exist)
                         var surveyType = new SqlParameter("@SurveyType", request.SurveyMainDetail.SurveyType);
-                        var surveyDeptID = new SqlParameter("@SurveyDeptID", request.SurveyMainDetail.SurveyDeptID);
+                    
                         var surveyID = new SqlParameter("@SurveyID", SqlDbType.Int) { Direction = ParameterDirection.Output };
                         var surveyIntakeID = new SqlParameter("@SurveyIntakeID", request.SurveyMainDetail.SurveyIntakeID);
+                        var createdBy = new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy);
+
+
+
                         var responseMain = await _context.Database.ExecuteSqlRawAsync(
-                            "EXEC AddSurveyMainDetail @SurveyType, @SurveyDeptID,@SurveyIntakeID, @SurveyID OUTPUT",
-                            surveyType, surveyDeptID,surveyIntakeID, surveyID
+                            "EXEC AddSurveyMainDetail @SurveyType, @SurveyIntakeID,@CreatedBy, @SurveyID OUTPUT",
+                            surveyType,surveyIntakeID,createdBy, surveyID
                         );
 
                         if (responseMain <= 0)
                         {
                             return false; // Failed to create new survey
                         }
-
+                        
                         int generatedSurveyID = (int)surveyID.Value;
 
                         // Step 4: Insert SurveySubDetails and SurveySubDetailOptions
@@ -209,19 +214,19 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                             var qid = new SqlParameter("@QID", SqlDbType.Int) { Direction = ParameterDirection.Output };
 
                             var responseSub = await _context.Database.ExecuteSqlRawAsync(
-                                "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @Mapping, @CreatedBy, @CreatedDate,@Marks, @QID OUTPUT",
-                                new SqlParameter("@SurveyID", generatedSurveyID),
-                                new SqlParameter("@Question", question.Question),
-                                new SqlParameter("@QType", question.QType),
-                                new SqlParameter("@Mapping", question.Mapping),
-                                new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy),
-                                new SqlParameter("@CreatedDate", DateTime.UtcNow),
-                         
+                               "EXEC AddSurveySubDetail @SurveyID, @Question, @QType, @CreatedBy,@Marks,@PLOID,@PEOID ,@QID OUTPUT",
+                               new SqlParameter("@SurveyID", generatedSurveyID),
+                               new SqlParameter("@Question", question.Question),
+                               new SqlParameter("@QType", question.QType),
+
+                               new SqlParameter("@CreatedBy", request.SurveyMainDetail.CreatedBy),
+
+
                                   new SqlParameter("@Marks", question.Marks),
-
-                                qid
-
-                            );
+                                    new SqlParameter("@PLOID", question.PLOID),
+                                      new SqlParameter("@PEOID", question.PEOID),
+                               qid
+                           );
 
                             int generatedQID = (int)qid.Value;
 
@@ -231,9 +236,10 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                                 foreach (var option in question.Options)
                                 {
                                     await _context.Database.ExecuteSqlRawAsync(
-                                        "EXEC AddSurveySubDetailOption @QID, @Options",
+                                        "EXEC AddSurveySubDetailOption @QID, @Options,@CreatedBy",
                                         new SqlParameter("@QID", generatedQID),
-                                        new SqlParameter("@Options", option)
+                                        new SqlParameter("@Options", option),
+                                        new SqlParameter("@CreatedBy",request.SurveyMainDetail.CreatedBy)
                                     );
                                 }
                             }
@@ -256,14 +262,14 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                 {
                     var survey = new SurveyResponseDto();
                     var surveyType = request.Surveytype;
-                    var surveyDeptID = request.Deptid;
+                  
                     var surveyIntakeID = request.SurveyIntakeID;
                     // Step 1: Get SurveyMainDetail
                     var surveyMainDetailParams = new SqlParameter("@SurveyType", surveyType);
-                    var surveyDeptIDParam = new SqlParameter("@SurveyDeptID", surveyDeptID);
+               
 
                     var mainDetail = await _context.Set<SurveyMainDetail>()
-                        .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID},@SurveyIntakeID={surveyIntakeID}").ToListAsync();
+                        .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={surveyType}, @SurveyIntakeID={surveyIntakeID}").ToListAsync();
                     
 
                     if (mainDetail == null || mainDetail.Count <= 0)
@@ -278,12 +284,12 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                         {
                             survey.SurveyID = mainDetailList.SurveyID;
                             survey.SurveyType = mainDetailList.SurveyType;
-                            survey.SurveyDeptID = mainDetailList.SurveyDeptID;
+                        
                         }
 
                         // Step 2: Get SurveySubDetails
                         var questions = await _context.Set<SurveySubDetail>()
-                            .FromSqlInterpolated($"EXEC GetSurveySubDetailsA @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID},@SurveyIntakeID={surveyIntakeID}")
+                            .FromSqlInterpolated($"EXEC GetSurveySubDetailsA @SurveyType={surveyType},@SurveyIntakeID={surveyIntakeID}")
                             .ToListAsync();
 
                         survey.Questions = new List<SurveyQuestionDto>();
@@ -295,9 +301,11 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                                 QID = question.QID,
                                 Question = question.Question,
                                 QType = question.QType,
-                                Mapping = question.Mapping,
-                                Section = question.Section,
-                                Options = new List<SurveySubDetailOption>()
+                              
+                                Options = new List<SurveySubDetailOption>(),
+                                  PLOID = question.PLOID,
+                                PEOID = question.PEOID,
+
                             };
 
                             // Step 3: Get SurveySubDetailOptions (if QType is Multiple Choice)
@@ -329,7 +337,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
 
 
-        async Task<bool> IIndirectAssessment.DeleteQuestion(int qid)
+        async Task<bool> IIndirectAssessment.DeleteQuestion(DeleteRequest request)
         {
             try
             {
@@ -337,8 +345,9 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
                 // Then delete the question
                 var result = await _context.Database.ExecuteSqlRawAsync(
-                    "EXEC DeleteSurveySubDetail @QID",
-                    new SqlParameter("@QID", qid)
+                    "EXEC DeleteSurveySubDetail @QID,@ModifiedBy",
+                    new SqlParameter("@QID", request.QID),
+                     new SqlParameter("@ModifiedBy", request.ModifiedBy)
                 );
 
                 return result > 0; // Return true if deletion was successful
@@ -353,7 +362,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
         async Task<Allsurvey> IIndirectAssessment.GetAllSurvey(getSurveyRequest request)
         {
-            if (request.Deptid == 0)
+            if (request.SurveyIntakeID == 0)
             {
                 return null;
 
@@ -361,12 +370,12 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
             try
             {
-                var deptID = request.Deptid;
-                var CSP = await GetSurvey("CSP", deptID,request.SurveyIntakeID);
-                var Internship = await GetSurvey("Internship", request.Deptid,request.SurveyIntakeID);
-                var Alumni = await GetSurvey("Alumni", request.Deptid, request.SurveyIntakeID);
-                var Exit = await GetSurvey("Exit", request.Deptid, request.SurveyIntakeID);
-                var Employer = await GetSurvey("Employer", request.Deptid, request.SurveyIntakeID);
+            
+                var CSP = await GetSurvey("CSP", request.SurveyIntakeID);
+                var Internship = await GetSurvey("Internship",request.SurveyIntakeID);
+                var Alumni = await GetSurvey("Alumni",  request.SurveyIntakeID);
+                var Exit = await GetSurvey("Exit", request.SurveyIntakeID);
+                var Employer = await GetSurvey("Employer", request.SurveyIntakeID);
                 return new Allsurvey
                 {
                     CSP = CSP,
@@ -391,7 +400,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
         }
 
 
-        async Task<SurveyResponseDto> GetSurvey(String Surveytype, int Deptid,int intakeID)
+        async Task<SurveyResponseDto> GetSurvey(String Surveytype, int intakeID)
         {
             try
             {
@@ -401,18 +410,18 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                    
                     var survey = new SurveyResponseDto();
                     var surveyType = Surveytype;
-                    int surveyDeptID = Deptid;
-                    if (surveyDeptID == 0)
+                  
+                    if (intakeID == 0)
                     {
                         return null;
 
                     }
                     // Step 1: Get SurveyMainDetail
                     var surveyMainDetailParams = new SqlParameter("@SurveyType", surveyType);
-                    var surveyDeptIDParam = new SqlParameter("@SurveyDeptID", surveyDeptID);
+            
 
                     var mainDetail = await _context.Set<SurveyMainDetail>()
-                        .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID},@SurveyIntakeID={intakeID}").ToListAsync();
+                        .FromSqlInterpolated($"EXEC GetSurveyMainDetail @SurveyType={surveyType},@SurveyIntakeID={intakeID}").ToListAsync();
                   
 
                     if (mainDetail == null || mainDetail.Count <= 0)
@@ -421,18 +430,18 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                     }
                     else
                     {
-                        var mainDetailList = mainDetail.FirstOrDefault();
-                        // Map SurveyMainDetail
-                        if (mainDetailList != null)
-                        {
-                            survey.SurveyID = mainDetailList.SurveyID;
-                            survey.SurveyType = mainDetailList.SurveyType;
-                            survey.SurveyDeptID = mainDetailList.SurveyDeptID;
-                        }
+                        //var mainDetailList = mainDetail.FirstOrDefault();
+                        //// Map SurveyMainDetail
+                        //if (mainDetailList != null)
+                        //{
+                        //    survey.SurveyID = mainDetailList.SurveyID;
+                        //    survey.SurveyType = mainDetailList.SurveyType;
+                        
+                        //}
 
                         // Step 2: Get SurveySubDetails
                         var questions = await _context.Set<SurveySubDetail>()
-                            .FromSqlInterpolated($"EXEC GetSurveySubDetailsA @SurveyType={surveyType}, @SurveyDeptID={surveyDeptID},@SurveyIntakeID={intakeID}")
+                            .FromSqlInterpolated($"EXEC GetSurveySubDetailsA @SurveyType={surveyType},@SurveyIntakeID={intakeID}")
                             .ToListAsync();
 
                         survey.Questions = new List<SurveyQuestionDto>();
@@ -444,8 +453,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                                 QID = question.QID,
                                 Question = question.Question,
                                 QType = question.QType,
-                                Mapping = question.Mapping,
-                                Section = question.Section,
+                              
                                 Options = new List<SurveySubDetailOption>(),
                                 PLOID=question.PLOID,
                                 PEOID = question.PEOID,
@@ -454,8 +462,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                             // Step 3: Get SurveySubDetailOptions (if QType is Multiple Choice)
                             if (question.QType == "Multiple Choice")
                             {
-                                //.FromSqlRaw("EXEC GetSurveySubDetailOptions @QID", new SqlParameter("@QID", question.QID))
-                                //        .AsNoTracking()
+                               
 
                                 var options = await _context.Set<SurveySubDetailOption>().FromSqlInterpolated($"EXEC GetSurveySubDetailOptions @QID={question.QID}").ToListAsync();
 

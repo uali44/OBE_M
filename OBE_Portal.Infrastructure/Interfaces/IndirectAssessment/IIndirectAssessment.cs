@@ -10,7 +10,7 @@ namespace OBE_Portal.Infrastructure.Interfaces.IndirectAssessment
     public interface IIndirectAssessment
     {
         Task<bool> AddSurvey(SurveyCreateRequest request);
-        Task<bool> DeleteQuestion(int qid);
+        Task<bool> DeleteQuestion(DeleteRequest requet);
         Task<Allsurvey> GetAllSurvey(getSurveyRequest request);
         Task<SurveyResponseDto> GetSurvey(getSurveyRequest request);
         Task<List<SurveyResponse>> GetSurveyResponse(int studentId);

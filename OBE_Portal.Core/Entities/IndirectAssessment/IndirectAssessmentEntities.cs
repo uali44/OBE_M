@@ -72,8 +72,8 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
     {
         public string Question { get; set; }
         public string QType { get; set; }
-        public string Mapping { get; set; }
-        public string Section { get; set; }
+      
+      
         public List<string> Options { get; set; }
         public int Marks { get; set; }
         public int PLOID { get; set; }
@@ -84,7 +84,7 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
     {
         public int SurveyID { get; set; }
         public string SurveyType { get; set; }
-        public int SurveyDeptID { get; set; }
+      
         public int SurveyIntakeID { get; set; }
         public ICollection<SurveySubDetail> SurveySubDetails { get; set; }
     }
@@ -95,10 +95,10 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public int SurveyID { get; set; }
         public string Question { get; set; }
         public string QType { get; set; }
-        public string Mapping { get; set; }
+     
         public int createdBy { get; set; }
         public DateTime createdDate { get; set; }
-        public string Section { get; set; }
+       
         public ICollection<SurveySubDetailOption> SurveySubDetailOptions { get; set; }
         public int Marks { get; set; }
         public int PLOID { get; set; }
@@ -125,8 +125,8 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public int QID { get; set; }
         public string Question { get; set; }
         public string QType { get; set; }
-        public string Mapping { get; set; }
-        public string Section { get;set; }
+
+      
         public List<SurveySubDetailOption> Options { get; set; }
         public int Marks { get; set; }
         public int PLOID { get; set; }
@@ -140,7 +140,7 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
     public class getSurveyRequest
     {
         public string Surveytype { get; set; }
-        public int Deptid { get; set; }
+    
         public int SurveyIntakeID { get; set; }
     }
     public class Allsurvey
@@ -223,8 +223,12 @@ namespace OBE_Portal.Core.Entities.IndirectAssessment
         public int CreatedBy { get; set; }  
     }
 
+    public class DeleteRequest
+    {
+      public  int QID { get; set; }
+        public int ModifiedBy { get; set; }
 
-
+    }
 
 
 
