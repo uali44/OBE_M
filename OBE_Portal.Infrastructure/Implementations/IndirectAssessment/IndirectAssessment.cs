@@ -21,39 +21,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
         {
             _context = context;
         }
-        async Task<bool> IIndirectAssessment.SaveCSPForm(SaveCSPFormRequest request)
-        {
-            try
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    var CSPQuestion1 = new SqlParameter("@CSPQuestion1", request.CSPQuestion1);
-                    var CSPQuestion2 = new SqlParameter("@CSPQuestion2", request.CSPQuestion2);
-                    var CSPQuestion3 = new SqlParameter("@CSPQuestion3", request.CSPQuestion3);
-                    var CSPQuestion4 = new SqlParameter("@CSPQuestion4", request.CSPQuestion4);
-                    var CSPQuestion5 = new SqlParameter("@CSPQuestion5", request.CSPQuestion5);
-                    var CSPQuestion6 = new SqlParameter("@CSPQuestion6", request.CSPQuestion6);
-                    var CSPQuestion7 = new SqlParameter("@CSPQuestion7", request.CSPQuestion7);
-                    var CSPSurveyFormRemarks = new SqlParameter("@CSPSurveyFormRemarks", request.CSPSurveyFormRemarks);
-                    var StudentID = new SqlParameter("@StudentID", request.StudentID);
-
-                    var response = await _context.Database.ExecuteSqlRawAsync($"EXEC SP_Save_CSP_Survey_Student_Details @CSPQuestion1,@CSPQuestion2,@CSPQuestion3,@CSPQuestion4,@CSPQuestion5,@CSPQuestion6,@CSPQuestion7,@CSPSurveyFormRemarks,@StudentID",
-                            CSPQuestion1, CSPQuestion2, CSPQuestion3, CSPQuestion4, CSPQuestion5, CSPQuestion6, CSPQuestion7, CSPSurveyFormRemarks, StudentID);
-                    if (response > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+     
         async Task<bool> IIndirectAssessment.SaveExitForm(SaveExitFormRequest request)
         {
             try
@@ -92,44 +60,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                 throw;
             }
         }
-        async Task<bool> IIndirectAssessment.SaveInternshipForm(SaveInternshipFormRequest request)
-        {
-            try
-            {
-                using (SqlCommand comm = new SqlCommand())
-                {
-                    var InternshipQuestion1 = new SqlParameter("@InternshipQuestion1", request.InternshipQuestion1);
-                    var InternshipQuestion2 = new SqlParameter("@InternshipQuestion2", request.InternshipQuestion2);
-                    var InternshipQuestion3 = new SqlParameter("@InternshipQuestion3", request.InternshipQuestion3);
-                    var InternshipQuestion4 = new SqlParameter("@InternshipQuestion4", request.InternshipQuestion4);
-                    var InternshipQuestion5 = new SqlParameter("@InternshipQuestion5", request.InternshipQuestion5);
-                    var InternshipQuestion6 = new SqlParameter("@InternshipQuestion6", request.InternshipQuestion6);
-                    var InternshipQuestion7 = new SqlParameter("@InternshipQuestion7", request.InternshipQuestion7);
-                    var InternshipQuestion8 = new SqlParameter("@InternshipQuestion8", request.InternshipQuestion8);
-                    var InternshipQuestion9 = new SqlParameter("@InternshipQuestion9", request.InternshipQuestion9);
-                    var InternshipQuestion10 = new SqlParameter("@InternshipQuestion10", request.InternshipQuestion10);
-                    var InternshipQuestion11 = new SqlParameter("@InternshipQuestion11", request.InternshipQuestion11);
-                    var InternshipQuestion12 = new SqlParameter("@InternshipQuestion12", request.InternshipQuestion12);
-                    var InternshipSurveyFormRemarks = new SqlParameter("@InternshipSurveyFormRemarks", request.InternshipSurveyFormRemarks);
-                    var StudentID = new SqlParameter("@StudentID", request.StudentID);
-
-                    var response = await _context.Database.ExecuteSqlRawAsync($"EXEC SP_Save_Internship_Survey_Student_Details @InternshipQuestion1,@InternshipQuestion2,@InternshipQuestion3,@InternshipQuestion4,@InternshipQuestion5,@InternshipQuestion6,@InternshipQuestion7,@InternshipQuestion8,@InternshipQuestion9,@InternshipQuestion10,@InternshipQuestion11,@InternshipQuestion12,@InternshipSurveyFormRemarks,@StudentID",
-                            InternshipQuestion1, InternshipQuestion2, InternshipQuestion3, InternshipQuestion4, InternshipQuestion5, InternshipQuestion6, InternshipQuestion7, InternshipQuestion8, InternshipQuestion9, InternshipQuestion10, InternshipQuestion11, InternshipQuestion12, InternshipSurveyFormRemarks, StudentID);
-                    if (response > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+    
 
         async Task<bool> IIndirectAssessment.AddSurvey(SurveyCreateRequest request)
         {
@@ -183,7 +114,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                             }
                         }
 
-                        return true; // Successfully added new questions/options
+                        return true; 
                     }
                     else
                     {
@@ -203,7 +134,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
                         if (responseMain <= 0)
                         {
-                            return false; // Failed to create new survey
+                            return false; 
                         }
                         
                         int generatedSurveyID = (int)surveyID.Value;
@@ -264,7 +195,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                     var surveyType = request.Surveytype;
                   
                     var surveyIntakeID = request.SurveyIntakeID;
-                    // Step 1: Get SurveyMainDetail
+                    //  Get SurveyMainDetail
                     var surveyMainDetailParams = new SqlParameter("@SurveyType", surveyType);
                
 
@@ -274,7 +205,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
                     if (mainDetail == null || mainDetail.Count <= 0)
                     {
-                        return null; // No data found
+                        return null;
                     }
                     else
                     {
@@ -287,7 +218,7 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
                         
                         }
 
-                        // Step 2: Get SurveySubDetails
+                        //  Get SurveySubDetails
                         var questions = await _context.Set<SurveySubDetail>()
                             .FromSqlInterpolated($"EXEC GetSurveySubDetailsA @SurveyType={surveyType},@SurveyIntakeID={surveyIntakeID}")
                             .ToListAsync();
@@ -308,11 +239,10 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
 
                             };
 
-                            // Step 3: Get SurveySubDetailOptions (if QType is Multiple Choice)
+                            //  Get SurveySubDetailOptions (if QType is Multiple Choice)
                             if (question.QType == "Multiple Choice")
                             {
-                                //.FromSqlRaw("EXEC GetSurveySubDetailOptions @QID", new SqlParameter("@QID", question.QID))
-                                //        .AsNoTracking()
+                               
 
                                 var options = await _context.Set<SurveySubDetailOption>().FromSqlInterpolated($"EXEC GetSurveySubDetailOptions @QID={question.QID}").ToListAsync();
 
@@ -343,14 +273,14 @@ namespace OBE_Portal.Infrastructure.Implementations.IndirectAssessment
             {
 
 
-                // Then delete the question
+                //  delete the question
                 var result = await _context.Database.ExecuteSqlRawAsync(
                     "EXEC DeleteSurveySubDetail @QID,@ModifiedBy",
                     new SqlParameter("@QID", request.QID),
                      new SqlParameter("@ModifiedBy", request.ModifiedBy)
                 );
 
-                return result > 0; // Return true if deletion was successful
+                return result > 0; 
             }
             catch (Exception)
             {

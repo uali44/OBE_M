@@ -22,6 +22,11 @@
         <h4 class="text-center">To ensure academic excellence through deliverance of quality education and applied research in a collegiate environment having strong linkages with industry and international community to meet the societal challenges.</h4>
       </div>
       <div role="tabpanel" class="tab-pane" id="Software-Engineering">
+        <ng-container  *ngFor="let PLO of Added_Intake_PLOs">
+          <h1>PLOs</h1>
+          <p><b>{{PLO.PLO_Title}}</b></p>
+
+        </ng-container>
         <h1>PEOs.</h1>
         <p> <b>PEO-1:</b>Graduates should demonstrate competence in applying Software Engineering principles & practices in various phases of software/system development life cycle in their respective professional career.</p>
         <p> <b>PEO-2:</b>Graduates should demonstrate effective team member or leadership skills with strong managerial skills and a sound sense of social responsibility for the sustainable development of society.</p>

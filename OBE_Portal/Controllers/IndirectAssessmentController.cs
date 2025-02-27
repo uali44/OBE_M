@@ -22,22 +22,8 @@ namespace OBE_Portal.Controllers
         {
             _indirectAssessment = indirectAssessment;
         }
-        [HttpPost("SaveCSPForm")]
-        public async Task<IActionResult> SaveCSPForm(SaveCSPFormRequest request)
-        {
-            try
-            {
-                var respone = await _indirectAssessment.SaveCSPForm(request).ConfigureAwait(true);
-                if (respone)
-                    return Ok(respone);
-                else
-                    return Ok(respone);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+       
+    
         [HttpPost("SaveExitForm")]
         public async Task<IActionResult> SaveExitForm(SaveExitFormRequest request)
         {
@@ -54,23 +40,7 @@ namespace OBE_Portal.Controllers
                 throw;
             }
         }
-        [HttpPost("SaveInternshipForm")]
-        public async Task<IActionResult> SaveInternshipForm(SaveInternshipFormRequest request)
-        {
-            try
-            {
-                var respone = await _indirectAssessment.SaveInternshipForm(request).ConfigureAwait(true);
-                if (respone)
-                    return Ok(respone);
-                else
-                    return Ok(respone);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
+    
 
         [HttpPost("AddSurvey")]
         public async Task<IActionResult> AddSurvey(SurveyCreateRequest request)

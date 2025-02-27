@@ -26,7 +26,7 @@ export class QuestionairesComponent implements OnInit {
     CreatedBy :0,
     SurveyIntakeID:0,
   };
-  surveyForm: FormGroup = this.fb.group({});
+
   surveySubDetails: any[] = [{
     Question: null,
     QType: null,
@@ -56,11 +56,8 @@ export class QuestionairesComponent implements OnInit {
   ExitSurveyData: any = [];
   AlumniSurveyData: any = [];
   EmployerSurveyData: any = [];
-  cSPSurveyForm: FormGroup = this.fb.group({});
-  alumniSurveyForm: FormGroup = this.fb.group({});
-  internshipSurveyForm: FormGroup = this.fb.group({});
-  exitSurveyForm: FormGroup = this.fb.group({});
-  employerSurveyForm: FormGroup = this.fb.group({});
+ 
+  
 
   
     Added_Intake_PLOs: any[];
@@ -109,7 +106,7 @@ export class QuestionairesComponent implements OnInit {
   
 
     this.Intake = 0;
-  /*  this.getSurvey(this.surveyMainDetail.SurveyType);*/
+  
     this.removeQuestion(0);
     this.enableSave = false;
     this.programId = 0;
@@ -127,7 +124,7 @@ export class QuestionairesComponent implements OnInit {
   }
 
   submitNewSurvey(): void {
-    console.log(this.createSurveyForm.value);
+   
     if (this.createSurveyForm.valid) {
       this.surveyMainDetail.SurveyType = this.createSurveyForm.controls["surveyType"].value;
       this.newQuestion.Question = this.createSurveyForm.controls["question"].value;
@@ -185,9 +182,7 @@ export class QuestionairesComponent implements OnInit {
   }
 
 
-  get createSurveyQuestions() {
-    return this.createSurveyForm.get('questions') as FormArray;
-  }
+ 
   get surveyQuestions(): FormArray {
     return this.createSurveyForm.get('questions') as FormArray;
   }
@@ -249,7 +244,7 @@ export class QuestionairesComponent implements OnInit {
           this.ngxService.stop();
           this.SurveyData = data;
          
-         // this.createForm();
+        
         
 
 
@@ -281,19 +276,7 @@ export class QuestionairesComponent implements OnInit {
           this.AlumniSurveyData = data.Alumni;
 
 
-          //this.createForm(this.cSPSurveyForm, this.CSPSurveyData);
-       
          
-          //this.createForm(this.exitSurveyForm, this.ExitSurveyData);
-       
-        
-          //this.createForm(this.employerSurveyForm, this.EmployerSurveyData);
-        
-         
-          //this.createForm(this.internshipSurveyForm, this.InternshipSurveyData);
-         
-        
-          //this.createForm(this.alumniSurveyForm, this.AlumniSurveyData);
 
 
 
@@ -306,43 +289,7 @@ export class QuestionairesComponent implements OnInit {
 
   }
 
-  createForm(form: FormGroup, SurveyData: any) {
-    if (!SurveyData || !SurveyData.Questions) return;
-
-    SurveyData.Questions.forEach((question: any) => {
-      if (question.QType === 'Text') {
-        form.addControl(question.QID, new FormControl('', Validators.required));
-      } else if (question.QType === 'Multiple Choice') {
-        form.addControl(question.QID, new FormControl('', Validators.required));
-      }
-      else if (question.QType === 'Likert') {
-        form.addControl(question.QID, new FormControl('', Validators.required));
-      }
-      else if (question.QType === 'Remarks') {
-        form.addControl(question.QID, new FormControl('', Validators.required));
-      }
-    });
-  }
-
-  submitSurvey() {
-    console.log('Survey Responses:', this.surveyForm.value);
-  }
-
-
-
-
-  //addQuestion(): void {
-  //  // Add the new question to the list
-  //  this.surveySubDetails.push({ ...this.newQuestion });
-
-  //  // Reset the new question form
-  //  this.newQuestion = {
-  //    Question: '',
-  //    QType: 'Multiple Choice',
-  //    Mapping: '',
-  //    Options: ['']
-  //  };
-  //}
+ 
 
   removeQuestion(index: number): void {
     this.surveySubDetails.splice(index, 1);
@@ -352,20 +299,10 @@ export class QuestionairesComponent implements OnInit {
     }
   }
 
-  addOption(): void {
-    this.newQuestion.Options.push('');
-  }
+  
 
-  removeOption(index: number): void {
-    if (this.newQuestion.Options.length > 1) {
-      this.newQuestion.Options.splice(index, 1);
-    } else {
-      alert('At least one option is required!');
-    }
-  }
-  trackByFn(index: number, item: any): number {
-    return index;
-  }
+ 
+ 
   TypeChange(val) {
     if (val === "Multiple Choice") {
       this.addnOption();

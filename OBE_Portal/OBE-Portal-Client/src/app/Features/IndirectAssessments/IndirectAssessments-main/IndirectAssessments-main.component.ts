@@ -43,11 +43,11 @@ export class IndirectAssessmentsMainComponent implements OnInit {
   ExitSurveyData: any = [];
   AlumniSurveyData: any = [];
   EmployerSurveyData: any = [];
-  cSPSurveyForm: FormGroup = this.fb.group({});
-  alumniSurveyForm: FormGroup = this.fb.group({});
-  internshipSurveyForm: FormGroup = this.fb.group({});
-  exitSurveyForm: FormGroup = this.fb.group({});
-  employerSurveyForm: FormGroup = this.fb.group({});
+  CSPSurveyForm: FormGroup = this.fb.group({});
+  AlumniSurveyForm: FormGroup = this.fb.group({});
+  InternshipSurveyForm: FormGroup = this.fb.group({});
+  ExitSurveyForm: FormGroup = this.fb.group({});
+  EmployerSurveyForm: FormGroup = this.fb.group({});
 
   surveyData: any = {
     studentID: 0,
@@ -90,7 +90,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
     this._InterconnectedService.CloseTab.subscribe(search => {
       this.CloseTabContent();
       this.Get_Institutes();
-      // this.getSurvey("CSP")
+     
      
     });
     this.getAllSurvey();
@@ -240,204 +240,15 @@ export class IndirectAssessmentsMainComponent implements OnInit {
     $("#IndirectAssessmentMainTab").addClass('active');
   }
   
-  resetCSPForm() {
-    $("input[name=CSPQuestion1][value=5]").prop('checked', true);
-    $("input[name=CSPQuestion2][value=5]").prop('checked', true);
-    $("input[name=CSPQuestion3][value=5]").prop('checked', true);
-    $("input[name=CSPQuestion4][value=5]").prop('checked', true);
-    $("input[name=CSPQuestion5][value=5]").prop('checked', true);
-    $("input[name=CSPQuestion6][value=5]").prop('checked', true);
-    $("input[name=CSPQuestion7][value=5]").prop('checked', true);
-    $("#CSPSurveyFormRemarks").val('')
-  }
-  resetExitForm() {
-    $("input[name=ExitQuestion1][value=5]").prop('checked', true);
-    $("input[name=ExitQuestion2][value=5]").prop('checked', true);
-    $("input[name=ExitQuestion3][value=5]").prop('checked', true);
-    $("input[name=ExitQuestion4][value=5]").prop('checked', true);
-    $("input[name=ExitQuestion5][value=5]").prop('checked', true);
-    $("input[name=ExitQuestion6][value=5]").prop('checked', true);
-    $("input[name=ExitQuestion7][value=5]").prop('checked', true);
-    $("input[name=ExitQuestion8][value=5]").prop('checked', true);
-    $("input[name=ExitQuestion9][value=5]").prop('checked', true);
-    $("input[name=ExitQuestion10][value=5]").prop('checked', true);
-    $("input[name=ExitQuestion11][value=5]").prop('checked', true);
-    $("input[name=ExitQuestion12][value=5]").prop('checked', true);
-    $("#ExitSurveyFormRemarks").val('')
-  }
-  resetInternshipForm() {
-    $("input[name=InternshipQuestion1][value=5]").prop('checked', true);
-    $("input[name=InternshipQuestion2][value=5]").prop('checked', true);
-    $("input[name=InternshipQuestion3][value=5]").prop('checked', true);
-    $("input[name=InternshipQuestion4][value=5]").prop('checked', true);
-    $("input[name=InternshipQuestion5][value=5]").prop('checked', true);
-    $("input[name=InternshipQuestion6][value=5]").prop('checked', true);
-    $("input[name=InternshipQuestion7][value=5]").prop('checked', true);
-    $("input[name=InternshipQuestion8][value=5]").prop('checked', true);
-    $("input[name=InternshipQuestion9][value=5]").prop('checked', true);
-    $("input[name=InternshipQuestion10][value=5]").prop('checked', true);
-    $("input[name=InternshipQuestion11][value=5]").prop('checked', true);
-    $("input[name=InternshipQuestion12][value=5]").prop('checked', true);
-    $("#InternshipSurveyFormRemarks").val('')
-  }
-
-  SaveCSPForm() {
-    if (this.StudentID === 0) {
-      this.toastr.error("Please select student", "Error!");
-      return;
-    }
-    var data = {};
-    data = {
-      "CSPQuestion1": $("input[name='CSPQuestion1']:checked").val(),
-      "CSPQuestion2": $("input[name='CSPQuestion2']:checked").val(),
-      "CSPQuestion3": $("input[name='CSPQuestion3']:checked").val(),
-      "CSPQuestion4": $("input[name='CSPQuestion4']:checked").val(),
-      "CSPQuestion5": $("input[name='CSPQuestion5']:checked").val(),
-      "CSPQuestion6": $("input[name='CSPQuestion6']:checked").val(),
-      "CSPQuestion7": $("input[name='CSPQuestion7']:checked").val(),
-      "CSPSurveyFormRemarks": $("#CSPSurveyFormRemarks").val(),
-      "StudentID": this.StudentID
-    }
-    this.ngxService.start();
-    this.IndirectAssessment.SaveCSPForm(data).
-      subscribe(
-        response => {
-          try {
-            if (response) {
-              this.resetCSPForm();
-              this.toastr.success("Information saved successfully", "Success!");
-              $("#CSPSurveyFormRemarks").val('')
-            }
-            this.ngxService.stop();
-          } catch (e) {
-            this.ngxService.stop();
-            this.toastr.error("Internal server error occured while processing your request", "Error!");
-          }
-
-        },
-        error => {
-          this.ngxService.stop();
-          this.toastr.error("Internal server error occured while processing your request", "Error!");
-        });
 
 
-  }
-  SaveExitForm() {
-    if (this.StudentID === 0) {
-      this.toastr.error("Please select student", "Error!");
-      return;
-    }
-    var data = {};
-    data = {
-      "ExitQuestion1": $("input[name='ExitQuestion1']:checked").val(),
-      "ExitQuestion2": $("input[name='ExitQuestion2']:checked").val(),
-      "ExitQuestion3": $("input[name='ExitQuestion3']:checked").val(),
-      "ExitQuestion4": $("input[name='ExitQuestion4']:checked").val(),
-      "ExitQuestion5": $("input[name='ExitQuestion5']:checked").val(),
-      "ExitQuestion6": $("input[name='ExitQuestion6']:checked").val(),
-      "ExitQuestion7": $("input[name='ExitQuestion7']:checked").val(),
-      "ExitQuestion8": $("input[name='ExitQuestion8']:checked").val(),
-      "ExitQuestion9": $("input[name='ExitQuestion9']:checked").val(),
-      "ExitQuestion10": $("input[name='ExitQuestion10']:checked").val(),
-      "ExitQuestion11": $("input[name='ExitQuestion11']:checked").val(),
-      "ExitQuestion12": $("input[name='ExitQuestion12']:checked").val(),
-      "ExitSurveyFormRemarks": $("#ExitSurveyFormRemarks").val(),
-      "StudentID": this.StudentID
-    }
-    this.ngxService.start();
-    this.IndirectAssessment.SaveExitForm(data).
-      subscribe(
-        response => {
-          try {
-            if (response) {
-              this.resetExitForm();
-              this.toastr.success("Information saved successfully", "Success!");
-              $("#ExitSurveyFormRemarks").val('')
-            }
-            this.ngxService.stop();
-          } catch (e) {
-            this.ngxService.stop();
-            this.toastr.error("Internal server error occured while processing your request", "Error!");
-          }
-
-        },
-        error => {
-          this.ngxService.stop();
-          this.toastr.error("Internal server error occured while processing your request", "Error!");
-        });
-
-
-  }
-  SaveInternshipForm() {
-    if (this.StudentID === 0) {
-      this.toastr.error("Please select student", "Error!");
-      return;
-    }
-    var data = {};
-    data = {
-      "InternshipQuestion1": $("input[name='InternshipQuestion1']:checked").val(),
-      "InternshipQuestion2": $("input[name='InternshipQuestion2']:checked").val(),
-      "InternshipQuestion3": $("input[name='InternshipQuestion3']:checked").val(),
-      "InternshipQuestion4": $("input[name='InternshipQuestion4']:checked").val(),
-      "InternshipQuestion5": $("input[name='InternshipQuestion5']:checked").val(),
-      "InternshipQuestion6": $("input[name='InternshipQuestion6']:checked").val(),
-      "InternshipQuestion7": $("input[name='InternshipQuestion7']:checked").val(),
-      "InternshipQuestion8": $("input[name='InternshipQuestion8']:checked").val(),
-      "InternshipQuestion9": $("input[name='InternshipQuestion9']:checked").val(),
-      "InternshipQuestion10": $("input[name='InternshipQuestion10']:checked").val(),
-      "InternshipQuestion11": $("input[name='InternshipQuestion11']:checked").val(),
-      "InternshipQuestion12": $("input[name='InternshipQuestion12']:checked").val(),
-      "InternshipSurveyFormRemarks": $("#InternshipSurveyFormRemarks").val(),
-      "StudentID": this.StudentID
-    }
-    this.ngxService.start();
-    this.IndirectAssessment.SaveInternshipForm(data).
-      subscribe(
-        response => {
-          try {
-            if (response) {
-              this.resetInternshipForm();
-              this.toastr.success("Information saved successfully", "Success!");
-              $("#ExitSurveyFormRemarks").val('')
-            }
-            this.ngxService.stop();
-          } catch (e) {
-            this.ngxService.stop();
-            this.toastr.error("Internal server error occured while processing your request", "Error!");
-          }
-
-        },
-        error => {
-          this.ngxService.stop();
-          this.toastr.error("Internal server error occured while processing your request", "Error!");
-        });
-
-
-  }
-  AlumniSurveyForm() {
-    if (this.StudentID === 0) {
-      this.toastr.error("Please select student", "Error!");
-      return;
-    }
-    this.toastr.success("Information saved successfully", "Success!");
-  }
-  SaveEmployerForm() {
-    if (this.StudentID === 0) {
-      this.toastr.error("Please select student", "Error!");
-      return;
-    }
-    this.toastr.success("Information saved successfully", "Success!");
-  }
   ResetAllForms() {
-    this.resetCSPForm();
-    this.resetExitForm();
-    
-    this.resetInternshipForm();
-    this.cSPSurveyForm.reset();
-    this.exitSurveyForm.reset();
-    this.internshipSurveyForm.reset();
-    this.employerSurveyForm.reset();
-    this.alumniSurveyForm.reset();
+  
+    this.CSPSurveyForm.reset();
+    this.ExitSurveyForm.reset();
+    this.InternshipSurveyForm.reset();
+    this.EmployerSurveyForm.reset();
+    this.AlumniSurveyForm.reset();
     this.getSurveyResponse();
    
 
@@ -452,31 +263,31 @@ export class IndirectAssessmentsMainComponent implements OnInit {
 
   }
 
-  getSurvey(surveyType: string) {
-    const request = {
-      Surveytype: surveyType,
-      Deptid: GlobalService.Deaprtment_ID
+  //getSurvey(surveyType: string) {
+  //  const request = {
+  //    Surveytype: surveyType,
+  //    Deptid: GlobalService.Deaprtment_ID
 
-    }
-    this.ngxService.start();
-    this.IndirectAssessment.GetSurvey(request).
-      subscribe(
-        data => {
-          this.ngxService.stop();
-          this.CSPSurveyData = data;
+  //  }
+  //  this.ngxService.start();
+  //  this.IndirectAssessment.GetSurvey(request).
+  //    subscribe(
+  //      data => {
+  //        this.ngxService.stop();
+  //        this.CSPSurveyData = data;
          
-          this.createForm(this.cSPSurveyForm, this.CSPSurveyData);
+  //        this.createForm(this.CSPSurveyForm, this.CSPSurveyData);
 
 
 
-        },
-        error => {
-          this.ngxService.stop();
-          this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
-        });
+  //      },
+  //      error => {
+  //        this.ngxService.stop();
+  //        this.toastr.error("Error occured while processing your request. Please contact to admin", "Error");
+  //      });
 
 
-  }
+  //}
   getAllSurvey() {
     const request = {
       Surveytype: "",
@@ -484,11 +295,11 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       SurveyIntakeID: this.intakeId
     }
 
-    this.ResetControls(this.cSPSurveyForm);
-    this.ResetControls(this.internshipSurveyForm);
-    this.ResetControls(this.exitSurveyForm);
-    this.ResetControls(this.employerSurveyForm);
-    this.ResetControls(this.alumniSurveyForm);
+    this.ResetControls(this.CSPSurveyForm);
+    this.ResetControls(this.InternshipSurveyForm);
+    this.ResetControls(this.ExitSurveyForm);
+    this.ResetControls(this.EmployerSurveyForm);
+    this.ResetControls(this.AlumniSurveyForm);
 
     this.ngxService.start();
     this.IndirectAssessment.GetAllSurvey(request).
@@ -497,19 +308,19 @@ export class IndirectAssessmentsMainComponent implements OnInit {
           this.ngxService.stop();
           this.CSPSurveyData = data.CSP;
        
-          this.createForm(this.cSPSurveyForm, this.CSPSurveyData);
+          this.createForm(this.CSPSurveyForm, this.CSPSurveyData);
           this.ExitSurveyData = data.Exit;
         
-          this.createForm(this.exitSurveyForm, this.ExitSurveyData);
+          this.createForm(this.ExitSurveyForm, this.ExitSurveyData);
           this.EmployerSurveyData = data.Employer;
          
-          this.createForm(this.employerSurveyForm, this.EmployerSurveyData);
+          this.createForm(this.EmployerSurveyForm, this.EmployerSurveyData);
           this.InternshipSurveyData = data.Internship;
         
-          this.createForm(this.internshipSurveyForm, this.InternshipSurveyData);
+          this.createForm(this.InternshipSurveyForm, this.InternshipSurveyData);
           this.AlumniSurveyData = data.Alumni;
          
-          this.createForm(this.alumniSurveyForm, this.AlumniSurveyData);
+          this.createForm(this.AlumniSurveyForm, this.AlumniSurveyData);
 
 
 
@@ -544,7 +355,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       var OptionID = null;
       var answer = null;
       if (qid.QType == "Multiple Choice") {
-        console.log(qid.QID);
+      
         OptionID = form.get(qid.QID.toString()).value;
       }
       else {
@@ -569,7 +380,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       return;
 
     }
-    const payload = this.getQuestions(this.CSPSurveyData, this.cSPSurveyForm)
+    const payload = this.getQuestions(this.CSPSurveyData, this.CSPSurveyForm)
     
   
     this.ngxService.start();
@@ -578,7 +389,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
         response => {
           try {
             if (response) {
-              this.cSPSurveyForm.reset();
+              this.CSPSurveyForm.reset();
               this.toastr.success("Information saved successfully", "Success!");
              
 
@@ -597,13 +408,13 @@ export class IndirectAssessmentsMainComponent implements OnInit {
 
   }
   submitExitSurvey() {
-   // console.log(this.exitSurveyForm.value);
+  
     if (this.StudentID == 0) {
       this.toastr.error("No student is selected", "Error!");
       return;
 
     }
-    const payload = this.getQuestions(this.ExitSurveyData, this.exitSurveyForm);
+    const payload = this.getQuestions(this.ExitSurveyData, this.ExitSurveyForm);
    
     this.ngxService.start();
     this.IndirectAssessment.SaveSurvey(payload).
@@ -611,7 +422,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
         response => {
           try {
             if (response) {
-              this.exitSurveyForm.reset();
+              this.ExitSurveyForm.reset();
               this.toastr.success("Information saved successfully", "Success!");
              
             }
@@ -635,7 +446,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
       return;
 
     }
-    const payload = this.getQuestions(this.InternshipSurveyData, this.internshipSurveyForm);
+    const payload = this.getQuestions(this.InternshipSurveyData, this.InternshipSurveyForm);
    
     this.ngxService.start();
     this.IndirectAssessment.SaveSurvey(payload).
@@ -643,7 +454,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
         response => {
           try {
             if (response) {
-              this.internshipSurveyForm.reset();
+              this.InternshipSurveyForm.reset();
               this.toastr.success("Information saved successfully", "Success!");
           
             }
@@ -660,13 +471,13 @@ export class IndirectAssessmentsMainComponent implements OnInit {
         });
   }
   submitEmployerSurvey() {
-    //console.log(this.internshipSurveyForm.value);
+  
     if (this.StudentID == 0) {
       this.toastr.error("No student is selected", "Error!");
       return;
 
     }
-    const payload = this.getQuestions(this.EmployerSurveyData, this.employerSurveyForm)
+    const payload = this.getQuestions(this.EmployerSurveyData, this.EmployerSurveyForm)
   
     this.ngxService.start();
     this.IndirectAssessment.SaveSurvey(payload).
@@ -674,7 +485,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
         response => {
           try {
             if (response) {
-              this.employerSurveyForm.reset();
+              this.EmployerSurveyForm.reset();
               this.toastr.success("Information saved successfully", "Success!");
           
             }
@@ -691,13 +502,13 @@ export class IndirectAssessmentsMainComponent implements OnInit {
         });
   }
   submitAlumniSurvey() {
-  //  console.log(this.alumniSurveyForm.value);
+  
     if (this.StudentID == 0) {
       this.toastr.error("No student is selected", "Error!");
       return;
 
     }
-    const payload = this.getQuestions(this.AlumniSurveyData, this.alumniSurveyForm);
+    const payload = this.getQuestions(this.AlumniSurveyData, this.AlumniSurveyForm);
     
     this.ngxService.start();
     this.IndirectAssessment.SaveSurvey(payload).
@@ -705,7 +516,7 @@ export class IndirectAssessmentsMainComponent implements OnInit {
         response => {
           try {
             if (response) {
-              this.alumniSurveyForm.reset();
+              this.AlumniSurveyForm.reset();
               this.toastr.success("Information saved successfully", "Success!");
            
             }
@@ -749,23 +560,22 @@ export class IndirectAssessmentsMainComponent implements OnInit {
 
       const value = question.OptionID !== null ? question.OptionID : question.Answer;
 
-      if (this.cSPSurveyForm.controls[question.QID]) {
+      if (this.CSPSurveyForm.controls[question.QID]) {
       
-        this.cSPSurveyForm.controls[question.QID].setValue(value);
+        this.CSPSurveyForm.controls[question.QID].setValue(value);
       }
-      if (this.exitSurveyForm.controls[question.QID]) {
-        this.exitSurveyForm.controls[question.QID].setValue(value);
+      if (this.ExitSurveyForm.controls[question.QID]) {
+        this.ExitSurveyForm.controls[question.QID].setValue(value);
       }
-      if (this.internshipSurveyForm.controls[question.QID]) {
-        console.log("qid", question.QID);
-        console.log("val", value);
-        this.internshipSurveyForm.controls[question.QID].setValue(value);
+      if (this.InternshipSurveyForm.controls[question.QID]) {
+     
+        this.InternshipSurveyForm.controls[question.QID].setValue(value);
       }
-      if (this.employerSurveyForm.controls[question.QID]) {
-        this.employerSurveyForm.controls[question.QID].setValue(value);
+      if (this.EmployerSurveyForm.controls[question.QID]) {
+        this.EmployerSurveyForm.controls[question.QID].setValue(value);
       }
-      if (this.alumniSurveyForm.controls[question.QID]) {
-        this.alumniSurveyForm.controls[question.QID].setValue(value);
+      if (this.AlumniSurveyForm.controls[question.QID]) {
+        this.AlumniSurveyForm.controls[question.QID].setValue(value);
       }
     });
   }

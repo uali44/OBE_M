@@ -119,8 +119,8 @@
                   <option value="{{i.PLO_ID}}" *ngFor="let i of Added_Intake_PLOs">{{i.PLO_Title}}</option>
 
                 </select>
-                <!--<div *ngIf="createSurveyForm.get('mapping').invalid && createSurveyForm.get('mapping').touched" class="text-danger">
-        Mapping is required.
+                <!--<div *ngIf="createSurveyForm.get('plo').invalid && createSurveyForm.get('peo').touched" class="text-danger">
+        PLO is required.
       </div>-->
               </div>
 
@@ -131,8 +131,8 @@
                   <option value="{{i.peoId}}" *ngFor="let i of Added_Intake_PEOs">{{i.peoTitle}}</option>
 
                 </select>
-                <!--<div *ngIf="createSurveyForm.get('mapping').invalid && createSurveyForm.get('mapping').touched" class="text-danger">
-        Mapping is required.
+                <!--<div *ngIf="createSurveyForm.get('peo').invalid && createSurveyForm.get('peo').touched" class="text-danger">
+        PEO is required.
       </div>-->
               </div>
 
@@ -387,7 +387,7 @@
 
 
 
-            <form [formGroup]="internshipSurveyForm">
+          
               <div class="table-responsive" style="max-height: 70vh;overflow-y:scroll">
                 <table class="table  table-theme table-hover margin-t10">
                   <thead>
@@ -427,8 +427,8 @@
                   </tbody>
                 </table>
               </div>
-              <!--<button type="submit" [disabled]="surveyForm.invalid">Submit</button>-->
-            </form>
+           
+        
 
 
 
@@ -458,7 +458,7 @@
 
 
 
-            <form [formGroup]="alumniSurveyForm">
+          
               <div class="table-responsive" style="max-height: 70vh;overflow-y:scroll">
                 <table class="table  table-theme table-hover margin-t10">
                   <thead>
@@ -497,9 +497,7 @@
                   </tbody>
                 </table>
               </div>
-              <!--<button type="submit" [disabled]="surveyForm.invalid">Submit</button>-->
-            </form>
-
+          
 
 
 
@@ -527,7 +525,7 @@
 
 
 
-            <form [formGroup]="employerSurveyForm">
+         
               <div class="table-responsive" style="max-height: 70vh;overflow-y:scroll">
                 <table class="table  table-theme table-hover margin-t10">
                   <thead>
@@ -567,8 +565,7 @@
                   </tbody>
                 </table>
               </div>
-              <!--<button type="submit" [disabled]="surveyForm.invalid">Submit</button>-->
-            </form>
+            
 
 
 

@@ -44,30 +44,30 @@ export class ExitSurveyFormComponent implements OnInit {
       "StudentID": GlobalService.StudentID
     }
     this.ngxService.start();
-    this.IndirectAssessment.SaveExitForm(data).
-      subscribe(
-        response => {
-          try {
-            if (response) {
-              this.toastr.success("Information saved successfully", "Success!");
-              $("#ExitSurveyFormRemarks").val('')
-              localStorage.removeItem('ShowExitForm');;
-              localStorage.setItem("ShowExitForm", '0');
-              this.router.navigate(["/student/main"]);
-              $("#Exit-Survey-Active").addClass('hidden');
-              $('#Dashboard-Active').addClass('active');
-            }
-            this.ngxService.stop();
-          } catch (e) {
-            this.ngxService.stop();
-            this.toastr.error("Internal server error occured while processing your request", "Error!");
-          }
+    //this.IndirectAssessment.SaveExitForm(data).
+    //  subscribe(
+    //    response => {
+    //      try {
+    //        if (response) {
+    //          this.toastr.success("Information saved successfully", "Success!");
+    //          $("#ExitSurveyFormRemarks").val('')
+    //          localStorage.removeItem('ShowExitForm');;
+    //          localStorage.setItem("ShowExitForm", '0');
+    //          this.router.navigate(["/student/main"]);
+    //          $("#Exit-Survey-Active").addClass('hidden');
+    //          $('#Dashboard-Active').addClass('active');
+    //        }
+    //        this.ngxService.stop();
+    //      } catch (e) {
+    //        this.ngxService.stop();
+    //        this.toastr.error("Internal server error occured while processing your request", "Error!");
+    //      }
 
-        },
-        error => {
-          this.ngxService.stop();
-          this.toastr.error("Internal server error occured while processing your request", "Error!");
-        });
+    //    },
+    //    error => {
+    //      this.ngxService.stop();
+    //      this.toastr.error("Internal server error occured while processing your request", "Error!");
+    //    });
 
 
   }

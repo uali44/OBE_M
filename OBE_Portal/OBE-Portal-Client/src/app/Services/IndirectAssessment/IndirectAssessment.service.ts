@@ -12,15 +12,11 @@ export class IndirectAssessment {
   constructor(private http: HttpClient) {
     this.baseUrl = GlobalService.ApiUrl;
   }
-  SaveCSPForm<T>(data: any): Observable<any> {
-    return this.http.post<any>(this.baseUrl + 'IndirectAssessment/SaveCSPForm', data);
-  }
+ 
   SaveExitForm<T>(data: any): Observable<any> {
     return this.http.post<any>(this.baseUrl + 'IndirectAssessment/SaveExitForm', data);
   }
-  SaveInternshipForm<T>(data: any): Observable<any> {
-    return this.http.post<any>(this.baseUrl + 'IndirectAssessment/SaveInternshipForm', data);
-  }
+ 
 
   AddSurvey<T>(data: any): Observable < any > {
   return this.http.post<any>(this.baseUrl + 'IndirectAssessment/AddSurvey', data);
